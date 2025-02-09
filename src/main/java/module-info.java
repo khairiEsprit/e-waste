@@ -7,7 +7,7 @@ module com.example.ewaste {
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
-    requires eu.hansolo.tilesfx;
+    //requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.sql;
     opens com.example.ewaste.controllers to javafx.fxml;
@@ -15,4 +15,6 @@ module com.example.ewaste {
 
     opens com.example.ewaste to javafx.fxml;
     exports com.example.ewaste;
+    exports com.example.ewaste.repository;
+    opens com.example.ewaste.repository to javafx.fxml;
 }
