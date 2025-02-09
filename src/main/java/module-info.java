@@ -9,6 +9,9 @@ module com.example.ewaste {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
+    opens com.example.ewaste.controllers to javafx.fxml;
+    exports com.example.ewaste.controllers;
 
     opens com.example.ewaste to javafx.fxml;
     exports com.example.ewaste;
