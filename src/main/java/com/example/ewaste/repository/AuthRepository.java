@@ -81,7 +81,7 @@ public class AuthRepository {
     }
 
     public boolean authenticateUser(String username, String password) {
-        String query = "SELECT * FROM users WHERE email = ? AND password = ?";
+        String query = "SELECT * FROM utilisateur WHERE email = ? AND mdp = ?";
         try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setString(1, username);
             statement.setString(2, hashPassword2(password));
@@ -137,7 +137,7 @@ public class AuthRepository {
     }
 
     public void modifyPassword(int id, String password) {
-        String query = "UPDATE users SET password = ? WHERE id = ?";
+        String query = "UPDATE utilisateur SET mdp = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, hashPassword2(password));
@@ -148,13 +148,13 @@ public class AuthRepository {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Success");
                 alert.setHeaderText(null);
-                alert.setContentText("Modification jawha hafalet");
+                alert.setContentText("Modification effectuée avec succès");
                 alert.showAndWait();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
-                alert.setContentText("fama mochkla ");
+                alert.setContentText("erreur lors de la modification");
                 alert.showAndWait();
             }
         } catch (SQLException e) {

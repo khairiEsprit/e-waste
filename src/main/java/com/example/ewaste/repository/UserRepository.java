@@ -1,14 +1,13 @@
 package com.example.ewaste.repository;
 
+
 import com.example.ewaste.entities.User;
 import com.example.ewaste.entities.UserRole;
 import com.example.ewaste.exceptions.DatabaseException;
 import com.example.ewaste.interfaces.EntityCrud;
 import com.example.ewaste.utils.DataBase;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -32,20 +31,21 @@ public class UserRepository implements EntityCrud<User> {
         }
     }
 
+
+
     // Create
     public void addEntity(User user) {
-        String query = "INSERT INTO utilisateur (nom, prenom, telephone, email, mdp, DateNss, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO utilisateur (nom, prenom, telephone, email, mdp, DateNss, role, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setString(1, user.getFirstName());
+            pstmt.setString(1, user.getNom());
             pstmt.setString(2, "test");
-//            pstmt.setString(3, user.getPhone());
+            pstmt.setInt(3, user.getTelephone());
             pstmt.setString(4, user.getEmail());
             pstmt.setString(5, hashPassword2(user.getPassword()));
-            pstmt.setDate(6, new Date(user.getDNaissance().getTime()));
+            pstmt.setDate(6, new Date(user.getDateNss().getTime()));
             pstmt.setString(7, user.getRole().toString());
-//            pstmt.setString(8, user.getPhoto());
-//            pstmt.setInt(9, user.getCentreId());
+            pstmt.setString(8, user.getPhotoUrl());
             pstmt.executeUpdate();
 
             ResultSet generatedKeys = pstmt.getGeneratedKeys();
@@ -67,13 +67,13 @@ public class UserRepository implements EntityCrud<User> {
             while (rs.next()) {
                 User user = new User();
                 user.setId(rs.getInt("id"));
-                user.setFirstName(rs.getString("nom"));
-                user.setLastName(rs.getString("prenom"));
+                user.setNom(rs.getString("nom"));
+                user.setPrenom(rs.getString("prenom"));
                 user.setEmail(rs.getString("email"));
-//                user.setPhone(rs.getString("telephone"));
+                user.setTelephone(rs.getInt("telephone"));
                 user.setRole(UserRole.valueOf(rs.getString("role")));
-                user.setDNaissance(rs.getDate("DateNss"));
-//                user.setPhoto(rs.getString("photo"));
+                user.setDateNss(rs.getDate("DateNss"));
+                user.setPhotoUrl(rs.getString("photo"));
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -87,35 +87,20 @@ public class UserRepository implements EntityCrud<User> {
         return null;
     }
 
-    public ObservableList<User> getEmployeList() throws SQLException {
-        ObservableList<User> employees = FXCollections.observableArrayList();
-        String query = "SELECT * FROM utilisateur WHERE role = ?";
 
-        PreparedStatement pstmt = conn.prepareStatement(query);
-        pstmt.setString(1, "employe");
-        ResultSet rs = pstmt.executeQuery();
-        while (rs.next()) {
-            User user = new User(
-                    rs.getString("nom"), rs.getString("email"), rs.getString("mdp"),
-                    rs.getDate("DateNss"), UserRole.valueOf(rs.getString("role")));
-            employees.add(user);
-        }
-        return employees;
-    }
 
     public void updateEntity(User u) {
-        String query = "UPDATE utilisateur SET nom = ?, prenom = ?, email = ?, mdp = ?, DateNss = ?, role = ?, WHERE id = ?";
+        String query = "UPDATE utilisateur SET nom = ?, prenom = ?, telephone = ?, email = ?, mdp = ?, DateNss = ?, role = ?, photo = ?, WHERE id = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setString(1, u.getFirstName());
-            preparedStatement.setString(2, u.getLastName());
-//            preparedStatement.setString(3, u.getPhone());
+            preparedStatement.setString(1, u.getNom());
+            preparedStatement.setString(2, u.getPrenom());
+            preparedStatement.setInt(3, u.getTelephone());
             preparedStatement.setString(4, u.getEmail());
             preparedStatement.setString(5, u.getPassword());
-            preparedStatement.setDate(6, new Date(u.getDNaissance().getTime()));
+            preparedStatement.setDate(6, new Date(u.getDateNss().getTime()));
             preparedStatement.setString(7, u.getRole().toString());
-//            preparedStatement.setString(8, u.getPhoto());
-//            preparedStatement.setInt(9, u.getCentreId());
+            preparedStatement.setString(8, u.getPhotoUrl());
             preparedStatement.setInt(10, u.getId());
 
             int rowsAffected = preparedStatement.executeUpdate();
@@ -137,13 +122,13 @@ public class UserRepository implements EntityCrud<User> {
                 if (resultSet.next()) {
                     User user = new User();
                     user.setId(resultSet.getInt("id"));
-                    user.setFirstName(resultSet.getString("nom"));
-                    user.setLastName(resultSet.getString("prenom"));
+                    user.setNom(resultSet.getString("nom"));
+                    user.setPrenom(resultSet.getString("prenom"));
                     user.setEmail(resultSet.getString("email"));
                     user.setRole(UserRole.valueOf(resultSet.getString("role")));
-//                    user.setPhone(resultSet.getString("telephone"));
-                    user.setDNaissance(resultSet.getDate("DateNss"));
-//                    user.setPhoto(resultSet.getString("photo"));
+                    user.setTelephone(resultSet.getInt("telephone"));
+                    user.setDateNss(resultSet.getDate("DateNss"));
+                    user.setPhotoUrl(resultSet.getString("photo"));
                     return user;
                 }
             }
@@ -168,4 +153,49 @@ public class UserRepository implements EntityCrud<User> {
             throw new DatabaseException("Failed to delete user", e);
         }
     }
+
+    public int getUserIdByEmail(String email) {
+        String query = "SELECT id FROM utilisateur WHERE email = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to retrieve user ID by email", e);
+        }
+
+        return -1; // Return -1 if the user is not found
+    }
+
+    public User getUserByEmail(String email) {
+        String query = "SELECT * FROM utilisateur WHERE email = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setNom(rs.getString("nom"));
+                    user.setPrenom(rs.getString("prenom"));
+                    user.setEmail(rs.getString("email"));
+                    user.setRole(UserRole.valueOf(rs.getString("role")));
+                    user.setTelephone(rs.getInt("telephone"));
+                    user.setDateNss(rs.getDate("DateNss"));
+                    user.setPhotoUrl(rs.getString("photo"));
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to retrieve user by email", e);
+        }
+
+        return null; // Return null if the user is not found
+    }
+
 }
+

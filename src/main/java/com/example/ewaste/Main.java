@@ -12,11 +12,10 @@ import java.sql.Connection;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-//        Connection conn = DataBase.getInstance().getConnection();
-//        System.out.println(conn);
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("views/hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+//
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("views/Dashboard.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+//        stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
         stage.show();
     }

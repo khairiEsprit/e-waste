@@ -40,10 +40,13 @@ public class RoleNavigation {
         // For example, if admin, load the admin view; else load a different view.
         String fxmlResource;
         if (role == UserRole.ADMIN) {
-            fxmlResource = "/View/Dashboard.fxml";
-        } else {
+            fxmlResource = "views/Dashboard.fxml";
+        } else if(role == UserRole.CITOYEN) {
             // Add more roles as needed; here is a default:
-            fxmlResource = "/View/mainLoginSignUp.fxml";
+            fxmlResource = "views/UserAccount.fxml";
+        }else {
+            // Add more roles as needed; here is a default:
+            fxmlResource = "views/EmployeeInterface.fxml";
         }
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlResource));

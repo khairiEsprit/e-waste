@@ -52,75 +52,201 @@
           <artifactId>*</artifactId>
         </exclusion>
       </exclusions>
-    </dependency><dependency>
-      <groupId>net.synedra</groupId>
-      <artifactId>validatorfx</artifactId>
-      <version>0.5.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.openjfx</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency><dependency>
-      <groupId>org.kordamp.bootstrapfx</groupId>
-      <artifactId>bootstrapfx-core</artifactId>
-      <version>0.4.0</version>
-    </dependency><dependency>
-      <groupId>eu.hansolo</groupId>
-      <artifactId>tilesfx</artifactId>
-      <version>21.0.3</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.openjfx</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency><dependency>
-      <groupId>com.github.almasb</groupId>
-      <artifactId>fxgl</artifactId>
-      <version>17.3</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.openjfx</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
-<dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-core</artifactId>
+          <version>2.15.2</version>
+      </dependency>
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+          <version>2.15.2</version>
+      </dependency>
+      <dependency>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+          <version>2.8.9</version> <!-- Vérifiez la dernière version disponible -->
+      </dependency>
 
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.33</version>
-    </dependency>
+      <dependency>
+          <groupId>io.github.palexdev</groupId>
+          <artifactId>materialfx</artifactId>
+          <version>11.13.10</version>
+      </dependency>
 
-    <dependency>
-      <groupId>io.github.cdimascio</groupId>
-      <artifactId>dotenv-java</artifactId>
-      <version>3.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>io.github.palexdev</groupId>
-      <artifactId>materialfx</artifactId>
-      <version>11.13.10</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.8.9</version> <!-- Vérifiez la dernière version disponible -->
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>  </dependencies>
+      <dependency>
+          <groupId>javax.ws.rs</groupId>
+          <artifactId>javax.ws.rs-api</artifactId>
+          <version>2.1.1</version>
+      </dependency>
+
+      <dependency>
+          <groupId>jakarta.ws.rs</groupId>
+          <artifactId>jakarta.ws.rs-api</artifactId>
+          <version>3.0.0</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.glassfish.jersey.media</groupId>
+          <artifactId>jersey-media-multipart</artifactId>
+          <version>3.0.12</version> <!-- or the version that suits your project -->
+      </dependency>
+      <dependency>
+          <groupId>org.glassfish.jersey.media</groupId>
+          <artifactId>jersey-media-json-jackson</artifactId>
+          <version>3.0.12</version>
+      </dependency>
+      <dependency>
+          <groupId>org.glassfish.jersey.core</groupId>
+          <artifactId>jersey-server</artifactId>
+          <version>3.0.13</version>
+      </dependency>
+
+
+      <dependency>
+          <groupId>jakarta.activation</groupId>
+          <artifactId>jakarta.activation-api</artifactId>
+          <version>1.2.1</version> <!-- or a version that fits your project -->
+      </dependency>
+      <dependency>
+          <groupId>com.auth0</groupId>
+          <artifactId>java-jwt</artifactId>
+          <version>3.18.2</version> <!-- or the version compatible with your setup -->
+      </dependency>
+
+      <dependency>
+          <groupId>org.kordamp.ikonli</groupId>
+          <artifactId>ikonli-javafx</artifactId>
+          <version>12.3.1</version>
+      </dependency>
+      <dependency>
+          <groupId>org.kordamp.ikonli</groupId>
+          <artifactId>ikonli-fontawesome-pack</artifactId>
+          <version>12.3.1</version>
+      </dependency>
+      <dependency>
+          <groupId>org.kordamp.ikonli</groupId>
+          <artifactId>ikonli-fontawesome5-pack</artifactId>
+          <version>12.3.1</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.glassfish.jersey.core</groupId>
+          <artifactId>jersey-client</artifactId>
+          <version>3.0.12</version>
+      </dependency>
+      <dependency>
+          <groupId>com.docusign</groupId>
+          <artifactId>docusign-esign-java</artifactId>
+          <version>6.0.0</version>
+      </dependency>
+
+
+
+
+      <dependency>
+          <groupId>de.jensd</groupId>
+          <artifactId>fontawesomefx-fontawesome</artifactId>
+          <version>4.7.0-9.1.2</version>
+      </dependency>
+
+      <dependency>
+          <groupId>com.jfoenix</groupId>
+          <artifactId>jfoenix</artifactId>
+          <version>9.0.1</version>
+      </dependency>
+      <!-- dotenv -->
+
+      <dependency>
+          <groupId>io.github.cdimascio</groupId>
+          <artifactId>dotenv-java</artifactId>
+          <version>3.0.0</version>
+      </dependency>
+
+
+      <dependency>
+          <groupId>com.sun.mail</groupId>
+          <artifactId>javax.mail</artifactId>
+          <version>1.6.2</version>
+      </dependency>
+      <!-- MySQL Connector -->
+      <dependency>
+          <groupId>com.mysql</groupId>
+          <artifactId>mysql-connector-j</artifactId>
+          <version>8.3.0</version>
+      </dependency>
+      <!-- Other Dependencies -->
+      <dependency>
+          <groupId>org.controlsfx</groupId>
+          <artifactId>controlsfx</artifactId>
+          <version>11.2.1</version>
+      </dependency>
+      <dependency>
+          <groupId>com.dlsc.formsfx</groupId>
+          <artifactId>formsfx-core</artifactId>
+          <version>11.6.0</version>
+          <exclusions>
+              <exclusion>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>*</artifactId>
+              </exclusion>
+          </exclusions>
+      </dependency>
+      <dependency>
+          <groupId>net.synedra</groupId>
+          <artifactId>validatorfx</artifactId>
+          <version>0.5.0</version>
+          <exclusions>
+              <exclusion>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>*</artifactId>
+              </exclusion>
+          </exclusions>
+      </dependency>
+      <dependency>
+          <groupId>org.kordamp.ikonli</groupId>
+          <artifactId>ikonli-javafx</artifactId>
+          <version>12.3.1</version>
+      </dependency>
+      <dependency>
+          <groupId>org.kordamp.bootstrapfx</groupId>
+          <artifactId>bootstrapfx-core</artifactId>
+          <version>0.4.0</version>
+      </dependency>
+      <dependency>
+          <groupId>eu.hansolo</groupId>
+          <artifactId>tilesfx</artifactId>
+          <version>21.0.3</version>
+          <exclusions>
+              <exclusion>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>*</artifactId>
+              </exclusion>
+          </exclusions>
+      </dependency>
+      <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-api</artifactId>
+          <version>${junit.version}</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-engine</artifactId>
+          <version>${junit.version}</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>com.itextpdf</groupId>
+          <artifactId>kernel</artifactId>
+          <version>7.2.6</version>
+      </dependency>
+      <dependency>
+          <groupId>com.itextpdf</groupId>
+          <artifactId>layout</artifactId>
+          <version>7.2.6</version>
+      </dependency> </dependencies>
 
   <build>
     <plugins>
