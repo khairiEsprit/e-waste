@@ -1,0 +1,61 @@
+
+.parent{
+    -fx-background-color: transparent;
+}
+.pane{
+    -fx-background-color: #00693E;
+}
+.trans-btn-white-border{
+    -fx-background-color: #29AB87;
+    -fx-background-radius: 5px;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+    -fx-text-fill: whitesmoke;
+}
+.white-pane{
+    -fx-background-color: #ffffff;
+}
+.blue-panel{
+    -fx-background-color: #013220;
+}
+.tf_box{
+    -fx-background-color: #ACE1AF;
+    -fx-border-color: #DEDEE4;
+    -fx-border-width: 0px 0px 1px 0px;
+    -fx-pref-height: 40px;
+
+
+
+}
+.header-label {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ACE1AF;
+}
+.tf{
+    -fx-background-color: transparent;
+}
+.blue-btn{
+    -fx-background-color: #29AB87;
+    -fx-background-radius: 5px;
+    -fx-text-fill: #fffff;
+
+
+}
+
+/* Style for the title labels in the smart waste management theme */
+.smart-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #29AB87;  /* Example color matching the theme */
+    -fx-padding: 5px 0;
+}
+
+/* Style for the descriptive text labels */
+.smart-description {
+    -fx-font-size: 16px;
+    -fx-font-style: italic;
+    -fx-text-fill: #FFFFFF;
+    -fx-padding: 5px 0;
+}
