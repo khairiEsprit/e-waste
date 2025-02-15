@@ -1,0 +1,149 @@
+/* Fond de la scène */
+.root {
+    -fx-background-color: #ace1af; /* Fond pastel vert clair */
+}
+
+/* TableView */
+.table-view {
+    -fx-background-color: #ffffff; /* Fond blanc pour la table */
+    -fx-border-color: #00693e; /* Bordure verte foncée */
+    -fx-border-width: 1px;
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* En-têtes de TableView */
+.table-view .column-header {
+    -fx-background-color: #00693e; /* En-têtes vert foncé */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-padding: 10px;
+}
+
+/* Colonnes de TableView */
+.table-column {
+    -fx-alignment: CENTER;
+    -fx-font-size: 14px;
+}
+
+/* Champs de texte */
+.text-field {
+    -fx-background-color: #ffffff; /* Fond blanc */
+    -fx-border-color: #00693e; /* Bordure verte */
+    -fx-border-radius: 5px;
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 250px;
+}
+
+.text-field:focused {
+    -fx-border-color: #29ab87; /* Bordure verte claire au focus */
+}
+
+/* Boutons */
+.button {
+    -fx-background-color: #00693e; /* Fond vert moyen */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 2, 2);
+}
+
+/* Effet de survol des boutons */
+.button:hover {
+    -fx-background-color: #29ab87; /* Fond vert clair au survol */
+}
+
+/* Bouton "Ajouter" */
+#btnAjouter {
+    -fx-background-color: #29ab87; /* Vert clair */
+}
+
+#btnAjouter:hover {
+    -fx-background-color: #ace1af; /* Vert pastel au survol */
+}
+
+/* Bouton "Modifier" */
+#btnModifier {
+    -fx-background-color: #013220; /* Vert foncé */
+}
+
+#btnModifier:hover {
+    -fx-background-color: #00693e; /* Vert moyen au survol */
+}
+
+/* Bouton "Supprimer" */
+#btnSupprimer {
+    -fx-background-color: #FF6347; /* Tomate pour l'alerte de suppression */
+    -fx-font-size: 14px;
+}
+
+#btnSupprimer:hover {
+    -fx-background-color: #D32F2F;
+}
+
+/* Espacement entre les éléments */
+.anchor-pane {
+    -fx-padding: 20px;
+}
+
+/* Centrer les boutons */
+.button {
+    -fx-alignment: center;
+}
+
+/* Espacement entre les boutons */
+.button {
+    -fx-spacing: 15px;
+}
+
+/* Bordure légère pour les TextFields */
+.text-field {
+    -fx-border-color: #00693e;
+    -fx-border-radius: 5px;
+}
+
+/* Mise en page des boutons en bas */
+.button-container {
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+    -fx-padding: 20px;
+}
+
+/* Style pour les ComboBox */
+.combo-box {
+    -fx-background-color: #ffffff; /* Fond blanc */
+    -fx-border-color: #00693e; /* Bordure verte */
+    -fx-border-radius: 5px;
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 250px;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #00693e; /* Fond vert pour la flèche */
+    -fx-border-radius: 5px;
+}
+
+.combo-box .arrow-button:hover {
+    -fx-background-color: #29ab87; /* Fond vert clair au survol */
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #ffffff; /* Fond blanc pour les éléments */
+    -fx-text-fill: #013220; /* Texte vert foncé */
+    -fx-padding: 5px;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #ace1af; /* Vert pastel au survol */
+}
+
+.combo-box:focused {
+    -fx-border-color: #29ab87; /* Bordure verte claire au focus */
+}

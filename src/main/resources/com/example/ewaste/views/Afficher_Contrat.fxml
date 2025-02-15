@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import java.net.URL?>
+
+<AnchorPane prefHeight="620.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.AfficherContratController">
+    <stylesheets>
+        <URL value="@CentreView.css" />
+    </stylesheets>
+   <children>
+   
+       <!-- Boutons -->
+       <Button fx:id="btnAjouter" layoutX="717.0" layoutY="527.0" mnemonicParsing="false" onAction="#Ajouter" text="Ajouter" />
+       <Button fx:id="btnModifier" layoutX="627.0" layoutY="449.0" mnemonicParsing="false" onAction="#Modifier" text="Modifier" />
+       <Button fx:id="btnSupprimer" layoutX="537.0" layoutY="527.0" mnemonicParsing="false" onAction="#Supprimer" text="Supprimer" />
+      <ListView fx:id="afficher" layoutX="14.0" layoutY="14.0" prefHeight="596.0" prefWidth="514.0" />
+      <DatePicker fx:id="DateDebut" layoutX="577.0" layoutY="291.0" promptText="Date Début" />
+      <DatePicker fx:id="DateFin" layoutX="577.0" layoutY="370.0" promptText="Date Fin" />
+      <ComboBox fx:id="idEmploye" layoutX="627.0" layoutY="86.0" prefWidth="150.0" promptText="id Employé" />
+      <ComboBox fx:id="idCentre" layoutX="627.0" layoutY="164.0" prefWidth="150.0" promptText="id Centre" />
+      <Button fx:id="Centre" layoutX="772.0" layoutY="14.0" mnemonicParsing="false" onAction="#GoToCentre" text="Centre" />
+   </children>
+
+</AnchorPane>

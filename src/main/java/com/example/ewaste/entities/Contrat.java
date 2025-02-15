@@ -5,22 +5,22 @@ import java.time.LocalDate;
 public class Contrat {
     private int id;
     private int idCentre;
-    private int idCitoyen;
+    private int idEmploye;
     private LocalDate dateDebut;
     private LocalDate dateFin;
 
     public Contrat() {}
 
-    public Contrat(int id,int idCentre,int idCitoyen,LocalDate dateDebut,LocalDate dateFin) {
+    public Contrat(int id,int idCentre,int idEmploye,LocalDate dateDebut,LocalDate dateFin) {
         this.id = id;
         this.idCentre = idCentre;
-        this.idCitoyen = idCitoyen;
+        this.idEmploye = idEmploye;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
     }
-    public Contrat(int idCentre,int idCitoyen,LocalDate dateDebut,LocalDate dateFin) {
+    public Contrat(int idCentre,int idEmploye,LocalDate dateDebut,LocalDate dateFin) {
         this.idCentre = idCentre;
-        this.idCitoyen = idCitoyen;
+        this.idEmploye = idEmploye;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
     }
@@ -37,11 +37,11 @@ public class Contrat {
     public void setIdCentre(int idCentre) {
         this.idCentre = idCentre;
     }
-    public int getIdCitoyen() {
-        return idCitoyen;
+    public int getIdEmploye() {
+        return idEmploye;
     }
-    public void setIdCitoyen(int idCitoyen) {
-        this.idCitoyen = idCitoyen;
+    public void setIdEmploye(int idEmploye) {
+        this.idEmploye = idEmploye;
     }
     public LocalDate getDateDebut() {
         return dateDebut;
@@ -60,10 +60,10 @@ public class Contrat {
     public String toString() {
         return "Contrat{" +
                 "id=" + id +
-                ", idCentre=" + idCentre +
-                ", idCitoyen=" + idCitoyen +
-                ", dateDebut='" + dateDebut + '\'' +
-                ", dateFin='" + dateFin + '\'' +
+                ", id_centre=" + idCentre +
+                ", id_employe=" + idEmploye +
+                ", date_debut='" + dateDebut + '\'' +
+                ", date_fin='" + dateFin + '\'' +
                 '}';
     }
 }

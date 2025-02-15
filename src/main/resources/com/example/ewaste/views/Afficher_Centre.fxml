@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<AnchorPane prefHeight="470.0" prefWidth="817.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.AfficherCentreController">
+
+    <stylesheets>
+        <URL value="@CentreView.css" />
+    </stylesheets>
+
+   <children>
+      <Button fx:id="btnSupprimer" layoutX="199.0" layoutY="404.0" mnemonicParsing="false" onAction="#Supprimer" prefHeight="44.0" prefWidth="117.0" text="Supprimer" />
+      <Button fx:id="Modifier" layoutX="584.0" layoutY="295.0" mnemonicParsing="false" onAction="#ModifierCentre" prefHeight="44.0" prefWidth="153.0" text="Modifier" />
+      <TextField fx:id="NomCentre" layoutX="534.0" layoutY="41.0" />
+      <TextField fx:id="AdresseCentre" layoutX="535.0" layoutY="112.0" />
+      <TextField fx:id="TelephoneCentre" layoutX="535.0" layoutY="169.0" />
+      <TextField fx:id="EmailCentre" layoutX="536.0" layoutY="235.0" />
+      <Text layoutX="609.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom du Centre" />
+      <Text layoutX="633.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Adresse" />
+      <Text layoutX="625.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Telephone" />
+      <Text layoutX="629.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+      <Button fx:id="AjouterCentre" layoutX="605.0" layoutY="369.0" mnemonicParsing="false" onAction="#AjouterCentre" prefHeight="44.0" prefWidth="110.0" text="Ajouter" />
+      <ListView fx:id="affichage" layoutX="14.0" layoutY="12.0" prefHeight="369.0" prefWidth="487.0" />
+      <Button fx:id="Contrats" layoutX="444.0" layoutY="404.0" mnemonicParsing="false" onAction="#GoToContrat" text="Contrats" />
+   </children>
+</AnchorPane>
