@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+
+<?import java.net.URL?>
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.ParticipationController">
+    <stylesheets>
+        <URL value="@../../styles/event-stylesheet.css" /> <!-- Lien vers le fichier CSS -->
+    </stylesheets>
+
+    <!-- Titre général en haut -->
+    <top>
+        <VBox alignment="CENTER" spacing="5" styleClass="header">
+            <Label text="Event Registration" styleClass="main-title"/>
+        </VBox>
+    </top>
+
+    <!-- Contenu principal au centre -->
+    <center>
+        <HBox alignment="CENTER" spacing="0" styleClass="main-content">
+            <!-- Colonne verte à gauche -->
+            <VBox alignment="CENTER" spacing="20" styleClass="left-column">
+                <!-- Logo en haut -->
+                <ImageView fitWidth="100" fitHeight="100" preserveRatio="true">
+                    <image>
+                        <Image url="@../../assets/logo.png"/> <!-- Chemin du logo -->
+                    </image>
+                </ImageView>
+
+                <!-- Boutons dans la colonne gauche -->
+                <Button text="Poubelle" styleClass="left-button" />
+                <Button text="Demande" styleClass="left-button" />
+                <Button text="Réclamation" styleClass="left-button" />
+                <Button text="Événement" styleClass="left-button" />
+            </VBox>
+
+            <!-- Cadre contenant le formulaire et l'image -->
+            <VBox alignment="CENTER" spacing="10" styleClass="form-image-container">
+                <!-- Sous-titre pour le formulaire et l'image -->
+                <Label text="Register right now while places are available" styleClass="subtitle"/>
+
+                <!-- Formulaire et image -->
+                <HBox alignment="CENTER" spacing="20" styleClass="form-image-wrapper">
+                    <!-- Formulaire à gauche -->
+                    <VBox alignment="CENTER" spacing="10" styleClass="form-container">
+                        <!-- Formulaire -->
+                        <GridPane hgap="10" vgap="10" alignment="CENTER">
+                            <!-- Première ligne : First Name et Last Name -->
+                            <Label text="First Name*" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                            <TextField fx:id="firstNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                            <Label text="Last Name*" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                            <TextField fx:id="lastNameField" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+                            <!-- Deuxième ligne : E-mail et Phone -->
+                            <Label text="E-mail*" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                            <TextField fx:id="emailField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                            <Label text="Phone" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                            <TextField fx:id="phoneField" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+                            <!-- Troisième ligne : City -->
+                            <Label text="City" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                            <TextField fx:id="cityField" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="3"/>
+
+                            <!-- Quatrième ligne : Country et Zip Code -->
+                            <Label text="Country" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                            <TextField fx:id="countryField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                            <Label text="Zip Code" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+                            <TextField fx:id="zipCodeField" GridPane.rowIndex="3" GridPane.columnIndex="3"/>
+                        </GridPane>
+
+                        <!-- Bouton Submit centré sous le formulaire -->
+                        <Button text="Submit" onAction="#handleSubmit" styleClass="button"/>
+                    </VBox>
+
+                    <!-- Image à droite -->
+                    <ImageView fitWidth="400" fitHeight="400" preserveRatio="true">
+                        <image>
+                            <Image url="@../../assets/event-image.jpg"/> <!-- Chemin de l'image -->
+                        </image>
+                    </ImageView>
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

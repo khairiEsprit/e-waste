@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.ewaste.Controllers.ListEvenementController"
+      spacing="20" styleClass="root" stylesheets="@../../styles/ListEvenement.css">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Titre de la page -->
+    <Label text="Liste des Événements" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <!-- Barre de recherche et boutons de tri -->
+    <HBox spacing="10" style="-fx-padding: 10;">
+        <TextField fx:id="searchField" promptText="Rechercher par nom..." styleClass="search-field"/>
+        <Button text="Trier par date" onAction="#sortByDate" styleClass="button"/>
+    </HBox>
+
+    <!-- Conteneur principal avec défilement -->
+    <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+        <GridPane fx:id="eventGrid" hgap="20" vgap="20" style="-fx-padding: 10;">
+            <!-- Colonne de gauche -->
+            <VBox fx:id="leftEventContainer" spacing="15" GridPane.columnIndex="0"/>
+
+            <!-- Colonne de droite -->
+            <VBox fx:id="rightEventContainer" spacing="15" GridPane.columnIndex="1"/>
+        </GridPane>
+    </ScrollPane>
+</VBox>

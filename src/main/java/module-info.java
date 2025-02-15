@@ -1,6 +1,4 @@
 module com.example.ewaste {
-    requires javafx.controls;
-    requires javafx.fxml;
     requires javafx.web;
 
     requires org.controlsfx.controls;
@@ -9,7 +7,12 @@ module com.example.ewaste {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
+    requires jdk.jfr;
+    requires MaterialFX;
 
     opens com.example.ewaste to javafx.fxml;
     exports com.example.ewaste;
+    exports com.example.ewaste.Controllers;
+    opens com.example.ewaste.Controllers to javafx.fxml;
 }

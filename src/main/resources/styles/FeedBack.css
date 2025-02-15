@@ -1,0 +1,61 @@
+.root {
+    -fx-background-color: #FEFEFA; /* Fond principal */
+    -fx-padding: 20;
+    -fx-alignment: center; /* Centrer les éléments dans le VBox */
+}
+
+.title-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #013220; /* Couleur du titre */
+    -fx-alignment: center; /* Centrer le texte dans le Label */
+}
+
+.input-field {
+    -fx-pref-width: 400px;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #ACE1AF; /* Bordure verte claire */
+    -fx-background-color: white;
+    -fx-font-size: 14px;
+}
+
+.input-field:focused {
+    -fx-border-color: #29AB87; /* Bordure verte plus foncée lorsqu'en focus */
+}
+
+.star-container {
+    -fx-alignment: center;
+}
+
+.star-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 28px;
+    -fx-text-fill: #ACE1AF; /* Étoiles non sélectionnées */
+}
+
+.star-button:selected {
+    -fx-text-fill: #29AB87; /* Étoiles sélectionnées */
+}
+
+.submit-button {
+    -fx-background-color: #00693E; /* Fond vert foncé */
+    -fx-text-fill: white;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-alignment: center; /* Centrer le texte dans le bouton */
+}
+
+.submit-button:hover {
+    -fx-background-color: #013220; /* Fond vert plus foncé au survol */
+}
+
+/* Ajoutez ceci à votre fichier CSS si nécessaire */
+#feedbackImage {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+}
