@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="536.0" prefWidth="1023.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.ControllerPageTaches">
+
+   <stylesheets>
+      <URL value="@Taches.css" />
+   </stylesheets>
+
+   <children>
+      <Label layoutX="40.0" layoutY="39.0" styleClass="table-title" text="Liste des tâches :">
+         <font>
+            <Font name="Consolas" size="18.0" />
+         </font>
+      </Label>
+
+      <TextField fx:id="searchField" layoutX="40.0" layoutY="98.0" prefHeight="38.0" prefWidth="302.0" promptText="Rechercher une tâche..." styleClass="text-field" />
+      <Button fx:id="searchButton" layoutX="300.0" layoutY="97.0" styleClass="button" text="🔍" />
+
+      <TableView fx:id="tableTaches" layoutX="40.0" layoutY="157.0" prefHeight="299.0" prefWidth="574.0" styleClass="table-view">
+         <columns>
+            <TableColumn fx:id="colId" prefWidth="50.0" styleClass="table-column" text="ID" />
+            <TableColumn fx:id="colMessage" prefWidth="150.0" styleClass="table-column" text="Message" />
+            <TableColumn fx:id="colAdresse" prefWidth="200.0" styleClass="table-column" text="Adresse" />
+            <TableColumn fx:id="colEtat" prefWidth="150.0" styleClass="table-column" text="État" />
+         </columns>
+      </TableView>
+      <Label layoutX="678.0" layoutY="157.0" text="Message :">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="678.0" layoutY="237.0" text="Adresse :">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="fieldMessage" layoutX="676.0" layoutY="187.0" />
+      <TextField fx:id="fieldAdresse" layoutX="676.0" layoutY="268.0" />
+      <Label layoutX="676.0" layoutY="74.0" text="Employé :">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="fieldIdEmploye" layoutX="676.0" layoutY="106.0" />
+      <Button fx:id="btnAjouter" layoutX="680.0" layoutY="412.0" mnemonicParsing="false" onAction="#ajouterTache" text="Ajouter" />
+      <Button fx:id="btnModifier" layoutX="833.0" layoutY="412.0" mnemonicParsing="false" text="Modifier" />
+      <Label layoutX="676.0" layoutY="318.0" text="Etat :">
+         <font>
+            <Font name="Consolas" size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="fieldEtat" layoutX="676.0" layoutY="354.0" promptText="État de la tâche" />
+      <Button fx:id="btnSupprimer" layoutX="364.0" layoutY="97.0" mnemonicParsing="false" onAction="#supprimerTache" text="Supprimer" />
+      <Button layoutX="482.0" layoutY="97.0" mnemonicParsing="false" text="Plannification" />
+   </children>
+</AnchorPane>

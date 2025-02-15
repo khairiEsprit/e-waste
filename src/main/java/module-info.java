@@ -10,9 +10,11 @@ module com.example.ewaste {
     //requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.sql;
+    requires java.management;
     opens com.example.ewaste.controllers to javafx.fxml;
     exports com.example.ewaste.controllers;
 
     opens com.example.ewaste to javafx.fxml;
+    opens com.example.ewaste.entities to javafx.base;
     exports com.example.ewaste;
 }
