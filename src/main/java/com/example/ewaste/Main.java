@@ -9,9 +9,10 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/views/event/participation-form.fxml"));
-        primaryStage.setTitle("Gestion des Avis");
-        primaryStage.setScene(new Scene(root, 400, 400));
+        // Charge le fichier FXML depuis le bon chemin
+        Parent root = FXMLLoader.load(getClass().getResource("/views/event/ListEvenement-view.fxml"));
+        primaryStage.setTitle("Event Registration");
+        primaryStage.setScene(new Scene(root, 800, 600)); // Taille de la fenêtre
         primaryStage.show();
     }
 

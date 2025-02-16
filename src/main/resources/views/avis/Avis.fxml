@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -13,49 +12,96 @@
 
     <!-- Gauche : Sidebar -->
     <left>
-        <VBox spacing="10" style="-fx-background-color: #F0F0F0; -fx-padding: 20;">
-            <Label text="Sidebar" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-            <!-- Ajoutez ici les éléments de votre sidebar -->
-            <Button text="Option 1" style="-fx-pref-width: 300px;"/>
-            <Button text="Option 2" style="-fx-pref-width: 300px;"/>
-            <Button text="Option 3" style="-fx-pref-width: 300px;"/>
-        </VBox>
-    </left>
-
-    <!-- Centre : Formulaire de feedback -->
-    <center>
-        <VBox spacing="20" alignment="CENTER" styleClass="root">
-            <padding>
-                <Insets top="40" right="40" bottom="40" left="40"/>
-            </padding>
-
-            <!-- Image en haut de l'interface -->
-            <ImageView fx:id="feedbackImage" fitWidth="300" fitHeight="300" preserveRatio="true">
+        <VBox spacing="10" styleClass="sidebar">
+            <!-- Logo en haut de la sidebar -->
+            <ImageView fitWidth="100" fitHeight="100" preserveRatio="true">
                 <image>
-                    <Image url="@../../assets/feedback.png"/> <!-- Chemin relatif vers l'image -->
+                    <Image url="@../../assets/logo.png"/>
                 </image>
             </ImageView>
 
-            <!-- Titre de la page -->
-            <Label text="Votre Avis" styleClass="title-label"/>
-
-            <!-- Champ pour le nom/prénom -->
-            <TextField fx:id="nameField" promptText="Nom/Prénom" styleClass="input-field"/>
-
-            <!-- Champ pour la description de l'avis -->
-            <TextArea fx:id="descriptionField" promptText="Description de votre avis" styleClass="input-field"/>
-
-            <!-- Note sous forme de 5 étoiles -->
-            <HBox spacing="10" styleClass="star-container">
-                <ToggleButton fx:id="star1" text="★" styleClass="star-button"/>
-                <ToggleButton fx:id="star2" text="★" styleClass="star-button"/>
-                <ToggleButton fx:id="star3" text="★" styleClass="star-button"/>
-                <ToggleButton fx:id="star4" text="★" styleClass="star-button"/>
-                <ToggleButton fx:id="star5" text="★" styleClass="star-button"/>
-            </HBox>
-
-            <!-- Bouton pour envoyer l'avis -->
-            <Button fx:id="submitButton" onAction="#handleSubmit" text="Envoyer" styleClass="submit-button"/>
+            <!-- Boutons du sidebar -->
+            <Button text="Poubelle" styleClass="sidebar-button"/>
+            <Button text="Demande" styleClass="sidebar-button"/>
+            <Button text="Réclamation" styleClass="sidebar-button"/>
+            <Button text="Événement" styleClass="sidebar-button"/>
         </VBox>
+    </left>
+
+    <!-- Centre : Formulaire de feedback et contenu de notation -->
+    <center>
+        <HBox spacing="20" alignment="CENTER">
+            <!-- Formulaire de feedback -->
+            <VBox spacing="20" alignment="CENTER" styleClass="form-container">
+                <!-- Image en haut de l'interface -->
+                <ImageView fx:id="feedbackImage" fitWidth="500" fitHeight="300" preserveRatio="true">
+                    <image>
+                        <Image url="@../../assets/feedback.png"/>
+                    </image>
+                </ImageView>
+
+                <!-- Titre de la page -->
+                <Label text="Votre Avis" styleClass="title-label"/>
+
+                <!-- Champ pour le nom/prénom -->
+                <TextField fx:id="nameField" promptText="Nom/Prénom" styleClass="input-field"/>
+
+                <!-- Champ pour la description de l'avis -->
+                <TextArea fx:id="descriptionField" promptText="Description de votre avis" styleClass="input-field"/>
+
+                <!-- Note sous forme de 5 étoiles -->
+                <HBox spacing="10" styleClass="star-container">
+                    <ToggleButton fx:id="star1" text="★" styleClass="star-button"/>
+                    <ToggleButton fx:id="star2" text="★" styleClass="star-button"/>
+                    <ToggleButton fx:id="star3" text="★" styleClass="star-button"/>
+                    <ToggleButton fx:id="star4" text="★" styleClass="star-button"/>
+                    <ToggleButton fx:id="star5" text="★" styleClass="star-button"/>
+                </HBox>
+
+                <!-- Bouton pour envoyer l'avis -->
+                <Button fx:id="submitButton" onAction="#handleSubmit" text="Envoyer" styleClass="submit-button"/>
+            </VBox>
+
+            <!-- Contenu de notation réduit et stylisé -->
+            <VBox spacing="10" alignment="CENTER" styleClass="rating-container">
+                <!-- Texte en haut du contenu de notation -->
+                <Label text="Les avis sont importants, car ils offrent des retours constructifs qui aident à améliorer continuellement la qualité des services et à mieux répondre aux attentes des utilisateurs."
+                       styleClass="rating-text"/>
+
+                <HBox alignment="CENTER" spacing="10">
+                    <VBox alignment="CENTER">
+                        <!-- Étoile et titre "4.5" -->
+                        <HBox alignment="CENTER" spacing="5">
+                            <Label text="★" styleClass="average-rating"/>
+                            <Label text="4.5" styleClass="star-icon"/>
+                        </HBox>
+                        <!-- Label "+655 reviews" -->
+                        <Label text="+655 reviews" styleClass="reviews-label"/>
+                    </VBox>
+                    <VBox spacing="5" alignment="CENTER_LEFT">
+                        <HBox spacing="5">
+                            <Label text="5★" styleClass="star-label"/>
+                            <ProgressBar progress="10" styleClass="progress-bar"/>
+                        </HBox>
+                        <HBox spacing="5">
+                            <Label text="4★" styleClass="star-label"/>
+                            <ProgressBar progress="0.8" styleClass="progress-bar"/>
+                        </HBox>
+                        <HBox spacing="5">
+                            <Label text="3★" styleClass="star-label"/>
+                            <ProgressBar progress="0.6" styleClass="progress-bar"/>
+                        </HBox>
+                        <HBox spacing="5">
+                            <Label text="2★" styleClass="star-label"/>
+                            <ProgressBar progress="0.4" styleClass="progress-bar"/>
+                        </HBox>
+                        <HBox spacing="5">
+                            <Label text="1★" styleClass="star-label"/>
+                            <ProgressBar progress="0.2" styleClass="progress-bar"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </HBox>
     </center>
 </BorderPane>

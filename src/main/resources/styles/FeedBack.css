@@ -1,61 +1,134 @@
+/* Couleurs de la palette */
+.primary-color { -fx-background-color: #013220; }
+.secondary-color { -fx-background-color: #00693E; }
+.tertiary-color { -fx-background-color: #29AB87; }
+.light-color { -fx-background-color: #ACE1AF; }
+.background-color { -fx-background-color: #FEFEFA; }
+
+/* Styles généraux */
 .root {
-    -fx-background-color: #FEFEFA; /* Fond principal */
+    -fx-background-color: #FEFEFA;
     -fx-padding: 20;
-    -fx-alignment: center; /* Centrer les éléments dans le VBox */
+}
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: #00693E;
+    -fx-padding: 20;
+    -fx-spacing: 10;
+}
+
+.sidebar-button {
+    -fx-pref-width: 200px;
+    -fx-background-color: #ACE1AF;
+    -fx-text-fill: #013220;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #29AB87;
+}
+
+/* Formulaire de feedback */
+.form-container {
+    -fx-padding: 40;
+    -fx-spacing: 20;
+    -fx-alignment: CENTER;
 }
 
 .title-label {
-    -fx-font-size: 28px;
+    -fx-font-size: 35px;
     -fx-font-weight: bold;
-    -fx-text-fill: #013220; /* Couleur du titre */
-    -fx-alignment: center; /* Centrer le texte dans le Label */
+    -fx-text-fill: #013220;
 }
 
 .input-field {
     -fx-pref-width: 400px;
-    -fx-padding: 10px;
+    -fx-pref-height: 40px;
+    -fx-font-size: 25px;
+    -fx-padding: 15px;
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
-    -fx-border-color: #ACE1AF; /* Bordure verte claire */
+    -fx-border-color: #ACE1AF;
     -fx-background-color: white;
-    -fx-font-size: 14px;
 }
 
 .input-field:focused {
-    -fx-border-color: #29AB87; /* Bordure verte plus foncée lorsqu'en focus */
+    -fx-border-color: #29AB87;
 }
 
 .star-container {
-    -fx-alignment: center;
+    -fx-alignment: CENTER;
+    -fx-spacing: 10;
 }
 
 .star-button {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-font-size: 28px;
-    -fx-text-fill: #ACE1AF; /* Étoiles non sélectionnées */
+    -fx-text-fill: #ACE1AF;
 }
 
 .star-button:selected {
-    -fx-text-fill: #29AB87; /* Étoiles sélectionnées */
+    -fx-text-fill: #29AB87;
 }
 
 .submit-button {
-    -fx-background-color: #00693E; /* Fond vert foncé */
+    -fx-pref-width: 200px;
+    -fx-pref-height: 50px;
+    -fx-font-size: 18px;
+    -fx-background-color: #00693E;
     -fx-text-fill: white;
-    -fx-padding: 10px 20px;
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-alignment: center; /* Centrer le texte dans le bouton */
 }
 
 .submit-button:hover {
-    -fx-background-color: #013220; /* Fond vert plus foncé au survol */
+    -fx-background-color: #013220;
 }
 
-/* Ajoutez ceci à votre fichier CSS si nécessaire */
-#feedbackImage {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+/* Contenu de notation */
+.rating-container {
+    -fx-background-color: #ACE1AF;
+    -fx-padding: 10;
+    -fx-pref-width: 350px;
+    -fx-spacing: 10;
+}
+
+.rating-text {
+    -fx-font-size: 18px;
+    -fx-text-fill: #013220;
+    -fx-wrap-text: true;
+}
+
+.average-rating {
+    -fx-font-size: 50px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #013220;
+}
+
+.reviews-label {
+    -fx-font-size: 24px;
+    -fx-text-fill: #29AB87;
+    -fx-background-color: #FEFEFA; /* Fond blanc cassé */
+    -fx-padding: 5px; /* Espace intérieur */
+    -fx-background-radius: 5px; /* Coins arrondis */
+    -fx-border-radius: 5px; /* Coins arrondis pour la bordure (si nécessaire) */
+}
+
+.star-icon {
+    -fx-font-size: 50px; /* Taille de l'étoile */
+    -fx-text-fill: #29AB87; /* Couleur de l'étoile */
+}
+
+.star-label {
+    -fx-font-size: 25px;
+}
+
+.progress-bar {
+    -fx-pref-width: 100px;
+    -fx-accent: #29AB87;
 }
