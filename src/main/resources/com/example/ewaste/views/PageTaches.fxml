@@ -12,7 +12,7 @@
 <AnchorPane prefHeight="536.0" prefWidth="1023.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.ControllerPageTaches">
 
    <stylesheets>
-      <URL value="@Taches.css" />
+      <URL value="@styles/Taches.css" />
    </stylesheets>
 
    <children>
@@ -52,7 +52,7 @@
       </Label>
       <TextField fx:id="fieldIdEmploye" layoutX="676.0" layoutY="106.0" />
       <Button fx:id="btnAjouter" layoutX="680.0" layoutY="412.0" mnemonicParsing="false" onAction="#ajouterTache" text="Ajouter" />
-      <Button fx:id="btnModifier" layoutX="833.0" layoutY="412.0" mnemonicParsing="false" text="Modifier" />
+      <Button fx:id="btnModifier" layoutX="833.0" layoutY="412.0" mnemonicParsing="false" onAction="#modifierTache" text="Modifier" />
       <Label layoutX="676.0" layoutY="318.0" text="Etat :">
          <font>
             <Font name="Consolas" size="18.0" />
@@ -60,6 +60,6 @@
       </Label>
       <TextField fx:id="fieldEtat" layoutX="676.0" layoutY="354.0" promptText="État de la tâche" />
       <Button fx:id="btnSupprimer" layoutX="364.0" layoutY="97.0" mnemonicParsing="false" onAction="#supprimerTache" text="Supprimer" />
-      <Button layoutX="482.0" layoutY="97.0" mnemonicParsing="false" text="Plannification" />
+      <Button layoutX="482.0" layoutY="97.0" mnemonicParsing="false" onAction="#ouvrirPlannification" text="Plannification" />
    </children>
 </AnchorPane>

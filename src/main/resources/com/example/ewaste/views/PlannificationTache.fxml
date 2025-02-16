@@ -7,19 +7,29 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="437.0" prefWidth="596.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.ControllerPlannificationTache">
+<AnchorPane prefHeight="470.0" prefWidth="600.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.ControllerPlannificationTache">
     <children>
-        <Label layoutX="194.0" layoutY="63.0" text="Priporité :">
-         <font>
-            <Font name="Consolas" size="18.0" />
-         </font></Label>
-        <TextField fx:id="fieldIdTache" editable="false" layoutX="194.0" layoutY="103.0" prefHeight="26.0" prefWidth="200.0" />
-        <Button fx:id="btnValider" layoutX="255.0" layoutY="264.0" text="Valider" />
-      <DatePicker layoutX="194.0" layoutY="197.0" prefHeight="26.0" prefWidth="200.0" />
-      <Label layoutX="194.0" layoutY="154.0" text="Date limite de la tache :">
-         <font>
-            <Font name="Consolas" size="18.0" />
-         </font>
-      </Label>
+        <Label layoutX="50.0" layoutY="30.0" text="Planification de Tâche" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+        <Label layoutX="50.0" layoutY="80.0" text="Priorité :">
+            <font>
+                <Font name="Consolas" size="16.0" />
+            </font>
+        </Label>
+        <TextField fx:id="fieldPriorite" layoutX="200.0" layoutY="75.0" prefHeight="26.0" prefWidth="300.0" promptText="Entrez la priorité" />
+
+        <Label layoutX="50.0" layoutY="140.0" text="Date limite :">
+            <font>
+                <Font name="Consolas" size="16.0" />
+            </font>
+        </Label>
+        <DatePicker fx:id="datePicker" layoutX="200.0" layoutY="135.0" prefHeight="26.0" prefWidth="300.0" />
+
+        <Label fx:id="labelIdTache" layoutX="50.0" layoutY="200.0" text="ID Tâche :" style="-fx-font-size: 16px;"/>
+        <TextField fx:id="fieldIdTache" layoutX="200.0" layoutY="195.0" prefHeight="26.0" prefWidth="300.0" editable="false"/>
+
+        <Button fx:id="btnAjouter" layoutX="50.0" layoutY="260.0" text="Ajouter" onAction="#ajouterPlanification" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+        <Button fx:id="btnModifier" layoutX="200.0" layoutY="260.0" text="Modifier" onAction="#modifierPlanification" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+        <Button fx:id="btnSupprimer" layoutX="350.0" layoutY="260.0" text="Supprimer" onAction="#supprimerPlanification" style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
     </children>
 </AnchorPane>

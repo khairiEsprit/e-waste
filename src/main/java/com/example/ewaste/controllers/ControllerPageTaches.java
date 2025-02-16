@@ -5,14 +5,24 @@ import com.example.ewaste.repository.ServiceTache;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
+
+
 import javax.management.Descriptor;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class ControllerPageTaches {
+public class ControllerPageTaches implements Initializable {
 
     @FXML
     private TableView<Tache> tableTaches;
@@ -44,23 +54,12 @@ public class ControllerPageTaches {
     @FXML
     private Button btnAjouter;
 
+    @FXML
+    private Button btnModifier;
+
     private final ServiceTache serviceTache = new ServiceTache();
 
-    @FXML
-    public void initialize() {
-        // Associer les colonnes aux attributs de l'objet Tache
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colMessage.setCellValueFactory(new PropertyValueFactory<>("message"));
-        colAdresse.setCellValueFactory(new PropertyValueFactory<>("adresse_poubelle"));
-        colEtat.setCellValueFactory(new PropertyValueFactory<>("etat"));
 
-        // Charger les données dans le tableau
-        try {
-            loadTableData();
-        } catch (SQLException e) {
-            e.printStackTrace(); // Gérer l'exception de manière plus propre si nécessaire
-        }
-    }
 
     private void loadTableData() throws SQLException {
         List<Tache> taches = serviceTache.afficher(1); // Remplace 1 par l'ID du centre voulu
@@ -152,6 +151,75 @@ public class ControllerPageTaches {
 
 
 
+    @FXML
+    private void ouvrirPlannification() {
+        // Récupérer la tâche sélectionnée
+        Tache selectedTache = tableTaches.getSelectionModel().getSelectedItem();
+
+        if (selectedTache == null) {
+            showAlert("Erreur", "Veuillez sélectionner une tâche pour la planification.");
+            return;
+        }
+
+        try {
+            // Charger la page FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/PlannificationTache.fxml"));
+            Parent root = loader.load();
+
+            // Récupérer le contrôleur de la nouvelle fenêtre et passer l'ID de la tâche
+            ControllerPlannificationTache controller = loader.getController();
+            controller.initData(selectedTache.getId());
+
+            // Afficher la nouvelle fenêtre
+            Stage stage = new Stage();
+            stage.setTitle("Planification de la tâche");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir la page de planification !");
+        }
+    }
+
+    @FXML
+    private void modifierTache() {
+        try {
+            Tache selectedTache = tableTaches.getSelectionModel().getSelectedItem();
+            if (selectedTache == null) {
+                showAlert("Erreur", "Veuillez sélectionner une tâche à modifier.");
+                return;
+            }
+
+            int idEmploye = Integer.parseInt(fieldIdEmploye.getText());
+            String adressePoubelle = fieldAdresse.getText();
+            String message = fieldMessage.getText();
+            String etat = fieldEtat.getText().trim();
+
+            if (adressePoubelle.isEmpty() || message.isEmpty() || etat.isEmpty()) {
+                showAlert("Erreur", "Tous les champs doivent être remplis !");
+                return;
+            }
+
+            selectedTache.setId_employe(idEmploye);
+            selectedTache.setAdresse_poubelle(adressePoubelle);
+            selectedTache.setMessage(message);
+            selectedTache.setEtat(etat);
+
+            serviceTache.modifier(selectedTache);  // Appel à la méthode de modification dans le service
+            loadTableData();
+            fieldIdEmploye.clear();
+            fieldMessage.clear();
+            fieldAdresse.clear();
+            fieldEtat.clear();
+        } catch (NumberFormatException e) {
+            showAlert("Erreur", "ID Employé doit être un nombre valide !");
+        } catch (SQLException e) {
+            showAlert("Erreur", "Impossible de modifier la tâche !");
+        }
+    }
+
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -159,4 +227,32 @@ public class ControllerPageTaches {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Associer les colonnes aux attributs de l'objet Tache
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colMessage.setCellValueFactory(new PropertyValueFactory<>("message"));
+        colAdresse.setCellValueFactory(new PropertyValueFactory<>("adresse_poubelle"));
+        colEtat.setCellValueFactory(new PropertyValueFactory<>("etat"));
+
+        // Charger les données dans le tableau
+        try {
+            loadTableData();
+        } catch (SQLException e) {
+            e.printStackTrace(); // Gérer l'exception de manière plus propre si nécessaire
+        }
+
+        // Ajouter un écouteur pour détecter la sélection d'une ligne
+        tableTaches.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                // Remplir les champs avec les données de la tâche sélectionnée
+                fieldIdEmploye.setText(String.valueOf(newValue.getId_employe()));
+                fieldAdresse.setText(newValue.getAdresse_poubelle());
+                fieldMessage.setText(newValue.getMessage());
+                fieldEtat.setText(newValue.getEtat());
+            }
+        });
+    }
+
 }

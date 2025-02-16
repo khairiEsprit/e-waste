@@ -81,4 +81,22 @@ public class ServicePlanificationTache implements IService<PlanificationTache> {
             return null;
         }
     }
+
+    public PlanificationTache getByIdTache(int idTache) throws SQLException {
+        String sql = "SELECT * FROM planificationtache WHERE id_tache = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, idTache);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return new PlanificationTache(
+                    rs.getInt("id"),
+                    rs.getInt("id_tache"),
+                    rs.getString("priorite"),
+                    rs.getDate("date_limite")
+            );
+        }
+        return null;
+    }
+
 }

@@ -28,7 +28,6 @@ public class ServiceTache implements IService<Tache> {
         ps.setString(4, tache.getMessage());
         ps.setString(5, tache.getEtat());
         ps.executeUpdate();
-
     }
 
     @Override
@@ -91,5 +90,9 @@ public class ServiceTache implements IService<Tache> {
         }
         return taches;
     }
+
+
+
+
 
 }
