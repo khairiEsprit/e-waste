@@ -16,5 +16,3 @@ public enum etat {
                return label;
           }
      }
-
-

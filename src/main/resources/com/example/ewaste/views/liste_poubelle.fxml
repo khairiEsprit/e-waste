@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.ewaste.controllers.Ajouter_poubelle_controller"
+            prefHeight="700.0" prefWidth="1200.0"
+            stylesheets="@style/style.css">
+
+    <BorderPane prefHeight="700.0" prefWidth="1200.0" styleClass="container">
+
+        <left>
+            <VBox spacing="15" styleClass="sidebar" prefWidth="300">
+
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="sidebar-header">
+                    <FontAwesomeIconView glyphName="TRASH_ALT" glyphSize="24" styleClass="header-icon"/>
+                    <Label text="Gestion des Poubelles" styleClass="header-title"/>
+                </HBox>
+
+                <!-- Menu principal -->
+                <VBox spacing="8" styleClass="menu-container">
+                    <Button text="Ajouter" styleClass="menu-btn " onAction="#handleAdd">
+                        <graphic>
+                            <FontAwesomeIconView glyphName="PLUS_CIRCLE" glyphSize="16"/>
+                        </graphic>
+                    </Button>
+
+                    <Button text="Modifier" styleClass="menu-btn" onAction="#handleEdit">
+                        <graphic>
+                            <FontAwesomeIconView glyphName="EDIT" glyphSize="16"/>
+                        </graphic>
+                    </Button>
+                </VBox>
+
+                <!-- Séparateur stylisé -->
+                <Separator styleClass="fancy-separator"/>
+
+                <!-- Contrôle du thème -->
+                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="theme-control">
+                    <!--<FontAwesomeIconView glyphName="MOON_O" glyphSize="18" styleClass="theme-icon"/>-->
+                    <Label text="Apparence :" styleClass="theme-label"/>
+                    <ToggleButton fx:id="themeToggle" styleClass="theme-toggle"/>
+                </HBox>
+
+            </VBox>
+        </left>
+
+        <center>
+            <VBox spacing="15" styleClass="content">
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="list-header">
+                    <TextField fx:id="searchField" promptText="Rechercher..." styleClass="task-name"/>
+                    <ComboBox fx:id="sortComboBox" promptText="Trier par" styleClass="status-inprogress"/>
+                </HBox>
+
+                <ListView fx:id="listPoubelles" styleClass="task-list" prefHeight="600"/>
+
+
+                <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="progress-container">
+                    <Button fx:id="btnAjouter" text="Ajouter" styleClass="priority-high"/>
+                    <Button fx:id="btnModifier" text="Modifier" styleClass="priority-medium"/>
+                </HBox>
+            </VBox>
+        </center>
+
+    </BorderPane>
+
+</AnchorPane>

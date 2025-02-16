@@ -9,8 +9,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-
-
 public class HomePage extends Application {
 
     public static void main(String[] args) {
@@ -18,20 +16,12 @@ public class HomePage extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
-        //load les interface
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/ewaste/views/Ajouter_Poubelle.fxml"));
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        }
-        catch (IOException e){
-            System.out.println(e.getMessage());
-        }
-
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/ewaste/views/liste_poubelle.fxml"));
+        primaryStage.setTitle("Gestion des Poubelles");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
     }
+    
 
-    public void savePersonne(ActionEvent actionEvent) {
-    }
 }
