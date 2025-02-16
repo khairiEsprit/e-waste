@@ -21,7 +21,7 @@ public class HomePage extends Application {
     public void start(Stage primaryStage) {
         //load les interface
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/ewaste/views/views/views/inscription.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/ewaste/views/Ajouter_Poubelle.fxml"));
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();

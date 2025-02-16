@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<AnchorPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.ewaste.controllers.Ajouter_poubelle_controller"
+            prefHeight="400.0"
+            prefWidth="600.0"
+            stylesheets="@style/style.css">
+
+
+    <VBox spacing="20" AnchorPane.topAnchor="20"
+          AnchorPane.rightAnchor="20"
+          AnchorPane.bottomAnchor="20"
+          AnchorPane.leftAnchor="20" styleClass="main-container">
+        <Label styleClass="title-label"/>
+        <Label styleClass="field-label"/>
+        <Button styleClass="primary-button"/>
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <!-- Titre -->
+        <Label text="Ajouter une Poubelle" styleClass="title-label"/>
+
+        <GridPane hgap="10" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="150"/>
+                <ColumnConstraints prefWidth="300"/>
+            </columnConstraints>
+
+            <!-- Centre -->
+            <Label text="Centre" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" fx:id="idCentreField"/>
+
+            <!-- Adresse -->
+            <Label text="Adresse" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField GridPane.rowIndex="1" GridPane.columnIndex="1" fx:id="adresseField"/>
+
+
+
+            <!-- Niveau de remplissage -->
+            <Label text="Niveau de Remplissage %" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField GridPane.rowIndex="3" GridPane.columnIndex="1" fx:id="niveauField"/>
+
+            <!-- Date d'installation -->
+            <Label text="Date d'installation" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <DatePicker GridPane.rowIndex="4" GridPane.columnIndex="1" fx:id="dateInstallationPicker"/>
+
+            <!-- État -->
+            <Label text="Etat_Poubelle" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="field-label"/>
+            <ComboBox GridPane.rowIndex="5" GridPane.columnIndex="1" fx:id="etatComboBox">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <ComboBox styleClass="combo-box"/>
+                        <DatePicker styleClass="date-picker"/>
+                        <String fx:value="FONCTIONNEL"/>
+                        <String fx:value="EN_PANNE"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+
+        </GridPane>
+
+
+
+
+        <!-- Nouveau code corrigé -->
+        <Button text="Ajouter" fx:id="ajouterBtn" prefWidth="200" onAction="#ajouterPoubelle"/>
+    </VBox>
+
+</AnchorPane>

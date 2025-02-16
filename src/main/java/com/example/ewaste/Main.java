@@ -46,10 +46,10 @@ public class Main {
             // Supprimer la poubelle
             service.supprimer(4);
             //HISTORIQUE*****************************************************************************
-            Historique_Poubelle h = new Historique_Poubelle(17,new Date(),type.REMPLISSAGE,"la pubelle est rempli",45.5f);
+            Historique_Poubelle h = new Historique_Poubelle(19,new Date(),type.REMPLISSAGE,"la pubelle est rempli",45.5f);
             Historique_Poubelle h1= new Historique_Poubelle(11,new Date(),type.REPARATION,"la pubelle est en coure de Reparation ",0.0f);
             Historique_Poubelle h2= new Historique_Poubelle(3,new Date(),type.PANNE,"la pubelle est en panne",0.0f);
-            Historique_Poubelle h3= new Historique_Poubelle(25,new Date(),type.VIDAGE,"la pubelle est vide",00.0f);
+            Historique_Poubelle h3= new Historique_Poubelle(16,new Date(),type.VIDAGE,"la pubelle est vide",00.0f);
 
             service_h.ajouter(h);
             service_h.ajouter(h1);
