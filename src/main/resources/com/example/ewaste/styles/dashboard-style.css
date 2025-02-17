@@ -129,7 +129,7 @@
     -fx-background-color: #22ad72;
 }
 .delete-btn{
-    -fx-background-color: #013220;
+    -fx-background-color: red;
     -fx-background-radius: 8px;
     -fx-cursor: hand;
     -fx-text-fill: #fff;
@@ -137,7 +137,7 @@
     -fx-font-family: "Arial";
 }
 .delete-btn:hover{
-    -fx-background-color: #ACE1AF;
+    -fx-background-color: red;
 }
 .clear-btn{
     -fx-background-color: #29AB87;
@@ -158,4 +158,36 @@
     -fx-font-family: "Tahoma";
     -fx-border-radius: 4px;
     -fx-padding: 0px 0px 0px 5px;
+}
+
+
+/* Page title styling */
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Button styling */
+/*.nav-btn {*/
+/*    -fx-background-color: #007ACC;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+/* Report box styling */
+.rapport-section {
+    -fx-background-color: #ACE1AF;
+    -fx-border-color: #013220;
+    -fx-border-width: 2;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+}
+
+/* Report section title styling */
+.rapport-section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #013220;
+    -fx-padding: 0 0 5 0;
 }
