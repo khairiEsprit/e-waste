@@ -13,7 +13,7 @@
     <top>
         <HBox spacing="20" style="-fx-background-color: #2C3E50; -fx-padding: 10;">
             <Button text="Demande" onAction="#showDemande" style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14px;"/>
-
+            <Button text="Consulter" onAction="#show" style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14px;"/>
         </HBox>
     </top>
 

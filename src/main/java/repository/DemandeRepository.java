@@ -75,4 +75,24 @@ public class DemandeRepository implements IService<Demande> {
         }
         return demandes;
     }
+    public List<Demande> getDemandesByUserId(int userId) throws SQLException {
+        List<Demande> demandes = new ArrayList<>();
+        String sql = "SELECT * FROM `demande` WHERE `id_utilisateur`=?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, 1);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            demandes.add(new Demande(
+                    rs.getInt("id"),
+                    rs.getInt("id_utilisateur"),
+                    rs.getInt("id_centre"),
+                    rs.getString("adresse"),
+                    rs.getString("email_utilisateur"),
+                    rs.getString("message"),
+                    rs.getString("type")
+            ));
+        }
+        return demandes;
+    }
 }
