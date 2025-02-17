@@ -13,7 +13,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 //
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("views/Dashboard.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("views/mainLoginSignUp.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 //        stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);

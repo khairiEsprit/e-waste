@@ -21,6 +21,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 import static com.example.ewaste.utils.RoleNavigation.navigateUser;
+import static com.example.ewaste.utils.Validator.isValidEmail;
 
 public class SignupController {
 
@@ -180,14 +181,7 @@ public class SignupController {
             }
     }
 
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-        return email != null && email.matches(emailRegex);
-    }
-    private boolean isValidPhoneNumber(String phoneNumber) {
-        String phoneRegex = "^\\d{8}$";
-        return phoneNumber.matches(phoneRegex);
-    }
+
 
 
 

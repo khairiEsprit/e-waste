@@ -114,6 +114,27 @@ public class UserRepository implements EntityCrud<User> {
         }
     }
 
+
+    public void updateEmailAndPhone(User u) {
+        String query = "UPDATE utilisateur SET email = ?, telephone = ? WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setString(1, u.getEmail());
+            preparedStatement.setInt(2, u.getTelephone());
+            preparedStatement.setInt(3, u.getId());
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("User email and phone updated successfully");
+            } else {
+                System.out.println("User not found");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error updating user: " + e.getMessage());
+        }
+    }
+
+
     public User getUserById(int id) {
         String query = "SELECT * FROM utilisateur WHERE id = ?";
         try (PreparedStatement statement = conn.prepareStatement(query)) {
