@@ -1,7 +1,9 @@
 package com.example.ewaste.controllers;
 
 import com.example.ewaste.entities.PlanificationTache;
-import com.example.ewaste.repository.ServicePlanificationTache;
+import com.example.ewaste.repository.PlanificationTacheRepository;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -29,17 +31,18 @@ public class ControllerPlannificationTache {
 
 
     private int idTache;
-    private final ServicePlanificationTache servicePlanification = new ServicePlanificationTache();
+    private final PlanificationTacheRepository servicePlanification = new PlanificationTacheRepository();
 
     public void initData(int idTache) {
         this.idTache = idTache;
         labelIdTache.setText("Tâche ID : " + idTache);
         fieldIdTache.setText(String.valueOf(idTache));
+        loadComboBoxData();
 
         try {
             PlanificationTache planification = servicePlanification.getByIdTache(idTache);
             if (planification != null) {
-                fieldPriorite.setText(planification.getPriorite());
+                comboPriorite.setValue(planification.getPriorite());
                 if (planification.getDate_limite() != null) {
                     datePicker.setValue(planification.getDate_limite().toLocalDate());
                 } else {
@@ -62,7 +65,7 @@ public class ControllerPlannificationTache {
         }
 
         try {
-            String priorite = fieldPriorite.getText();
+            String priorite = comboPriorite.getValue();
             LocalDate dateLimite = datePicker.getValue();
             if (priorite.isEmpty() || dateLimite == null) {
                 showAlert(Alert.AlertType.WARNING, "Champs vides", "Veuillez remplir tous les champs.");
@@ -88,9 +91,9 @@ public class ControllerPlannificationTache {
                 return;
             }
 
-            String priorite = fieldPriorite.getText();
+            String priorite = comboPriorite.getValue();
             LocalDate dateLimite = datePicker.getValue();
-            if (priorite.isEmpty() || dateLimite == null) {
+            if (dateLimite == null) {
                 showAlert(Alert.AlertType.WARNING, "Champs vides", "Veuillez remplir tous les champs.");
                 return;
             }
@@ -161,4 +164,14 @@ public class ControllerPlannificationTache {
         Stage stage = (Stage) btnValider.getScene().getWindow();
         stage.close();
     }
+
+    private void loadComboBoxData() {
+        // Création de la liste des options statiques pour le ComboBox
+        ObservableList<String> options = FXCollections.observableArrayList("Faible", "Moyenne", "Elevé");
+
+        // Affectation de la liste d'options au ComboBox
+        comboPriorite.setItems(options);
+
+    }
+
 }

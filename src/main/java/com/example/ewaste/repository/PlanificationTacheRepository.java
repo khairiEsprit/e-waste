@@ -10,10 +10,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServicePlanificationTache implements IService<PlanificationTache> {
+public class PlanificationTacheRepository implements IService<PlanificationTache> {
     private Connection connection;
 
-    public ServicePlanificationTache() {
+    public PlanificationTacheRepository() {
         connection = DataBase.getInstance().getConnection();
     }
 

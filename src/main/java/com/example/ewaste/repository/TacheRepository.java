@@ -4,17 +4,14 @@ import com.example.ewaste.interfaces.IService;
 import com.example.ewaste.entities.Tache;
 import com.example.ewaste.utils.DataBase;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceTache implements IService<Tache> {
-    private Connection connection;
+public class TacheRepository implements IService<Tache> {
+    private static Connection connection;
 
-    public ServiceTache() {
+    public TacheRepository() {
         connection = DataBase.getInstance().getConnection();
     }
 
@@ -94,4 +91,74 @@ public class ServiceTache implements IService<Tache> {
         }
         return taches;
     }
+
+    public static List<String> getEmployeNames() throws SQLException {
+        List<String> employeNames = new ArrayList<>();
+        String query = "SELECT nom FROM utilisateur WHERE role = 'EMPLOYE'";
+
+        try (PreparedStatement ps = connection.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                employeNames.add(rs.getString("nom"));
+            }
+        }
+        return employeNames;
+    }
+
+    public Integer getEmployeIdByName(String nom) throws SQLException {
+        String query = "SELECT id FROM utilisateur WHERE nom = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, nom);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        }
+        return null;
+    }
+
+
+        public String getEmployeNameById(int idEmploye) throws SQLException {
+            String query = "SELECT nom FROM utilisateur WHERE id = ?";
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                stmt.setInt(1, idEmploye);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getString("nom");
+                }
+            }
+            return null;
+        }
+
+
+       /* public List<Integer> getEmployeIds() throws SQLException {
+            List<Integer> employeIds = new ArrayList<>();
+            String sql = "SELECT id FROM utilisateur";
+
+            try (Statement statement = connection.createStatement(); ResultSet rs = statement.executeQuery(sql)) {
+                while (rs.next()) {
+                    employeIds.add(rs.getInt("id"));
+                }
+            }
+            return employeIds;
+
+        }*/
+       public List<Integer> getEmployeIds() throws SQLException {
+           // Retourne une liste des IDs des employés depuis la base de données
+           // Exemple avec une requête SQL (modifiez en fonction de votre structure de base de données)
+           String query = "SELECT id FROM employes"; // Modifier avec le nom de votre table d'employés
+           List<Integer> employeIds = new ArrayList<>();
+           try (Connection connection = DriverManager.getConnection("your-database-url", "username", "password");
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+
+               while (resultSet.next()) {
+                   employeIds.add(resultSet.getInt("id"));
+               }
+           }
+           return employeIds;
+       }
+
+
+
 }
