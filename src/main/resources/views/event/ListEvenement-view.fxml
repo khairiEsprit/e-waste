@@ -55,16 +55,19 @@
                     <!-- Colonne de gauche -->
                     <VBox fx:id="leftEventContainer" spacing="15" GridPane.columnIndex="0"/>
 
+                    <!-- Colonne du milieu -->
+                    <VBox fx:id="middleEventContainer" spacing="15" GridPane.columnIndex="1"/>
+
                     <!-- Colonne de droite -->
-                    <VBox fx:id="rightEventContainer" spacing="15" GridPane.columnIndex="1"/>
+                    <VBox fx:id="rightEventContainer" spacing="15" GridPane.columnIndex="2"/>
                 </GridPane>
             </ScrollPane>
 
             <!-- Carte à droite -->
-            <VBox styleClass="info-card" spacing="10" prefWidth="200">
+            <VBox styleClass="info-card" spacing="10" prefWidth="400">
                 <!-- Titre et icône pour Événements -->
                 <Label text="NB Événements" styleClass="info-title"/>
-                <ImageView fitHeight="50" fitWidth="50" preserveRatio="true">
+                <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
                     <image>
                         <Image url="@../../assets/event-icon.png"/>
                     </image>
@@ -73,7 +76,7 @@
 
                 <!-- Titre et icône pour Points -->
                 <Label text="NB Points" styleClass="info-title"/>
-                <ImageView fitHeight="50" fitWidth="50" preserveRatio="true">
+                <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
                     <image>
                         <Image url="@../../assets/points-icon.png"/>
                     </image>
@@ -82,7 +85,7 @@
 
                 <!-- Titre et icône pour Amis -->
                 <Label text="NB Amis" styleClass="info-title"/>
-                <ImageView fitHeight="50" fitWidth="50" preserveRatio="true">
+                <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
                     <image>
                         <Image url="@../../assets/friends-icon.png"/>
                     </image>

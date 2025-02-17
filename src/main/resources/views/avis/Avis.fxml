@@ -12,19 +12,17 @@
 
     <!-- Gauche : Sidebar -->
     <left>
-        <VBox spacing="10" styleClass="sidebar">
-            <!-- Logo en haut de la sidebar -->
-            <ImageView fitWidth="100" fitHeight="100" preserveRatio="true">
+        <!-- Colonne gauche -->
+        <VBox alignment="CENTER" spacing="20" styleClass="left-column">
+            <ImageView fitWidth="200" fitHeight="200" preserveRatio="true">
                 <image>
                     <Image url="@../../assets/logo.png"/>
                 </image>
             </ImageView>
-
-            <!-- Boutons du sidebar -->
-            <Button text="Poubelle" styleClass="sidebar-button"/>
-            <Button text="Demande" styleClass="sidebar-button"/>
-            <Button text="Réclamation" styleClass="sidebar-button"/>
-            <Button text="Événement" styleClass="sidebar-button"/>
+            <Button text="Poubelle" styleClass="left-button" />
+            <Button text="Demande" styleClass="left-button" />
+            <Button text="Réclamation" styleClass="left-button" />
+            <Button text="Événement" styleClass="left-button" />
         </VBox>
     </left>
 
@@ -32,22 +30,26 @@
     <center>
         <HBox spacing="20" alignment="CENTER">
             <!-- Formulaire de feedback -->
-            <VBox spacing="20" alignment="CENTER" styleClass="form-container">
-                <!-- Image en haut de l'interface -->
-                <ImageView fx:id="feedbackImage" fitWidth="500" fitHeight="300" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/feedback.png"/>
-                    </image>
-                </ImageView>
-
+            <VBox spacing="15" alignment="CENTER" styleClass="form-container">
                 <!-- Titre de la page -->
                 <Label text="Votre Avis" styleClass="title-label"/>
 
+                <!-- Image en haut de l'interface -->
+                <ImageView fx:id="feedbackImage" fitWidth="900" fitHeight="200" preserveRatio="true">
+                    <image>
+                        <Image url="@../../assets/avis.jpg"/>
+                    </image>
+                </ImageView>
+
+                <!-- Texte descriptif -->
+                <Label text="Les avis aident à améliorer les services et à instaurer la confiance."
+                       styleClass="description-label" wrapText="true" maxWidth="1200" prefHeight="50"/>
+
                 <!-- Champ pour le nom/prénom -->
-                <TextField fx:id="nameField" promptText="Nom/Prénom" styleClass="input-field"/>
+                <TextField fx:id="nameField" promptText="Nom/Prénom" styleClass="input-field" prefWidth="300" prefHeight="30"/>
 
                 <!-- Champ pour la description de l'avis -->
-                <TextArea fx:id="descriptionField" promptText="Description de votre avis" styleClass="input-field"/>
+                <TextArea fx:id="descriptionField" promptText="Description de votre avis" styleClass="input-field" prefWidth="300" prefHeight="80"/>
 
                 <!-- Note sous forme de 5 étoiles -->
                 <HBox spacing="10" styleClass="star-container">
@@ -59,49 +61,43 @@
                 </HBox>
 
                 <!-- Bouton pour envoyer l'avis -->
-                <Button fx:id="submitButton" onAction="#handleSubmit" text="Envoyer" styleClass="submit-button"/>
+                <Button fx:id="submitButton" onAction="#handleSubmit" text="Envoyer" styleClass="submit-button" prefWidth="150" prefHeight="40"/>
             </VBox>
 
-            <!-- Contenu de notation réduit et stylisé -->
-            <VBox spacing="10" alignment="CENTER" styleClass="rating-container">
-                <!-- Texte en haut du contenu de notation -->
-                <Label text="Les avis sont importants, car ils offrent des retours constructifs qui aident à améliorer continuellement la qualité des services et à mieux répondre aux attentes des utilisateurs."
-                       styleClass="rating-text"/>
-
+            <VBox spacing="10" translateY="100.0" alignment="BOTTOM_CENTER" styleClass="rating-container">
                 <HBox alignment="CENTER" spacing="10">
                     <VBox alignment="CENTER">
-                        <!-- Étoile et titre "4.5" -->
                         <HBox alignment="CENTER" spacing="5">
                             <Label text="★" styleClass="average-rating"/>
                             <Label text="4.5" styleClass="star-icon"/>
                         </HBox>
-                        <!-- Label "+655 reviews" -->
                         <Label text="+655 reviews" styleClass="reviews-label"/>
                     </VBox>
                     <VBox spacing="5" alignment="CENTER_LEFT">
                         <HBox spacing="5">
                             <Label text="5★" styleClass="star-label"/>
-                            <ProgressBar progress="10" styleClass="progress-bar"/>
+                            <ProgressBar progress="1.0" styleClass="progress-bar" prefWidth="150"/>
                         </HBox>
                         <HBox spacing="5">
                             <Label text="4★" styleClass="star-label"/>
-                            <ProgressBar progress="0.8" styleClass="progress-bar"/>
+                            <ProgressBar progress="0.8" styleClass="progress-bar" prefWidth="150"/>
                         </HBox>
                         <HBox spacing="5">
                             <Label text="3★" styleClass="star-label"/>
-                            <ProgressBar progress="0.6" styleClass="progress-bar"/>
+                            <ProgressBar progress="0.6" styleClass="progress-bar" prefWidth="150"/>
                         </HBox>
                         <HBox spacing="5">
                             <Label text="2★" styleClass="star-label"/>
-                            <ProgressBar progress="0.4" styleClass="progress-bar"/>
+                            <ProgressBar progress="0.4" styleClass="progress-bar" prefWidth="150"/>
                         </HBox>
                         <HBox spacing="5">
                             <Label text="1★" styleClass="star-label"/>
-                            <ProgressBar progress="0.2" styleClass="progress-bar"/>
+                            <ProgressBar progress="0.2" styleClass="progress-bar" prefWidth="150"/>
                         </HBox>
                     </VBox>
                 </HBox>
             </VBox>
+
         </HBox>
     </center>
 </BorderPane>

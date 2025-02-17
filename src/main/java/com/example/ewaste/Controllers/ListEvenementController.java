@@ -25,6 +25,8 @@ public class ListEvenementController {
 
     @FXML
     private TextField searchField;
+    @FXML
+    private VBox middleEventContainer; // Add this line
 
     private final EventRepository eventRepository = new EventRepository();
     private List<Event> events;
@@ -54,14 +56,25 @@ public class ListEvenementController {
     }
 
     private void displayEvents(List<Event> events) {
+        // Clear all columns
         leftEventContainer.getChildren().clear();
+        middleEventContainer.getChildren().clear(); // Clear the middle column
         rightEventContainer.getChildren().clear();
 
+        // Distribute events across 3 columns
         for (int i = 0; i < events.size(); i++) {
-            VBox targetContainer = (i % 2 == 0) ? leftEventContainer : rightEventContainer;
+            VBox targetContainer;
+            if (i % 3 == 0) {
+                targetContainer = leftEventContainer; // First column
+            } else if (i % 3 == 1) {
+                targetContainer = middleEventContainer; // Second column
+            } else {
+                targetContainer = rightEventContainer; // Third column
+            }
             targetContainer.getChildren().add(createEventCard(events.get(i)));
         }
     }
+
 
     private VBox createEventCard(Event event) {
         VBox card = new VBox();

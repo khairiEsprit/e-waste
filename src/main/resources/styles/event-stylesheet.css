@@ -1,106 +1,102 @@
 /* Style général */
 .root {
-    -fx-background-color: #f0f8ff; /* Fond clair */
+    -fx-background-color: #FEFEFA; /* Couleur de fond principale */
 }
 
-/* En-tête (titre général) */
+/* En-tête */
 .header {
     -fx-padding: 20;
-    -fx-background-color: #00796b; /* Vert moyen */
+    -fx-background-color: #29AB87; /* Couleur de fond de l'en-tête */
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
 }
 
-/* Titre général */
 .main-title {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
-    -fx-text-fill: white; /* Texte blanc */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte de l'en-tête */
 }
 
-/* Conteneur principal */
+/* Contenu principal */
 .main-content {
     -fx-padding: 20;
-    -fx-spacing: 0; /* Pas d'espace entre la colonne et le formulaire */
-    -fx-alignment: CENTER; /* Centrer le contenu */
+    -fx-spacing: 0;
+    -fx-alignment: CENTER;
 }
 
-/* Colonne verte à gauche */
+/* Colonne gauche */
 .left-column {
-    -fx-background-color: #00796b; /* Vert moyen */
+    -fx-background-color: #29AB87; /* Couleur de fond de la colonne gauche */
     -fx-padding: 20;
     -fx-spacing: 20;
-    -fx-alignment: CENTER; /* Centrer le contenu */
-    -fx-min-width: 200; /* Largeur minimale de la colonne */
+    -fx-alignment: CENTER;
+    -fx-min-width: 200;
 }
 
-/* Boutons dans la colonne gauche */
 .left-button {
-    -fx-background-color: #004d40; /* Vert foncé */
-    -fx-text-fill: white;
+    -fx-background-color: #00693E; /* Couleur de fond des boutons de gauche */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte des boutons de gauche */
     -fx-font-size: 14px;
     -fx-padding: 10 20;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
-    -fx-alignment: CENTER; /* Centrer le texte dans le bouton */
+    -fx-alignment: CENTER;
 }
 
 .left-button:hover {
-    -fx-background-color: #00251a; /* Vert très foncé au survol */
+    -fx-background-color: #29AB87; /* Couleur de fond au survol des boutons de gauche */
 }
 
-/* Cadre contenant le formulaire et l'image */
+/* Conteneur formulaire et image */
 .form-image-container {
     -fx-padding: 20;
     -fx-spacing: 10;
-    -fx-background-color: #ffffff; /* Fond blanc */
+    -fx-background-color: #FEFEFA; /* Couleur de fond du conteneur formulaire et image */
     -fx-border-radius: 10;
     -fx-background-radius: 10;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
-    -fx-border-color: green; /* Bordure verte */
-    -fx-border-width: 2px; /* Épaisseur de la bordure */
+    -fx-border-color: #29AB87; /* Couleur de la bordure */
+    -fx-border-width: 2px;
 }
 
-/* Sous-titre pour le formulaire et l'image */
 .subtitle {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: #004d40; /* Vert foncé */
-    -fx-padding: 0 0 10 0; /* Espacement en bas */
+    -fx-text-fill: #013220; /* Couleur du texte du sous-titre */
+    -fx-padding: 0 0 10 0;
 }
 
-/* Conteneur du formulaire */
+/* Formulaire */
 .form-container {
     -fx-padding: 20;
     -fx-spacing: 10;
-    -fx-alignment: CENTER; /* Centrer le contenu */
+    -fx-alignment: CENTER;
 }
 
-/* Champs de texte */
 .text-field {
-    -fx-background-color: #e0f2f1; /* Vert clair */
-    -fx-border-color: #00796b; /* Vert moyen */
+    -fx-background-color: #ACE1AF; /* Couleur de fond des champs de texte */
+    -fx-border-color: #00693E; /* Couleur de la bordure des champs de texte */
     -fx-border-radius: 5;
     -fx-padding: 5;
     -fx-font-size: 14px;
 }
 
 .text-field:focused {
-    -fx-border-color: #004d40; /* Vert foncé */
+    -fx-border-color: #29AB87; /* Couleur de la bordure au focus */
 }
 
 /* Bouton */
 .button {
-    -fx-background-color: #00796b; /* Vert moyen */
-    -fx-text-fill: white;
+    -fx-background-color: #00693E; /* Couleur de fond du bouton */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte du bouton */
     -fx-font-size: 14px;
     -fx-padding: 10 20;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
-    -fx-alignment: CENTER; /* Centrer le texte dans le bouton */
+    -fx-alignment: CENTER;
 }
 
 .button:hover {
-    -fx-background-color: #004d40; /* Vert foncé */
+    -fx-background-color: #29AB87; /* Couleur de fond au survol du bouton */
 }
 
 /* Image */
