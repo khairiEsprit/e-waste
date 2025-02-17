@@ -20,26 +20,28 @@ public class ServiceTache implements IService<Tache> {
 
     @Override
     public void ajouter(Tache tache) throws SQLException {
-        String sql = "INSERT INTO `tache`(`id_centre`, `id_employe`, `adresse_poubelle`, `message`, `etat`) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO `tache`(`id_centre`, `id_employe`, `latitude`, `longitude`, `message`, `etat`) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, tache.getId_centre());
         ps.setInt(2, tache.getId_employe());
-        ps.setString(3, tache.getAdresse_poubelle());
-        ps.setString(4, tache.getMessage());
-        ps.setString(5, tache.getEtat());
+        ps.setFloat(3, tache.getLatitude());
+        ps.setFloat(4, tache.getLongitude());
+        ps.setString(5, tache.getMessage());
+        ps.setString(6, tache.getEtat());
         ps.executeUpdate();
     }
 
     @Override
     public void modifier(Tache tache) throws SQLException {
-        String sql = "UPDATE `tache` SET `id_centre`=?, `id_employe`=?, `adresse_poubelle`=?, `message`=?, `etat`=? WHERE id = ?";
+        String sql = "UPDATE `tache` SET `id_centre`=?, `id_employe`=?, `latitude`=?, `longitude`=?, `message`=?, `etat`=? WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, tache.getId_centre());
         ps.setInt(2, tache.getId_employe());
-        ps.setString(3, tache.getAdresse_poubelle());
-        ps.setString(4, tache.getMessage());
-        ps.setString(5, tache.getEtat());
-        ps.setInt(6, tache.getId());
+        ps.setFloat(3, tache.getLatitude());
+        ps.setFloat(4, tache.getLongitude());
+        ps.setString(5, tache.getMessage());
+        ps.setString(6, tache.getEtat());
+        ps.setInt(7, tache.getId());
         ps.executeUpdate();
     }
 
@@ -63,7 +65,8 @@ public class ServiceTache implements IService<Tache> {
                     rs.getInt("id"),
                     rs.getInt("id_centre"),
                     rs.getInt("id_employe"),
-                    rs.getString("adresse_poubelle"),
+                    rs.getFloat("latitude"),
+                    rs.getFloat("longitude"),
                     rs.getString("message"),
                     rs.getString("etat")
             ));
@@ -83,16 +86,12 @@ public class ServiceTache implements IService<Tache> {
                     rs.getInt("id"),
                     rs.getInt("id_centre"),
                     rs.getInt("id_employe"),
-                    rs.getString("adresse_poubelle"),
+                    rs.getFloat("latitude"),
+                    rs.getFloat("longitude"),
                     rs.getString("message"),
                     rs.getString("etat")
             ));
         }
         return taches;
     }
-
-
-
-
-
 }

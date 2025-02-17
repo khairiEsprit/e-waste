@@ -15,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-
 import javax.management.Descriptor;
 import java.net.URL;
 import java.sql.SQLException;
@@ -34,7 +33,10 @@ public class ControllerPageTaches implements Initializable {
     private TableColumn<Tache, String> colMessage;
 
     @FXML
-    private TableColumn<Tache, String> colAdresse;
+    private TableColumn<Tache, Float> colLatitude; // Changement ici pour latitude
+
+    @FXML
+    private TableColumn<Tache, Float> colLongitude; // Changement ici pour longitude
 
     @FXML
     private TableColumn<Tache, String> colEtat;
@@ -43,7 +45,10 @@ public class ControllerPageTaches implements Initializable {
     private TextField fieldIdEmploye;
 
     @FXML
-    private TextField fieldAdresse;
+    private TextField fieldLatitude; // Changement ici pour latitude
+
+    @FXML
+    private TextField fieldLongitude; // Changement ici pour longitude
 
     @FXML
     private TextField fieldMessage;
@@ -59,8 +64,6 @@ public class ControllerPageTaches implements Initializable {
 
     private final ServiceTache serviceTache = new ServiceTache();
 
-
-
     private void loadTableData() throws SQLException {
         List<Tache> taches = serviceTache.afficher(1); // Remplace 1 par l'ID du centre voulu
         ObservableList<Tache> data = FXCollections.observableArrayList(taches);
@@ -74,19 +77,21 @@ public class ControllerPageTaches implements Initializable {
 
             // Récupération des valeurs du formulaire
             int idEmploye = Integer.parseInt(fieldIdEmploye.getText());
-            String adressePoubelle = fieldAdresse.getText();
+            float latitude = Float.parseFloat(fieldLatitude.getText()); // Récupère la latitude
+            float longitude = Float.parseFloat(fieldLongitude.getText()); // Récupère la longitude
             String message = fieldMessage.getText();
             String etat = fieldEtat.getText().trim();
-            System.out.println("ID: " + idEmploye + "Adresse" + adressePoubelle + "Message" + message + "Etat" + etat);
+            System.out.println("ID: " + idEmploye + " Latitude: " + latitude + " Longitude: " + longitude + " Message: " + message + " Etat: " + etat);
+
             // Vérifier que les champs ne sont pas vides
-            if (adressePoubelle.isEmpty() || message.isEmpty() || etat.isEmpty()) {
+            if (latitude == 0 || longitude == 0 || message.isEmpty() || etat.isEmpty()) {
                 showAlert("Erreur", "Tous les champs doivent être remplis !");
                 return;
             }
             System.out.println("Champs valides, création de la tâche.");
 
             // Création d'un objet Tache
-            Tache nouvelleTache = new Tache(1, idEmploye, adressePoubelle, message, etat);
+            Tache nouvelleTache = new Tache(1, idEmploye, latitude, longitude, message, etat); // Utilisation de latitude et longitude
 
             System.out.println("Objet Tache créé : " + nouvelleTache);
 
@@ -101,12 +106,13 @@ public class ControllerPageTaches implements Initializable {
             // Nettoyage des champs
             fieldIdEmploye.clear();
             fieldMessage.clear();
-            fieldAdresse.clear();
+            fieldLatitude.clear();
+            fieldLongitude.clear();
             fieldEtat.clear();
             System.out.println("Champs réinitialisés.");
 
         } catch (NumberFormatException e) {
-            showAlert("Erreur", "ID Employé doit être un nombre valide !");
+            showAlert("Erreur", "Les coordonnées doivent être des nombres valides !");
             System.out.println("Erreur NumberFormatException: " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -149,8 +155,6 @@ public class ControllerPageTaches implements Initializable {
         });
     }
 
-
-
     @FXML
     private void ouvrirPlannification() {
         // Récupérer la tâche sélectionnée
@@ -192,17 +196,19 @@ public class ControllerPageTaches implements Initializable {
             }
 
             int idEmploye = Integer.parseInt(fieldIdEmploye.getText());
-            String adressePoubelle = fieldAdresse.getText();
+            float latitude = Float.parseFloat(fieldLatitude.getText()); // Récupère la latitude
+            float longitude = Float.parseFloat(fieldLongitude.getText()); // Récupère la longitude
             String message = fieldMessage.getText();
             String etat = fieldEtat.getText().trim();
 
-            if (adressePoubelle.isEmpty() || message.isEmpty() || etat.isEmpty()) {
+            if (latitude == 0 || longitude == 0 || message.isEmpty() || etat.isEmpty()) {
                 showAlert("Erreur", "Tous les champs doivent être remplis !");
                 return;
             }
 
             selectedTache.setId_employe(idEmploye);
-            selectedTache.setAdresse_poubelle(adressePoubelle);
+            selectedTache.setLatitude(latitude); // Met à jour la latitude
+            selectedTache.setLongitude(longitude); // Met à jour la longitude
             selectedTache.setMessage(message);
             selectedTache.setEtat(etat);
 
@@ -210,15 +216,15 @@ public class ControllerPageTaches implements Initializable {
             loadTableData();
             fieldIdEmploye.clear();
             fieldMessage.clear();
-            fieldAdresse.clear();
+            fieldLatitude.clear();
+            fieldLongitude.clear();
             fieldEtat.clear();
         } catch (NumberFormatException e) {
-            showAlert("Erreur", "ID Employé doit être un nombre valide !");
+            showAlert("Erreur", "Les coordonnées et l'ID Employé doivent être valides !");
         } catch (SQLException e) {
             showAlert("Erreur", "Impossible de modifier la tâche !");
         }
     }
-
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -233,7 +239,8 @@ public class ControllerPageTaches implements Initializable {
         // Associer les colonnes aux attributs de l'objet Tache
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colMessage.setCellValueFactory(new PropertyValueFactory<>("message"));
-        colAdresse.setCellValueFactory(new PropertyValueFactory<>("adresse_poubelle"));
+        colLatitude.setCellValueFactory(new PropertyValueFactory<>("latitude")); // Changement ici
+        colLongitude.setCellValueFactory(new PropertyValueFactory<>("longitude")); // Changement ici
         colEtat.setCellValueFactory(new PropertyValueFactory<>("etat"));
 
         // Charger les données dans le tableau
@@ -248,11 +255,11 @@ public class ControllerPageTaches implements Initializable {
             if (newValue != null) {
                 // Remplir les champs avec les données de la tâche sélectionnée
                 fieldIdEmploye.setText(String.valueOf(newValue.getId_employe()));
-                fieldAdresse.setText(newValue.getAdresse_poubelle());
+                fieldLatitude.setText(String.valueOf(newValue.getLatitude())); // Changement ici
+                fieldLongitude.setText(String.valueOf(newValue.getLongitude())); // Changement ici
                 fieldMessage.setText(newValue.getMessage());
                 fieldEtat.setText(newValue.getEtat());
             }
         });
     }
-
 }

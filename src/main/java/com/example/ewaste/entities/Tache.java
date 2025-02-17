@@ -4,27 +4,29 @@ public class Tache {
     private int id;
     private int id_centre;
     private int id_employe;
-    private String adresse_poubelle;
+    private float latitude;
+    private float longitude;
     private String message;
     private String etat;
 
-    public Tache(int id, int id_centre, int id_employe, String adresse_poubelle, String message, String etat) {
+    public Tache(int id, int id_centre, int id_employe, float latitude, float longitude, String message, String etat) {
         this.id = id;
         this.id_centre = id_centre;
         this.id_employe = id_employe;
-        this.adresse_poubelle = adresse_poubelle;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.message = message;
         this.etat = etat;
     }
 
-    public Tache(int id_centre, int id_employe, String adresse_poubelle, String message, String etat) {
+    public Tache(int id_centre, int id_employe, float latitude, float longitude, String message, String etat) {
         this.id_centre = id_centre;
         this.id_employe = id_employe;
-        this.adresse_poubelle = adresse_poubelle;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.message = message;
         this.etat = etat;
     }
-
 
     public int getId() {
         return id;
@@ -50,12 +52,20 @@ public class Tache {
         this.id_employe = id_employe;
     }
 
-    public String getAdresse_poubelle() {
-        return adresse_poubelle;
+    public float getLatitude() {
+        return latitude;
     }
 
-    public void setAdresse_poubelle(String adresse_poubelle) {
-        this.adresse_poubelle = adresse_poubelle;
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
+    }
+
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
     }
 
     public String getMessage() {
@@ -80,7 +90,8 @@ public class Tache {
                 "id=" + id +
                 ", id_centre=" + id_centre +
                 ", id_employe=" + id_employe +
-                ", adresse_poubelle='" + adresse_poubelle + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", message='" + message + '\'' +
                 ", etat='" + etat + '\'' +
                 '}';
