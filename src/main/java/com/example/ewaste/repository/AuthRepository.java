@@ -98,35 +98,35 @@ public class AuthRepository {
         }
     }
 
-//    public boolean validerPassword(int id, String password) {
-//        String query = "SELECT * FROM user WHERE password = ? AND id = ?";
-//        try (PreparedStatement statement = conn.prepareStatement(query)) {
-//            statement.setString(1, hashPassword2(password));
-//            statement.setInt(2, id);
-//            try (ResultSet resultSet = statement.executeQuery()) {
-//                boolean isValid = resultSet.next();
-//                if (!isValid) {
-//                    // Show an alert if the password is invalid
-//                    Alert alert = new Alert(Alert.AlertType.WARNING);
-//                    alert.setTitle("Invalid Password");
-//                    alert.setHeaderText(null);
-//                    alert.setContentText("The password is incorrect.");
-//                    alert.showAndWait();
-//                }
-//                return isValid;
-//            }
-//        } catch (SQLException ex) {
-//            System.err.println(ex.getMessage());
-//            // Show an alert for SQL exception
-//            showErrorAlert("SQL Error", "An error occurred while validating the password.");
-//            return false;
-//        } catch (Exception ex) {
-//            System.err.println(ex.getMessage());
-//            // Show a generic alert for other exceptions
-//            showErrorAlert("Error", "An unexpected error occurred.");
-//            return false;
-//        }
-//    }
+    public boolean validerPassword(int id, String password) {
+        String query = "SELECT * FROM utilisateur WHERE mdp = ? AND id = ?";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setString(1, hashPassword2(password));
+            statement.setInt(2, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                boolean isValid = resultSet.next();
+                if (!isValid) {
+                    // Show an alert if the password is invalid
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Invalid Password");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The password is incorrect.");
+                    alert.showAndWait();
+                }
+                return isValid;
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            // Show an alert for SQL exception
+            showErrorAlert("SQL Error", "An error occurred while validating the password.");
+            return false;
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+            // Show a generic alert for other exceptions
+            showErrorAlert("Error", "An unexpected error occurred.");
+            return false;
+        }
+    }
 
     private void showErrorAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
