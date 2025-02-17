@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.ewaste.Controllers.ListEvenementController"
+      spacing="20" styleClass="root" stylesheets="@../../styles/ListEvenement.css">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Sidebar à gauche -->
+    <VBox styleClass="sidebar" spacing="20" prefWidth="200">
+        <!-- Logo -->
+        <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
+            <image>
+                <Image url="@../../assets/logo.png"/>
+            </image>
+        </ImageView>
+
+        <!-- Champ Poubelle -->
+        <Button text="Poubelle" styleClass="sidebar-button"/>
+
+        <!-- Champ Demande -->
+        <Button text="Demande" styleClass="sidebar-button"/>
+
+        <!-- Champ Réclamation -->
+        <Button text="Réclamation" styleClass="sidebar-button"/>
+
+        <!-- Champ Événement -->
+        <Button text="Événement" styleClass="sidebar-button"/>
+    </VBox>
+
+    <!-- Contenu principal -->
+    <VBox spacing="20" style="-fx-padding: 0 0 0 20;" HBox.hgrow="ALWAYS">
+        <!-- Titre de la page -->
+        <Label text="Liste des Événements" styleClass="main-title"/>
+
+        <!-- Barre de recherche et boutons de tri -->
+        <HBox spacing="10" style="-fx-padding: 10;">
+            <TextField fx:id="searchField" promptText="Rechercher par nom..." styleClass="search-field"/>
+            <Button text="Trier par date" onAction="#sortByDate" styleClass="button"/>
+        </HBox>
+
+        <!-- Conteneur principal avec défilement et carte à droite -->
+        <HBox spacing="20" HBox.hgrow="ALWAYS">
+            <!-- Liste des événements -->
+            <ScrollPane fitToWidth="true" styleClass="scroll-pane" HBox.hgrow="ALWAYS">
+                <GridPane fx:id="eventGrid" hgap="20" vgap="20" style="-fx-padding: 10;">
+                    <!-- Colonne de gauche -->
+                    <VBox fx:id="leftEventContainer" spacing="15" GridPane.columnIndex="0"/>
+
+                    <!-- Colonne du milieu -->
+                    <VBox fx:id="middleEventContainer" spacing="15" GridPane.columnIndex="1"/>
+
+                    <!-- Colonne de droite -->
+                    <VBox fx:id="rightEventContainer" spacing="15" GridPane.columnIndex="2"/>
+                </GridPane>
+            </ScrollPane>
+
+            <!-- Carte à droite -->
+            <VBox styleClass="info-card" spacing="10" prefWidth="400">
+                <!-- Titre et icône pour Événements -->
+                <Label text="NB Événements" styleClass="info-title"/>
+                <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
+                    <image>
+                        <Image url="@../../assets/event-icon.png"/>
+                    </image>
+                </ImageView>
+                <Label text="5" styleClass="info-label"/>
+
+                <!-- Titre et icône pour Points -->
+                <Label text="NB Points" styleClass="info-title"/>
+                <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
+                    <image>
+                        <Image url="@../../assets/points-icon.png"/>
+                    </image>
+                </ImageView>
+                <Label text="1K" styleClass="info-label"/>
+
+                <!-- Titre et icône pour Amis -->
+                <Label text="NB Amis" styleClass="info-title"/>
+                <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
+                    <image>
+                        <Image url="@../../assets/friends-icon.png"/>
+                    </image>
+                </ImageView>
+                <Label text="500" styleClass="info-label"/>
+            </VBox>
+        </HBox>
+    </VBox>
+</HBox>

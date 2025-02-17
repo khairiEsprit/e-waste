@@ -1,0 +1,178 @@
+/* Couleurs de la palette */
+.primary-color { -fx-background-color: #013220; }
+.secondary-color { -fx-background-color: #00693E; }
+.tertiary-color { -fx-background-color: #29AB87; }
+.light-color { -fx-background-color: #ACE1AF; }
+.background-color { -fx-background-color: #FEFEFA; }
+
+/* Styles généraux */
+.root {
+    -fx-background-color: #FEFEFA;
+    -fx-padding: 20;
+}
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: #00693E;
+    -fx-padding: 20;
+    -fx-spacing: 10;
+}
+
+.left-column {
+    -fx-background-color: #29AB87; /* Couleur de fond de la colonne gauche */
+    -fx-padding: 20;
+    -fx-spacing: 20;
+    -fx-alignment: CENTER;
+    -fx-min-width: 200;
+}
+
+.sidebar-button {
+    -fx-pref-width: 200px;
+    -fx-background-color: #ACE1AF;
+    -fx-text-fill: #013220;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.left-button {
+    -fx-background-color: #00693E; /* Couleur de fond des boutons de gauche */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte des boutons de gauche */
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-alignment: CENTER;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #29AB87;
+}
+
+/* Formulaire de feedback */
+.form-container {
+    -fx-padding: 40;
+    -fx-spacing: 20;
+    -fx-alignment: CENTER;
+}
+
+.title-label {
+    -fx-font-size: 70px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #013220;
+}
+
+/* Styles pour les champs de saisie */
+.input-field {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 30px; /* Hauteur réduite pour le champ nom/prénom */
+    -fx-font-size: 14px; /* Taille de police réduite */
+    -fx-padding: 5px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #ACE1AF;
+    -fx-background-color: white;
+}
+
+.input-field:focused {
+    -fx-border-color: #29AB87;
+}
+
+.star-container {
+    -fx-alignment: CENTER;
+    -fx-spacing: 10;
+}
+
+.star-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 28px;
+    -fx-text-fill: #ACE1AF;
+}
+
+.star-button:selected {
+    -fx-text-fill: #29AB87;
+}
+
+/* Styles pour le bouton "Envoyer" */
+.submit-button {
+    -fx-pref-width: 150px;
+    -fx-pref-height: 40px;
+    -fx-font-size: 16px;
+    -fx-background-color: #00693E;
+    -fx-text-fill: white;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.submit-button:hover {
+    -fx-background-color: #013220;
+}
+
+/* Styles pour le cadre à droite */
+.rating-container {
+    -fx-background-color: #ACE1AF;
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+
+    -fx-pref-width: 350px; /* Ajuste la largeur */
+    -fx-max-height: 200px; /* Permet à la VBox d'avoir une hauteur ajustée */
+}
+.rating-text {
+    -fx-font-size: 18px;
+    -fx-text-fill: #013220;
+    -fx-wrap-text: true;
+}
+
+.average-rating {
+    -fx-font-size: 50px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #013220;
+}
+
+.reviews-label {
+    -fx-font-size: 24px;
+    -fx-text-fill: #29AB87;
+    -fx-background-color: #FEFEFA; /* Fond blanc cassé */
+    -fx-padding: 5px; /* Espace intérieur */
+    -fx-background-radius: 5px; /* Coins arrondis */
+    -fx-border-radius: 5px; /* Coins arrondis pour la bordure (si nécessaire) */
+}
+
+.star-icon {
+    -fx-font-size: 50px; /* Taille de l'étoile */
+    -fx-text-fill: #29AB87; /* Couleur de l'étoile */
+}
+
+.star-label {
+    -fx-font-size: 25px;
+}
+
+.progress-bar {
+    -fx-pref-width: 100px;
+    -fx-accent: #29AB87;
+}
+/* Styles pour le texte descriptif */
+.description-label {
+    -fx-font-size: 16px;          /* Taille de la police */
+    -fx-text-fill: #00693E;       /* Couleur du texte */
+    -fx-padding: 5px;             /* Réduire le padding si nécessaire */
+    -fx-wrap-text: true;          /* Activer le retour à la ligne */
+    -fx-max-width: 1200px;        /* Largeur maximale pour s'adapter à l'interface */
+    -fx-pref-height: 50px;        /* Hauteur préférée pour afficher plusieurs lignes */
+    -fx-alignment: center-left;   /* Aligner le texte à gauche */
+    -fx-background-color: transparent; /* Fond transparent */
+}
+
+/* Styles pour le TextArea (description) */
+.text-area {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 80px; /* Hauteur ajustée pour la description */
+    -fx-font-size: 14px; /* Taille de police réduite */
+    -fx-padding: 5px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #ACE1AF;
+    -fx-background-color: white;
+}
