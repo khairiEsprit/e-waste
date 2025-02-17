@@ -68,12 +68,12 @@
           <artifactId>gson</artifactId>
           <version>2.8.9</version> <!-- Vérifiez la dernière version disponible -->
       </dependency>
-
       <dependency>
           <groupId>io.github.palexdev</groupId>
           <artifactId>materialfx</artifactId>
           <version>11.13.10</version>
       </dependency>
+
 
       <dependency>
           <groupId>javax.ws.rs</groupId>
@@ -231,6 +231,8 @@
           <version>${junit.version}</version>
           <scope>test</scope>
       </dependency>
+<!--// video record-->
+
       <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-engine</artifactId>

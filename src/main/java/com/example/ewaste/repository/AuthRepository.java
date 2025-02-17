@@ -18,30 +18,6 @@ public class AuthRepository {
     private static final int SALT_LENGTH = 16;
     private static final SecureRandom random = new SecureRandom();
 
-//    public static String hashPassword(String password) throws NoSuchAlgorithmException {
-//
-//        byte[] salt = new byte[SALT_LENGTH];
-//        random.nextBytes(salt);
-//
-//        // Hacher le mot de passe avec le sel
-//        String hashedPassword = hashWithSalt(password, salt);
-//
-//        // Concaténer le sel et le hachage du mot de passe pour le stockage
-//        return Base64.getEncoder().encodeToString(salt) + ":" + hashedPassword;
-//    }
-//
-//
-//    private static String hashWithSalt(String password, byte[] salt) throws NoSuchAlgorithmException {
-//        // Concatène le sel avec le mot de passe
-//        String saltedPassword = Base64.getEncoder().encodeToString(salt) + password;
-//
-//        // Hash le sel concaténé avec le mot de passe
-//        MessageDigest md = MessageDigest.getInstance("SHA-256");
-//        byte[] hashedPassword = md.digest(saltedPassword.getBytes());
-//
-//        // Retourne le résultat haché
-//        return Base64.getEncoder().encodeToString(hashedPassword);
-//    }
 
 //    public static boolean verifyPassword(String inputPassword, String storedHash) throws NoSuchAlgorithmException {
 //        // Séparation de la chaîne stockée en sel et hachage du mot de passe
@@ -59,7 +35,7 @@ public class AuthRepository {
 //        return storedHashedPassword.equals(hashedPassword);
 //    }
     public boolean emailExists(String email) {
-        String query = "SELECT * FROM user WHERE email = ?";
+        String query = "SELECT * FROM utilisateur WHERE email = ?";
         try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setString(1, email);
             try (ResultSet resultSet = statement.executeQuery()) {

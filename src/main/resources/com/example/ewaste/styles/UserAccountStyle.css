@@ -1,0 +1,63 @@
+.sidebar {
+    -fx-padding: 20px 30px;
+    -fx-background-color: #29AB87;
+}
+
+.sidebar-link {
+    -fx-background-color: transparent;
+    -fx-padding: 10px 50px 10px 20px;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+
+}
+.sidebar-link:hover {
+    -fx-background-radius: 10px;
+    -fx-gap: 10px;
+    -fx-display: flex;
+    -fx-padding: 10px 50px 10px 20px;
+    -fx-align-self: stretch;
+    -fx-align-items: center;
+    -fx-flex-shrink: 0;
+    -fx-background-color: #ACE1AF;
+}
+.sidebar-link-active {
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 50px 10px 20px;
+    -fx-background-color: #ACE1AF;
+
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.sidebar-logout{
+    -fx-background-color: transparent;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 50px 10px 20px;
+    -fx-opacity: 0.5;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+.sidebar-logout:hover {
+    -fx-opacity: 1;
+
+}
+
+.cardStats{
+    -fx-background-color: #ccbf7e;
+    -fx-background-radius: 20px;
+    -fx-pref-width: 100px;
+    -fx-pref-height: 150px;
+
+}
+
+.box
+{
+
+    -fx-display: flex;
+    -fx-padding: 10px 50px 10px 20px;
+    -fx-align-items: center;
+    -fx-gap: 10px;
+    -fx-align-self: stretch;
+    -fx-background-radius: 10px;
+    -fx-background-color : #ACE1AF;
+}
