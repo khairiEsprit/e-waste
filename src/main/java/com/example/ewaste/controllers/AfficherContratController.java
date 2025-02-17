@@ -71,7 +71,7 @@
             // Ajouter un listener pour détecter la sélection dans la ListView
             afficher.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue != null) {
-                    afficherDetailsContrat(newValue);
+                   afficherDetailsContrat(newValue);
                 }
             });
         }

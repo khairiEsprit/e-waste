@@ -1,6 +1,6 @@
 /* Fond de la scène */
 .root {
-    -fx-background-color: #ace1af; /* Fond pastel vert clair */
+    -fx-background-color: linear-gradient(to bottom, #ace1af, #4caf50);
 }
 
 /* TableView */
@@ -147,3 +147,5 @@
 .combo-box:focused {
     -fx-border-color: #29ab87; /* Bordure verte claire au focus */
 }
+
+

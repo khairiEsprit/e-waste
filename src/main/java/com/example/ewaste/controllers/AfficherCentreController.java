@@ -61,10 +61,7 @@ public class AfficherCentreController {
         });
     }
 
-  /*  @FXML
-    void AfficherCentre(ActionEvent event) {
-        loadData();
-    }*/
+
 
     private void loadData() {
         try {
@@ -144,10 +141,10 @@ public class AfficherCentreController {
             try {
                 int telephone = Integer.parseInt(phoneText);
 
-                /*if (centreRepository.existeCentre(nom)) {
-                    showAlert("Erreur", "Un centre avec ce nom existe déjà.");
+                if (centreRepository.existeCentre( longitude, altitude)) {
+                    showAlert("Erreur", "Un centre avec ce nom ou ces coordonnées existe déjà !");
                     return;
-                }*/
+                }
 
                 Centre centre = new Centre(nom, longitude, altitude, telephone, email);
                 centreRepository.ajouter(centre);

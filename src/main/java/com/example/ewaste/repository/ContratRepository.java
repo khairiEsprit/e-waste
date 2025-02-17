@@ -148,7 +148,7 @@ public class ContratRepository implements IService<Contrat> {
 
     public List<String> getEmployeNames() throws SQLException {
         List<String> employeNames = new ArrayList<>();
-        String query = "SELECT nom FROM utilisateur"; // Récupère tous les noms des utilisateurs
+        String query = "SELECT nom FROM utilisateur WHERE role = 'EMPLOYE'"; // Récupère tous les noms des utilisateurs
 
         try (PreparedStatement ps = connection.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {

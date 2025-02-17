@@ -8,22 +8,22 @@
 <?import javafx.geometry.*?>
 <?import java.net.URL?>
 
-<AnchorPane prefHeight="620.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.AfficherContratController">
+<AnchorPane prefHeight="800" prefWidth="1300" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.AfficherContratController">
     <stylesheets>
-        <URL value="@CentreView.css" />
+        <URL value="@styles/CentreView.css" />
     </stylesheets>
    <children>
-   
+
        <!-- Boutons -->
-       <Button fx:id="btnAjouter" layoutX="717.0" layoutY="527.0" mnemonicParsing="false" onAction="#Ajouter" text="Ajouter" />
-       <Button fx:id="btnModifier" layoutX="627.0" layoutY="449.0" mnemonicParsing="false" onAction="#Modifier" text="Modifier" />
-       <Button fx:id="btnSupprimer" layoutX="537.0" layoutY="527.0" mnemonicParsing="false" onAction="#Supprimer" text="Supprimer" />
-      <ListView fx:id="afficher" layoutX="14.0" layoutY="14.0" prefHeight="596.0" prefWidth="514.0" />
-      <DatePicker fx:id="DateDebut" layoutX="577.0" layoutY="291.0" promptText="Date Début" />
-      <DatePicker fx:id="DateFin" layoutX="577.0" layoutY="370.0" promptText="Date Fin" />
-      <ComboBox fx:id="idEmploye" layoutX="627.0" layoutY="86.0" prefWidth="150.0" promptText="Nom Employé" />
-      <ComboBox fx:id="idCentre" layoutX="627.0" layoutY="164.0" prefWidth="150.0" promptText="Nom Centre" />
-      <Button fx:id="Centre" layoutX="772.0" layoutY="14.0" mnemonicParsing="false" onAction="#GoToCentre" text="Centre" />
+       <Button fx:id="btnAjouter" layoutX="912.0" layoutY="610.0" mnemonicParsing="false" onAction="#Ajouter" prefHeight="68.0" prefWidth="144.0" text="Ajouter" />
+       <Button fx:id="btnModifier" layoutX="1124.0" layoutY="610.0" mnemonicParsing="false" onAction="#Modifier" prefHeight="68.0" prefWidth="144.0" text="Modifier" />
+       <Button fx:id="btnSupprimer" layoutX="1026.0" layoutY="698.0" mnemonicParsing="false" onAction="#Supprimer" prefHeight="68.0" prefWidth="144.0" text="Supprimer" />
+      <ListView fx:id="afficher" layoutX="362.0" layoutY="26.0" prefHeight="575.0" prefWidth="593.0" />
+      <DatePicker fx:id="DateDebut" layoutX="990.0" layoutY="373.0" prefHeight="68.0" prefWidth="250.0" promptText="Date Début" />
+      <DatePicker fx:id="DateFin" layoutX="984.0" layoutY="513.0" prefHeight="68.0" prefWidth="250.0" promptText="Date Fin" />
+      <ComboBox fx:id="idEmploye" layoutX="990.0" layoutY="121.0" prefHeight="68.0" prefWidth="281.0" promptText="Nom Employé" />
+      <ComboBox fx:id="idCentre" layoutX="990.0" layoutY="244.0" prefHeight="68.0" prefWidth="258.0" promptText="Nom Centre" />
+      <Button fx:id="Centre" layoutX="1052.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToCentre" prefHeight="68.0" prefWidth="144.0" text="Centre" />
    </children>
 
 </AnchorPane>

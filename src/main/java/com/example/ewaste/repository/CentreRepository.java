@@ -68,14 +68,20 @@ public class CentreRepository implements IService<Centre> {
         return centres;
     }
 
-    public boolean existeCentre(Float longitude,Float altitude) throws SQLException {
-        String sql = "SELECT * FROM `centre` WHERE `longitude` = ? AND `altitude` = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setFloat(1, longitude);
-            ps.setFloat(1, altitude);  // Si vous voulez tester la longitude/altitude, vous devrez ajuster la requête ici.
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
+    public boolean existeCentre(float longitude, float altitude) throws SQLException {
+        String query = "SELECT COUNT(*) FROM centre WHERE longitude = ? AND altitude = ?";
+
+        try (Connection conn = DataBase.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setFloat(1, longitude);
+            stmt.setFloat(2, altitude);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Si COUNT(*) > 0, un centre avec ces coordonnées existe déjà
             }
         }
+        return false;
     }
+
 }
