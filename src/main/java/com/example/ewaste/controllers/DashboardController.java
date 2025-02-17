@@ -1299,6 +1299,7 @@ public class DashboardController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         homeDisplayCitoyenChart();
         homeDisplayEmployeeChart();
         try {

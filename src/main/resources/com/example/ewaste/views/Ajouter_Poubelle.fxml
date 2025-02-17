@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.collections.FXCollections?>
+
+<?import java.lang.String?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.ewaste.controllers.Ajouter_poubelle_controller"
+            prefHeight="400.0"
+            prefWidth="600.0"
+            stylesheets="@style/style.css">
+
+    <VBox spacing="20" styleClass="main-container"
+          AnchorPane.topAnchor="20" AnchorPane.rightAnchor="20"
+          AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20">
+
+        <!-- Titre centré -->
+        <HBox alignment="CENTER">
+            <Label text="Ajouter Poubelle" styleClass="title-label"/>
+        </HBox>
+
+        <GridPane hgap="10" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="150"/>
+                <ColumnConstraints prefWidth="300"/>
+            </columnConstraints>
+
+            <!-- Champs du formulaire -->
+            <Label text="Centre" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="idCentreField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Adresse" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="adresseField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Niveau de Remplissage %" styleClass="field-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="niveauField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Date d'installation" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="dateInstallationPicker" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <Label text="État Poubelle" styleClass="field-label" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="etatComboBox" GridPane.rowIndex="5" GridPane.columnIndex="1">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="FONCTIONNEL"/>
+                        <String fx:value="EN_PANNE"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+        </GridPane>
+
+        <!-- Bouton Ajouter -->
+        <HBox alignment="CENTER">
+            <Button text="Ajouter" fx:id="ajouterBtn"
+                    onAction="#ajouterPoubelle"
+                    styleClass="primary-button"/>
+        </HBox>
+
+        <!-- Panel de confirmation -->
+        <StackPane fx:id="confirmationPanel" visible="false">
+            <VBox alignment="CENTER" spacing="15" styleClass="confirmation-box">
+                <Label text="✓" styleClass="success-icon"/>
+                <Label fx:id="confirmationMessage" styleClass="success-text"/>
+                <Button text="Fermer" styleClass="close-button"
+                        onAction="#fermerConfirmation"/>
+            </VBox>
+        </StackPane>
+
+    </VBox>
+</AnchorPane>
