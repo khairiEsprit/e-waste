@@ -1,0 +1,43 @@
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.ewaste.contollers.FormDemandeController"
+      stylesheets="@../styles/style1.css">
+
+    <Label text="Formulaire de Demande"/>
+
+    <VBox spacing="2">
+        <TextField fx:id="adresseField" promptText="Adresse" styleClass="text-field"/>
+        <Label fx:id="adresseError" textFill="red" visible="false"/>
+    </VBox>
+
+    <VBox spacing="2">
+        <TextField fx:id="emailField" promptText="Email Utilisateur" styleClass="text-field"/>
+        <Label fx:id="emailError" textFill="red" visible="false"/>
+    </VBox>
+
+    <VBox spacing="2">
+        <TextField fx:id="messageField" promptText="Message" styleClass="text-field"/>
+        <Label fx:id="messageError" textFill="red" visible="false"/>
+    </VBox>
+
+    <VBox spacing="2">
+        <ComboBox fx:id="typeField" styleClass="combo-box">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Demande"/>
+                    <String fx:value="Reclamation"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <Label fx:id="typeError" textFill="red" visible="false"/>
+    </VBox>
+
+    <Button fx:id="saveButton" text="Envoyer" onAction="#handleSubmit" styleClass="button"/>
+</VBox>

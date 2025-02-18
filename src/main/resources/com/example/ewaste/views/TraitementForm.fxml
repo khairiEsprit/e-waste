@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+
+
+    <VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="com.example.ewaste.contollers.TraitementFormController"
+
+          style="-fx-padding: 20; -fx-background-color: #F8F9FA;" stylesheets="@../styles/style1.css">
+
+        <Label text="Ajouter / Modifier un Traitement"
+               style="-fx-font-size: 18px; -fx-text-fill: #2C3E50; -fx-font-weight: bold;"/>
+
+
+
+<!--        &lt;!&ndash; Status Selection &ndash;&gt;-->
+<!--        <ComboBox fx:id="statusField">-->
+<!--            <items>-->
+<!--                <FXCollections fx:factory="observableArrayList">-->
+<!--                    <String fx:value="En attente"/>-->
+<!--                    <String fx:value="Traitée"/>-->
+<!--                    <String fx:value="Refusée"/>-->
+<!--                </FXCollections>-->
+<!--            </items>-->
+<!--        </ComboBox>-->
+
+<!--        &lt;!&ndash; Commentaire Field &ndash;&gt;-->
+<!--        <TextArea fx:id="commentaireField" promptText="Commentaire"-->
+<!--                  wrapText="true" prefHeight="80"/>-->
+
+<!--        &lt;!&ndash; Buttons &ndash;&gt;-->
+<!--        <HBox spacing="10">-->
+<!--            <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSubmit"-->
+<!--                    style="-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 14px;"/>-->
+<!--            <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel"-->
+<!--                    style="-fx-background-color: #DC3545; -fx-text-fill: white; -fx-font-size: 14px;"/>-->
+<!--        </HBox>-->
+    <ComboBox fx:id="statusField">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="En attente"/>
+                <String fx:value="Traitée"/>
+                <String fx:value="Refusée"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <TextArea fx:id="commentaireField" promptText="Commentaire" wrapText="true" prefHeight="80"/>
+
+    <Label fx:id="errorLabel" text="" style="-fx-text-fill: red;"/>
+
+    <HBox spacing="10">
+        <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSubmit"
+                style="-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 14px;"/>
+        <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel"
+                style="-fx-background-color: #DC3545; -fx-text-fill: white; -fx-font-size: 14px;"/>
+    </HBox>
+
+    </VBox>
+
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.ewaste.contollers.TraitementController"
+      style="-fx-padding: 20; -fx-background-color: #F8F9FA;" stylesheets="@../styles/style2.css">
+
+    <Label text="Détails du Traitement" style="-fx-font-size: 18px; -fx-text-fill: #2C3E50; -fx-font-weight: bold;"/>
+    <Button text="Ajouter Traitement" fx:id="addTraitementButton" onAction="#openAddTraitementForm"
+            style="-fx-background-color: #28A745; -fx-text-fill: white; -fx-font-size: 14px;"/>
+    <TableView fx:id="traitementTable">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="statusColumn" text="Statut" prefWidth="150"/>
+            <TableColumn fx:id="dateColumn" text="Date Traitement" prefWidth="150"/>
+            <TableColumn fx:id="commentaireColumn" text="Commentaire" prefWidth="200"/>
+        </columns>
+    </TableView>
+
+</VBox>

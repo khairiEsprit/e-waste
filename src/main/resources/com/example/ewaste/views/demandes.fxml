@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.ewaste.contollers.DemandesController"
+>
+
+    <HBox spacing="20" styleClass="root" stylesheets="@../styles/tache.css">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <!-- Sidebar -->
+        <VBox styleClass="sidebar" spacing="20" prefWidth="200">
+            <!-- Logo -->
+            <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
+                <image>
+                    <Image url="@../assets/logo.png"/>
+                </image>
+            </ImageView>
+
+            <!-- Navigation Buttons -->
+            <Button text="Poubelle" styleClass="sidebar-button"/>
+            <Button text="Demande" styleClass="sidebar-button"/>
+            <Button text="Réclamation" styleClass="sidebar-button"/>
+            <Button text="Événement" styleClass="sidebar-button"/>
+        </VBox>
+
+        <!-- Main Content -->
+        <VBox spacing="20" style="-fx-padding: 0 0 0 20;" HBox.hgrow="ALWAYS">
+            <Label text="Liste des Demandes" styleClass="main-title"/>
+
+            <!-- Search & Filter -->
+            <HBox spacing="10" style="-fx-padding: 10;">
+                <TextField fx:id="searchField" promptText="Rechercher par type..." styleClass="search-field"/>
+                <Button text="Trier par date" styleClass="button"/>
+            </HBox>
+
+            <!-- Main Container with Requests & Info Card -->
+            <HBox spacing="20" HBox.hgrow="ALWAYS">
+                <!-- Request List -->
+                <ScrollPane fitToWidth="true" styleClass="scroll-pane" HBox.hgrow="ALWAYS">
+                    <GridPane fx:id="gridPane" hgap="20" vgap="20" style="-fx-padding: 10;">
+                        <!-- Requests will be loaded dynamically here -->
+                    </GridPane>
+                </ScrollPane>
+
+                <!-- Information Card -->
+                <VBox styleClass="info-card" spacing="10" prefWidth="400">
+                    <!-- Request Count -->
+                    <Label text="NB Demandes" styleClass="info-title"/>
+                    <ImageView fitHeight="80" fitWidth="80" preserveRatio="true"/>
+                    <Label text="15" styleClass="info-label"/>
+
+                    <!-- Treatment Count -->
+                    <Label text="Traitements Associés" styleClass="info-title"/>
+                    <ImageView fitHeight="80" fitWidth="80" preserveRatio="true"/>
+                    <Label text="10 Traitements" styleClass="info-label"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </HBox>
+</AnchorPane>

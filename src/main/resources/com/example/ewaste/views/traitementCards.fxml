@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.ewaste.contollers.TraitementCardsController">
+
+    <HBox spacing="20" styleClass="root" stylesheets="@../styles/style2.css">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <!-- Sidebar -->
+        <VBox styleClass="sidebar" spacing="20" prefWidth="200">
+            <!-- Logo -->
+            <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
+                <image>
+                    <Image url="@../assets/logo.png"/>
+                </image>
+            </ImageView>
+
+            <!-- Navigation Buttons -->
+            <Button text="Poubelle" styleClass="sidebar-button"/>
+            <Button text="Demande" styleClass="sidebar-button"/>
+            <Button text="Réclamation" styleClass="sidebar-button"/>
+            <Button text="Événement" styleClass="sidebar-button"/>
+        </VBox>
+
+        <!-- Main Content -->
+        <VBox spacing="20" style="-fx-padding: 0 0 0 20;" HBox.hgrow="ALWAYS">
+            <Label text="Liste des Traitements" styleClass="main-title"/>
+
+            <!-- Main Container with Scroll and Info Card -->
+            <HBox spacing="20" HBox.hgrow="ALWAYS">
+                <!-- Traitement List -->
+                <ScrollPane fitToWidth="true" styleClass="scroll-pane" HBox.hgrow="ALWAYS">
+                    <GridPane fx:id="gridPane" hgap="20" vgap="20" styleClass="grid-pane">
+                        <!-- Traitements will be loaded dynamically here -->
+                    </GridPane>
+                </ScrollPane>
+
+                <!-- Information Card -->
+                <VBox styleClass="info-card" spacing="10" prefWidth="400">
+                    <!-- Traitement Count -->
+                    <Label text="NB Traitements" styleClass="info-title"/>
+                    <ImageView fitHeight="80" fitWidth="80" preserveRatio="true"/>
+                    <Label text="10" styleClass="info-label"/>
+
+                    <!-- Traitement Status -->
+                    <Label text="Traitements Terminés" styleClass="info-title"/>
+                    <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
+                        <image>
+                            <Image url="@../assets/status-icon.png"/>
+                        </image>
+                    </ImageView>
+                    <Label text="5 Validés" styleClass="info-label"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </HBox>
+</AnchorPane>

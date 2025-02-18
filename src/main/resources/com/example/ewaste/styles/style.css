@@ -1,0 +1,75 @@
+/* Root Container */
+.root {
+    -fx-background-color: #FEFEFA; /* Soft background */
+    -fx-padding: 20px;
+    -fx-font-family: "Arial", sans-serif;
+}
+
+/* Page Title */
+.label {
+    -fx-font-size: 20px;
+    -fx-text-fill: #013220;
+    -fx-font-weight: bold;
+}
+
+/* TableView Styling */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #29AB87;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px;
+}
+
+/* Table Header */
+.table-view .column-header-background {
+    -fx-background-color: #29AB87; /* Green header */
+    -fx-padding: 10px;
+}
+
+.table-view .column-header {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Table Rows */
+.table-row-cell {
+    -fx-background-color: #F8F9FA; /* Light gray background */
+    -fx-border-color: #DDDDDD;
+    -fx-font-size: 14px;
+}
+
+/* Alternating Row Colors */
+.table-row-cell:odd {
+    -fx-background-color: #E8F5E9; /* Soft green */
+}
+
+/* Hover Effect */
+.table-row-cell:hover {
+    -fx-background-color: #ACE1AF; /* Brighter green */
+    -fx-cursor: hand;
+}
+
+/* Selected Row */
+.table-row-cell:selected {
+    -fx-background-color: #00693E; /* Dark green */
+    -fx-text-fill: white;
+}
+
+/* Actions Column (Buttons) */
+.action-button {
+    -fx-background-color: #29AB87;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 5px;
+    -fx-border-color: transparent;
+}
+
+/* Button Hover */
+.action-button:hover {
+    -fx-background-color: #00693E;
+    -fx-cursor: hand;
+}

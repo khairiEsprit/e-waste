@@ -1,0 +1,89 @@
+/* Main Container */
+.root {
+    -fx-background-color: #FEFEFA; /* Soft white background */
+    -fx-padding: 20px;
+    -fx-font-family: "Arial", sans-serif;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+    -fx-background-color: #013220; /* Dark Green */
+    -fx-padding: 20px;
+    -fx-spacing: 15px;
+    -fx-alignment: center;
+    -fx-border-radius: 10px;
+}
+
+/* Sidebar Buttons */
+.sidebar-button {
+    -fx-background-color: #29AB87; /* Light Green */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 15px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: transparent;
+    -fx-min-width: 150px;
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+/* Sidebar Button Hover Effect */
+.sidebar-button:hover {
+    -fx-background-color: #00693E; /* Darker Green */
+    -fx-cursor: hand;
+}
+
+/* Page Title */
+.main-title {
+    -fx-font-size: 22px;
+    -fx-text-fill: #013220;
+    -fx-font-weight: bold;
+    -fx-padding-bottom: 10px;
+}
+
+/* Scroll Pane */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-radius: 10px;
+}
+
+/* Grid Pane (Traitement Cards) */
+.grid-pane {
+    -fx-padding: 10px;
+}
+
+/* Traitement Card */
+.traitement-card {
+    -fx-background-color: white;
+    -fx-border-color: #29AB87;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 105, 62, 0.2), 10, 0, 0, 3);
+}
+
+/* Info Card */
+.info-card {
+    -fx-background-color: #ACE1AF; /* Soft Green */
+    -fx-padding: 20px;
+    -fx-border-radius: 10px;
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 105, 62, 0.2), 10, 0, 0, 3);
+}
+
+/* Info Titles */
+.info-title {
+    -fx-font-size: 18px;
+    -fx-text-fill: #013220;
+    -fx-font-weight: bold;
+}
+
+/* Info Labels */
+.info-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: #00693E;
+    -fx-font-weight: bold;
+}
