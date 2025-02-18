@@ -85,7 +85,6 @@ public class UseraccountController implements Initializable {
     String userName ;
     String userPrenom ;
     UserRole userRole ;
-//    static UserSession us = ApplicationContext.getInstance().getUserSession();
 
 
     public void getUserSession() {
@@ -111,18 +110,14 @@ public class UseraccountController implements Initializable {
             }
 
             String numero = tf_UserAccountNumero.getText();
-            // Optionally validate phone number...
 
             a.setEmail(email);
             a.setTelephone(Integer.parseInt(numero));
 
-            // If an image was selected, update the user's image.
             if (selectedImageFile != null) {
-                // For example, store the file path or convert the file to a byte[] as needed.
                 a.setPhotoUrl(selectedImageFile.getAbsolutePath());
             }
 
-            // Update the user data in your persistence layer.
             ur.updateEmailPhoneAndImage(a);
             Modals.displaySuccess("Profile updated successfully", "Update");
             afficherdetails();
@@ -148,20 +143,15 @@ public class UseraccountController implements Initializable {
 
 
     public void afficherUpdate(ActionEvent actionEvent) {
-        // Ensure the UI updates are done on the JavaFX Application Thread
         Platform.runLater(() -> {
-            // Ensure Dialog_Camera is not affecting the visibility of the update password dialog
 
-            // Apply blur effect to the general pane
             BoxBlur boxBlur = new BoxBlur(5, 5, 3);
             general_pane.setEffect(boxBlur);
 
 
-            // Make the update password dialog visible and apply fade-in transition
             Dialog_UpdatePassword_User.setOpacity(0);
             Dialog_UpdatePassword_User.setVisible(true);
 
-            // Create a fade-in effect
             FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5), Dialog_UpdatePassword_User);
             fadeIn.setToValue(1.0);
             fadeIn.setOnFinished(event -> general_pane.setEffect(boxBlur)); // Apply blur after fade-in
@@ -258,7 +248,6 @@ public class UseraccountController implements Initializable {
                 Parent root = FXMLLoader.load(Main.class.getResource("views/mainLoginSignUp.fxml"));
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
-                stage.setTitle("Login | Student Management System");
                 // Make the window draggable
                 root.setOnMousePressed((MouseEvent event) -> {
                     xOffset = event.getSceneX();

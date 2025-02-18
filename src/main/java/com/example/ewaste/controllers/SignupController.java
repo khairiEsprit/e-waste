@@ -49,7 +49,7 @@ public class SignupController {
     private Button sign_up_button;
     @FXML
     private void initialize() {
-        // Optional: Preselect a role, e.g., "citoyent"
+
         roleComboBox.getItems().setAll(UserRole.values());
         roleComboBox.getSelectionModel().select(UserRole.ADMIN);
     }
@@ -65,14 +65,12 @@ public class SignupController {
         boolean valid = true;
         StringBuilder errorMessage = new StringBuilder();
 
-        // Clear all previous error messages
         emailErrorLabel.setText("");
         birthDateErrorLabel.setText("");
         roleErrorLabel.setText("");
         passwordErrorLabel.setText("");
         fullNameErrorLabel.setText("");
 
-        // Validate Email
         String email = emailField.getText();
         if (!isValidEmail(email)) {
             errorMessage.append("Invalid Email: Please enter a valid email address.\n");
@@ -80,7 +78,6 @@ public class SignupController {
             valid = false;
         }
 
-        // Validate Full Name
         String nom = fullNameField.getText();
         if (nom == null || nom.isEmpty()) {
             errorMessage.append("Name cannot be empty!\n");
@@ -88,21 +85,18 @@ public class SignupController {
             valid = false;
         }
 
-        // Validate Password
         if (passwordField == null || passwordField.getText().isEmpty()){
             errorMessage.append("Password cannot be empty!\n");
             passwordErrorLabel.setText("Password cannot be empty!");
             valid = false;
         }
 
-        // Validate Birth Date
         LocalDate selectedDate = birthDateField.getValue();
         if (selectedDate == null) {
             errorMessage.append("Please select a birth date!\n");
             birthDateErrorLabel.setText("Birth date is required!");
             valid = false;
         } else {
-            // Check the format YYYY/MM/DD
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
             try {
                 String formattedDate = selectedDate.format(formatter);
@@ -117,14 +111,12 @@ public class SignupController {
             }
         }
 
-        // Validate Role Selection (if required)
         if (roleComboBox.getSelectionModel().getSelectedItem() == null) {
             errorMessage.append("Please select a role!\n");
             roleErrorLabel.setText("Role selection is required!");
             valid = false;
         }
 
-        // Optionally display a modal with the aggregated error messages
         if (!valid) {
             Modals.displayError(errorMessage.toString(), "Invalid input");
         }
@@ -151,10 +143,7 @@ public class SignupController {
                     }
 
                     LocalDate selectedDate = birthDateField.getValue();
-                    if (selectedDate == null) {
-                        Modals.displayError("Invalid Date", "Veuillez sélectionner une date de naissance.");
-                        return;
-                    }
+
 
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String formattedDate = selectedDate.format(formatter);
@@ -166,7 +155,7 @@ public class SignupController {
                         Modals.displaySuccess("Account Created", "Your account has been created successfully");
 
                     }
-                    System.out.println(u1.toString());
+                    System.out.println(u1);
 
                     UserSession us = UserSession.initializeUserSession(u1);
 
