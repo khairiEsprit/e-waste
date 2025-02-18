@@ -1,5 +1,4 @@
 package com.example.ewaste.Models;
-
 import java.util.Date;
 
 public class poubelle {
@@ -61,12 +60,12 @@ public class poubelle {
         this.niveau = niveau;
     }
 
-    public Date getDate_installation() {
-        return date_installation;
-    }
-
     public void setDate_installation(Date date_installation) {
         this.date_installation = date_installation;
+    }
+
+    public Date getDate_installation() {
+        return date_installation;
     }
 
     public com.example.ewaste.Models.etat getEtat() {

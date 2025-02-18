@@ -1,7 +1,8 @@
 package com.example.ewaste.controllers;
+
 import com.example.ewaste.Models.etat;
 import com.example.ewaste.Models.poubelle;
-import com.example.ewaste.repository.service_poubelle;
+import com.example.ewaste.repository.PoubelleRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -10,7 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
 import java.net.URL;
@@ -53,8 +54,13 @@ public class liste_poubelle implements Initializable {
     @FXML
     private Button btnModifier;
 
+    @FXML
+    private AnchorPane rootPane; // Ensure this is the root node of your FXML
+
     private ObservableList<poubelle> poubelleList = FXCollections.observableArrayList();
-    private service_poubelle service = new service_poubelle();
+    private FilteredList<poubelle> filteredData;
+    private SortedList<poubelle> sortedData;
+    private PoubelleRepository service = new PoubelleRepository();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -95,7 +101,6 @@ public class liste_poubelle implements Initializable {
             }
         });
 
-        // Ajout du bouton de suppression
         TableColumn<poubelle, Void> colAction = new TableColumn<>("Action");
         colAction.setCellFactory(createActionCellFactory());
         tablePoubelles.getColumns().add(colAction);
@@ -104,13 +109,12 @@ public class liste_poubelle implements Initializable {
     private Callback<TableColumn<poubelle, Void>, TableCell<poubelle, Void>> createActionCellFactory() {
         return param -> new TableCell<poubelle, Void>() {
             private final Button deleteButton = new Button("🗑");
-
             {
                 deleteButton.setOnAction(event -> {
                     poubelle p = getTableView().getItems().get(getIndex());
                     try {
                         service.supprimer(p.getId());
-                        poubelleList.remove(p);
+                        poubelleList.remove(p); // Remove the item from the observable list
                     } catch (SQLException e) {
                         showAlert("Erreur de suppression", e.getMessage());
                     }
@@ -130,7 +134,7 @@ public class liste_poubelle implements Initializable {
     }
 
     private void setupSearch() {
-        FilteredList<poubelle> filteredData = new FilteredList<>(poubelleList, p -> true);
+        filteredData = new FilteredList<>(poubelleList, p -> true);
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(poubelle -> {
@@ -143,7 +147,7 @@ public class liste_poubelle implements Initializable {
             });
         });
 
-        SortedList<poubelle> sortedData = new SortedList<>(filteredData);
+        sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(tablePoubelles.comparatorProperty());
         tablePoubelles.setItems(sortedData);
     }
@@ -185,11 +189,11 @@ public class liste_poubelle implements Initializable {
     }
 
     private void setDarkTheme() {
-        tablePoubelles.getScene().getRoot().setStyle("-fx-base: #2b2b2b;");
+        rootPane.setStyle("-fx-base: #2b2b2b;"); // Apply to the root node
     }
 
     private void setLightTheme() {
-        tablePoubelles.getScene().getRoot().setStyle("-fx-base: #f4f4f4;");
+        rootPane.setStyle("-fx-base: #f4f4f4;"); // Apply to the root node
     }
 
     private void loadData() {
@@ -202,12 +206,20 @@ public class liste_poubelle implements Initializable {
 
     @FXML
     private void handleAdd() {
-        // Ouvrir la fenêtre d'ajout
+        // Refresh the data and reapply search, sorting, and theme toggle
+        loadData();
+        setupSearch();
+        setupSorting();
+        setupThemeToggle();
     }
 
     @FXML
     private void handleEdit() {
-        // Ouvrir la fenêtre de modification
+        // Refresh the data and reapply search, sorting, and theme toggle
+        loadData();
+        setupSearch();
+        setupSorting();
+        setupThemeToggle();
     }
 
     private void showAlert(String title, String message) {

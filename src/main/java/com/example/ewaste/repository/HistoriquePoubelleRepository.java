@@ -9,10 +9,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceHistoriquePoubelle implements IService<Historique_Poubelle> {
+public class HistoriquePoubelleRepository implements IService<Historique_Poubelle> {
     private Connection connection;
 
-    public ServiceHistoriquePoubelle() {
+    public HistoriquePoubelleRepository() {
         connection = DataBase.getInstance().getConnection();
     }
 
@@ -68,6 +68,66 @@ public class ServiceHistoriquePoubelle implements IService<Historique_Poubelle> 
             historiquePoubelles.add(h);
         }
         return historiquePoubelles;
+    }
+    public List<Historique_Poubelle> recupererParPoubelle(int idPoubelle) throws SQLException {
+        String sql = "SELECT * FROM historique WHERE id_poubelle = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, idPoubelle);
+        ResultSet rs = ps.executeQuery();
+
+        List<Historique_Poubelle> historiquePoubelles = new ArrayList<>();
+        while (rs.next()) {
+            Historique_Poubelle h = new Historique_Poubelle(
+                    rs.getInt("id"),
+                    rs.getInt("id_poubelle"),
+                    rs.getTimestamp("date_evenement"),
+                    type.valueOf(rs.getString("type_evenement")),
+                    rs.getString("description"),
+                    rs.getFloat("quantite_dechets")
+            );
+            historiquePoubelles.add(h);
+        }
+        return historiquePoubelles;
+    }
+
+    public List<Historique_Poubelle> recupererParPoubelleEtType(int idPoubelle, type typeEvenement) throws SQLException {
+        String sql = "SELECT * FROM historique WHERE id_poubelle = ? AND type_evenement = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, idPoubelle);
+        ps.setString(2, typeEvenement.toString());
+        ResultSet rs = ps.executeQuery();
+
+        List<Historique_Poubelle> historiquePoubelles = new ArrayList<>();
+        while (rs.next()) {
+            Historique_Poubelle h = new Historique_Poubelle(
+                    rs.getInt("id"),
+                    rs.getInt("id_poubelle"),
+                    rs.getTimestamp("date_evenement"),
+                    type.valueOf(rs.getString("type_evenement")),
+                    rs.getString("description"),
+                    rs.getFloat("quantite_dechets")
+            );
+            historiquePoubelles.add(h);
+        }
+        return historiquePoubelles;
+    }
+
+    public boolean existePoubelle(int idPoubelle) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM poubelle WHERE id = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, idPoubelle);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0; // Retourne true si la poubelle existe
+        }
+        return false;
+    }
+    public void mettreAJourNiveauRemplissage (int idPoubelle, float niveauRemplissage) throws SQLException {
+        String sql = "UPDATE poubelle SET niveau = ? WHERE id = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setFloat(1, niveauRemplissage);
+        ps.setInt(2, idPoubelle);
+        ps.executeUpdate();
     }
     }
 

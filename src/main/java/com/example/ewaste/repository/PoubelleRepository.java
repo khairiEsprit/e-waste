@@ -9,12 +9,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class service_poubelle implements IService<poubelle>
+public class PoubelleRepository implements IService<poubelle>
 {
 
     private Connection connection;
 
-    public service_poubelle() {
+    public PoubelleRepository (){
         connection = DataBase.getInstance().getConnection();
     }
     @Override
@@ -84,6 +84,4 @@ public class service_poubelle implements IService<poubelle>
         }
         return poubelles;
     }
-    }
-
-
+}

@@ -12,7 +12,7 @@
             fx:controller="com.example.ewaste.controllers.Ajouter_poubelle_controller"
             prefHeight="400.0"
             prefWidth="600.0"
-            stylesheets="@style/style.css">
+            stylesheets="@../style/style.css">
 
     <VBox spacing="20" styleClass="main-container"
           AnchorPane.topAnchor="20" AnchorPane.rightAnchor="20"
@@ -63,7 +63,7 @@
         <!-- Panel de confirmation -->
         <StackPane fx:id="confirmationPanel" visible="false">
             <VBox alignment="CENTER" spacing="15" styleClass="confirmation-box">
-                <Label text="✓" styleClass="success-icon"/>
+                <Label styleClass="fas success-icon"/> <!-- Icône FontAwesome -->
                 <Label fx:id="confirmationMessage" styleClass="success-text"/>
                 <Button text="Fermer" styleClass="close-button"
                         onAction="#fermerConfirmation"/>
