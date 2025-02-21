@@ -1,4 +1,4 @@
-package com.example.ewaste.entities;
+package com.example.ewaste.Entities;
 
 public class Centre {
     private int id;

@@ -2,7 +2,7 @@ package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Entities.Avis;
 import com.example.ewaste.Repository.AvisRepository;
-import com.example.ewaste.Utils.DataBaseConn;
+import com.example.ewaste.Utils.DataBase;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -27,7 +27,7 @@ public class AvisController {
 
     public AvisController() {
         // Initialize repository with the database connection
-        Connection conn = DataBaseConn.getInstance().getConnection();
+        Connection conn = DataBase.getInstance().getConnection();
         this.avisRepository = new AvisRepository(conn);
     }
 

@@ -1,8 +1,8 @@
-    package com.example.ewaste.controllers;
+    package com.example.ewaste.Controllers;
 
-    import com.example.ewaste.entities.Centre;
-    import com.example.ewaste.entities.Contrat;
-    import com.example.ewaste.repository.ContratRepository;
+    import com.example.ewaste.Entities.Centre;
+    import com.example.ewaste.Entities.Contrat;
+    import com.example.ewaste.Repository.ContratRepository;
     import javafx.collections.FXCollections;
     import javafx.collections.ObservableList;
     import javafx.event.ActionEvent;

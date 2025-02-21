@@ -1,8 +1,8 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
-import com.example.ewaste.entities.Centre;
-import com.example.ewaste.interfaces.IService;
-import com.example.ewaste.utils.DataBase;
+import com.example.ewaste.Entities.Centre;
+import com.example.ewaste.Interfaces.IService;
+import com.example.ewaste.Utils.DataBase;
 
 import java.sql.*;
 import java.util.ArrayList;

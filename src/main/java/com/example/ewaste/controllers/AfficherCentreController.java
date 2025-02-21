@@ -1,6 +1,6 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
-import com.example.ewaste.utils.DataBase;
+import com.example.ewaste.Utils.DataBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,8 +14,8 @@ import javafx.scene.control.TextField;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 
-import com.example.ewaste.entities.Centre;
-import com.example.ewaste.repository.CentreRepository;
+import com.example.ewaste.Entities.Centre;
+import com.example.ewaste.Repository.CentreRepository;
 
 import java.io.IOException;
 import java.sql.Connection;

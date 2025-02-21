@@ -2,14 +2,14 @@ package com.example.ewaste.Repository;
 
 
 import com.example.ewaste.Entities.Participation;
-import com.example.ewaste.Utils.DataBaseConn;
+import com.example.ewaste.Utils.DataBase;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ParticipationRepository {
-    private final Connection conn = DataBaseConn.getInstance().getConnection();
+    private final Connection conn = DataBase.getInstance().getConnection();
 
     // Create (Insert) a new participation
     public boolean create(Participation participation) {

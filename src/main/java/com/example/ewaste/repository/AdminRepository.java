@@ -1,8 +1,7 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
 
-import com.example.ewaste.entities.Admin;
-import com.example.ewaste.interfaces.EntityCrud;
+import com.example.ewaste.Entities.Admin;
 
 import java.util.List;
 

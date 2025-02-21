@@ -1,12 +1,12 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
 
-import com.example.ewaste.entities.User;
-import com.example.ewaste.entities.UserRole;
-import com.example.ewaste.entities.UserSession;
-import com.example.ewaste.repository.AuthRepository;
-import com.example.ewaste.repository.UserRepository;
-import com.example.ewaste.utils.Modals;
+import com.example.ewaste.Entities.User;
+import com.example.ewaste.Entities.UserRole;
+import com.example.ewaste.Entities.UserSession;
+import com.example.ewaste.Repository.AuthRepository;
+import com.example.ewaste.Repository.UserRepository;
+import com.example.ewaste.Utils.Modals;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -20,8 +20,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 
-import static com.example.ewaste.utils.RoleNavigation.navigateUser;
-import static com.example.ewaste.utils.Validator.isValidEmail;
+import static com.example.ewaste.Utils.RoleNavigation.navigateUser;
+import static com.example.ewaste.Utils.Validator.isValidEmail;
 
 public class SignupController {
 
@@ -150,7 +150,7 @@ public class SignupController {
                     Date date = java.sql.Date.valueOf(formattedDate);
 
                     User u1 = new User(fullNameField.getText(), emailField.getText(), passwordField.getText(), date, roleComboBox.getSelectionModel().getSelectedItem());
-                    u.addEntity(u1);
+                    u.ajouter(u1);
                     if(u.getUserByEmail(emailField.getText()) != null){
                         Modals.displaySuccess("Account Created", "Your account has been created successfully");
 

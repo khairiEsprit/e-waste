@@ -1,6 +1,6 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
-import com.example.ewaste.entities.Centre;
+import com.example.ewaste.Entities.Centre;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;

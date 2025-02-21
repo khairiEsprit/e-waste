@@ -1,7 +1,7 @@
-package com.example.ewaste.controllers;
-import com.example.ewaste.Models.etat;
-import com.example.ewaste.Models.poubelle;
-import com.example.ewaste.repository.service_poubelle;
+package com.example.ewaste.Controllers;
+import com.example.ewaste.Entities.etat;
+import com.example.ewaste.Entities.poubelle;
+import com.example.ewaste.Repository.service_poubelle;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -11,26 +11,17 @@ import javafx.collections.transformation.SortedList;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.awt.*;
-
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.ZoneId;

@@ -1,7 +1,7 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
-import com.example.ewaste.entities.Tache;
-import com.example.ewaste.repository.TacheRepository;
+import com.example.ewaste.Entities.Tache;
+import com.example.ewaste.Repository.TacheRepository;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

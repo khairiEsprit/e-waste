@@ -1,7 +1,7 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
-import com.example.ewaste.entities.PlanificationTache;
-import com.example.ewaste.repository.PlanificationTacheRepository;
+import com.example.ewaste.Entities.PlanificationTache;
+import com.example.ewaste.Repository.PlanificationTacheRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

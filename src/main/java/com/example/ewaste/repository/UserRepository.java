@@ -1,23 +1,22 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
-
-import com.example.ewaste.entities.User;
-import com.example.ewaste.entities.UserRole;
-import com.example.ewaste.exceptions.DatabaseException;
-import com.example.ewaste.interfaces.EntityCrud;
-import com.example.ewaste.utils.DataBase;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.example.ewaste.Entities.PlanificationTache;
+import com.example.ewaste.Entities.poubelle;
+import com.example.ewaste.Interfaces.IService;
+import com.example.ewaste.Entities.User;
+import com.example.ewaste.Entities.UserRole;
+import com.example.ewaste.Exceptions.DatabaseException;
+import com.example.ewaste.Utils.DataBase;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.ewaste.repository.AuthRepository.hashPassword2;
+import static com.example.ewaste.Repository.AuthRepository.hashPassword2;
 
 
-public class UserRepository implements EntityCrud<User> {
+public class UserRepository implements IService<User> {
     private final Connection conn = DataBase.getInstance().getConnection();
 
     public int countusers() throws SQLException {
@@ -34,7 +33,7 @@ public class UserRepository implements EntityCrud<User> {
 
 
     // Create
-    public void addEntity(User user) {
+    public void ajouter(User user) {
         String query = "INSERT INTO utilisateur (nom, prenom, telephone, email, mdp, DateNss, role, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -59,7 +58,7 @@ public class UserRepository implements EntityCrud<User> {
     }
 
     // Read All
-    public List<User> displayEntity() {
+    public List<User> afficher() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM utilisateur";
 
@@ -83,13 +82,17 @@ public class UserRepository implements EntityCrud<User> {
     }
 
     @Override
-    public User display(int id) {
-        return null;
+    public List<PlanificationTache> afficher(int id_centre) throws SQLException {
+        return List.of();
+    }
+
+    @Override
+    public List<poubelle> recuperer() throws SQLException {
+        return List.of();
     }
 
 
-
-    public void updateEntity(User u) {
+    public void modifier(User u) {
         String query = "UPDATE utilisateur SET nom = ?, prenom = ?, telephone = ?, email = ?, mdp = ?, DateNss = ?, role = ?, photo = ?, WHERE id = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
@@ -161,7 +164,7 @@ public class UserRepository implements EntityCrud<User> {
         return null;
     }
 
-    public void deleteEntity(int userId) {
+    public void supprimer(int userId) {
         String sql = "DELETE FROM utilisateur WHERE id = ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {

@@ -1,9 +1,10 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
-import com.example.ewaste.Models.etat;
-import com.example.ewaste.Models.poubelle;
-import com.example.ewaste.interfaces.IService;
-import com.example.ewaste.utils.DataBase;
+import com.example.ewaste.Entities.PlanificationTache;
+import com.example.ewaste.Entities.etat;
+import com.example.ewaste.Entities.poubelle;
+import com.example.ewaste.Interfaces.IService;
+import com.example.ewaste.Utils.DataBase;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -36,6 +37,16 @@ public class service_poubelle implements IService<poubelle>
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, id);
         ps.executeUpdate();
+    }
+
+    @Override
+    public List<poubelle> afficher() throws SQLException {
+        return List.of();
+    }
+
+    @Override
+    public List<PlanificationTache> afficher(int id_centre) throws SQLException {
+        return List.of();
     }
 
     @Override

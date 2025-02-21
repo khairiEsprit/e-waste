@@ -1,7 +1,7 @@
-package com.example.ewaste.controllers;
-import com.example.ewaste.Models.etat;
-import com.example.ewaste.Models.poubelle;
-import com.example.ewaste.repository.service_poubelle;
+package com.example.ewaste.Controllers;
+import com.example.ewaste.Entities.etat;
+import com.example.ewaste.Entities.poubelle;
+import com.example.ewaste.Repository.service_poubelle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -10,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 
 import java.net.URL;

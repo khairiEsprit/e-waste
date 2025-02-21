@@ -1,6 +1,5 @@
 package com.example.ewaste;
 
-import com.example.ewaste.utils.DataBase;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,7 +7,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.sql.Connection;
 
 public class Main extends Application {
     @Override

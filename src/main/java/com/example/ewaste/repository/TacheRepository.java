@@ -1,8 +1,9 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
-import com.example.ewaste.interfaces.IService;
-import com.example.ewaste.entities.Tache;
-import com.example.ewaste.utils.DataBase;
+import com.example.ewaste.Entities.poubelle;
+import com.example.ewaste.Interfaces.IService;
+import com.example.ewaste.Entities.Tache;
+import com.example.ewaste.Utils.DataBase;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -51,6 +52,11 @@ public class TacheRepository implements IService<Tache> {
     }
 
     @Override
+    public List<Tache> afficher() throws SQLException {
+        return List.of();
+    }
+
+    @Override
     public List<Tache> afficher(int idCentre) throws SQLException {
         List<Tache> taches = new ArrayList<>();
         String sql = "SELECT * FROM `tache` WHERE `id_centre` = ?";
@@ -69,6 +75,11 @@ public class TacheRepository implements IService<Tache> {
             ));
         }
         return taches;
+    }
+
+    @Override
+    public List<poubelle> recuperer() throws SQLException {
+        return List.of();
     }
 
     public List<Tache> afficherParEmploye(int idCentre, int idEmploye) throws SQLException {

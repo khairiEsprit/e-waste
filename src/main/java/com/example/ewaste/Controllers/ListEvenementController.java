@@ -115,7 +115,7 @@ public class ListEvenementController {
         actionButton.setDisable(!event.isAvailable());
         actionButton.setOnAction(evt -> {
             Stage stage = (Stage) actionButton.getScene().getWindow();
-            Navigate.navigate(actionButton, "/views/event/participation-form.fxml", stage);
+            Navigate.navigate(actionButton, "/com/example/ewaste/views/participation-form.fxml", stage);
         });
 
         // Ajouter les éléments à la carte de l'événement

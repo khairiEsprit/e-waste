@@ -1,11 +1,11 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
 
-import com.example.ewaste.entities.Employee;
-import com.example.ewaste.entities.User;
-import com.example.ewaste.entities.UserRole;
-import com.example.ewaste.interfaces.EntityCrud;
-import com.example.ewaste.utils.DataBase;
+import com.example.ewaste.Entities.Employee;
+import com.example.ewaste.Entities.User;
+import com.example.ewaste.Entities.UserRole;
+import com.example.ewaste.Interfaces.IService;
+import com.example.ewaste.Utils.DataBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -15,34 +15,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class EmployeeRepository implements EntityCrud<Employee> {
+public class EmployeeRepository implements IService<Employee> {
 
     private final Connection conn = DataBase.getInstance().getConnection();
 
-    @Override
-    public void addEntity(Employee employee) {
 
-    }
-
-    @Override
-    public void updateEntity(Employee employee) {
-
-    }
-
-    @Override
-    public void deleteEntity(int id) {
-
-    }
-
-    @Override
-    public List<Employee> displayEntity() {
-        return List.of();
-    }
-
-    @Override
-    public Employee display(int id) {
-        return null;
-    }
 
     public int getEmployeeCount() throws SQLException {
         String query = "SELECT COUNT(*) FROM utilisateur WHERE role = ?";
@@ -84,4 +61,23 @@ public class EmployeeRepository implements EntityCrud<Employee> {
         return employees;
     }
 
+    @Override
+    public void ajouter(Employee employee) throws SQLException {
+
+    }
+
+    @Override
+    public void modifier(Employee employee) throws SQLException {
+
+    }
+
+    @Override
+    public void supprimer(int id) throws SQLException {
+
+    }
+
+    @Override
+    public List<Employee> afficher() throws SQLException {
+        return List.of();
+    }
 }

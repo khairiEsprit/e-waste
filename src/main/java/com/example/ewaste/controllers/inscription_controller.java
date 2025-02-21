@@ -1,4 +1,4 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

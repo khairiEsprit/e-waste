@@ -8,9 +8,9 @@
 <?import javafx.geometry.*?>
 <?import java.net.URL?>
 
-<AnchorPane prefHeight="800" prefWidth="1300" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.AfficherContratController">
+<AnchorPane prefHeight="800" prefWidth="1300" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.AfficherContratController">
     <stylesheets>
-        <URL value="@styles/CentreView.css" />
+        <URL value="@../styles/CentreView.css" />
     </stylesheets>
    <children>
 

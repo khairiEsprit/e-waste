@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="f_validation" prefHeight="401.0" prefWidth="488.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.HomePage">
+<AnchorPane fx:id="f_validation" prefHeight="401.0" prefWidth="488.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.HomePage">
    <children>
       <Label layoutX="84.0" layoutY="102.0" text="Nom :" />
       <Label layoutX="83.0" layoutY="160.0" text="prenom :" />
