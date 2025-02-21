@@ -1,0 +1,114 @@
+/* Couleurs de la palette */
+.root {
+    -fx-background-color: #FEFEFA; /* Fond principal */
+}
+
+.main-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #00693E; /* Couleur foncée pour le titre */
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.search-field {
+    -fx-pref-width: 300px;
+    -fx-padding: 8px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #29AB87; /* Bordure verte claire */
+    -fx-background-color: white;
+}
+
+.event-card {
+    -fx-padding: 15;
+    -fx-border-color: #29AB87; /* Bordure verte claire */
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-background-color: #ACE1AF; /* Fond vert clair */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+    -fx-min-width: 300px;
+    -fx-max-width: 300px;
+}
+
+.event-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: #013220; /* Texte foncé */
+}
+
+.event-description {
+    -fx-font-size: 12px;
+    -fx-text-fill: #00693E; /* Texte vert foncé */
+}
+
+.event-info {
+    -fx-font-size: 12px;
+    -fx-text-fill: #00693E; /* Texte vert foncé */
+}
+
+.button {
+    -fx-background-color: #29AB87; /* Bouton vert clair */
+    -fx-text-fill: white;
+    -fx-padding: 8px 12px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-font-weight: bold;
+}
+
+.button:disabled {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: black;
+}
+
+.info-card {
+    -fx-padding: 15;
+    -fx-border-color: #29AB87; /* Bordure verte claire */
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-background-color: #FEFEFA; /* Fond blanc */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+    -fx-min-width: 200px;
+    -fx-max-width: 200px;
+    -fx-alignment: center;
+}
+
+.info-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-text-fill: #013220; /* Texte foncé */
+    -fx-alignment: center;
+}
+
+.info-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 25px;
+    -fx-text-fill: #00693E; /* Texte vert foncé */
+    -fx-alignment: center;
+}
+
+.sidebar {
+    -fx-padding: 15;
+    -fx-border-color: #29AB87; /* Bordure verte claire */
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-background-color: #FEFEFA; /* Fond blanc */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+    -fx-alignment: center;
+}
+
+.sidebar-button {
+    -fx-background-color: #29AB87; /* Bouton vert clair */
+    -fx-text-fill: white;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-font-weight: bold;
+    -fx-min-width: 150px;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #00693E; /* Vert foncé au survol */
+}

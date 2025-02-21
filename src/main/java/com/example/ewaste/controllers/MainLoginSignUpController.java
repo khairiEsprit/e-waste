@@ -1,4 +1,4 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Main;
 import javafx.animation.TranslateTransition;

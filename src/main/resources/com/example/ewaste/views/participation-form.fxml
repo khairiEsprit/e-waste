@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.ParticipationController">
+    <stylesheets>
+        <URL value="@../styles/event-stylesheet.css" />
+    </stylesheets>
+
+    <!-- En-tête -->
+    <top>
+        <VBox alignment="CENTER" spacing="5" styleClass="header">
+            <Label text="Inscription à l'événement" styleClass="main-title"/>
+        </VBox>
+    </top>
+
+    <!-- Contenu principal -->
+    <center>
+        <HBox alignment="CENTER" spacing="0" styleClass="main-content">
+            <!-- Colonne gauche -->
+            <VBox alignment="CENTER" spacing="20" styleClass="left-column">
+                <ImageView fitWidth="100" fitHeight="100" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/logo.png"/>
+                    </image>
+                </ImageView>
+                <Button text="Poubelle" styleClass="left-button" />
+                <Button text="Demande" styleClass="left-button" />
+                <Button text="Réclamation" styleClass="left-button" />
+                <Button text="Événement" styleClass="left-button" />
+            </VBox>
+
+            <!-- Formulaire et image -->
+            <VBox alignment="CENTER" spacing="10" styleClass="form-image-container">
+                <Label text="Inscrivez-vous dès maintenant pendant que des places sont disponibles" styleClass="subtitle"/>
+                <HBox alignment="CENTER" spacing="20" styleClass="form-image-wrapper">
+                    <!-- Formulaire -->
+                    <VBox alignment="CENTER" spacing="10" styleClass="form-container">
+                        <GridPane hgap="10" vgap="10" alignment="CENTER">
+                            <Label text="Nom*" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                            <TextField fx:id="firstNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                            <Label text="Prenom*" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                            <TextField fx:id="lastNameField" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+                            <Label text="E-mail*" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                            <TextField fx:id="emailField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                            <Label text="Telephone" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                            <TextField fx:id="phoneField" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+                            <Label text="Ville" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                            <TextField fx:id="cityField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                            <Label text="Pays" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                            <TextField fx:id="countryField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                            <Label text="Code Postal" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+                            <TextField fx:id="zipCodeField" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+                        </GridPane>
+                        <VBox alignment="CENTER">
+                            <Button text="Envoyer" onAction="#handleSubmit" styleClass="button"/>
+                            <VBox.margin>
+                                <Insets top="20"/>
+                            </VBox.margin>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Image -->
+                    <ImageView fitWidth="400" fitHeight="400" preserveRatio="true">
+                        <image>
+                            <Image url="@../assets/Participation2.png"/>
+                        </image>
+                    </ImageView>
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

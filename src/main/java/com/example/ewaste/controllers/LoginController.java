@@ -1,12 +1,12 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
 
-import com.example.ewaste.entities.User;
+import com.example.ewaste.Entities.User;
 import com.example.ewaste.entities.UserSession;
-import com.example.ewaste.repository.AuthRepository;
-import com.example.ewaste.repository.UserRepository;
-import com.example.ewaste.utils.Modals;
-import com.example.ewaste.utils.Navigate;
+import com.example.ewaste.Repository.AuthRepository;
+import com.example.ewaste.Repository.UserRepository;
+import com.example.ewaste.Utils.Modals;
+import com.example.ewaste.Utils.Navigate;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static com.example.ewaste.utils.RoleNavigation.navigateUser;
+import static com.example.ewaste.Utils.RoleNavigation.navigateUser;
 
 
 public class LoginController {
