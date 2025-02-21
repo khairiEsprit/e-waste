@@ -4,7 +4,7 @@ public class Citoyen extends User{
 
     public Citoyen() {
         super();
-        this.setRole(UserRole.CITOYEN);
+        this.setRole(com.example.ewaste.entities.UserRole.CITOYEN);
     }
 
     // Parameterized constructor that automatically sets the role to CITOYEN

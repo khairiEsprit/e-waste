@@ -1,13 +1,10 @@
 package com.example.ewaste.repository;
 
-
 import com.example.ewaste.entities.User;
 import com.example.ewaste.entities.UserRole;
 import com.example.ewaste.exceptions.DatabaseException;
 import com.example.ewaste.interfaces.EntityCrud;
 import com.example.ewaste.utils.DataBase;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;

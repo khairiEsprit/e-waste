@@ -78,6 +78,11 @@
                                                 <FontIcon iconColor="WHITE" iconLiteral="fas-plus-circle" />
                                             </graphic>
                                         </Button>
+                                        <Button fx:id="Map_view" layoutX="10.0" layoutY="347.0" mnemonicParsing="false" onAction="#switchFormOnAction" prefHeight="35.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@../styles/dashboard-style.css" text="Maps Activity">
+                                            <graphic>
+                                                <FontIcon iconColor="WHITE" iconLiteral="fas-plus-circle" />
+                                            </graphic>
+                                        </Button>
 
                                         <Button fx:id="logout_btn" layoutX="14.0" layoutY="518.0" mnemonicParsing="false" onAction="#logout_btn_onAction" stylesheets="@../styles/dashboard-style.css">
                                             <graphic>
@@ -352,6 +357,28 @@
                                         </StackPane>
                                     </children>
                                 </AnchorPane>
+                                <AnchorPane fx:id="MapsDisplay" layoutX="14.0" layoutY="14.0" prefHeight="560.0" prefWidth="900.0"
+                                            visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+                                            stylesheets="@../styles/dashboard-style.css">
+                                    <VBox prefHeight="560.0" prefWidth="900.0">
+                                        <children>
+                                            <Label text="Maps Activity"  styleClass="real-time-label" prefWidth="900.0"
+                                                   AnchorPane.topAnchor="10.0"
+                                                   AnchorPane.leftAnchor="0.0"
+                                                   AnchorPane.rightAnchor="0.0"
+                                                   alignment="CENTER"/>
+                                            <VBox fx:id="address" styleClass="map-container" >
+                                                <VBox.margin>
+                                                    <Insets top="10" right="10" bottom="10" left="10"/>
+                                                </VBox.margin>
+                                            </VBox>
+
+
+                                        </children>
+                                    </VBox>
+                                </AnchorPane>
+
 
 
                             </children>

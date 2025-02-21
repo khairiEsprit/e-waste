@@ -2,12 +2,17 @@ package com.example.ewaste.controllers;
 
 import com.example.ewaste.Main;
 import com.example.ewaste.entities.GetData;
+import com.example.ewaste.entities.Poubelle;
+import com.example.ewaste.repository.PoubelleRepository;
 import com.example.ewaste.utils.DataBase;
 import com.example.ewaste.entities.User;
 import com.example.ewaste.repository.AuthRepository;
 import com.example.ewaste.repository.CitoyenRepository;
 import com.example.ewaste.repository.EmployeeRepository;
 import com.example.ewaste.utils.OpenAiApi;
+import com.gluonhq.maps.MapLayer;
+import com.gluonhq.maps.MapPoint;
+import com.gluonhq.maps.MapView;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,18 +22,25 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -54,12 +66,23 @@ import java.util.stream.Stream;
 
 public class DashboardController implements Initializable {
 
-
+    @FXML
     public TextField addEmployee_telephone;
+    @FXML
     public PasswordField addEmployee_password;
+    @FXML
     public AnchorPane rapportDisplay;
     @FXML
+    public Button Map_view;
+    @FXML
+    public AnchorPane MapsDisplay;
+
+    @FXML
     private Button addEmployee_addBtn;
+
+    @FXML
+    private VBox address;
+
 
     @FXML
     private DatePicker addEmployee_birthDate;
@@ -216,12 +239,287 @@ public class DashboardController implements Initializable {
     private double yOffset = 0;
 
     private String[] statusList = {"Disponible", "Non Disponible"};
+    private final MapPoint point = new MapPoint(48.85,2.29);
+
+
+
 
     CitoyenRepository cr = new CitoyenRepository();
     EmployeeRepository er = new EmployeeRepository();
+
+
+
     public void close_btn_OnAction() {
         System.exit(0);
     }
+
+
+    @Override
+    public void initialize (URL url, ResourceBundle resourceBundle) {
+
+        try {
+            homeDisplayTotalCitoyen();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            homeDisplayTotalEmployee();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        homeDisplayCitoyenChart();
+        homeDisplayEmployeeChart();
+        try {
+            addEmployeeShowListData();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        Image image = new Image(Main.class.getResourceAsStream("/com/example/ewaste/assets/iconLoadingGIF.gif"));
+        loadingGif.setImage(image);
+        addEmployee_statusList();
+//        setAddStudent_courseList();
+        addEmployee_search_onKeyTyped();
+        MapView map = CreateMapView();
+        address.getChildren().add(map);
+        VBox.setVgrow(map, Priority.ALWAYS);
+        System.out.println("MapView added to address container: " + (map != null));
+
+    }
+
+    //  maps code :!!!!!!!
+
+     private static final int CENTER_ID = 1; // Change dynamically if needed
+     PoubelleRepository pr = new PoubelleRepository();
+
+    private static final int FULL_THRESHOLD = 70;
+
+    private MapView CreateMapView() {
+        MapView map = new MapView();
+        map.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        map.setZoom(18);
+
+        // Set your center point (e.g., collection center)
+        MapPoint centerLocation = getCenterLocation(CENTER_ID);
+        map.flyTo(0, centerLocation, 0.1);
+
+        // Add a marker for the center (without a route number)
+//        map.addLayer(new CustomMapLayer(centerLocation, "Collection Center", Color.BLUE, null));
+        map.addLayer(new CenterMapLayer(centerLocation, "Center of Ariana"));
+
+        // Fetch poubelle bins for this center
+        List<Poubelle> poubelleBins = pr.getPoubellesByCenter(CENTER_ID);
+
+        // First, compute the route ordering:
+        // We want: center -> first full trash bin -> then all low filled bins
+        Map<Poubelle, Integer> routePriority = new HashMap<>();
+        Poubelle firstFullBin = null;
+        List<Poubelle> lowBins = new ArrayList<>();
+
+        for (Poubelle poubelle : poubelleBins) {
+            if (poubelle.getFillLevel() >= FULL_THRESHOLD) {
+                // Pick the first bin that is full
+                if (firstFullBin == null) {
+                    firstFullBin = poubelle;
+                }
+            } else {
+                lowBins.add(poubelle);
+            }
+        }
+
+        int prio = 1;
+        if (firstFullBin != null) {
+            routePriority.put(firstFullBin, prio++);
+        }
+        for (Poubelle bin : lowBins) {
+            routePriority.put(bin, prio++);
+        }
+
+        // Add markers for trash bins.
+        // If the trash bin is part of the route, pass its route priority so that it appears inside the circle.
+        for (Poubelle poubelle : poubelleBins) {
+            MapPoint poubelleLocation = new MapPoint(poubelle.getLatitude(), poubelle.getLongitude());
+            Color fillColor = getFillColor(poubelle.getFillLevel());
+            String tooltipText = "Trash Bin\nFill Level: " + poubelle.getFillLevel() + "%\nStatus: "
+                    + (poubelle.isWorking() ? "Working" : "Broken");
+
+            // Get the route priority if available; otherwise, null.
+            Integer routeNum = routePriority.get(poubelle);
+            map.addLayer(new CustomMapLayer(poubelleLocation, tooltipText, fillColor, routeNum));
+        }
+
+        // Build the route polyline:
+        List<MapPoint> routePoints = new ArrayList<>();
+        routePoints.add(centerLocation);
+        if (firstFullBin != null) {
+            routePoints.add(new MapPoint(firstFullBin.getLatitude(), firstFullBin.getLongitude()));
+        }
+        for (Poubelle bin : lowBins) {
+            routePoints.add(new MapPoint(bin.getLatitude(), bin.getLongitude()));
+        }
+
+        // Add the polyline route to the map.
+        map.addLayer(new CustomPolylineLayer(routePoints, Color.RED));
+
+        return map;
+    }
+
+    private class CustomMapLayer extends MapLayer {
+        private final MapPoint location;
+        private final Node marker;
+
+        /**
+         * @param location    Geographic location of the marker.
+         * @param tooltipText Text for the tooltip.
+         * @param markerColor Color of the circle.
+         * @param priority    Optional route priority number to display inside the circle (or null).
+         */
+        public CustomMapLayer(MapPoint location, String tooltipText, Color markerColor, Integer priority) {
+            this.location = location;
+            // Create the circle for the marker.
+            Circle circle = new Circle(10, markerColor);
+
+            // Use a StackPane so that we can layer the circle and an optional number.
+            StackPane markerPane = new StackPane();
+            markerPane.getChildren().add(circle);
+
+            // If a priority number is provided, add it as a label.
+            if (priority != null) {
+                Label label = new Label(priority.toString());
+                label.setTextFill(Color.WHITE);
+                // Optionally, style the label font size or weight:
+                label.setStyle("-fx-font-weight: bold;");
+                markerPane.getChildren().add(label);
+            }
+
+            // Install a tooltip on the marker.
+            Tooltip.install(markerPane, new Tooltip(tooltipText));
+            marker = markerPane;
+            getChildren().add(marker);
+        }
+
+        @Override
+        protected void layoutLayer() {
+            // Convert geographic coordinates to screen coordinates.
+            Point2D screenPoint = getMapPoint(location.getLatitude(), location.getLongitude());
+            marker.setTranslateX(screenPoint.getX());
+            marker.setTranslateY(screenPoint.getY());
+        }
+    }
+
+
+    // Custom layer for the center marker with a different shape and a fixed label.
+    private class CenterMapLayer extends MapLayer {
+        private final MapPoint location;
+        private final Node marker;
+
+        /**
+         * @param location  The geographic location for the center.
+         * @param labelText The text to display (e.g., "Center of Ariana").
+         */
+        public CenterMapLayer(MapPoint location, String labelText) {
+            this.location = location;
+
+            // Create a rectangle as the marker shape.
+            Rectangle rectangle = new Rectangle(120, 40);
+            rectangle.setFill(Color.DARKBLUE);
+            rectangle.setArcWidth(10);
+            rectangle.setArcHeight(10);
+
+            // Create a label to display on the marker.
+            Label label = new Label(labelText);
+            label.setTextFill(Color.WHITE);
+            label.setStyle("-fx-font-weight: bold; -fx-font-size: 10;");
+            label.setWrapText(true);
+            label.setAlignment(Pos.CENTER);
+
+            // Use a StackPane to overlay the label on the rectangle.
+            StackPane markerPane = new StackPane();
+            markerPane.getChildren().addAll(rectangle, label);
+
+            marker = markerPane;
+            getChildren().add(marker);
+        }
+
+        @Override
+        protected void layoutLayer() {
+            // Convert geographic coordinates to screen coordinates.
+            Point2D screenPoint = getMapPoint(location.getLatitude(), location.getLongitude());
+            marker.setTranslateX(screenPoint.getX());
+            marker.setTranslateY(screenPoint.getY());
+        }
+    }
+
+
+
+
+    private class CustomPolylineLayer extends MapLayer {
+        private final List<MapPoint> points;
+        private final Polyline polyline;
+
+        public CustomPolylineLayer(List<MapPoint> points, Color lineColor) {
+            this.points = points;
+            polyline = new Polyline();
+            polyline.setStroke(lineColor);
+            polyline.setStrokeWidth(2);
+            getChildren().add(polyline);
+        }
+
+        @Override
+        protected void layoutLayer() {
+            ObservableList<Double> coords = polyline.getPoints();
+            coords.clear();
+            for (MapPoint mp : points) {
+                Point2D pt = getMapPoint(mp.getLatitude(), mp.getLongitude());
+                coords.add(pt.getX());
+                coords.add(pt.getY());
+            }
+        }
+    }
+
+    private MapPoint getCenterLocation(int centerId) {
+        // Hardcoded for now, but you can fetch from DB
+        return new MapPoint(36.8022, 10.1811);
+    }
+
+
+
+    private Color getFillColor(int fillLevel) {
+        if (fillLevel < 30) return Color.GREEN;
+        if (fillLevel < 70) return Color.ORANGE;
+        return Color.RED;
+    }
+
+//    public class MapLayer extends Pane {
+//        // Your custom functionality here
+//    }
+
+//    private MapLayer drawRoute(MapPoint start, MapPoint end) {
+//        MapLayer routeLayer = new MapLayer();
+//
+//        Line route = new Line();
+//        route.setStartX(start.getLatitude());
+//        route.setStartY(start.getLongitude());
+//        route.setEndX(end.getLatitude());
+//        route.setEndY(end.getLongitude());
+//        route.setStrokeWidth(2);
+//        route.setStroke(Color.DARKGRAY);
+//
+//        routeLayer.getChildren().add(route);
+//        return routeLayer;
+//    }
+
+    // maps code !!!!!
+
+
+
+
+
+
+
+
+
 
     public void minimize_btn_onAction() {
         Stage stage = (Stage) main_form.getScene().getWindow();
@@ -352,6 +650,8 @@ public class DashboardController implements Initializable {
         // Hide all sections
         home_form.setVisible(false);
         addEmployee_form.setVisible(false);
+        MapsDisplay.setVisible(false);
+        rapportDisplay.setVisible(false);
 
 
         // Show the selected section
@@ -360,7 +660,7 @@ public class DashboardController implements Initializable {
         // Reset button styles
         home_btn.setStyle("-fx-background-color: transparent");
         addEmployee_btn.setStyle("-fx-background-color: transparent");
-
+        Map_view.setStyle("-fx-background-color: transparent");
         generate_rapport.setStyle("-fx-background-color: transparent");
 
         // Highlight the active button
@@ -386,6 +686,9 @@ public class DashboardController implements Initializable {
         } else if (event.getSource() == generate_rapport) {
             showSection(rapportDisplay, generate_rapport);
             generateRapport_btn.setStyle("-fx-background-color: linear-gradient(to bottom right, #29AB87, #ACE1AF);");
+        }else  if (event.getSource() == Map_view){
+            showSection(MapsDisplay,Map_view);
+
         }
     }
 
@@ -835,40 +1138,37 @@ public class DashboardController implements Initializable {
         addEmployee_tableView.setItems(sortList);
     }
 
+//    private MapView CreateMapView() {
+//        MapView map = new MapView();
+////        map.setPrefSize(500,400);
+//        map.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+//        map.addLayer(new customMapLayer());
+//        map.setZoom(10);
+//        map.flyTo(0,point,0.1);
+//        return map;
+//
+//    }
+//    private class customMapLayer extends MapLayer {
+//        private Node marker;
+//        public customMapLayer(){
+//            marker = new Circle(5, Color.RED);
+//            getChildren().add(marker);
+//        }
+//
+//        @Override
+//        protected  void layoutLayer(){
+//            Point2D point1 = getMapPoint(point.getLatitude(),point.getLongitude());
+//            marker.setTranslateX(point1.getX());
+//            marker.setTranslateY(point1.getY());
+//        }
+//    }
 
 
 
 
 
-    @Override
-    public void initialize (URL url, ResourceBundle resourceBundle) {
 
-        try {
-            homeDisplayTotalCitoyen();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            homeDisplayTotalEmployee();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
-        homeDisplayCitoyenChart();
-        homeDisplayEmployeeChart();
-        try {
-            addEmployeeShowListData();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        Image image = new Image(Main.class.getResourceAsStream("/com/example/ewaste/assets/iconLoadingGIF.gif"));
-        loadingGif.setImage(image);
-        addEmployee_statusList();
-//        setAddStudent_courseList();
-        addEmployee_search_onKeyTyped();
-
-    }
 
 
 }

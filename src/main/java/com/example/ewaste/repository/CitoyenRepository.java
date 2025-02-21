@@ -1,6 +1,5 @@
 package com.example.ewaste.repository;
 
-
 import com.example.ewaste.entities.Citoyen;
 import com.example.ewaste.interfaces.EntityCrud;
 import com.example.ewaste.utils.DataBase;

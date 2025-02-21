@@ -1,6 +1,5 @@
 package com.example.ewaste.entities;
 
-
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -15,7 +14,7 @@ public class User {
     private String password;
     private Date DateNss;
     private int telephone;
-    private UserRole role;
+    private com.example.ewaste.entities.UserRole role;
 
     // Default constructor
     public User() {}
