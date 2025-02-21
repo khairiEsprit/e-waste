@@ -131,6 +131,7 @@ public class AfficherCentreController {
 
     @FXML
     void AjouterCentre(ActionEvent event) {
+
         if (validateInputs()) {
             String nom = NomCentre.getText();
             float longitude = Float.parseFloat(LongitudeCentre.getText());
@@ -141,8 +142,8 @@ public class AfficherCentreController {
             try {
                 int telephone = Integer.parseInt(phoneText);
 
-                if (centreRepository.existeCentre( longitude, altitude)) {
-                    showAlert("Erreur", "Un centre avec ce nom ou ces coordonnées existe déjà !");
+                if (centreRepository.existeCentre(altitude,longitude)) {
+                    showAlert("Erreur", "Un centre avec ces coordonnées existe déjà !");
                     return;
                 }
 

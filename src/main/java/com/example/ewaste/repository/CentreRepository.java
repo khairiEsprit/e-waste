@@ -78,7 +78,7 @@ public class CentreRepository implements IService<Centre> {
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1) > 0; // Si COUNT(*) > 0, un centre avec ces coordonnées existe déjà
+                return rs.getInt(1) > 0;
             }
         }
         return false;

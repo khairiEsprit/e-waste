@@ -8,21 +8,24 @@ public class Contrat {
     private int idEmploye;
     private LocalDate dateDebut;
     private LocalDate dateFin;
+    private String signaturePath;
 
     public Contrat() {}
 
-    public Contrat(int id,int idCentre,int idEmploye,LocalDate dateDebut,LocalDate dateFin) {
+    public Contrat(int id,int idCentre,int idEmploye,LocalDate dateDebut,LocalDate dateFin,String signaturePath) {
         this.id = id;
         this.idCentre = idCentre;
         this.idEmploye = idEmploye;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.signaturePath = signaturePath;
     }
-    public Contrat(int idCentre,int idEmploye,LocalDate dateDebut,LocalDate dateFin) {
+    public Contrat(int idCentre,int idEmploye,LocalDate dateDebut,LocalDate dateFin,String signaturePath) {
         this.idCentre = idCentre;
         this.idEmploye = idEmploye;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.signaturePath = signaturePath;
     }
 
     public int getId() {
@@ -55,6 +58,10 @@ public class Contrat {
     public void setDateFin(LocalDate dateFin) {
         this.dateFin = dateFin;
     }
+
+    public String getSignaturePath() {return signaturePath;}
+
+    public void setSignaturePath(String signaturePath) {this.signaturePath = signaturePath;}
 
     @Override
     public String toString() {

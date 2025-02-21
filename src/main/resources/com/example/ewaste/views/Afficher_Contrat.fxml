@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
 <?import javafx.scene.*?>
@@ -24,6 +25,7 @@
       <ComboBox fx:id="idEmploye" layoutX="990.0" layoutY="121.0" prefHeight="68.0" prefWidth="281.0" promptText="Nom Employé" />
       <ComboBox fx:id="idCentre" layoutX="990.0" layoutY="244.0" prefHeight="68.0" prefWidth="258.0" promptText="Nom Centre" />
       <Button fx:id="Centre" layoutX="1052.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToCentre" prefHeight="68.0" prefWidth="144.0" text="Centre" />
+      <Canvas fx:id="signature" height="200.0" layoutX="88.0" layoutY="244.0" width="200.0" />
    </children>
 
 </AnchorPane>

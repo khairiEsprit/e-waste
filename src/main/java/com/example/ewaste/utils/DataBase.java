@@ -7,15 +7,15 @@ import java.sql.SQLException;
 
 public class DataBase {
 
-    private final String URL = "jdbc:mysql://localhost:3306/e-waste";
-    private final String USER = "root";
-    private final String PSW = "";
+    private static final String URL = "jdbc:mysql://localhost:3306/e-waste";
+    private static final String USER = "root";
+    private static final String PSW = "";
 
     private static DataBase instance;
 
     private DataBase() {
         try {
-            System.out.println("Database Connection Initialized");
+            System.out.println("Connected");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -28,7 +28,7 @@ public class DataBase {
         return instance;
     }
 
-    public  Connection getConnection() {
+    public static Connection getConnection() {
         try {
             return DriverManager.getConnection(URL, USER, PSW);
         } catch (SQLException e) {

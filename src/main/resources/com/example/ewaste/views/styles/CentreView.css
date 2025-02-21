@@ -147,5 +147,8 @@
 .combo-box:focused {
     -fx-border-color: #29ab87; /* Bordure verte claire au focus */
 }
-
+#signature {
+    -fx-border-color: red;
+    -fx-border-width: 3px;
+}
 
