@@ -11,6 +11,7 @@ module com.example.ewaste {
     requires com.almasb.fxgl.all;
     requires java.sql;
     requires javafx.swing;
+    requires jdk.jsobject;
     opens com.example.ewaste.controllers to javafx.fxml;
     exports com.example.ewaste.controllers;
     opens com.example.ewaste.entities to javafx.base;

@@ -84,4 +84,22 @@ public class CentreRepository implements IService<Centre> {
         return false;
     }
 
+    public Centre getCentreById(int id) {
+        Centre centre = null;
+        try {
+            String query = "SELECT nom, latitude, longitude FROM centre WHERE id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                centre = new Centre(rs.getString("nom"), rs.getFloat("altitude"), rs.getFloat("longitude")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return centre;
+    }
+
 }

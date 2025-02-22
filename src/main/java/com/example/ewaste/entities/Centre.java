@@ -14,7 +14,10 @@ public class Centre {
         this.id = id;
         this.nom = nom;
     }
-
+    public Centre(String nom,float latitude,float longitude) {
+        this.id = id;
+        this.nom = nom;
+    }
     public Centre(int id, String nom, float latitude, float longitude, int telephone, String email) {
         this.id = id;
         this.nom = nom;

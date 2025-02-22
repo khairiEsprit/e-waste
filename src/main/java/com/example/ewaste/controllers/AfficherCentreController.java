@@ -12,17 +12,24 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import com.example.ewaste.entities.Centre;
 import com.example.ewaste.repository.CentreRepository;
+import netscape.javascript.JSObject;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
-
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.concurrent.Worker;
+import netscape.javascript.JSObject;
 public class AfficherCentreController {
 
     @FXML
@@ -43,12 +50,57 @@ public class AfficherCentreController {
     @FXML
     private TextField EmailCentre;
 
+    @FXML
+    private WebView Map;
+
     private CentreRepository centreRepository = new CentreRepository();
+
+    @FXML
+    private WebView mapView;
+    private WebEngine webEngine;
+
 
     @FXML
     public void initialize() {
         loadData();
         affichage.setCellFactory(param -> new CentreListCellController());
+        LongitudeCentre.setEditable(false);
+        AltitudeCentre.setEditable(false);
+
+
+
+        if (mapView != null) {
+            webEngine = mapView.getEngine();
+            URL mapUrl = getClass().getResource("/com/example/ewaste/views/map.html");
+            if (mapUrl != null) {
+                webEngine.load(mapUrl.toExternalForm());
+
+
+                webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                    if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                        JSObject window = (JSObject) webEngine.executeScript("window");
+                        window.setMember("javaApp", this); // 🔥 Liaison entre Java et JavaScript
+                    }
+                });
+
+
+              /*  // Ajouter un écouteur pour récupérer les coordonnées envoyées par la carte
+                webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                    if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                        webEngine.executeScript(
+                                "window.javaConnector = { setCoords: function(lat, lon) { " +
+                                        "    javafx.scene.web.WebEngine.call('setCoordinates', lat, lon);" +
+                                        "} };"
+                        );
+                    }
+
+                });*/
+
+            } else {
+                System.out.println("Erreur : Fichier map.html introuvable !");
+            }
+        }
+
 
         affichage.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
@@ -57,9 +109,76 @@ public class AfficherCentreController {
                 AltitudeCentre.setText(String.valueOf(newSelection.getLatitude()));
                 TelephoneCentre.setText(String.valueOf(newSelection.getTelephone()));
                 EmailCentre.setText(newSelection.getEmail());
+                new MapController(mapView, AltitudeCentre, LongitudeCentre);
+
+
+                //afficherCentreSurCarte();
+                setLocation((double) newSelection.getLatitude(), (double) newSelection.getLongitude());
+
             }
         });
     }
+
+
+
+    public void setCoordinates(double lat, double lon) {
+        LongitudeCentre.setText(String.valueOf(lon));
+        AltitudeCentre.setText(String.valueOf(lat));
+        setLocation(lat, lon); // Mettre à jour l'affichage sur la carte
+    }
+
+
+
+
+
+    public void setLocation(double lat, double lon) {
+        if (webEngine != null) {
+            String script = "updateLocation(" + lat + ", " + lon + ")";
+            webEngine.executeScript(script);
+        } else {
+            System.out.println("Erreur : WebEngine non initialisé !");
+        }
+    }
+
+
+
+    @FXML
+    private void afficherCentre(Centre centre) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/Afficher_Centre.fxml"));
+        try {
+            Parent root = loader.load();
+            AfficherCentreController controller = loader.getController();
+
+            // Vérifier si les valeurs sont valides
+            if (centre != null) {
+                controller.setLocation(centre.getLatitude(), centre.getLongitude());
+            } else {
+                System.out.println("Erreur : Centre non trouvé !");
+            }
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+   /* @FXML
+    public void afficherCentreSurCarte() {
+        Centre selectedCentre = affichage.getSelectionModel().getSelectedItem();
+        if (selectedCentre != null) {
+            float latitude = selectedCentre.getLatitude();
+            float longitude = selectedCentre.getLongitude();
+
+            // Exécuter le script JavaScript pour mettre à jour la carte
+            webEngine.executeScript("window.setLocationFromJava(" + latitude + ", " + longitude + ");");
+        } else {
+            showAlert("Erreur", "Veuillez sélectionner un centre à afficher sur la carte.");
+        }
+    }*/
 
 
 
