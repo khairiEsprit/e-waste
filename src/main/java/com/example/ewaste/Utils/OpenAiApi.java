@@ -1,4 +1,5 @@
-package com.example.ewaste.utils;
+package com.example.ewaste.Utils;
+
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -10,44 +11,45 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class GeminiApi {
-    private final Dotenv dotenv = Dotenv.load();
+public class OpenAiApi {
+    Dotenv dotenv = Dotenv.configure()
+            .directory("C:/Users/User/Documents/e-waste/e-waste") // Adjust the path accordingly
+            .filename(".env")
+            .load();
 
     public String genererRapport(String prompt) throws IOException, InterruptedException {
-        String apiKey = dotenv.get("GEMINI_KEY");
-        if(apiKey == null || apiKey.isEmpty()){
-            throw new IllegalArgumentException("Api key not set");
+        String apiKey = dotenv.get("OPENAI_API_KEY");
+        if (apiKey == null || apiKey.isEmpty()) {
+            throw new IllegalArgumentException("API key not set");
         }
         try {
-
-//            String escapedPrompt = prompt.replace("\"", "\\\"");
-//
-//            String requestBody = String.format(
-//                    "{\"contents\":[{\"parts\":[{\"text\":\"%s\"}]}]}",
-//                    escapedPrompt
-//            );
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+apiKey))
+                    .uri(URI.create("https://api.openai.com/v1/chat/completions"))
                     .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + apiKey)
                     .POST(HttpRequest.BodyPublishers.ofString(
-                            "{'contents':[{'parts':[{'text': \"" + prompt + "\"}]}]}"
+                            "{\n" +
+                                    "  \"model\": \"gpt-4o-mini\",\n" +
+                                    "  \"messages\": [\n" +
+                                    "    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n" +
+                                    "    {\"role\": \"user\", \"content\": \"" + prompt + "\"}\n" +
+                                    "  ]\n" +
+                                    "}"
                     ))
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return extraireTexteReponse(response.body());
         } catch (IOException e) {
-            // Gestion des erreurs d'I/O (connexion, lecture/réponse, etc.)
-            System.err.println("Erreur I/O : " + e.getMessage());
-            return "{\"error\": \"Erreur lors de la génération du rapport : " + e.getMessage() + "\"}";
+            // Handle I/O errors (connection, reading/response, etc.)
+            System.err.println("I/O Error: " + e.getMessage());
+            return "{\"error\": \"Error generating the report: " + e.getMessage() + "\"}";
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return "Request interrupted: " + e.getMessage();
         }
-    catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-        return "Requête interrompue : " + e.getMessage();
     }
-    }
-
 
     public static void main(String[] args) throws IOException, InterruptedException {
         String prompt = "Données pour le rapport mensuel - Novembre 2024 :" +
@@ -58,27 +60,22 @@ public class GeminiApi {
                 "- Zones problématiques : Quartier X (retards fréquents)." +
                 "Analyse ces données et rédige un rapport professionnel en français." +
                 "Points clés : efficacité des collectes, satisfaction citoyenne, problèmes récurrents.";
-        GeminiApi api = new GeminiApi();
-        String rapport =  api.genererRapport(prompt);
+        OpenAiApi api = new OpenAiApi();
+        String rapport = api.genererRapport(prompt);
         System.out.println(rapport);
     }
 
     private String extraireTexteReponse(String jsonResponse) {
         try {
             JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
-//            System.out.println(jsonObject);
-            return jsonObject.getAsJsonArray("candidates")
+            System.out.println(jsonObject);
+            return jsonObject.getAsJsonArray("choices")
                     .get(0).getAsJsonObject()
-                    .getAsJsonObject("content")
-                    .getAsJsonArray("parts")
-                    .get(0).getAsJsonObject()
-                    .get("text").getAsString();
+                    .get("message").getAsJsonObject()
+                    .get("content").getAsString();
         } catch (Exception e) {
             e.printStackTrace();
-            return "Erreur lors de l'extraction du texte : " + e.getMessage();
+            return "Error extracting the text: " + e.getMessage();
         }
     }
-
 }
-
-

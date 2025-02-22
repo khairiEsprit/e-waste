@@ -1,20 +1,17 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
-
-import com.example.ewaste.entities.User;
-import com.example.ewaste.entities.UserRole;
-import com.example.ewaste.exceptions.DatabaseException;
-import com.example.ewaste.interfaces.EntityCrud;
-import com.example.ewaste.utils.DataBase;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.example.ewaste.Entities.User;
+import com.example.ewaste.Entities.UserRole;
+import com.example.ewaste.Exceptions.DatabaseException;
+import com.example.ewaste.Interfaces.EntityCrud;
+import com.example.ewaste.Utils.DataBase;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.ewaste.repository.AuthRepository.hashPassword2;
+import static com.example.ewaste.Repository.AuthRepository.hashPassword2;
 
 
 public class UserRepository implements EntityCrud<User> {

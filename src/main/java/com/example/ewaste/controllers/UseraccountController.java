@@ -1,24 +1,22 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Main;
-import com.example.ewaste.entities.ApplicationContext;
-import com.example.ewaste.entities.User;
-import com.example.ewaste.entities.UserRole;
-import com.example.ewaste.entities.UserSession;
-import com.example.ewaste.repository.AuthRepository;
-import com.example.ewaste.repository.UserRepository;
-import com.example.ewaste.utils.Modals;
+import com.example.ewaste.Entities.ApplicationContext;
+import com.example.ewaste.Entities.User;
+import com.example.ewaste.Entities.UserRole;
+import com.example.ewaste.Entities.UserSession;
+import com.example.ewaste.Repository.AuthRepository;
+import com.example.ewaste.Repository.UserRepository;
+import com.example.ewaste.Utils.Modals;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -29,11 +27,7 @@ import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -45,7 +39,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static com.example.ewaste.utils.Validator.isValidEmail;
+import static com.example.ewaste.Utils.Validator.isValidEmail;
 
 public class UseraccountController implements Initializable {
     public Button Home_Btn;
@@ -85,7 +79,6 @@ public class UseraccountController implements Initializable {
     String userName ;
     String userPrenom ;
     UserRole userRole ;
-//    static UserSession us = ApplicationContext.getInstance().getUserSession();
 
 
     public void getUserSession() {
@@ -111,18 +104,14 @@ public class UseraccountController implements Initializable {
             }
 
             String numero = tf_UserAccountNumero.getText();
-            // Optionally validate phone number...
 
             a.setEmail(email);
             a.setTelephone(Integer.parseInt(numero));
 
-            // If an image was selected, update the user's image.
             if (selectedImageFile != null) {
-                // For example, store the file path or convert the file to a byte[] as needed.
                 a.setPhotoUrl(selectedImageFile.getAbsolutePath());
             }
 
-            // Update the user data in your persistence layer.
             ur.updateEmailPhoneAndImage(a);
             Modals.displaySuccess("Profile updated successfully", "Update");
             afficherdetails();
@@ -134,13 +123,12 @@ public class UseraccountController implements Initializable {
     private void changeImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Profile Image");
-        // Limit selection to image files
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
         );
         File file = fileChooser.showOpenDialog(ChangeImageBtn.getScene().getWindow());
         if (file != null) {
-            selectedImageFile = file;  // Save the selected file for later update
+            selectedImageFile = file;
             Image image = new Image(file.toURI().toString());
             ImageviewUser.setImage(image);
         }
@@ -148,20 +136,15 @@ public class UseraccountController implements Initializable {
 
 
     public void afficherUpdate(ActionEvent actionEvent) {
-        // Ensure the UI updates are done on the JavaFX Application Thread
         Platform.runLater(() -> {
-            // Ensure Dialog_Camera is not affecting the visibility of the update password dialog
 
-            // Apply blur effect to the general pane
             BoxBlur boxBlur = new BoxBlur(5, 5, 3);
             general_pane.setEffect(boxBlur);
 
 
-            // Make the update password dialog visible and apply fade-in transition
             Dialog_UpdatePassword_User.setOpacity(0);
             Dialog_UpdatePassword_User.setVisible(true);
 
-            // Create a fade-in effect
             FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5), Dialog_UpdatePassword_User);
             fadeIn.setToValue(1.0);
             fadeIn.setOnFinished(event -> general_pane.setEffect(boxBlur)); // Apply blur after fade-in
@@ -258,8 +241,6 @@ public class UseraccountController implements Initializable {
                 Parent root = FXMLLoader.load(Main.class.getResource("views/mainLoginSignUp.fxml"));
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
-                stage.setTitle("Login | Student Management System");
-                // Make the window draggable
                 root.setOnMousePressed((MouseEvent event) -> {
                     xOffset = event.getSceneX();
                     yOffset = event.getSceneY();
@@ -270,7 +251,6 @@ public class UseraccountController implements Initializable {
                     stage.setOpacity(.6);
                 });
 
-                // Reset opacity on mouse release
                 root.setOnMouseReleased((MouseEvent event) -> {
                     stage.setOpacity(1);
                 });

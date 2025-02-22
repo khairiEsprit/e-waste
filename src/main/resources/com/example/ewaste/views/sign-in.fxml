@@ -13,7 +13,7 @@
 <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="580.0" prefWidth="580.0" styleClass="blue-panel" stylesheets="@../styles/sign-up.css"
       xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.ewaste.controllers.LoginController">
+      fx:controller="com.example.ewaste.Controllers.LoginController">
 
     <children>
         <VBox alignment="CENTER" spacing="20">

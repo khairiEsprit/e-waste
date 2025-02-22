@@ -1,11 +1,11 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
 
-import com.example.ewaste.entities.Employee;
-import com.example.ewaste.entities.User;
-import com.example.ewaste.entities.UserRole;
-import com.example.ewaste.interfaces.EntityCrud;
-import com.example.ewaste.utils.DataBase;
+import com.example.ewaste.Entities.Employee;
+import com.example.ewaste.Entities.User;
+import com.example.ewaste.Entities.UserRole;
+import com.example.ewaste.Interfaces.EntityCrud;
+import com.example.ewaste.Utils.DataBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
