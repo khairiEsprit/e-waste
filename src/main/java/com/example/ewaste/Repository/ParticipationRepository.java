@@ -42,13 +42,14 @@ public class ParticipationRepository {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("city"),
+                        rs.getString("country"),  // Ajoutez le champ country
                         rs.getString("zipCode")
                 );
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;  // returns null if no participation found with the given ID
+        return null;
     }
 
     // Read (Select) all participations
@@ -65,6 +66,7 @@ public class ParticipationRepository {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("city"),
+                        rs.getString("country"),  // Ajoutez le champ country
                         rs.getString("zipCode")
                 ));
             }
@@ -75,7 +77,8 @@ public class ParticipationRepository {
     }
 
     // Update an existing participation
-    public boolean update(Participation participation) {
+    // Update an existing participation
+    public boolean updateParticipation(Participation participation) {  // Renommer la méthode
         String sql = "UPDATE participation SET firstName = ?, lastName = ?, email = ?, phone = ?, city = ?, zipCode = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, participation.getFirstName());

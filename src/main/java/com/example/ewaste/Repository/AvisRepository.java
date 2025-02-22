@@ -1,10 +1,10 @@
 package com.example.ewaste.Repository;
 
+import com.example.ewaste.Entities.Avis;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.example.ewaste.Entities.Avis;
 
 public class AvisRepository {
 
@@ -16,7 +16,17 @@ public class AvisRepository {
     }
 
     // Create a new Avis (feedback)
-    public boolean create(Avis avis) {
+    public boolean create(Avis avis) throws SQLException {
+        if (avis.getName() == null || avis.getName().isEmpty()) {
+            throw new IllegalArgumentException("Le nom de l'avis ne peut pas être vide");
+        }
+        if (avis.getDescription() == null || avis.getDescription().isEmpty()) {
+            throw new IllegalArgumentException("La description de l'avis ne peut pas être vide");
+        }
+        if (avis.getRating() < 1 || avis.getRating() > 5) {
+            throw new IllegalArgumentException("La note doit être comprise entre 1 et 5");
+        }
+
         String sql = "INSERT INTO avis (nom, description, note) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, avis.getName());
@@ -26,8 +36,7 @@ public class AvisRepository {
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new SQLException("Erreur lors de la création de l'avis", e);
         }
     }
 
@@ -53,7 +62,11 @@ public class AvisRepository {
     }
 
     // Update an existing Avis
-    public boolean update(Avis avis) {
+    public boolean update(Avis avis) throws SQLException {
+        if (findById(avis.getId()) == null) {
+            throw new IllegalArgumentException("L'avis avec l'ID " + avis.getId() + " n'existe pas");
+        }
+
         String sql = "UPDATE avis SET nom = ?, description = ?, note = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, avis.getName());
@@ -64,13 +77,16 @@ public class AvisRepository {
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new SQLException("Erreur lors de la mise à jour de l'avis", e);
         }
     }
 
     // Delete an Avis by its ID
-    public boolean delete(int id) {
+    public boolean delete(int id) throws SQLException {
+        if (findById(id) == null) {
+            throw new IllegalArgumentException("L'avis avec l'ID " + id + " n'existe pas");
+        }
+
         String sql = "DELETE FROM avis WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -78,8 +94,7 @@ public class AvisRepository {
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new SQLException("Erreur lors de la suppression de l'avis", e);
         }
     }
 
@@ -88,14 +103,15 @@ public class AvisRepository {
         String sql = "SELECT * FROM avis WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Avis(
-                        rs.getInt("id"),
-                        rs.getString("nom"),
-                        rs.getString("description"),
-                        rs.getInt("note")
-                );
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Avis(
+                            rs.getInt("id"),
+                            rs.getString("nom"),
+                            rs.getString("description"),
+                            rs.getInt("note")
+                    );
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,4 +119,3 @@ public class AvisRepository {
         return null;
     }
 }
-

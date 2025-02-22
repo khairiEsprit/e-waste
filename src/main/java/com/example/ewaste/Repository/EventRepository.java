@@ -4,6 +4,7 @@ import com.example.ewaste.Entities.Event;
 import com.example.ewaste.Utils.DataBaseConn;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class EventRepository {
                         rs.getString("imageUrl"),
                         rs.getInt("remainingPlaces"),
                         rs.getString("location"),
-                        rs.getDate("date")
+                        rs.getDate("date").toLocalDate() // Convertir java.sql.Date en LocalDate
                 );
                 events.add(event);
             }
@@ -35,14 +36,14 @@ public class EventRepository {
     }
 
     public void addEvent(Event event) {
-        String query = "INSERT INTO events (title, description, imageUrl, remainingPlaces, location, date) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO event (title, description, imageUrl, remainingPlaces, location, date) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, event.getTitle());
             pstmt.setString(2, event.getDescription());
             pstmt.setString(3, event.getImageUrl());
             pstmt.setInt(4, event.getRemainingPlaces());
             pstmt.setString(5, event.getLocation());
-            pstmt.setDate(6, new java.sql.Date(event.getDate().getTime()));
+            pstmt.setDate(6, java.sql.Date.valueOf(event.getDate())); // Convertir LocalDate en java.sql.Date
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,14 +51,14 @@ public class EventRepository {
     }
 
     public void updateEvent(Event event) {
-        String query = "UPDATE events SET title=?, description=?, imageUrl=?, remainingPlaces=?, location=?, date=? WHERE id=?";
+        String query = "UPDATE event SET title=?, description=?, imageUrl=?, remainingPlaces=?, location=?, date=? WHERE id=?";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, event.getTitle());
             pstmt.setString(2, event.getDescription());
             pstmt.setString(3, event.getImageUrl());
             pstmt.setInt(4, event.getRemainingPlaces());
             pstmt.setString(5, event.getLocation());
-            pstmt.setDate(6, new java.sql.Date(event.getDate().getTime()));
+            pstmt.setDate(6, java.sql.Date.valueOf(event.getDate())); // Convertir LocalDate en java.sql.Date
             pstmt.setInt(7, event.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -66,7 +67,7 @@ public class EventRepository {
     }
 
     public void deleteEvent(int eventId) {
-        String query = "DELETE FROM events WHERE id=?";
+        String query = "DELETE FROM event WHERE id=?";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, eventId);
             pstmt.executeUpdate();

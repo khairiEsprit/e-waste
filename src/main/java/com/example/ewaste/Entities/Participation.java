@@ -7,20 +7,24 @@ public class Participation {
     private String email;
     private String phone;
     private String city;
+    private String country;
     private String zipCode;
 
-    // Constructor
-    public Participation(int id, String firstName, String lastName, String email, String phone, String city, String zipCode) {
+    // Constructeurs
+    public Participation() {}
+
+    public Participation(int id, String firstName, String lastName, String email, String phone, String city, String country, String zipCode) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
         this.city = city;
+        this.country = country;
         this.zipCode = zipCode;
     }
 
-    // Getters and Setters
+    // Getters et Setters
     public int getId() {
         return id;
     }
@@ -69,6 +73,14 @@ public class Participation {
         this.city = city;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public String getZipCode() {
         return zipCode;
     }
@@ -86,6 +98,7 @@ public class Participation {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
                 ", zipCode='" + zipCode + '\'' +
                 '}';
     }

@@ -6,10 +6,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import javafx.collections.FXCollections?>
 
+<?import java.lang.String?>
 <HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.example.ewaste.Controllers.ListEvenementController"
-      spacing="20" styleClass="root" stylesheets="@../../styles/ListEvenement.css">
+      spacing="20" styleClass="root" stylesheets="@../styles/ListEvenement.css">
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
@@ -19,7 +21,7 @@
         <!-- Logo -->
         <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
             <image>
-                <Image url="@../../assets/logo.png"/>
+                <Image url="@../assets/logo.png"/>
             </image>
         </ImageView>
 
@@ -41,10 +43,31 @@
         <!-- Titre de la page -->
         <Label text="Liste des Événements" styleClass="main-title"/>
 
-        <!-- Barre de recherche et boutons de tri -->
-        <HBox spacing="10" style="-fx-padding: 10;">
+        <!-- Barre de recherche, boutons de tri et affichage du nombre total d'événements -->
+        <HBox spacing="10" style="-fx-padding: 10;" alignment="CENTER_LEFT">
+            <!-- Barre de recherche -->
             <TextField fx:id="searchField" promptText="Rechercher par nom..." styleClass="search-field"/>
+
+            <!-- Bouton Trier par date -->
             <Button text="Trier par date" onAction="#sortByDate" styleClass="button"/>
+
+            <!-- ComboBox Trier par statut -->
+            <ComboBox fx:id="statusFilter" promptText="Trier par statut" styleClass="button combo-box">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Tous"/>
+                        <String fx:value="Événements terminés"/>
+                        <String fx:value="Événements en cours"/>
+                        <String fx:value="Événements à venir"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <!-- Espaceur pour pousser le label vers la droite -->
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Label Nombre total d'événements -->
+            <Label fx:id="totalEventsLabel" text="Nombre total d'événements : 0" styleClass="button nombre"/>
         </HBox>
 
         <!-- Conteneur principal avec défilement et carte à droite -->
@@ -69,7 +92,7 @@
                 <Label text="NB Événements" styleClass="info-title"/>
                 <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
                     <image>
-                        <Image url="@../../assets/event-icon.png"/>
+                        <Image url="@../assets/event-icon.png"/>
                     </image>
                 </ImageView>
                 <Label text="5" styleClass="info-label"/>
@@ -78,7 +101,7 @@
                 <Label text="NB Points" styleClass="info-title"/>
                 <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
                     <image>
-                        <Image url="@../../assets/points-icon.png"/>
+                        <Image url="@../assets/points-icon.png"/>
                     </image>
                 </ImageView>
                 <Label text="1K" styleClass="info-label"/>
@@ -87,7 +110,7 @@
                 <Label text="NB Amis" styleClass="info-title"/>
                 <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
                     <image>
-                        <Image url="@../../assets/friends-icon.png"/>
+                        <Image url="@../assets/friends-icon.png"/>
                     </image>
                 </ImageView>
                 <Label text="500" styleClass="info-label"/>

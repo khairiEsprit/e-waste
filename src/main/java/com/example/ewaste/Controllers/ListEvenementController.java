@@ -5,6 +5,7 @@ import com.example.ewaste.Repository.EventRepository;
 import com.example.ewaste.Utils.Navigate;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -12,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,8 +28,15 @@ public class ListEvenementController {
 
     @FXML
     private TextField searchField;
+
     @FXML
-    private VBox middleEventContainer; // Add this line
+    private VBox middleEventContainer;
+
+    @FXML
+    private ComboBox<String> statusFilter;
+
+    @FXML
+    private Label totalEventsLabel; // Référence au Label pour afficher le nombre total d'événements
 
     private final EventRepository eventRepository = new EventRepository();
     private List<Event> events;
@@ -36,8 +46,22 @@ public class ListEvenementController {
         events = eventRepository.getEvents();
         displayEvents(events);
 
+        // Mettre à jour le nombre total d'événements
+        updateTotalEventsLabel();
+
         // Ajouter un écouteur pour la barre de recherche
         searchField.textProperty().addListener((observable, oldValue, newValue) -> filterEvents(newValue));
+
+        // Ajouter un écouteur pour le ComboBox de filtrage par statut
+        statusFilter.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            filterEventsByStatus(newValue);
+        });
+    }
+
+    // Méthode pour mettre à jour le nombre total d'événements
+    private void updateTotalEventsLabel() {
+        int totalEvents = events.size();
+        totalEventsLabel.setText("Nombre total d'événements : " + totalEvents);
     }
 
     @FXML
@@ -55,10 +79,34 @@ public class ListEvenementController {
         displayEvents(filteredEvents);
     }
 
+    private void filterEventsByStatus(String status) {
+        LocalDate today = LocalDate.now();
+        List<Event> filteredEvents = events.stream()
+                .filter(event -> {
+                    LocalDate eventDate = event.getDate();
+                    if (eventDate == null) {
+                        return false; // Ignorer les événements sans date valide
+                    }
+
+                    switch (status) {
+                        case "Événements terminés":
+                            return eventDate.isBefore(today);
+                        case "Événements en cours":
+                            return eventDate.isEqual(today);
+                        case "Événements à venir":
+                            return eventDate.isAfter(today);
+                        default:
+                            return true; // Tous les événements
+                    }
+                })
+                .collect(Collectors.toList());
+        displayEvents(filteredEvents);
+    }
+
     private void displayEvents(List<Event> events) {
         // Clear all columns
         leftEventContainer.getChildren().clear();
-        middleEventContainer.getChildren().clear(); // Clear the middle column
+        middleEventContainer.getChildren().clear();
         rightEventContainer.getChildren().clear();
 
         // Distribute events across 3 columns
@@ -73,8 +121,10 @@ public class ListEvenementController {
             }
             targetContainer.getChildren().add(createEventCard(events.get(i)));
         }
-    }
 
+        // Mettre à jour le nombre total d'événements
+        updateTotalEventsLabel();
+    }
 
     private VBox createEventCard(Event event) {
         VBox card = new VBox();
@@ -115,7 +165,7 @@ public class ListEvenementController {
         actionButton.setDisable(!event.isAvailable());
         actionButton.setOnAction(evt -> {
             Stage stage = (Stage) actionButton.getScene().getWindow();
-            Navigate.navigate(actionButton, "/views/event/participation-form.fxml", stage);
+            Navigate.navigate(actionButton, "/com.example.ewaste/views/participation-form.fxml", stage);
         });
 
         // Ajouter les éléments à la carte de l'événement

@@ -1,39 +1,31 @@
 package com.example.ewaste.Controllers;
 
+import com.example.ewaste.Entities.Participation;
 import com.example.ewaste.Repository.ParticipationRepository;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
-
-
-import com.example.ewaste.Entities.Participation;
-import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class ParticipationController {
 
     // FXML elements (form fields)
     @FXML
     private TextField firstNameField;
-
     @FXML
     private TextField lastNameField;
-
     @FXML
     private TextField emailField;
-
     @FXML
     private TextField phoneField;
-
     @FXML
     private TextField cityField;
-
     @FXML
     private TextField countryField;
-
     @FXML
     private TextField zipCodeField;
 
@@ -69,6 +61,7 @@ public class ParticipationController {
                 email,
                 phone,
                 city,
+                country,
                 zipCode
         );
 
@@ -79,8 +72,28 @@ public class ParticipationController {
         if (success) {
             showAlert("Success", "Your participation has been successfully registered.");
             clearForm();  // Optionally clear the form after successful submission
+            redirectToListParticipation();  // Redirect to ListParticipation page
         } else {
             showAlert("Error", "There was an issue registering your participation. Please try again.");
+        }
+    }
+
+    // Redirect to ListParticipation page
+    private void redirectToListParticipation() {
+        if (submitButton == null) {
+            showAlert("Error", "Internal error: submitButton is null.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/ListParticipation-view.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) submitButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load the participation list view.");
         }
     }
 

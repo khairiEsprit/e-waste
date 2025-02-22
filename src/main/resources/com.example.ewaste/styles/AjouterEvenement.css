@@ -1,0 +1,97 @@
+/* AjouterEvenement.css */
+
+/* Styles généraux */
+VBox {
+    -fx-background-color: #FEFEFA; /* Fond de l'interface */
+    -fx-padding: 20;
+}
+
+/* Titre de l'interface */
+.title-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #013220; /* Couleur du texte du titre */
+}
+
+/* Labels du formulaire */
+.form-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #00693E; /* Couleur du texte des labels */
+}
+
+/* Champs du formulaire */
+.form-field {
+    -fx-font-size: 14px;
+    -fx-pref-width: 200px; /* Largeur préférée de 200 pixels */
+    -fx-max-width: 450px;  /* Largeur maximale de 100 pixels */
+    -fx-background-color: #FEFEFA; /* Fond des champs */
+    -fx-border-color: #29AB87; /* Bordure des champs */
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.form-field:focused {
+    -fx-border-color: #00693E; /* Bordure des champs lorsqu'ils sont en focus */
+}
+
+/* Boutons du formulaire */
+.form-button {
+    -fx-background-color: #29AB87; /* Fond des boutons */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte des boutons */
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+}
+
+.form-button:hover {
+    -fx-background-color: #00693E; /* Fond des boutons au survol */
+}
+
+/* Boutons d'action (Ajouter, Modifier, Supprimer) */
+.action-button {
+    -fx-background-color: #013220; /* Fond des boutons d'action */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte des boutons d'action */
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+}
+
+.action-button:hover {
+    -fx-background-color: #00693E; /* Fond des boutons d'action au survol */
+}
+
+/* TableView */
+.event-table {
+    -fx-background-color: #FEFEFA; /* Fond de la TableView */
+    -fx-border-color: #29AB87; /* Bordure de la TableView */
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+/* Colonnes de la TableView */
+.table-column {
+    -fx-font-size: 14px;
+    -fx-text-fill: #013220; /* Couleur du texte des colonnes */
+    -fx-alignment: CENTER;
+}
+
+/* En-têtes des colonnes de la TableView */
+.table-column .label {
+    -fx-text-fill: #FEFEFA; /* Couleur du texte des en-têtes */
+    -fx-background-color: #29AB87; /* Fond des en-têtes */
+    -fx-padding: 5px;
+    -fx-border-radius: 5px;
+}
+
+/* Lignes de la TableView */
+.table-row-cell {
+    -fx-background-color: #FEFEFA; /* Fond des lignes */
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #ACE1AF; /* Fond des lignes impaires */
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #00693E; /* Fond des lignes sélectionnées */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte des lignes sélectionnées */
+}

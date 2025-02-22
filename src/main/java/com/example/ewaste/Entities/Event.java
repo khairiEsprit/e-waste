@@ -1,6 +1,6 @@
 package com.example.ewaste.Entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Event {
     private int id;
@@ -9,10 +9,10 @@ public class Event {
     private String imageUrl;
     private int remainingPlaces;
     private String location;
-    private Date date;
+    private LocalDate date; // Utilisez LocalDate au lieu de java.util.Date
 
     // Constructor
-    public Event(int id, String title, String description, String imageUrl, int remainingPlaces, String location, Date date) {
+    public Event(int id, String title, String description, String imageUrl, int remainingPlaces, String location, LocalDate date) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -75,11 +75,11 @@ public class Event {
         this.location = location;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

@@ -8,7 +8,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.ewaste.Controllers.AvisController"
-            stylesheets="@../../styles/FeedBack.css">
+            stylesheets="@../styles/FeedBack.css">
 
     <!-- Gauche : Sidebar -->
     <left>
@@ -16,7 +16,7 @@
         <VBox alignment="CENTER" spacing="20" styleClass="left-column">
             <ImageView fitWidth="200" fitHeight="200" preserveRatio="true">
                 <image>
-                    <Image url="@../../assets/logo.png"/>
+                    <Image url="@../assets/logo.png"/>
                 </image>
             </ImageView>
             <Button text="Poubelle" styleClass="left-button" />
@@ -37,7 +37,7 @@
                 <!-- Image en haut de l'interface -->
                 <ImageView fx:id="feedbackImage" fitWidth="900" fitHeight="200" preserveRatio="true">
                     <image>
-                        <Image url="@../../assets/avis.jpg"/>
+                        <Image url="@../assets/avis.jpg"/>
                     </image>
                 </ImageView>
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.paint.Color?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.ewaste.Controllers.ListParticipationController"
+            stylesheets="@../styles/ListParticipation.css">
+
+    <!-- En-tête -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER" spacing="20">
+            <Label text="Liste des Participations" styleClass="title"/>
+        </HBox>
+    </top>
+
+    <!-- Contenu principal -->
+    <center>
+        <VBox fx:id="mainContainer" spacing="20" style="-fx-padding: 20;">
+            <!-- Barre de recherche et boutons -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Rechercher par nom..." styleClass="search-field"/>
+                <Button text="Modifier" fx:id="editButton" styleClass="button" onAction="#handleEditAction" disable="true"/>
+                <Button text="Supprimer" fx:id="deleteButton" styleClass="button" onAction="#handleDeleteAction" disable="true"/>
+            </HBox>
+
+            <!-- TableView pour afficher les participations -->
+            <TableView fx:id="participationTable" styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="firstNameColumn" text="First Name" prefWidth="150" />
+                    <TableColumn fx:id="lastNameColumn" text="Last Name" prefWidth="150" />
+                    <TableColumn fx:id="emailColumn" text="Email" prefWidth="300" /> <!-- Colonne Email plus large -->
+                    <TableColumn fx:id="phoneColumn" text="Phone" prefWidth="150" />
+                    <TableColumn fx:id="cityColumn" text="City" prefWidth="150" />
+                    <TableColumn fx:id="countryColumn" text="Country" prefWidth="150" />
+                    <TableColumn fx:id="zipCodeColumn" text="Zip Code" prefWidth="150" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>

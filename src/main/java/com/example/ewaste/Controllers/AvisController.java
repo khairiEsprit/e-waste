@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class AvisController {
 
@@ -51,13 +52,19 @@ public class AvisController {
         Avis avis = new Avis(0, name, description, rating);
 
         // Insert the Avis into the database using the repository
-        boolean success = avisRepository.create(avis);
+        try {
+            boolean success = avisRepository.create(avis);
 
-        // Show success or error alert based on the result
-        if (success) {
-            showAlert("Success", "Your feedback has been successfully submitted.");
-        } else {
-            showAlert("Error", "There was an issue submitting your feedback. Please try again.");
+            // Show success or error alert based on the result
+            if (success) {
+                showAlert("Success", "Your feedback has been successfully submitted.");
+            } else {
+                showAlert("Error", "There was an issue submitting your feedback. Please try again.");
+            }
+        } catch (SQLException e) {
+            // Handle the SQL exception
+            e.printStackTrace();
+            showAlert("Database Error", "An error occurred while submitting your feedback: " + e.getMessage());
         }
     }
 

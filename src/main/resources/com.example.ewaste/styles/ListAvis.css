@@ -1,0 +1,61 @@
+/* Style général de la fenêtre */
+.root {
+    -fx-background-color: #FEFEFA; /* Fond principal */
+}
+
+/* Style des labels */
+.label {
+    -fx-text-fill: #013220; /* Couleur du texte */
+    -fx-font-size: 14px;
+}
+
+/* Style des champs de texte */
+.text-field {
+    -fx-background-color: #ACE1AF; /* Fond des champs de texte */
+    -fx-text-fill: #013220; /* Couleur du texte */
+    -fx-prompt-text-fill: #00693E; /* Couleur du texte d'invite */
+    -fx-border-color: #29AB87; /* Bordure */
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+/* Style des boutons */
+.button {
+    -fx-background-color: #29AB87; /* Fond des boutons */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte */
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #00693E; /* Couleur au survol */
+}
+
+/* Style du TableView */
+.table-view {
+    -fx-background-color: #FEFEFA; /* Fond du tableau */
+    -fx-border-color: #29AB87; /* Bordure du tableau */
+    -fx-border-radius: 5px;
+}
+
+.table-view .column-header {
+    -fx-background-color: #29AB87; /* Fond des en-têtes de colonnes */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte des en-têtes */
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: #ACE1AF; /* Fond des lignes */
+    -fx-text-fill: #013220; /* Couleur du texte des lignes */
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #FEFEFA; /* Fond des lignes impaires */
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #00693E; /* Fond de la ligne sélectionnée */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte de la ligne sélectionnée */
+}
