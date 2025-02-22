@@ -27,6 +27,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -44,6 +46,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 
@@ -232,6 +236,8 @@ public class DashboardController implements Initializable {
 
     @FXML
     private Button studentGrade_clearBtn;
+    @FXML
+    private VBox rapportContentContainer;
 
     @FXML
     private TableColumn<User, String> studentGrade_col_course;
@@ -283,6 +289,13 @@ public class DashboardController implements Initializable {
     @FXML
     private Label username;
 
+
+    @FXML
+    private StackPane loadingOverlay;
+
+    @FXML
+    private ImageView loadingGif;
+
     private double xOffset = 0;
     private double yOffset = 0;
 
@@ -311,53 +324,119 @@ public class DashboardController implements Initializable {
     }
 
 
+
     @FXML
     private void generateRapport() throws IOException, InterruptedException {
-        // Disable button and update text to show loading state
+        // Show the loading overlay immediately when the button is clicked
+        loadingOverlay.setVisible(true);
+
+        // Disable the button and change its text to indicate a loading state
         generateRapport_btn.setDisable(true);
         generateRapport_btn.setText("Generating...");
 
         // Run the API call in a separate thread to avoid freezing the UI
         new Thread(() -> {
             try {
-                // Call the OpenAI function to get the rapport
                 String prompt = "Données pour le rapport mensuel - Novembre 2024 :" +
                         "- Tâches : 150 (130 terminées, taux de réussite : 87%)." +
                         "- Réclamations : 45 (40 résolues, taux de résolution : 89%)." +
-                        "- Avis des citoyens : Note moyenne de 4.2/5." +
-                        "  Commentaires fréquents : Collectes ponctuelles mais quelques retards en fin de mois." +
-                        "- Zones problématiques : Quartier X (retards fréquents)." +
-                        "Analyse ces données et rédige un rapport professionnel en français." +
+                        "- Avis des citoyens : Note moyenne de 4.2/5. " +
+                        "Commentaires fréquents : Collectes ponctuelles mais quelques retards en fin de mois. " +
+                        "- Zones problématiques : Quartier X (retards fréquents). " +
+                        "Analyse ces données et rédige un rapport professionnel en français. " +
+                        "Le rapport doit comporter une date de rédaction valide choisie de manière aléatoire, " +
+                        "ainsi qu'une signature finale comprenant un nom et un titre aléatoires (par exemple, " +
+                        "'Jean Dupont, Directeur des opérations'). " +
                         "Points clés : efficacité des collectes, satisfaction citoyenne, problèmes récurrents.";
 
                 String rapport = callOpenAIFunction(prompt);
 
-                // Update UI on JavaFX application thread
+                // Update the UI on the JavaFX Application Thread
                 Platform.runLater(() -> {
-                    rapportContent.setText(rapport);
-                    rapportDisplay.setVisible(true);
+                    // Clear previous content
+                    rapportContentContainer.getChildren().clear();
 
-                    // Re-enable button and reset text
+                    // Parse the full report into sections based on Markdown-style titles
+                    List<Section> sections = parseSections(rapport);
+
+                    // For each section, create a styled block that takes the full width of the container
+                    for (Section section : sections) {
+                        VBox sectionBox = new VBox();
+                        sectionBox.getStyleClass().add("rapport-section");
+                        sectionBox.setSpacing(5);
+                        sectionBox.setMaxWidth(Double.MAX_VALUE); // Fill available width
+
+                        Label sectionTitle = new Label(section.title);
+                        sectionTitle.getStyleClass().add("rapport-section-title");
+
+                        Label sectionContent = new Label(section.content);
+                        sectionContent.setWrapText(true);
+
+                        sectionBox.getChildren().addAll(sectionTitle, sectionContent);
+                        rapportContentContainer.getChildren().add(sectionBox);
+                    }
+
+                    // Hide the loading overlay and re-enable the button
+                    loadingOverlay.setVisible(false);
                     generateRapport_btn.setDisable(false);
                     generateRapport_btn.setText("Generate Rapport");
                 });
-
             } catch (Exception e) {
                 e.printStackTrace();
-
-                // Handle errors and re-enable the button
                 Platform.runLater(() -> {
+                    // Hide the loading overlay and re-enable the button in case of error
+                    loadingOverlay.setVisible(false);
                     generateRapport_btn.setDisable(false);
                     generateRapport_btn.setText("Generate Rapport");
-                    rapportContent.setText("Error generating the report. Please try again.");
+
+                    // Display a styled error block
+                    VBox errorBox = new VBox();
+                    errorBox.getStyleClass().add("rapport-section");
+                    errorBox.setSpacing(5);
+                    errorBox.setMaxWidth(Double.MAX_VALUE);
+
+                    Label errorTitle = new Label("Error");
+                    errorTitle.getStyleClass().add("rapport-section-title");
+
+                    Label errorContent = new Label("Error generating the report. Please try again.");
+                    errorContent.setWrapText(true);
+
+                    errorBox.getChildren().addAll(errorTitle, errorContent);
+                    rapportContentContainer.getChildren().clear();
+                    rapportContentContainer.getChildren().add(errorBox);
                 });
             }
         }).start();
     }
+
     private String callOpenAIFunction(String prompt) throws IOException, InterruptedException {
         OpenAiApi api = new OpenAiApi();
         return api.genererRapport(prompt);
     }
+
+    // Helper method to parse the OpenAI response into sections based on Markdown-style titles
+    private List<Section> parseSections(String text) {
+        List<Section> sections = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\*\\*(.*?)\\*\\*\\s*(.*?)(?=\\n\\*\\*|\\z)", Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            String title = matcher.group(1).trim();
+            String content = matcher.group(2).trim();
+            sections.add(new Section(title, content));
+        }
+        return sections;
+    }
+
+    // Inner class representing a report section
+    private static class Section {
+        String title;
+        String content;
+        public Section(String title, String content) {
+            this.title = title;
+            this.content = content;
+        }
+    }
+
 
     //    START CODE FOR FORM SWITCHING
     private void showSection(AnchorPane sectionToShow, Button activeButton) {
@@ -1227,6 +1306,9 @@ public class DashboardController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        Image image = new Image(Main.class.getResourceAsStream("/com/example/ewaste/assets/iconLoadingGIF.gif"));
+        loadingGif.setImage(image);
 //        displayUsername();
 //        defaultNav();
 //        homeDisplayTotalEnrolledStudents();

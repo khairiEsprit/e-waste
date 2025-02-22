@@ -66,6 +66,8 @@ public class ForgotPasswordController implements Initializable {
                 alert.setHeaderText(null);
                 alert.setContentText("Failed to send verification code. Please check your internet connection or email settings and try again.");
                 alert.showAndWait();
+                Navigate.navigate(SendCodeBtn,"/views/mainLoginSignUp.fxml", (Stage) SendCodeBtn.getScene().getWindow());
+
             }
         }
         else {
@@ -74,6 +76,7 @@ public class ForgotPasswordController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("email not found");
             alert.showAndWait();
+//            Navigate.navigate(SendCodeBtn,"/views/mainLoginSignUp.fxml", (Stage) SendCodeBtn.getScene().getWindow());
 
         }
     }
@@ -119,7 +122,7 @@ public class ForgotPasswordController implements Initializable {
         window.setScene(new Scene(root,1098,667));*/
         Stage window = (Stage) savePassword.getScene().getWindow();
 
-        Navigate.navigate(savePassword,"/View/mainLoginSignUp.fxml",window);
+        Navigate.navigate(savePassword,"/views/mainLoginSignUp.fxml",window);
 
         general_pane.setEffect(null);
     }
