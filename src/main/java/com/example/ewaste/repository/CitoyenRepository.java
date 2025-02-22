@@ -1,9 +1,8 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
-
-import com.example.ewaste.entities.Citoyen;
-import com.example.ewaste.interfaces.EntityCrud;
-import com.example.ewaste.utils.DataBase;
+import com.example.ewaste.Entities.Citoyen;
+import com.example.ewaste.Interfaces.EntityCrud;
+import com.example.ewaste.Utils.DataBase;
 
 
 import java.sql.Connection;
