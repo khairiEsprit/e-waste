@@ -1,7 +1,7 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
-import com.example.ewaste.entities.Poubelle;
-import com.example.ewaste.utils.DataBase;
+import com.example.ewaste.Entities.Poubelle;
+import com.example.ewaste.Utils.DataBase;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

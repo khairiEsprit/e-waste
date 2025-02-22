@@ -1,4 +1,4 @@
-package com.example.ewaste.entities;
+package com.example.ewaste.Entities;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -14,7 +14,7 @@ public class User {
     private String password;
     private Date DateNss;
     private int telephone;
-    private com.example.ewaste.entities.UserRole role;
+    private UserRole role;
 
     // Default constructor
     public User() {}

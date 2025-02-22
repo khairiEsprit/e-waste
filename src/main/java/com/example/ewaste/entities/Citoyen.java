@@ -1,10 +1,10 @@
-package com.example.ewaste.entities;
+package com.example.ewaste.Entities;
 
 public class Citoyen extends User{
 
     public Citoyen() {
         super();
-        this.setRole(com.example.ewaste.entities.UserRole.CITOYEN);
+        this.setRole(UserRole.CITOYEN);
     }
 
     // Parameterized constructor that automatically sets the role to CITOYEN

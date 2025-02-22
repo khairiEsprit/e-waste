@@ -1,4 +1,4 @@
-package com.example.ewaste.exceptions;
+package com.example.ewaste.Exceptions;
 
 public class DatabaseException extends RuntimeException {
     public DatabaseException(String message) {

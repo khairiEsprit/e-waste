@@ -1,9 +1,9 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
-import com.example.ewaste.repository.AuthRepository;
-import com.example.ewaste.repository.UserRepository;
-import com.example.ewaste.utils.Navigate;
-import com.example.ewaste.utils.SendMail;
+import com.example.ewaste.Repository.AuthRepository;
+import com.example.ewaste.Repository.UserRepository;
+import com.example.ewaste.Utils.Navigate;
+import com.example.ewaste.Utils.SendMail;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import javafx.animation.FadeTransition;

@@ -1,24 +1,22 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Main;
-import com.example.ewaste.entities.ApplicationContext;
-import com.example.ewaste.entities.User;
-import com.example.ewaste.entities.UserRole;
-import com.example.ewaste.entities.UserSession;
-import com.example.ewaste.repository.AuthRepository;
-import com.example.ewaste.repository.UserRepository;
-import com.example.ewaste.utils.Modals;
+import com.example.ewaste.Entities.ApplicationContext;
+import com.example.ewaste.Entities.User;
+import com.example.ewaste.Entities.UserRole;
+import com.example.ewaste.Entities.UserSession;
+import com.example.ewaste.Repository.AuthRepository;
+import com.example.ewaste.Repository.UserRepository;
+import com.example.ewaste.Utils.Modals;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -29,11 +27,7 @@ import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -45,7 +39,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static com.example.ewaste.utils.Validator.isValidEmail;
+import static com.example.ewaste.Utils.Validator.isValidEmail;
 
 public class UseraccountController implements Initializable {
     public Button Home_Btn;

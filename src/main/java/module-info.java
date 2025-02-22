@@ -13,10 +13,12 @@ module com.example.ewaste {
     requires MaterialFX;
     requires java.mail;
     requires com.gluonhq.maps;
-    opens com.example.ewaste.controllers to javafx.fxml;
-    exports com.example.ewaste.controllers;
-    opens com.example.ewaste.entities to javafx.base;
-    exports com.example.ewaste.entities;
+    requires jxbrowser;
+    requires jxbrowser.javafx;
+    opens com.example.ewaste.Controllers to javafx.fxml;
+    exports com.example.ewaste.Controllers;
+    opens com.example.ewaste.Entities to javafx.base;
+    exports com.example.ewaste.Entities;
     opens com.example.ewaste to javafx.fxml;
     exports com.example.ewaste;
 }

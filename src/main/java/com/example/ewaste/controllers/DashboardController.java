@@ -1,15 +1,12 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Main;
-import com.example.ewaste.entities.GetData;
-import com.example.ewaste.entities.Poubelle;
-import com.example.ewaste.repository.PoubelleRepository;
-import com.example.ewaste.utils.DataBase;
-import com.example.ewaste.entities.User;
-import com.example.ewaste.repository.AuthRepository;
-import com.example.ewaste.repository.CitoyenRepository;
-import com.example.ewaste.repository.EmployeeRepository;
-import com.example.ewaste.utils.OpenAiApi;
+import com.example.ewaste.Entities.GetData;
+import com.example.ewaste.Entities.Poubelle;
+import com.example.ewaste.Repository.*;
+import com.example.ewaste.Utils.DataBase;
+import com.example.ewaste.Entities.User;
+import com.example.ewaste.Utils.OpenAiApi;
 import com.gluonhq.maps.MapLayer;
 import com.gluonhq.maps.MapPoint;
 import com.gluonhq.maps.MapView;
@@ -27,18 +24,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
@@ -76,6 +70,7 @@ public class DashboardController implements Initializable {
     public Button Map_view;
     @FXML
     public AnchorPane MapsDisplay;
+    public AnchorPane mapContainer;
 
     @FXML
     private Button addEmployee_addBtn;
@@ -203,7 +198,7 @@ public class DashboardController implements Initializable {
     @FXML
     private Button generate_rapport;
 
-
+    private MapBox mapboxMap;
 
 
 
@@ -220,7 +215,6 @@ public class DashboardController implements Initializable {
 
     @FXML
     private VBox rapportContentContainer;
-
 
 
 
@@ -246,9 +240,10 @@ public class DashboardController implements Initializable {
 
     CitoyenRepository cr = new CitoyenRepository();
     EmployeeRepository er = new EmployeeRepository();
-
-
-
+    PoubelleRepository pr = new PoubelleRepository();
+    CentreRepository ctr = new CentreRepository();
+    private static final int CENTER_ID = 1;
+private final  MapBox map = new MapBox();
     public void close_btn_OnAction() {
         System.exit(0);
     }
@@ -281,215 +276,282 @@ public class DashboardController implements Initializable {
         addEmployee_statusList();
 //        setAddStudent_courseList();
         addEmployee_search_onKeyTyped();
-        MapView map = CreateMapView();
-        address.getChildren().add(map);
-        VBox.setVgrow(map, Priority.ALWAYS);
-        System.out.println("MapView added to address container: " + (map != null));
+        // code for gluon map
+//        MapView map = CreateMapView();
+//        address.getChildren().add(map);
+//        VBox.setVgrow(map, Priority.ALWAYS);
+//        System.out.println("MapView added to address container: " + (map != null));
+        // code for mapbox
+
+        Node mapView = map.getView();
+
+        // Add the map view to the AnchorPane container.
+        mapContainer.getChildren().add(mapView);
+
+        // Set anchor constraints so that the map fills the container.
+        AnchorPane.setTopAnchor(mapView, 0.0);
+        AnchorPane.setBottomAnchor(mapView, 0.0);
+        AnchorPane.setLeftAnchor(mapView, 0.0);
+        AnchorPane.setRightAnchor(mapView, 0.0);
+
+        map.flyToLocation(36.8065, 10.1815, 15);
+//
+        displayPoubellesAndRoute(CENTER_ID);
+
+
 
     }
 
-    //  maps code :!!!!!!!
-
-     private static final int CENTER_ID = 1; // Change dynamically if needed
-     PoubelleRepository pr = new PoubelleRepository();
-
-    private static final int FULL_THRESHOLD = 70;
-
-    private MapView CreateMapView() {
-        MapView map = new MapView();
-        map.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        map.setZoom(18);
-
-        // Set your center point (e.g., collection center)
-        MapPoint centerLocation = getCenterLocation(CENTER_ID);
-        map.flyTo(0, centerLocation, 0.1);
-
-        // Add a marker for the center (without a route number)
-//        map.addLayer(new CustomMapLayer(centerLocation, "Collection Center", Color.BLUE, null));
-        map.addLayer(new CenterMapLayer(centerLocation, "Center of Ariana"));
-
-        // Fetch poubelle bins for this center
+    public void displayPoubellesAndRoute(int CENTER_ID) {
+        // Fetch all poubelles
         List<Poubelle> poubelleBins = pr.getPoubellesByCenter(CENTER_ID);
+        System.out.println(poubelleBins.get(1).toString());
+        float[] centerLocation;
+        try {
+            centerLocation = ctr.getLatitudeLongitude(CENTER_ID);
+            System.out.println(centerLocation[0]);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
-        // First, compute the route ordering:
-        // We want: center -> first full trash bin -> then all low filled bins
-        Map<Poubelle, Integer> routePriority = new HashMap<>();
-        Poubelle firstFullBin = null;
-        List<Poubelle> lowBins = new ArrayList<>();
+        // Mark the center location
+        map.addCustomMarker(centerLocation[0], centerLocation[1], "black", true, "Center of Ariana");
 
-        for (Poubelle poubelle : poubelleBins) {
-            if (poubelle.getFillLevel() >= FULL_THRESHOLD) {
-                // Pick the first bin that is full
-                if (firstFullBin == null) {
-                    firstFullBin = poubelle;
-                }
+        // Sort poubelles by fill level (highest first)
+        poubelleBins.sort((p1, p2) -> Float.compare(p2.getFillLevel(), p1.getFillLevel()));
+
+        // Create waypoints for optimized route
+        List<String> waypoints = new ArrayList<>();
+        waypoints.add(centerLocation[1] + "," + centerLocation[0]); // Start from center
+
+        // Loop through bins and mark them
+        for (Poubelle bin : poubelleBins) {
+            String color;
+            float fillLevel = bin.getFillLevel();
+
+            if (fillLevel > 80) {
+                color = "red";
+            } else if (fillLevel > 60) {
+                color = "orange";
+            } else if (fillLevel > 40) {
+                color = "yellow";
             } else {
-                lowBins.add(poubelle);
-            }
-        }
-
-        int prio = 1;
-        if (firstFullBin != null) {
-            routePriority.put(firstFullBin, prio++);
-        }
-        for (Poubelle bin : lowBins) {
-            routePriority.put(bin, prio++);
-        }
-
-        // Add markers for trash bins.
-        // If the trash bin is part of the route, pass its route priority so that it appears inside the circle.
-        for (Poubelle poubelle : poubelleBins) {
-            MapPoint poubelleLocation = new MapPoint(poubelle.getLatitude(), poubelle.getLongitude());
-            Color fillColor = getFillColor(poubelle.getFillLevel());
-            String tooltipText = "Trash Bin\nFill Level: " + poubelle.getFillLevel() + "%\nStatus: "
-                    + (poubelle.isWorking() ? "Working" : "Broken");
-
-            // Get the route priority if available; otherwise, null.
-            Integer routeNum = routePriority.get(poubelle);
-            map.addLayer(new CustomMapLayer(poubelleLocation, tooltipText, fillColor, routeNum));
-        }
-
-        // Build the route polyline:
-        List<MapPoint> routePoints = new ArrayList<>();
-        routePoints.add(centerLocation);
-        if (firstFullBin != null) {
-            routePoints.add(new MapPoint(firstFullBin.getLatitude(), firstFullBin.getLongitude()));
-        }
-        for (Poubelle bin : lowBins) {
-            routePoints.add(new MapPoint(bin.getLatitude(), bin.getLongitude()));
-        }
-
-        // Add the polyline route to the map.
-        map.addLayer(new CustomPolylineLayer(routePoints, Color.RED));
-
-        return map;
-    }
-
-    private class CustomMapLayer extends MapLayer {
-        private final MapPoint location;
-        private final Node marker;
-
-        /**
-         * @param location    Geographic location of the marker.
-         * @param tooltipText Text for the tooltip.
-         * @param markerColor Color of the circle.
-         * @param priority    Optional route priority number to display inside the circle (or null).
-         */
-        public CustomMapLayer(MapPoint location, String tooltipText, Color markerColor, Integer priority) {
-            this.location = location;
-            // Create the circle for the marker.
-            Circle circle = new Circle(10, markerColor);
-
-            // Use a StackPane so that we can layer the circle and an optional number.
-            StackPane markerPane = new StackPane();
-            markerPane.getChildren().add(circle);
-
-            // If a priority number is provided, add it as a label.
-            if (priority != null) {
-                Label label = new Label(priority.toString());
-                label.setTextFill(Color.WHITE);
-                // Optionally, style the label font size or weight:
-                label.setStyle("-fx-font-weight: bold;");
-                markerPane.getChildren().add(label);
+                color = "green";
             }
 
-            // Install a tooltip on the marker.
-            Tooltip.install(markerPane, new Tooltip(tooltipText));
-            marker = markerPane;
-            getChildren().add(marker);
+            // Mark bin on the map
+            map.addCustomMarker(bin.getLatitude(), bin.getLongitude(), color, false, "Fill: " + fillLevel + "%");
+
+            // Add to waypoints for routing
+            waypoints.add(bin.getLongitude() + "," + bin.getLatitude());
         }
 
-        @Override
-        protected void layoutLayer() {
-            // Convert geographic coordinates to screen coordinates.
-            Point2D screenPoint = getMapPoint(location.getLatitude(), location.getLongitude());
-            marker.setTranslateX(screenPoint.getX());
-            marker.setTranslateY(screenPoint.getY());
-        }
+        // Request and draw optimized route
+        map.drawRoute(waypoints);
     }
 
-
-    // Custom layer for the center marker with a different shape and a fixed label.
-    private class CenterMapLayer extends MapLayer {
-        private final MapPoint location;
-        private final Node marker;
-
-        /**
-         * @param location  The geographic location for the center.
-         * @param labelText The text to display (e.g., "Center of Ariana").
-         */
-        public CenterMapLayer(MapPoint location, String labelText) {
-            this.location = location;
-
-            // Create a rectangle as the marker shape.
-            Rectangle rectangle = new Rectangle(120, 40);
-            rectangle.setFill(Color.DARKBLUE);
-            rectangle.setArcWidth(10);
-            rectangle.setArcHeight(10);
-
-            // Create a label to display on the marker.
-            Label label = new Label(labelText);
-            label.setTextFill(Color.WHITE);
-            label.setStyle("-fx-font-weight: bold; -fx-font-size: 10;");
-            label.setWrapText(true);
-            label.setAlignment(Pos.CENTER);
-
-            // Use a StackPane to overlay the label on the rectangle.
-            StackPane markerPane = new StackPane();
-            markerPane.getChildren().addAll(rectangle, label);
-
-            marker = markerPane;
-            getChildren().add(marker);
-        }
-
-        @Override
-        protected void layoutLayer() {
-            // Convert geographic coordinates to screen coordinates.
-            Point2D screenPoint = getMapPoint(location.getLatitude(), location.getLongitude());
-            marker.setTranslateX(screenPoint.getX());
-            marker.setTranslateY(screenPoint.getY());
-        }
-    }
-
-
-
-
-    private class CustomPolylineLayer extends MapLayer {
-        private final List<MapPoint> points;
-        private final Polyline polyline;
-
-        public CustomPolylineLayer(List<MapPoint> points, Color lineColor) {
-            this.points = points;
-            polyline = new Polyline();
-            polyline.setStroke(lineColor);
-            polyline.setStrokeWidth(2);
-            getChildren().add(polyline);
-        }
-
-        @Override
-        protected void layoutLayer() {
-            ObservableList<Double> coords = polyline.getPoints();
-            coords.clear();
-            for (MapPoint mp : points) {
-                Point2D pt = getMapPoint(mp.getLatitude(), mp.getLongitude());
-                coords.add(pt.getX());
-                coords.add(pt.getY());
-            }
-        }
-    }
-
-    private MapPoint getCenterLocation(int centerId) {
-        // Hardcoded for now, but you can fetch from DB
-        return new MapPoint(36.8022, 10.1811);
-    }
-
-
-
-    private Color getFillColor(int fillLevel) {
-        if (fillLevel < 30) return Color.GREEN;
-        if (fillLevel < 70) return Color.ORANGE;
-        return Color.RED;
-    }
+    //  maps code gluon :!!!!!!!
+//
+//     private static final int CENTER_ID = 1; // Change dynamically if needed
+//     PoubelleRepository pr = new PoubelleRepository();
+//
+//    private static final int FULL_THRESHOLD = 70;
+//
+//    private MapView CreateMapView() {
+//        MapView map = new MapView();
+//        map.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+//        map.setZoom(18);
+//
+//        // Set your center point (e.g., collection center)
+//        MapPoint centerLocation = getCenterLocation(CENTER_ID);
+//        map.flyTo(0, centerLocation, 0.1);
+//
+//        // Add a marker for the center (without a route number)
+////        map.addLayer(new CustomMapLayer(centerLocation, "Collection Center", Color.BLUE, null));
+//        map.addLayer(new CenterMapLayer(centerLocation, "Center of Ariana"));
+//
+//        // Fetch poubelle bins for this center
+//        List<Poubelle> poubelleBins = pr.getPoubellesByCenter(CENTER_ID);
+//
+//        // First, compute the route ordering:
+//        // We want: center -> first full trash bin -> then all low filled bins
+//        Map<Poubelle, Integer> routePriority = new HashMap<>();
+//        Poubelle firstFullBin = null;
+//        List<Poubelle> lowBins = new ArrayList<>();
+//
+//        for (Poubelle poubelle : poubelleBins) {
+//            if (poubelle.getFillLevel() >= FULL_THRESHOLD) {
+//                // Pick the first bin that is full
+//                if (firstFullBin == null) {
+//                    firstFullBin = poubelle;
+//                }
+//            } else {
+//                lowBins.add(poubelle);
+//            }
+//        }
+//
+//        int prio = 1;
+//        if (firstFullBin != null) {
+//            routePriority.put(firstFullBin, prio++);
+//        }
+//        for (Poubelle bin : lowBins) {
+//            routePriority.put(bin, prio++);
+//        }
+//
+//        // Add markers for trash bins.
+//        // If the trash bin is part of the route, pass its route priority so that it appears inside the circle.
+//        for (Poubelle poubelle : poubelleBins) {
+//            MapPoint poubelleLocation = new MapPoint(poubelle.getLatitude(), poubelle.getLongitude());
+//            Color fillColor = getFillColor(poubelle.getFillLevel());
+//            String tooltipText = "Trash Bin\nFill Level: " + poubelle.getFillLevel() + "%\nStatus: "
+//                    + (poubelle.isWorking() ? "Working" : "Broken");
+//
+//            // Get the route priority if available; otherwise, null.
+//            Integer routeNum = routePriority.get(poubelle);
+//            map.addLayer(new CustomMapLayer(poubelleLocation, tooltipText, fillColor, routeNum));
+//        }
+//
+//        // Build the route polyline:
+//        List<MapPoint> routePoints = new ArrayList<>();
+//        routePoints.add(centerLocation);
+//        if (firstFullBin != null) {
+//            routePoints.add(new MapPoint(firstFullBin.getLatitude(), firstFullBin.getLongitude()));
+//        }
+//        for (Poubelle bin : lowBins) {
+//            routePoints.add(new MapPoint(bin.getLatitude(), bin.getLongitude()));
+//        }
+//
+//        // Add the polyline route to the map.
+//        map.addLayer(new CustomPolylineLayer(routePoints, Color.RED));
+//
+//        return map;
+//    }
+//
+//    private class CustomMapLayer extends MapLayer {
+//        private final MapPoint location;
+//        private final Node marker;
+//
+//        /**
+//         * @param location    Geographic location of the marker.
+//         * @param tooltipText Text for the tooltip.
+//         * @param markerColor Color of the circle.
+//         * @param priority    Optional route priority number to display inside the circle (or null).
+//         */
+//        public CustomMapLayer(MapPoint location, String tooltipText, Color markerColor, Integer priority) {
+//            this.location = location;
+//            // Create the circle for the marker.
+//            Circle circle = new Circle(10, markerColor);
+//
+//            // Use a StackPane so that we can layer the circle and an optional number.
+//            StackPane markerPane = new StackPane();
+//            markerPane.getChildren().add(circle);
+//
+//            // If a priority number is provided, add it as a label.
+//            if (priority != null) {
+//                Label label = new Label(priority.toString());
+//                label.setTextFill(Color.WHITE);
+//                // Optionally, style the label font size or weight:
+//                label.setStyle("-fx-font-weight: bold;");
+//                markerPane.getChildren().add(label);
+//            }
+//
+//            // Install a tooltip on the marker.
+//            Tooltip.install(markerPane, new Tooltip(tooltipText));
+//            marker = markerPane;
+//            getChildren().add(marker);
+//        }
+//
+//        @Override
+//        protected void layoutLayer() {
+//            // Convert geographic coordinates to screen coordinates.
+//            Point2D screenPoint = getMapPoint(location.getLatitude(), location.getLongitude());
+//            marker.setTranslateX(screenPoint.getX());
+//            marker.setTranslateY(screenPoint.getY());
+//        }
+//    }
+//
+//
+//    // Custom layer for the center marker with a different shape and a fixed label.
+//    private class CenterMapLayer extends MapLayer {
+//        private final MapPoint location;
+//        private final Node marker;
+//
+//        /**
+//         * @param location  The geographic location for the center.
+//         * @param labelText The text to display (e.g., "Center of Ariana").
+//         */
+//        public CenterMapLayer(MapPoint location, String labelText) {
+//            this.location = location;
+//
+//            // Create a rectangle as the marker shape.
+//            Rectangle rectangle = new Rectangle(120, 40);
+//            rectangle.setFill(Color.DARKBLUE);
+//            rectangle.setArcWidth(10);
+//            rectangle.setArcHeight(10);
+//
+//            // Create a label to display on the marker.
+//            Label label = new Label(labelText);
+//            label.setTextFill(Color.WHITE);
+//            label.setStyle("-fx-font-weight: bold; -fx-font-size: 10;");
+//            label.setWrapText(true);
+//            label.setAlignment(Pos.CENTER);
+//
+//            // Use a StackPane to overlay the label on the rectangle.
+//            StackPane markerPane = new StackPane();
+//            markerPane.getChildren().addAll(rectangle, label);
+//
+//            marker = markerPane;
+//            getChildren().add(marker);
+//        }
+//
+//        @Override
+//        protected void layoutLayer() {
+//            // Convert geographic coordinates to screen coordinates.
+//            Point2D screenPoint = getMapPoint(location.getLatitude(), location.getLongitude());
+//            marker.setTranslateX(screenPoint.getX());
+//            marker.setTranslateY(screenPoint.getY());
+//        }
+//    }
+//
+//
+//
+//
+//    private class CustomPolylineLayer extends MapLayer {
+//        private final List<MapPoint> points;
+//        private final Polyline polyline;
+//
+//        public CustomPolylineLayer(List<MapPoint> points, Color lineColor) {
+//            this.points = points;
+//            polyline = new Polyline();
+//            polyline.setStroke(lineColor);
+//            polyline.setStrokeWidth(2);
+//            getChildren().add(polyline);
+//        }
+//
+//        @Override
+//        protected void layoutLayer() {
+//            ObservableList<Double> coords = polyline.getPoints();
+//            coords.clear();
+//            for (MapPoint mp : points) {
+//                Point2D pt = getMapPoint(mp.getLatitude(), mp.getLongitude());
+//                coords.add(pt.getX());
+//                coords.add(pt.getY());
+//            }
+//        }
+//    }
+//
+//    private MapPoint getCenterLocation(int centerId) {
+//        // Hardcoded for now, but you can fetch from DB
+//        return new MapPoint(36.8022, 10.1811);
+//    }
+//
+//
+//
+//    private Color getFillColor(int fillLevel) {
+//        if (fillLevel < 30) return Color.GREEN;
+//        if (fillLevel < 70) return Color.ORANGE;
+//        return Color.RED;
+//    }
 
 //    public class MapLayer extends Pane {
 //        // Your custom functionality here

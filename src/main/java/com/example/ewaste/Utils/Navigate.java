@@ -1,7 +1,6 @@
-package com.example.ewaste.utils;
+package com.example.ewaste.Utils;
 
 import com.example.ewaste.Main;
-import com.example.ewaste.entities.UserRole;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -10,17 +9,20 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
 
-public class RoleNavigation {
-   static int width = 1200;
-   static int height = 700;
+public class Navigate {
 
-    public static void navigateUser(Stage stage, UserRole role) throws IOException {
+    private static final int width = 1200;
+    private static final int height = 700;
+    public static void navigate(Button button, String fxmlPath, Stage stage) {
+        button.setDisable(true); // Prevent multiple clicks
+
         // Create a progress indicator
         MFXProgressSpinner progressIndicator = new MFXProgressSpinner();
         progressIndicator.setPrefSize(70, 70);
@@ -30,27 +32,22 @@ public class RoleNavigation {
         VBox container = new VBox(progressIndicator);
         container.setAlignment(Pos.CENTER);
 
-        // Prepare fade out transition from the current scene
+        // Prepare fade out transition for the current scene
         Parent currentRoot = stage.getScene().getRoot();
         FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.5), currentRoot);
         fadeOut.setFromValue(1.0);
         fadeOut.setToValue(0.0);
 
-        // Choose the FXML resource based on the role.
-        // For example, if admin, load the admin view; else load a different view.
-        String fxmlResource;
-        if (role == UserRole.ADMIN) {
-            fxmlResource = "views/Dashboard.fxml";
-        } else if(role == UserRole.CITOYEN) {
-            // Add more roles as needed; here is a default:
-            fxmlResource = "views/UserAccount.fxml";
-        }else {
-            // Add more roles as needed; here is a default:
-            fxmlResource = "views/EmployeeInterface.fxml";
+        // Load the new FXML file
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlPath));
+        Parent newRoot;
+        try {
+            newRoot = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            button.setDisable(false); // Re-enable the button in case of failure
+            return;
         }
-
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlResource));
-        Parent newRoot = fxmlLoader.load();
 
         // Prepare fade in transition for the new scene
         FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5), newRoot);
@@ -60,9 +57,9 @@ public class RoleNavigation {
         // Timeline to switch the scene after fade out
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0.5), e -> {
-                    // Replace the scene with the new root
                     stage.setScene(new Scene(newRoot, width, height));
                     fadeIn.play();
+                    button.setDisable(false); // Re-enable the button after navigation
                 })
         );
 
@@ -73,5 +70,4 @@ public class RoleNavigation {
         // Set the progress indicator scene immediately
         stage.setScene(new Scene(container, width, height));
     }
-
 }

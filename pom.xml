@@ -11,14 +11,40 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-<junit.version>5.10.2</junit.version>  </properties>
+<junit.version>5.10.2</junit.version>
+<!--      <jxbrowser.version>8.4.0</jxbrowser.version>-->
 
+  </properties>
+    <repositories>
+        <!-- Configures the Maven repository for JxBrowser. -->
+        <repository>
+            <id>com.teamdev</id>
+            <url>https://europe-maven.pkg.dev/jxbrowser/releases</url>
+        </repository>
+    </repositories>
   <dependencies>
+      <dependency>
+          <groupId>com.teamdev.jxbrowser</groupId>
+          <artifactId>jxbrowser-cross-platform</artifactId>
+          <version>8.4.0</version>
+          <type>pom</type>
+      </dependency>
+
+      <!-- Adds dependency to the JavaFX UI toolkit integration. -->
+      <dependency>
+          <groupId>com.teamdev.jxbrowser</groupId>
+          <artifactId>jxbrowser-javafx</artifactId>
+          <version>8.4.0</version>
+      </dependency>
+
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
       <version>17.0.6</version>
     </dependency>
+
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>

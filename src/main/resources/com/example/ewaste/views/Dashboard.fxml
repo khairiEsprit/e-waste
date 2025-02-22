@@ -15,7 +15,7 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.geometry.Insets?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/" fx:controller="com.example.ewaste.controllers.DashboardController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/" fx:controller="com.example.ewaste.Controllers.DashboardController">
     <children>
         <AnchorPane fx:id="main_form" prefHeight="200.0" prefWidth="200.0">
             <children>
@@ -358,26 +358,25 @@
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane fx:id="MapsDisplay" layoutX="14.0" layoutY="14.0" prefHeight="560.0" prefWidth="900.0"
-                                            visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+                                            visible="false" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+                                            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                             stylesheets="@../styles/dashboard-style.css">
-                                    <VBox prefHeight="560.0" prefWidth="900.0">
-                                        <children>
-                                            <Label text="Maps Activity"  styleClass="real-time-label" prefWidth="900.0"
-                                                   AnchorPane.topAnchor="10.0"
-                                                   AnchorPane.leftAnchor="0.0"
-                                                   AnchorPane.rightAnchor="0.0"
-                                                   alignment="CENTER"/>
-                                            <VBox fx:id="address" styleClass="map-container" >
-                                                <VBox.margin>
-                                                    <Insets top="10" right="10" bottom="10" left="10"/>
-                                                </VBox.margin>
-                                            </VBox>
-
-
-                                        </children>
-                                    </VBox>
+                                    <children>
+                                        <!-- Title label with enhanced design -->
+                                        <Label text="Maps Activity" styleClass="real-time-label" prefWidth="900.0"
+                                               AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                               alignment="CENTER"/>
+                                        <!-- Container for the map with margins -->
+                                        <AnchorPane fx:id="mapContainer" layoutY="40.0" styleClass="map-container"
+                                                    AnchorPane.topAnchor="80.0"
+                                        AnchorPane.bottomAnchor="20.0"
+                                        AnchorPane.leftAnchor="20.0"
+                                        AnchorPane.rightAnchor="20.0"/> <!-- Added right margin -->
+                                    </children>
                                 </AnchorPane>
+
+
+
 
 
 

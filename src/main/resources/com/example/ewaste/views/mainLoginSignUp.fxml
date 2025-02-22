@@ -10,7 +10,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1200.0" styleClass="parent" stylesheets="@../styles/sign-up.css"
             xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171"
-            fx:controller="com.example.ewaste.controllers.MainLoginSignUpController">
+            fx:controller="com.example.ewaste.Controllers.MainLoginSignUpController">
     <children>
         <Pane layoutX="2.0" layoutY="140.0" prefHeight="490.0" prefWidth="1200.0" styleClass="pane">
             <children>

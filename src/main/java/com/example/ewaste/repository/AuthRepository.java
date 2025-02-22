@@ -1,6 +1,6 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
-import com.example.ewaste.utils.DataBase;
+import com.example.ewaste.Utils.DataBase;
 import javafx.scene.control.Alert;
 
 import java.security.MessageDigest;
