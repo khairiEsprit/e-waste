@@ -12,7 +12,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class OpenAiApi {
-    private final Dotenv dotenv = Dotenv.load();
+    Dotenv dotenv = Dotenv.configure()
+            .directory("C:/Users/User/Documents/e-waste/e-waste") // Adjust the path accordingly
+            .filename(".env")
+            .load();
 
     public String genererRapport(String prompt) throws IOException, InterruptedException {
         String apiKey = dotenv.get("OPENAI_API_KEY");
