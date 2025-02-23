@@ -60,7 +60,7 @@ public class Main extends Application {
 //    public void start(Stage primaryStage) {
 //        // Initialize Chromium with hardware acceleration and add your license key here.
 //        EngineOptions options = EngineOptions.newBuilder(HARDWARE_ACCELERATED)
-//                .licenseKey("OK6AEKNYF32DAKB5HZ0JGL8P7CPMZX1P6MDBA56UIFDM5OGQTEHDEM8SOTV9FUHDBNY7XVO43IBSPEG7Q0JG3DP8T3NWUVDXN8S8FP4NZD2WQ8A30TY9GP52ZUC698JC8CHF2JKT5JS856R83") // Replace with your actual license key.
+//                .licenseKey("") // Replace with your actual license key.
 //                .build();
 //        Engine engine = Engine.newInstance(options);
 //
@@ -87,7 +87,7 @@ public class Main extends Application {
 //                "        // TO MAKE THE MAP APPEAR YOU MUST\n" +
 //                "        // ADD YOUR ACCESS TOKEN FROM\n" +
 //                "        // https://account.mapbox.com\n" +
-//                "        mapboxgl.accessToken = 'pk.eyJ1IjoibmFzc2VmZmFkaGxhb3VpNTUiLCJhIjoiY203ZWtjNDU0MDgwMDJqc2VsaGlweXRuZiJ9.AIx_P3VKlvQD59v9dsWpCg';\n" +
+//                "        mapboxgl.accessToken = '';\n" +
 //                "        const map = new mapboxgl.Map({\n" +
 //                "            container: 'map', // container ID\n" +
 //                "            center: [-74.5, 40], // starting position [lng, lat]\n" +

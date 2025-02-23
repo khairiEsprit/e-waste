@@ -15,6 +15,7 @@ module com.example.ewaste {
     requires com.gluonhq.maps;
     requires jxbrowser;
     requires jxbrowser.javafx;
+    requires org.json;
     opens com.example.ewaste.Controllers to javafx.fxml;
     exports com.example.ewaste.Controllers;
     opens com.example.ewaste.Entities to javafx.base;
