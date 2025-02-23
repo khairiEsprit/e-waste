@@ -6,6 +6,7 @@ import com.example.ewaste.Entities.Poubelle;
 import com.example.ewaste.Repository.*;
 import com.example.ewaste.Utils.DataBase;
 import com.example.ewaste.Entities.User;
+import com.example.ewaste.Utils.FloatingChatbotButton;
 import com.example.ewaste.Utils.OpenAiApi;
 import com.gluonhq.maps.MapLayer;
 import com.gluonhq.maps.MapPoint;
@@ -252,6 +253,14 @@ private final  MapBox map = new MapBox();
     @Override
     public void initialize (URL url, ResourceBundle resourceBundle) {
 
+
+        FloatingChatbotButton chatbotButton = new FloatingChatbotButton();
+        main_form.getChildren().add(chatbotButton.getButton());
+
+        // Positioning the button at the bottom-right corner
+        AnchorPane.setBottomAnchor(chatbotButton.getButton(), 20.0);
+        AnchorPane.setRightAnchor(chatbotButton.getButton(), 20.0);
+
         try {
             homeDisplayTotalCitoyen();
         } catch (SQLException e) {
@@ -294,13 +303,14 @@ private final  MapBox map = new MapBox();
         AnchorPane.setLeftAnchor(mapView, 0.0);
         AnchorPane.setRightAnchor(mapView, 0.0);
 
-        map.flyToLocation(36.8065, 10.1815, 15);
+//        map.flyToLocation(36.8065, 10.1815, 12);
 //
         displayPoubellesAndRoute(CENTER_ID);
 
 
 
     }
+
 
     public void displayPoubellesAndRoute(int CENTER_ID) {
         // Fetch all poubelles
@@ -749,6 +759,8 @@ private final  MapBox map = new MapBox();
             showSection(rapportDisplay, generate_rapport);
             generateRapport_btn.setStyle("-fx-background-color: linear-gradient(to bottom right, #29AB87, #ACE1AF);");
         }else  if (event.getSource() == Map_view){
+            map.flyToLocation(36.8065, 10.1815, 12);
+
             showSection(MapsDisplay,Map_view);
 
         }
