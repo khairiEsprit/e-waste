@@ -1,18 +1,20 @@
 package com.example.ewaste.Utils;
 
-import com.example.ewaste.Controllers.ChatbotInterface;
+import com.example.ewaste.Controllers.ChatBotInterface;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import javafx.event.EventHandler;
+
 public class FloatingChatbotButton {
 
     private Button chatbotButton;
-    ChatbotInterface chatbotInterface = new ChatbotInterface();
-    public FloatingChatbotButton() {
+    public FloatingChatbotButton(Runnable action) {
         // Create Chatbot Floating Icon Button
         ImageView chatbotIcon = new ImageView(new Image("https://cdn-icons-png.flaticon.com/512/4712/4712034.png"));
         chatbotIcon.setFitWidth(50);
@@ -22,7 +24,7 @@ public class FloatingChatbotButton {
         chatbotButton.setGraphic(chatbotIcon);
         chatbotButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
         setupButtonAnimations(chatbotButton);
-        chatbotButton.setOnAction(e -> chatbotInterface.openChatbot() );
+        chatbotButton.setOnAction(e -> action.run());
     }
 
     public Button getButton() {

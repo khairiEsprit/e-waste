@@ -1,7 +1,14 @@
 package com.example.ewaste.Controllers;
 // ChatbotInterface.java
+import com.example.ewaste.Entities.Message;
+import com.example.ewaste.Entities.Sender;
+import com.example.ewaste.Main;
 import com.example.ewaste.Repository.PoubelleRepository;
 import io.github.cdimascio.dotenv.Dotenv;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -9,7 +16,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.SVGPath;
 import javafx.util.Duration;
 import javafx.animation.TranslateTransition;
 
@@ -17,162 +27,242 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+
 public class ChatBotInterface {
+
+
+    PoubelleRepository pr = new PoubelleRepository();
+    String binData = pr.getLastTenPoubellesForOpenAI(1);
+    private static final String CSS_FILE = "styles/chat-style.css";
+    private static final double INITIAL_WIDTH = 450;
+    private static final double INITIAL_HEIGHT = 450;
     Dotenv dotenv = Dotenv.configure()
             .directory("C:/Users/User/Documents/e-waste/e-waste") // Adjust the path accordingly
             .filename(".env")
             .load();
     String apiKey = dotenv.get("OPENAI_API_KEY");
     private static final String OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions";
-    private VBox chatBox;
-    private ListView<HBox> chatListView;
-    private TextField inputField;
     private Dialog<Void> chatbotDialog;
-    private boolean isChatbotVisible = false;
-
-//    public void toggleChatbot() {
-//        if (isChatbotVisible) {
-//            closeChatbot();  // Close the chatbot if it's visible
-//        } else {
-//            openChatbot();  // Open the chatbot if it's not visible
-//        }
-//    }
-
+    private ListView<Message> chatListView;
+    private TextField inputField;
+    private Button sendButton;
+    private ExecutorService executorService;
+    private void setupExecutorService() {
+        executorService = Executors.newFixedThreadPool(2);
+    }
     public void openChatbot() {
         if (chatbotDialog == null) {
-            // Create a new dialog instance for the chatbot
-            chatbotDialog = new Dialog<>();
-            chatbotDialog.setTitle("Chat Assistant");
-
-            // Initialize the chat components
-            chatListView = new ListView<>();
-            chatListView.setPrefHeight(400);
-            chatListView.setFocusTraversable(false);
-
-            inputField = new TextField();
-            inputField.setPromptText("Type your message...");
-            inputField.setPrefWidth(400);
-
-            Button sendButton = new Button("Send");
-            sendButton.setOnAction(e -> sendMessage());
-
-            HBox inputBox = new HBox(10, inputField, sendButton);
-            inputBox.setPadding(new Insets(10));
-            inputBox.setAlignment(Pos.CENTER);
-
-            // Set up the chat box layout
-            chatBox = new VBox(10, chatListView, inputBox);
-            chatBox.setPadding(new Insets(10));
-            chatBox.setStyle("-fx-background-color: white; -fx-border-radius: 10; -fx-border-color: #ccc;");
-
-            // Set the content of the dialog to the chatBox
-            chatbotDialog.getDialogPane().setContent(chatBox);
-
-            // Reset dialog reference when closed
-            chatbotDialog.setOnCloseRequest(event -> {
-                closeChatbot();
-                event.consume(); // Prevent default close if needed
-            });
-
-            // Update button types to handle close via OS window controls
-            chatbotDialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-            Node closeButton = chatbotDialog.getDialogPane().lookupButton(ButtonType.CLOSE);
-            closeButton.addEventFilter(ActionEvent.ACTION, event -> {
-                closeChatbot();
-                event.consume();
-            });
-
-            // Show the dialog
-            chatbotDialog.show();
-
-            // Mark the chatbot as visible
-            isChatbotVisible = true;
-
-            // Add entrance animation
-            animateChatboxEntrance();
+            initializeDialog();
+            setupExecutorService();
+            animateEntrance();
         }
     }
 
-    private void closeChatbot() {
-        if (chatbotDialog != null) {
-            chatbotDialog.close();
-            chatbotDialog = null; // Clear reference to allow reopening
-            isChatbotVisible = false;
-        }
+
+    private void addMessage(Message message) {
+        Platform.runLater(() -> {
+            chatListView.getItems().add(message);
+            chatListView.scrollTo(chatListView.getItems().size() - 1);
+        });
     }
 
-    private void animateChatboxEntrance() {
-        TranslateTransition slideIn = new TranslateTransition(Duration.millis(500), chatBox);
-        slideIn.setFromY(600);
-        slideIn.setToY(0);
-        slideIn.play();
+    private void initializeDialog() {
+        chatbotDialog = new Dialog<>();
+        chatbotDialog.setTitle("AI Assistant");
+        chatbotDialog.getDialogPane().getStylesheets().add(Main.class.getResource(CSS_FILE).toExternalForm());
+
+        createChatInterface();
+        setupDialogCloseHandler();
+        chatbotDialog.show();
     }
 
+    private void createChatInterface() {
+        VBox mainContainer = new VBox(10);
+        mainContainer.setPrefSize(INITIAL_WIDTH, INITIAL_HEIGHT);
+        mainContainer.setMaxHeight(Double.MAX_VALUE); // Allow vertical expansion
+        mainContainer.getStyleClass().add("main-container");
+
+        // Chat History
+        chatListView = new ListView<>();
+        chatListView.setCellFactory(this::createMessageCell);
+        VBox.setVgrow(chatListView, Priority.ALWAYS); // Critical for vertical expansion
+        chatListView.setMaxHeight(Double.MAX_VALUE); // Allow unlimited vertical growth
+        chatListView.getStyleClass().add("chat-list");
+
+        // Input Area
+        HBox inputContainer = new HBox(30);
+        inputContainer.getStyleClass().add("input-container");
+        inputContainer.setMaxHeight(60); // Fixed height for input area
 
 
+        inputField = new TextField();
+        inputField.setPromptText("Type your message...");
+        inputField.setOnAction(e -> sendMessage());
+        HBox.setHgrow(inputField, Priority.ALWAYS);  // Make text field expand
+        inputField.setMaxWidth(Double.MAX_VALUE);     // Allow unlimited horizontal expansion
+
+        sendButton = new Button();
+        sendButton.setGraphic(createSendIcon());
+        sendButton.setOnAction(e -> sendMessage());
+        sendButton.setPrefSize(40, 40);  // Fixed size for button
+
+        inputContainer.getChildren().addAll(inputField, sendButton);
+        mainContainer.getChildren().addAll(chatListView, inputContainer);
+
+        chatbotDialog.getDialogPane().setContent(mainContainer);
+    }
+
+    private ListCell<Message> createMessageCell(ListView<Message> listView) {
+        return new ListCell<>() {
+            private final Label content = new Label();
+            private final HBox container = new HBox();
+
+            {
+                content.setWrapText(true);
+                content.setMaxWidth(INITIAL_WIDTH * 0.8);
+                container.setPadding(new Insets(5));
+                container.getChildren().add(content);
+            }
+
+            @Override
+            protected void updateItem(Message message, boolean empty) {
+                super.updateItem(message, empty);
+                if (empty || message == null) {
+                    setGraphic(null);
+                } else {
+                    content.setText(message.text());
+                    container.getStyleClass().setAll(message.sender().styleClass);
+                    setGraphic(container);
+                }
+            }
+        };
+    }
+
+    private Node createSendIcon() {
+        SVGPath icon = new SVGPath();
+        icon.setContent("M 0 0 L 10 5 L 0 10 Z");
+        icon.setFill(Color.web("#4A90E2"));
+        return icon;
+    }
+
+    private void setupDialogCloseHandler() {
+        // Add hidden close button type
+        ButtonType closeButtonType = new ButtonType("", ButtonBar.ButtonData.CANCEL_CLOSE);
+        chatbotDialog.getDialogPane().getButtonTypes().add(closeButtonType);
+
+        // Get reference to the invisible close button
+        Node closeButton = chatbotDialog.getDialogPane().lookupButton(closeButtonType);
+
+        // Hide the button completely
+        closeButton.setVisible(false);
+        closeButton.setManaged(false);
+
+        // Handle all close scenarios
+        chatbotDialog.setOnCloseRequest(e -> {
+            closeChatbot();
+            e.consume();
+        });
+    }
     private void sendMessage() {
         String userInput = inputField.getText().trim();
         if (userInput.isEmpty()) return;
 
-        addMessage("User: " + userInput, Sender.USER);
+        addMessage(new Message(userInput, Sender.USER));
         inputField.clear();
+        disableInput(true);
 
-        addMessage("Bot: ...", Sender.BOT); // Temporary message
+        Message loadingMessage = new Message("...", Sender.BOT_LOADING);
+        addMessage(loadingMessage);
 
-        Task<String> task = new Task<>() {
+        executorService.execute(createChatTask(userInput, loadingMessage));
+    }
+
+    private Task<Message> createChatTask(String userInput, Message loadingMessage) {
+        return new Task<>() {
             @Override
-            protected String call() throws Exception {
-                return callOpenAI(userInput);
+            protected Message call() throws Exception {
+                String response = callOpenAI(userInput);
+                return new Message(response, Sender.BOT);
+            }
+
+            @Override
+            protected void succeeded() {
+                replaceMessage(loadingMessage, getValue());
+                disableInput(false);
+            }
+
+            @Override
+            protected void failed() {
+                replaceMessage(loadingMessage, new Message("Sorry, I couldn't process your request.", Sender.BOT_ERROR));
+                disableInput(false);
             }
         };
-
-        task.setOnSucceeded(event -> {
-            removeLastMessage();
-            addMessage("Bot: " + task.getValue(), Sender.BOT);
-        });
-
-        task.setOnFailed(event -> {
-            removeLastMessage();
-            addMessage("Bot: Error occurred.", Sender.BOT);
-        });
-
-        new Thread(task).start();
     }
 
-    private void addMessage(String message, Sender sender) {
-        Label label = new Label(message);
-        label.setWrapText(true);
-        label.setMaxWidth(350);
-        label.setStyle("-fx-font-size: 14px; -fx-padding: 10;");
-
-        HBox container = new HBox(label);
-        container.setPadding(new Insets(5));
-
-        if (sender == Sender.USER) {
-            container.setAlignment(Pos.CENTER_RIGHT);
-            container.setStyle("-fx-background-color: #DCF8C6; -fx-background-radius: 10;");
-        } else {
-            container.setAlignment(Pos.CENTER_LEFT);
-            container.setStyle("-fx-background-color: #F1F0F0; -fx-background-radius: 10;");
-        }
-
-        chatListView.getItems().add(container);
-        chatListView.scrollTo(chatListView.getItems().size() - 1);
-    }
-
-    private void removeLastMessage() {
-        int size = chatListView.getItems().size();
-        if (size > 0) {
-            chatListView.getItems().remove(size - 1);
+    private void replaceMessage(Message oldMessage, Message newMessage) {
+        int index = chatListView.getItems().indexOf(oldMessage);
+        if (index >= 0) {
+            chatListView.getItems().set(index, newMessage);
+            chatListView.scrollTo(index);
         }
     }
 
-    PoubelleRepository pr = new PoubelleRepository();
-    String binData = pr.getLastTenPoubellesForOpenAI(1);
+    private void disableInput(boolean disable) {
+        inputField.setDisable(disable);
+        sendButton.setDisable(disable);
+    }
+
+    private void animateEntrance() {
+        ScaleTransition scale = new ScaleTransition(Duration.millis(1000), chatbotDialog.getDialogPane());
+        scale.setFromX(0.9);
+        scale.setFromY(0.9);
+        scale.setToX(1);
+        scale.setToY(1);
+
+        FadeTransition fade = new FadeTransition(Duration.millis(1000), chatbotDialog.getDialogPane());
+        fade.setFromValue(0);
+        fade.setToValue(1);
+
+        ParallelTransition animation = new ParallelTransition(scale, fade);
+        animation.play();
+    }
+
+    private void closeChatbot() {
+        if (chatbotDialog != null) {
+            animateExit(() -> {
+                chatbotDialog.close();
+                chatbotDialog = null;
+                executorService.shutdownNow();
+            });
+        }
+    }
+
+
+    private void animateExit(Runnable onFinished) {
+        ScaleTransition scale = new ScaleTransition(Duration.millis(200), chatbotDialog.getDialogPane());
+        scale.setToX(0.9);
+        scale.setToY(0.9);
+
+        FadeTransition fade = new FadeTransition(Duration.millis(200), chatbotDialog.getDialogPane());
+        fade.setToValue(0);
+
+        ParallelTransition animation = new ParallelTransition(scale, fade);
+        animation.setOnFinished(e -> onFinished.run());
+        animation.play();
+    }
+
+
+
+
+
+
 
     // 📡 Call OpenAI API
     private String callOpenAI(String userInput) throws Exception {
@@ -234,5 +324,5 @@ public class ChatBotInterface {
         return "No response from AI.";
     }
 
-    private enum Sender { USER, BOT }
+
 }

@@ -234,10 +234,11 @@ public class DashboardController implements Initializable {
     private double yOffset = 0;
 
     private String[] statusList = {"Disponible", "Non Disponible"};
-    private final MapPoint point = new MapPoint(48.85,2.29);
+//    private final MapPoint point = new MapPoint(48.85,2.29);
 
 
 
+    ChatBotInterface chat = new ChatBotInterface();
 
     CitoyenRepository cr = new CitoyenRepository();
     EmployeeRepository er = new EmployeeRepository();
@@ -254,7 +255,7 @@ private final  MapBox map = new MapBox();
     public void initialize (URL url, ResourceBundle resourceBundle) {
 
 
-        FloatingChatbotButton chatbotButton = new FloatingChatbotButton();
+        FloatingChatbotButton chatbotButton = new FloatingChatbotButton(chat::openChatbot);
         main_form.getChildren().add(chatbotButton.getButton());
 
         // Positioning the button at the bottom-right corner
