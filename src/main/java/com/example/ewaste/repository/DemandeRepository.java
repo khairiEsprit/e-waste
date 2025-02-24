@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DemandeRepository implements IService<Demande> {
+    //Déclaration et connexion à la base de données
     private Connection connection;
 
     public DemandeRepository() {
@@ -97,4 +98,24 @@ public class DemandeRepository implements IService<Demande> {
         }
         return demandes;
     }
+    public Demande getDemandeById(int id) throws SQLException {
+        String sql = "SELECT * FROM `demande` WHERE `id`=?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return new Demande(
+                    rs.getInt("id"),
+                    rs.getInt("id_utilisateur"),
+                    rs.getInt("id_centre"),
+                    rs.getString("adresse"),
+                    rs.getString("email_utilisateur"),
+                    rs.getString("message"),
+                    rs.getString("type")
+            );
+        }
+        return null;
+    }
+
 }

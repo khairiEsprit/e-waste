@@ -54,6 +54,8 @@ public class TraitementRepository implements IService<Traitement> {
     @Override
     public List<Traitement> afficher() throws SQLException {
         List<Traitement> traitements = new ArrayList<>();
+        // afficher()
+        //Récupère et retourne tous les traitements de la table.
         String sql = "SELECT * FROM `traitement`";
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery(sql);
@@ -72,6 +74,7 @@ public class TraitementRepository implements IService<Traitement> {
 
     public List<Traitement> getTraitementByDemande(int idDemande) throws SQLException {
         List<Traitement> traitements = new ArrayList<>();
+        //Récupère les traitements liés à une demande spécifique (id_demande).
         String sql = "SELECT * FROM `traitement` WHERE id_demande = ?";
 
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -83,7 +86,7 @@ public class TraitementRepository implements IService<Traitement> {
                     rs.getInt("id"),
                     rs.getInt("id_demande"),
                     rs.getString("status"),
-                    rs.getTimestamp("date_traitement").toLocalDateTime(),
+                    rs.getTimestamp("date_traitement").toLocalDateTime(),// Conversion Timestamp → LocalDateTime
                     rs.getString("commentaire")
             ));
         }

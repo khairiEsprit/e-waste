@@ -1,8 +1,11 @@
 package com.example.ewaste.contollers;
 
 
+import com.example.ewaste.entities.Demande;
 import com.example.ewaste.entities.Traitement;
+import com.example.ewaste.repository.DemandeRepository;
 import com.example.ewaste.repository.TraitementRepository;
+import com.example.ewaste.service.EmailService;
 import com.example.ewaste.utils.AlertUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,8 +34,10 @@ public class TraitementFormController implements Initializable {
     @FXML
     private TextField idDemandeField;
     private final TraitementRepository traitementRepository = new TraitementRepository();
+    private final DemandeRepository demandeRepository = new DemandeRepository();
     private int idDemande;
     private Traitement traitementToEdit = null;
+    private final EmailService emailService = new EmailService("houssem.tej47@gmail.com", "mond ufel sqxg kcfe");
 
     public void setDemandeId(int idDemande) {
         this.idDemande = idDemande;
@@ -54,7 +59,13 @@ public class TraitementFormController implements Initializable {
 
             if (traitementToEdit == null) {
 
+
                 Traitement newTraitement = new Traitement(idDemande, status, LocalDateTime.now(), commentaire);
+                // send email
+                Demande demandeFromTraitement=demandeRepository.getDemandeById(idDemande);
+                System.out.println("this is the demande "+demandeFromTraitement);
+               emailService.sendEmail(demandeFromTraitement.getEmailUtilisateur(),"Resolution du Traitement","votre traitement a été traite");
+
                 traitementRepository.ajouter(newTraitement);
                 AlertUtil.showAlert("Succès", "Traitement ajouté avec succès.", Alert.AlertType.INFORMATION);
             } else {
@@ -65,6 +76,8 @@ public class TraitementFormController implements Initializable {
                 traitementRepository.modifier(traitementToEdit);
                 AlertUtil.showAlert("Succès", "Traitement modifié avec succès.", Alert.AlertType.INFORMATION);
             }
+
+
 
 
             closeForm();

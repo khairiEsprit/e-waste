@@ -9,6 +9,7 @@ module org.example.ewaste.pihoussem {
     requires java.sql;
     requires java.net.http;
     requires javafx.fxml;
+    requires java.mail;
 
     opens com.example.ewaste.contollers to javafx.fxml;
     exports com.example.ewaste.contollers;
