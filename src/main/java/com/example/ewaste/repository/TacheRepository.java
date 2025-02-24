@@ -131,22 +131,9 @@ public class TacheRepository implements IService<Tache> {
         }
 
 
-       /* public List<Integer> getEmployeIds() throws SQLException {
-            List<Integer> employeIds = new ArrayList<>();
-            String sql = "SELECT id FROM utilisateur";
-
-            try (Statement statement = connection.createStatement(); ResultSet rs = statement.executeQuery(sql)) {
-                while (rs.next()) {
-                    employeIds.add(rs.getInt("id"));
-                }
-            }
-            return employeIds;
-
-        }*/
        public List<Integer> getEmployeIds() throws SQLException {
            // Retourne une liste des IDs des employés depuis la base de données
-           // Exemple avec une requête SQL (modifiez en fonction de votre structure de base de données)
-           String query = "SELECT id FROM employes"; // Modifier avec le nom de votre table d'employés
+           String query = "SELECT id FROM employes";
            List<Integer> employeIds = new ArrayList<>();
            try (Connection connection = DriverManager.getConnection("your-database-url", "username", "password");
                 Statement statement = connection.createStatement();
@@ -160,5 +147,18 @@ public class TacheRepository implements IService<Tache> {
        }
 
 
+    public String getEmployeEmailById(int idEmploye) throws SQLException {
+        String email = null;
+        String query = "SELECT email FROM utilisateur WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, idEmploye);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    email = rs.getString("email");
+                }
+            }
+        }
+        return email;
+    }
 
 }

@@ -99,4 +99,19 @@ public class PlanificationTacheRepository implements IService<PlanificationTache
         return null;
     }
 
+    public PlanificationTache afficherPlannification() throws SQLException {
+        String sql = "SELECT * FROM planificationtache";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return new PlanificationTache(
+                    rs.getInt("id"),
+                    rs.getInt("id_tache"),
+                    rs.getString("priorite"),
+                    rs.getDate("date_limite")
+            );
+        }
+        return null;
+    }
 }

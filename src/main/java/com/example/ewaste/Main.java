@@ -20,8 +20,8 @@ public class Main extends Application {
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();
-        }catch(IOException e){
-            System.out.println(e.getMessage());
+        }catch(IOException e) {
+                e.printStackTrace();
+            }
         }
-    }
 }

@@ -99,7 +99,7 @@ public class ControllerPlannificationTache {
             }
 
             PlanificationTache planification = new PlanificationTache(
-                    planificationExistante.getId(), // Utilisation de l'ID existant
+                    planificationExistante.getId(),
                     idTache,
                     priorite,
                     java.sql.Date.valueOf(dateLimite)
@@ -173,5 +173,7 @@ public class ControllerPlannificationTache {
         comboPriorite.setItems(options);
 
     }
+
+
 
 }
