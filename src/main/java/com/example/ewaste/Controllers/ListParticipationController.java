@@ -5,10 +5,16 @@ import com.example.ewaste.Repository.ParticipationRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class ListParticipationController {
     @FXML
@@ -45,13 +51,6 @@ public class ListParticipationController {
 
     @FXML
     public void initialize() {
-        // Vérification des colonnes
-        if (firstNameColumn == null || lastNameColumn == null || emailColumn == null ||
-                phoneColumn == null || cityColumn == null || countryColumn == null || zipCodeColumn == null) {
-            System.err.println("Erreur : Une ou plusieurs colonnes sont null.");
-            return;
-        }
-
         // Configuration des colonnes
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -98,6 +97,25 @@ public class ListParticipationController {
             });
         } else {
             System.err.println("Erreur : mainContainer est null. Vérifiez le fichier FXML.");
+        }
+    }
+
+    @FXML
+    private void handleRetour() {
+        try {
+            // Charger le fichier FXML de l'interface ListEvenement
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/ListEvenement-view.fxml"));
+            Parent root = loader.load();
+
+            // Obtenir la scène actuelle à partir du bouton Retour
+            Stage stage = (Stage) participationTable.getScene().getWindow();
+
+            // Changer la scène pour afficher ListEvenement
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger l'interface ListEvenement.");
         }
     }
 

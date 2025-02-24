@@ -27,6 +27,11 @@ public class AvisRepository {
             throw new IllegalArgumentException("La note doit être comprise entre 1 et 5");
         }
 
+        // Vérifier si un avis avec les mêmes données existe déjà
+        if (exists(avis)) {
+            throw new SQLException("Un avis avec les mêmes coordonnées existe déjà.");
+        }
+
         String sql = "INSERT INTO avis (nom, description, note) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, avis.getName());
@@ -117,5 +122,22 @@ public class AvisRepository {
             e.printStackTrace();
         }
         return null;
+    }
+
+    // Vérifier si un avis avec les mêmes données existe déjà
+    public boolean exists(Avis avis) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM avis WHERE nom = ? AND description = ? AND note = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, avis.getName());
+            stmt.setString(2, avis.getDescription());
+            stmt.setInt(3, avis.getRating());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; // Retourne true si un avis existe déjà
+                }
+            }
+        }
+        return false;
     }
 }

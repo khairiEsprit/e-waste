@@ -1,6 +1,5 @@
 package com.example.ewaste.Repository;
 
-
 import com.example.ewaste.Entities.Participation;
 import com.example.ewaste.Utils.DataBaseConn;
 
@@ -13,17 +12,22 @@ public class ParticipationRepository {
 
     // Create (Insert) a new participation
     public boolean create(Participation participation) {
-        String sql = "INSERT INTO participation (firstName, lastName, email, phone, city, zipCode) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO participation (firstName, lastName, email, phone, city, country, zipCode) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, participation.getFirstName());
             stmt.setString(2, participation.getLastName());
             stmt.setString(3, participation.getEmail());
             stmt.setString(4, participation.getPhone());
             stmt.setString(5, participation.getCity());
-            stmt.setString(6, participation.getZipCode());
-            return stmt.executeUpdate() > 0;  // returns true if a record was inserted
+            stmt.setString(6, participation.getCountry());
+            stmt.setString(7, participation.getZipCode());
+            return stmt.executeUpdate() > 0;  // Retourne true si une ligne a été insérée
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getSQLState().equals("23000")) {  // Code d'erreur pour violation de contrainte d'unicité
+                System.err.println("Erreur : Une participation avec cet e-mail existe déjà.");
+            } else {
+                e.printStackTrace();
+            }
             return false;
         }
     }
@@ -42,7 +46,7 @@ public class ParticipationRepository {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("city"),
-                        rs.getString("country"),  // Ajoutez le champ country
+                        rs.getString("country"),  // Ajout du champ country
                         rs.getString("zipCode")
                 );
             }
@@ -66,7 +70,7 @@ public class ParticipationRepository {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("city"),
-                        rs.getString("country"),  // Ajoutez le champ country
+                        rs.getString("country"),  // Ajout du champ country
                         rs.getString("zipCode")
                 ));
             }
@@ -77,18 +81,18 @@ public class ParticipationRepository {
     }
 
     // Update an existing participation
-    // Update an existing participation
-    public boolean updateParticipation(Participation participation) {  // Renommer la méthode
-        String sql = "UPDATE participation SET firstName = ?, lastName = ?, email = ?, phone = ?, city = ?, zipCode = ? WHERE id = ?";
+    public boolean updateParticipation(Participation participation) {
+        String sql = "UPDATE participation SET firstName = ?, lastName = ?, email = ?, phone = ?, city = ?, country = ?, zipCode = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, participation.getFirstName());
             stmt.setString(2, participation.getLastName());
             stmt.setString(3, participation.getEmail());
             stmt.setString(4, participation.getPhone());
             stmt.setString(5, participation.getCity());
-            stmt.setString(6, participation.getZipCode());
-            stmt.setInt(7, participation.getId());
-            return stmt.executeUpdate() > 0;  // returns true if the record was updated
+            stmt.setString(6, participation.getCountry()); // Ajout du champ country
+            stmt.setString(7, participation.getZipCode());
+            stmt.setInt(8, participation.getId());
+            return stmt.executeUpdate() > 0;  // Retourne true si une ligne a été mise à jour
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -100,10 +104,25 @@ public class ParticipationRepository {
         String sql = "DELETE FROM participation WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            return stmt.executeUpdate() > 0;  // returns true if the record was deleted
+            return stmt.executeUpdate() > 0;  // Retourne true si une ligne a été supprimée
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    // Vérifier si une participation avec le même e-mail existe déjà
+    public boolean isParticipationExists(String email) {
+        String sql = "SELECT COUNT(*) FROM participation WHERE email = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Retourne true si une participation existe déjà
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

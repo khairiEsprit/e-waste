@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class ParticipationController {
 
     // FXML elements (form fields)
@@ -50,6 +52,12 @@ public class ParticipationController {
         // Validate the form (simple checks)
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()) {
             showAlert("Error", "Please fill in all required fields.");
+            return;
+        }
+
+        // Vérifier si une participation avec le même e-mail existe déjà
+        if (participationRepository.isParticipationExists(email)) {
+            showAlert("Error", "Une participation avec cet e-mail existe déjà.");
             return;
         }
 
@@ -94,6 +102,26 @@ public class ParticipationController {
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Failed to load the participation list view.");
+        }
+    }
+
+    // Handle Retour button action
+    @FXML
+    private void handleRetour() {
+        try {
+            // Charger le fichier FXML de l'interface ListEvenement
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/ListEvenement-view.fxml"));
+            Parent root = loader.load();
+
+            // Obtenir la scène actuelle à partir du bouton Retour
+            Stage stage = (Stage) submitButton.getScene().getWindow();
+
+            // Changer la scène pour afficher ListEvenement
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger l'interface ListEvenement.");
         }
     }
 

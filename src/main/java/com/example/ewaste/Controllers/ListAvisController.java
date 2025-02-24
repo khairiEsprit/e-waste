@@ -6,11 +6,17 @@ import com.example.ewaste.Utils.DataBaseConn;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -29,6 +35,8 @@ public class ListAvisController {
     private Button editButton;
     @FXML
     private Button deleteButton;
+    @FXML
+    private Button returnButton; // Nouveau bouton pour retourner à la page Avis
 
     @FXML
     private TextField searchField; // Champ de recherche
@@ -52,6 +60,36 @@ public class ListAvisController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+
+        // Configurer la CellFactory pour afficher les étoiles
+        ratingColumn.setCellFactory(column -> new TableCell<Avis, Integer>() {
+            @Override
+            protected void updateItem(Integer rating, boolean empty) {
+                super.updateItem(rating, empty);
+
+                if (empty || rating == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    // Créer un HBox pour afficher les étoiles
+                    HBox starContainer = new HBox();
+                    starContainer.setSpacing(2);
+
+                    // Ajouter des étoiles en fonction de la note
+                    for (int i = 1; i <= 5; i++) {
+                        Label star = new Label("★");
+                        if (i <= rating) {
+                            star.setStyle("-fx-text-fill: gold;"); // Étoile sélectionnée
+                        } else {
+                            star.setStyle("-fx-text-fill: gray;"); // Étoile non sélectionnée
+                        }
+                        starContainer.getChildren().add(star);
+                    }
+
+                    setGraphic(starContainer);
+                }
+            }
+        });
 
         // Charger les données
         loadAvis();
@@ -113,6 +151,24 @@ public class ListAvisController {
     private void loadAvis() {
         avisList.clear();
         avisList.addAll(avisRepository.readAll());
+    }
+
+    @FXML
+    private void handleReturnAction() {
+        try {
+            // Charger l'interface Avis.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/Avis.fxml"));
+            Parent root = loader.load();
+
+            // Obtenir la scène actuelle
+            Scene currentScene = returnButton.getScene();
+
+            // Remplacer la scène actuelle par la nouvelle scène
+            currentScene.setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger la page Avis.");
+        }
     }
 
     @FXML

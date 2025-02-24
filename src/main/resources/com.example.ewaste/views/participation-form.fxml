@@ -61,7 +61,8 @@
                             <TextField fx:id="zipCodeField" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
                         </GridPane>
                         <VBox alignment="CENTER">
-                            <Button fx:id="submitButton" text="Envoyer" onAction="#handleSubmit" styleClass="button"/>                            <VBox.margin>
+                            <Button fx:id="submitButton" text="Envoyer" onAction="#handleSubmit" styleClass="button"/>
+                            <VBox.margin>
                                 <Insets top="20"/>
                             </VBox.margin>
                         </VBox>
@@ -77,4 +78,11 @@
             </VBox>
         </HBox>
     </center>
+
+    <!-- Bouton Retour en bas de l'interface -->
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-padding: 10;">
+            <Button text="Retour" styleClass="button" onAction="#handleRetour"/>
+        </HBox>
+    </bottom>
 </BorderPane>

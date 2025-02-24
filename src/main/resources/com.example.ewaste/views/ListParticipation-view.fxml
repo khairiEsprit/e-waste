@@ -41,4 +41,11 @@
             </TableView>
         </VBox>
     </center>
+
+    <!-- Bouton Retour en bas de l'interface -->
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-padding: 10;">
+            <Button text="Retour" styleClass="button" onAction="#handleRetour"/>
+        </HBox>
+    </bottom>
 </BorderPane>
