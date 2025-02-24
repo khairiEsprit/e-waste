@@ -12,8 +12,8 @@ import java.util.Properties;
 public class MailRepository {
 
     public static void sendEmail(String recipientEmail, String subject, String messageContent, String attachmentPath) {
-        final String username = "nasseffadhlaoui@gmail.com"; // Votre adresse e-mail
-        final String password = "xnye onep frrg swzp"; // Votre mot de passe d'application
+        final String username = ""; // Votre adresse e-mail
+        final String password = ""; // Votre mot de passe d'application
 
         // Configuration du serveur SMTP
         Properties prop = new Properties();

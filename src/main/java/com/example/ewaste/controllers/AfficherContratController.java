@@ -42,6 +42,9 @@
     public class AfficherContratController {
 
         @FXML
+        private Button Ajou;
+
+        @FXML
         private DatePicker DateFin;
 
         @FXML
@@ -72,6 +75,32 @@
         private ContratRepository contratRepository = new ContratRepository();
 
         private boolean signatureAffichee = false; // Suivi de l'affichage de la signature
+
+
+
+        @FXML
+        void Ajou(ActionEvent event) {
+            try {
+                // Charger le fichier FXML de l'interface "ajoutercentre.fxml"
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/ajoutercentre.fxml"));
+                Parent root = loader.load();
+
+                // Créer une nouvelle scène
+                Scene scene = new Scene(root);
+
+                // Obtenir la fenêtre actuelle (stage) à partir de l'événement
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                // Définir la nouvelle scène sur le stage
+                stage.setScene(scene);
+                stage.setTitle("Ajouter un Centre"); // Titre de la fenêtre
+                stage.show(); // Afficher la nouvelle interface
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Erreur : Impossible de charger l'interface ajoutercentre.fxml.");
+            }
+
+        }
 
         @FXML
         public void initialize() {
