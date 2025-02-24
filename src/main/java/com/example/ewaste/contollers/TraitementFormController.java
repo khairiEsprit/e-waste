@@ -84,7 +84,7 @@ public class TraitementFormController implements Initializable {
     }
 
     private void refreshTraitementTable() {
-        TraitementController traitementController = TraitementController.getInstance();
+        TaitementByDemandeAdminController traitementController = TaitementByDemandeAdminController.getInstance();
         if (traitementController != null) {
             traitementController.loadTraitementByDemande(idDemande);
             System.out.println("hdsdsdsds"+idDemande);

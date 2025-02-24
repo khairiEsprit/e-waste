@@ -99,7 +99,7 @@ public void handleSubmit(ActionEvent actionEvent) {
 
     private void openDemandeView() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/DemandeView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/ListDemandesAdmin.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();

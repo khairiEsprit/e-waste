@@ -24,11 +24,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class TraitementController implements Initializable {
-    private static TraitementController instance;
+public class TaitementByDemandeAdminController implements Initializable {
+    private static TaitementByDemandeAdminController instance;
     private int currentDemandeId=0;
 
-    public static TraitementController getInstance() {
+    public static TaitementByDemandeAdminController getInstance() {
         return instance;
     }
     @FXML

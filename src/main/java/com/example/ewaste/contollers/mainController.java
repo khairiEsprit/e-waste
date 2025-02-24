@@ -14,7 +14,7 @@ public class mainController {
     @FXML
     private StackPane contentArea;
     public void showDemande(ActionEvent actionEvent) throws IOException {
-        loadContent("/com/example/ewaste/views/AjoutDemande.fxml");
+        loadContent("/com/example/ewaste/views/FormDemande.fxml");
     }
 
     public void showReclamation(ActionEvent actionEvent) {
@@ -26,7 +26,7 @@ public class mainController {
 
 
     public void show(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/demandes.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/listDemandesUser.fxml"));
         Parent root = loader.load();
 
         // Create a new stage (window)

@@ -20,28 +20,6 @@
 
 
 
-<!--        &lt;!&ndash; Status Selection &ndash;&gt;-->
-<!--        <ComboBox fx:id="statusField">-->
-<!--            <items>-->
-<!--                <FXCollections fx:factory="observableArrayList">-->
-<!--                    <String fx:value="En attente"/>-->
-<!--                    <String fx:value="Traitée"/>-->
-<!--                    <String fx:value="Refusée"/>-->
-<!--                </FXCollections>-->
-<!--            </items>-->
-<!--        </ComboBox>-->
-
-<!--        &lt;!&ndash; Commentaire Field &ndash;&gt;-->
-<!--        <TextArea fx:id="commentaireField" promptText="Commentaire"-->
-<!--                  wrapText="true" prefHeight="80"/>-->
-
-<!--        &lt;!&ndash; Buttons &ndash;&gt;-->
-<!--        <HBox spacing="10">-->
-<!--            <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSubmit"-->
-<!--                    style="-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 14px;"/>-->
-<!--            <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel"-->
-<!--                    style="-fx-background-color: #DC3545; -fx-text-fill: white; -fx-font-size: 14px;"/>-->
-<!--        </HBox>-->
     <ComboBox fx:id="statusField">
         <items>
             <FXCollections fx:factory="observableArrayList">

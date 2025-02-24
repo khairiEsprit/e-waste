@@ -5,8 +5,9 @@
 
 <VBox spacing="10" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.ewaste.contollers.DemandeController"
+      fx:controller="com.example.ewaste.contollers.ListDemandesAdminController"
       stylesheets="@../styles/style.css">
+    <TextField fx:id="searchField" promptText="Rechercher..." onKeyReleased="#filterList"/>
 
     <Label text="Liste des Demandes"/>
 

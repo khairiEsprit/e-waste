@@ -5,7 +5,7 @@
 
 <VBox spacing="10" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.ewaste.contollers.TraitementController"
+      fx:controller="com.example.ewaste.contollers.TaitementByDemandeAdminController"
       style="-fx-padding: 20; -fx-background-color: #F8F9FA;" stylesheets="@../styles/style2.css">
 
     <Label text="Détails du Traitement" style="-fx-font-size: 18px; -fx-text-fill: #2C3E50; -fx-font-weight: bold;"/>
