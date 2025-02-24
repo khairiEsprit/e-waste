@@ -1,6 +1,7 @@
 package com.example.ewaste.controllers;
 
 import com.example.ewaste.utils.DataBase;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,11 +10,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import com.example.ewaste.entities.Centre;
@@ -21,15 +25,21 @@ import com.example.ewaste.repository.CentreRepository;
 import netscape.javascript.JSObject;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
+
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.concurrent.Worker;
 import netscape.javascript.JSObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class AfficherCentreController {
 
     @FXML
@@ -51,6 +61,14 @@ public class AfficherCentreController {
     private TextField EmailCentre;
 
     @FXML
+    private Text CountryFlag;
+
+    @FXML
+    private Button Ajou;
+
+
+
+    @FXML
     private WebView Map;
 
     private CentreRepository centreRepository = new CentreRepository();
@@ -61,13 +79,32 @@ public class AfficherCentreController {
 
 
     @FXML
+    void Ajou(ActionEvent event) {
+        try {
+            System.out.println(getClass().getResource("views/AjouterCentre.fxml"));
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/AjouterCentre.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Ajouter un Centre");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(((Node) event.getSource()).getScene().getWindow());
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
     public void initialize() {
         loadData();
         affichage.setCellFactory(param -> new CentreListCellController());
         LongitudeCentre.setEditable(false);
         AltitudeCentre.setEditable(false);
-
-
+        detectUserLocation();
 
         if (mapView != null) {
             webEngine = mapView.getEngine();
@@ -75,27 +112,12 @@ public class AfficherCentreController {
             if (mapUrl != null) {
                 webEngine.load(mapUrl.toExternalForm());
 
-
                 webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
                     if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
                         JSObject window = (JSObject) webEngine.executeScript("window");
                         window.setMember("javaApp", this); // 🔥 Liaison entre Java et JavaScript
                     }
                 });
-
-
-              /*  // Ajouter un écouteur pour récupérer les coordonnées envoyées par la carte
-                webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-                    if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
-                        webEngine.executeScript(
-                                "window.javaConnector = { setCoords: function(lat, lon) { " +
-                                        "    javafx.scene.web.WebEngine.call('setCoordinates', lat, lon);" +
-                                        "} };"
-                        );
-                    }
-
-                });*/
-
             } else {
                 System.out.println("Erreur : Fichier map.html introuvable !");
             }
@@ -318,7 +340,7 @@ public class AfficherCentreController {
             return false;
         }
 
-        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             showAlert("Erreur", "Veuillez entrer un email valide.");
             return false;
         }
@@ -346,4 +368,57 @@ public class AfficherCentreController {
             e.printStackTrace();
         }
     }
+
+    private void detectUserLocation() {
+        String apiUrl = "http://ip-api.com/json/";
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+            connection.connect();
+
+            Scanner scanner = new Scanner(connection.getInputStream());
+            String response = scanner.useDelimiter("\\A").next();
+
+            scanner.close();
+
+            JSONObject json = new JSONObject(response);
+            //JSONObject json = new JSONObject(response);
+
+            String countryCode = json.getString("countryCode"); // "TN" pour Tunisie, "FR" pour France
+            String countryName = json.getString("country");
+
+            updatePhoneField(countryCode, countryName);
+
+        } catch (IOException e) {
+            System.out.println("Erreur lors de la récupération de la localisation.");
+            e.printStackTrace();
+        }
+    }
+
+   private void updatePhoneField(String countryCode, String countryName) {
+        String phoneCode = "";
+        String flagEmoji = "";
+
+        switch (countryCode) {
+            case "TN":
+                phoneCode = "+216";
+                flagEmoji = "🇹🇳";
+                break;
+            case "FR":
+                phoneCode = "+33";
+                flagEmoji = "🇫🇷";
+                break;
+            default:
+                phoneCode = "";
+                flagEmoji = "🌍";
+                break;
+        }
+
+        TelephoneCentre.setPromptText(phoneCode);
+        CountryFlag.setText(flagEmoji + " " + countryName);
+    }
+
+
+
 }

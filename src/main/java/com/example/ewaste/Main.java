@@ -1,6 +1,7 @@
 package com.example.ewaste;
 
 
+//import com.example.ewaste.utils.OpenCVConfig;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,6 +17,7 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.show();
+        //OpenCVConfig.init();
     }}
 
 

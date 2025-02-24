@@ -182,6 +182,48 @@ public class ContratRepository implements IService<Contrat> {
         }
     }
 
+    public String getEmployeEmailById(int idEmploye) throws SQLException {
+        String email = null;
+        String query = "SELECT email FROM utilisateur WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, idEmploye);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // Now you only call rs.next() once, and it will return true if a row exists
+                    email = rs.getString("email");
+                    if (email != null) {
+                        System.out.println("Email trouvé : " + email);
+                    } else {
+                        System.out.println("Aucun email trouvé pour l'employé avec l'ID : " + idEmploye);
+                    }
+                } else {
+                    System.out.println("Aucun employé trouvé avec l'ID : " + idEmploye);
+                }
+            }
+        }
+        return email;
+    }
+
+    public Contrat getContratById(int id) throws SQLException {
+        String query = "SELECT * FROM Contrat WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Contrat contrat = new Contrat();
+                contrat.setId(resultSet.getInt("id"));
+                contrat.setIdCentre(resultSet.getInt("id_centre"));
+                contrat.setIdEmploye(resultSet.getInt("id_employe"));
+                contrat.setDateDebut(resultSet.getDate("date_debut").toLocalDate());
+                contrat.setDateFin(resultSet.getDate("date_fin").toLocalDate());
+                contrat.setSignaturePath(resultSet.getString("signature_path")); // Récupérer le chemin de la signature
+                return contrat;
+            }
+        }
+        return null;
+    }
+
+
 
 
 

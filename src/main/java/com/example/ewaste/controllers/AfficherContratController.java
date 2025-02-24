@@ -3,6 +3,12 @@
     import com.example.ewaste.entities.Centre;
     import com.example.ewaste.entities.Contrat;
     import com.example.ewaste.repository.ContratRepository;
+    import com.example.ewaste.repository.MailRepository;
+    import com.itextpdf.text.Document;
+    import com.itextpdf.text.Element;
+    import com.itextpdf.text.Font;
+    import com.itextpdf.text.Paragraph;
+    import com.itextpdf.text.pdf.PdfWriter;
     import javafx.collections.FXCollections;
     import javafx.collections.ObservableList;
     import javafx.embed.swing.SwingFXUtils;
@@ -23,10 +29,15 @@
     import javax.imageio.ImageIO;
     import java.awt.image.BufferedImage;
     import java.io.File;
+    import java.io.FileOutputStream;
     import java.io.IOException;
     import java.sql.SQLException;
     import java.time.LocalDate;
     import java.util.List;
+
+
+
+
 
     public class AfficherContratController {
 
@@ -174,67 +185,109 @@
 
 
 
-      @FXML
-      void Ajouter(ActionEvent event) {
-          String centreNom = idCentre.getValue();
-          String employeNom = idEmploye.getValue();
-          LocalDate dateDebut = DateDebut.getValue();
-          LocalDate dateFin = DateFin.getValue();
+        @FXML
+        void Ajouter(ActionEvent event) {
+            String centreNom = idCentre.getValue();
+            String employeNom = idEmploye.getValue();
+            LocalDate dateDebut = DateDebut.getValue();
+            LocalDate dateFin = DateFin.getValue();
 
-          try {
-              if (centreNom == null || employeNom == null || dateDebut == null || dateFin == null) {
-                  showAlert("Erreur Tous les champs doivent etre remplis ");
-                  return;
-              }
+            try {
+                // Validation des champs
+                if (centreNom == null || employeNom == null || dateDebut == null || dateFin == null) {
+                    showAlert("Erreur : Tous les champs doivent être remplis.");
+                    return;
+                }
 
-              if (dateDebut.isAfter(dateFin)) {
-                  showAlert("La date de début doit être antérieure à la date de fin.");
-                  return;
-              }
-              if (signatureIsEmpty()) {
-                  showAlert("Erreur : Vous devez signer avant d'ajouter le contrat.");
-                  return;
-              }
-              Integer centreId = contratRepository.getCentreIdByName(centreNom);
-              Integer employeId = contratRepository.getEmployeIdByName(employeNom);
+                if (dateDebut.isAfter(dateFin)) {
+                    showAlert("Erreur : La date de début doit être antérieure à la date de fin.");
+                    return;
+                }
 
-              if (centreId == null || employeId == null) {
-                  showAlert("Erreur : Centre ou employé introuvable !");
-                  return;
-              }
+                if (signatureIsEmpty()) {
+                    showAlert("Erreur : Vous devez signer avant d'ajouter le contrat.");
+                    return;
+                }
 
-              if (contratRepository.existeContrat(centreId, employeId, dateDebut, dateFin)) {
-                  showAlert("Ce contrat existe déjà dans la base de données.");
-              } else {
-                  Contrat nouveauContrat = new Contrat(centreId, employeId, dateDebut, dateFin,null);
-                  contratRepository.ajouter(nouveauContrat);
-                  int dernierId = contratRepository.getLastInsertedContratId();
+                // Récupérer les IDs du centre et de l'employé
+                Integer centreId = contratRepository.getCentreIdByName(centreNom);
+                Integer employeId = contratRepository.getEmployeIdByName(employeNom);
 
-                  if (dernierId != -1) {
-                      String signaturePath = enregistrerSignature(dernierId);
+                if (centreId == null || employeId == null) {
+                    showAlert("Erreur : Centre ou employé introuvable.");
+                    return;
+                }
 
-                      if (signaturePath != null) {
-                          System.out.println("Signature enregistrée à : " + signaturePath); // 🔹 Debug
-                          contratRepository.updateSignaturePath(dernierId, signaturePath);
-                      } else {
-                          showAlert("Erreur lors de l'enregistrement de la signature.");
-                      }
-                  }
-                  loadData();
-                  idCentre.setValue(null);
-                  idEmploye.setValue(null);
-                  DateDebut.setValue(null);
-                  DateFin.setValue(null);
+                // Vérifier si le contrat existe déjà
+                if (contratRepository.existeContrat(centreId, employeId, dateDebut, dateFin)) {
+                    showAlert("Erreur : Ce contrat existe déjà dans la base de données.");
+                    return;
+                }
 
-                  GraphicsContext gc = signature.getGraphicsContext2D();
-                  gc.setFill(Color.WHITE);
-                  gc.fillRect(0, 0, signature.getWidth(), signature.getHeight());
-              }
-          } catch (SQLException e) {
-              e.printStackTrace();
-          }
-      }
+                // Ajouter le contrat
+                Contrat nouveauContrat = new Contrat(centreId, employeId, dateDebut, dateFin, null);
+                contratRepository.ajouter(nouveauContrat);
 
+                // Générer le PDF
+                generatePDF(nouveauContrat);
+
+                // Récupérer l'ID du dernier contrat ajouté
+                int dernierId = contratRepository.getLastInsertedContratId();
+
+                // Enregistrer la signature
+                String signaturePath = enregistrerSignature(dernierId);
+                if (signaturePath != null) {
+                    contratRepository.updateSignaturePath(dernierId, signaturePath);
+                } else {
+                    showAlert("Erreur : Impossible d'enregistrer la signature.");
+                    return;
+                }
+
+                // Envoyer l'e-mail avec le PDF en pièce jointe
+                String recipientEmail = contratRepository.getEmployeEmailById(employeId);
+                if (recipientEmail == null || recipientEmail.isEmpty()) {
+                    showAlert("Erreur : L'e-mail de l'employé est introuvable.");
+                    return;
+                }
+
+                String subject = "[Contrat] Détails de votre contrat";
+                String message = "Bonjour " + employeNom + ",\n\n" +
+                        "Veuillez trouver ci-joint les détails de votre contrat.\n\n" +
+                        "Cordialement,\n" +
+                        "L'équipe E-WASTE";
+
+                String pdfPath = "contrats/contrat_" + dernierId + ".pdf"; // Chemin du PDF généré
+
+                // Vérifier si le fichier PDF existe
+                File pdfFile = new File(pdfPath);
+                if (!pdfFile.exists()) {
+                    showAlert("Erreur : Le fichier PDF du contrat est introuvable.");
+                    return;
+                }
+
+                // Envoyer l'e-mail avec le PDF en pièce jointe
+              // MailRepository.sendEmail(recipientEmail, subject, message, pdfPath);
+
+                // Réinitialiser le formulaire
+                loadData();
+                idCentre.setValue(null);
+                idEmploye.setValue(null);
+                DateDebut.setValue(null);
+                DateFin.setValue(null);
+
+                // Effacer la signature
+                GraphicsContext gc = signature.getGraphicsContext2D();
+                gc.setFill(Color.WHITE);
+                gc.fillRect(0, 0, signature.getWidth(), signature.getHeight());
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert("Erreur : Une erreur s'est produite lors de l'ajout du contrat.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Erreur : Une erreur s'est produite lors de l'envoi de l'e-mail.");
+            }
+        }
 
 
 
@@ -334,7 +387,7 @@
                     // Récupérer le chemin du fichier de signature
                     String signaturePath = contratSelectionne.getSignaturePath();
 
-                    // Supprimer le contrat de la base de données
+                    // Supprimer le contrat de la base de données²
                     contratRepository.supprimer(contratSelectionne.getId());
 
                     // Supprimer le fichier de signature s'il existe
@@ -453,9 +506,65 @@
            }
        }
 
+        private void generatePDF(Contrat contrat) {
+            try {
+                int lastId = contratRepository.getLastInsertedContratId(); // Récupérer le dernier ID
+                if (lastId == -1) {
+                    showAlert("Aucun contrat trouvé !");
+                    return;
+                }
 
+                String filePath = "contrats/contrat_" + lastId + ".pdf"; // Utiliser le dernier ID
 
+                Document document = new Document();
+                File file = new File(filePath);
+                file.getParentFile().mkdirs(); // Créer le dossier s'il n'existe pas
 
+                PdfWriter.getInstance(document, new FileOutputStream(file));
+                document.open();
+
+                // Ajouter les détails du contrat
+                Font titleFont = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+                Font normalFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
+
+                document.add(new Paragraph("Contrat de Travail", titleFont));
+                document.add(new Paragraph("Centre : " + contratRepository.getCentreNameById(contrat.getIdCentre()), normalFont));
+                document.add(new Paragraph("Employé : " + contratRepository.getEmployeNameById(contrat.getIdEmploye()), normalFont));
+                document.add(new Paragraph("Date de début : " + contrat.getDateDebut(), normalFont));
+                document.add(new Paragraph("Date de fin : " + contrat.getDateFin(), normalFont));
+
+                // Ajouter la signature si elle existe
+                String signaturePath = contrat.getSignaturePath();
+                if (signaturePath != null) {
+                    File signatureFile = new File(signaturePath);
+
+                    if (signatureFile.exists()) { // Vérifier si l'image existe
+                        try {
+                            com.itextpdf.text.Image signatureImage = com.itextpdf.text.Image.getInstance(signatureFile.getAbsolutePath());
+                            signatureImage.scaleToFit(150, 50); // Redimensionner l’image
+                            signatureImage.setAlignment(Element.ALIGN_CENTER); // Centrer l’image
+
+                            document.add(new Paragraph("\n\nSignature :", normalFont)); // Ajouter un label
+                            document.add(signatureImage); // Ajouter l’image au PDF
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("⚠️ Erreur lors de l'ajout de la signature au PDF !");
+                        }
+                    } else {
+                        System.out.println("⚠️ Fichier de signature introuvable : " + signatureFile.getAbsolutePath());
+                    }
+                } else {
+                    System.out.println("⚠️ Aucun chemin de signature trouvé pour le contrat.");
+                }
+
+                document.close();
+                System.out.println("✅ PDF généré : " + filePath);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Erreur lors de la génération du PDF.");
+            }
+        }
 
 
 

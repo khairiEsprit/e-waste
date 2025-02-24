@@ -12,6 +12,11 @@ module com.example.ewaste {
     requires java.sql;
     requires javafx.swing;
     requires jdk.jsobject;
+    requires org.json;
+    requires libphonenumber;
+    requires mysql.connector.j;
+    requires jakarta.mail;
+    requires itextpdf;
     opens com.example.ewaste.controllers to javafx.fxml;
     exports com.example.ewaste.controllers;
     opens com.example.ewaste.entities to javafx.base;

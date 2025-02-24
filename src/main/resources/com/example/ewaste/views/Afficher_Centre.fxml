@@ -27,7 +27,7 @@
          <font>
             <Font size="24.0" />
          </font></Text>
-      <Text layoutX="1063.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Longitude">
+      <Text layoutX="1063.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Localisation">
          <font>
             <Font size="24.0" />
          </font></Text>
@@ -50,6 +50,8 @@
       <TextField fx:id="TelephoneCentre" layoutX="992.0" layoutY="416.0" prefHeight="71.0" promptText="Téléphone" />
       <TextField fx:id="EmailCentre" layoutX="992.0" layoutY="529.0" prefHeight="71.0" promptText="Email" />
       <Button fx:id="btnSupprimer" layoutX="1027.0" layoutY="726.0" mnemonicParsing="false" onAction="#Supprimer" prefHeight="60.0" prefWidth="153.0" text="Supprimer" />
-      <WebView fx:id="mapView" layoutX="14.0" layoutY="81.0" prefHeight="641.0" prefWidth="313.0" />
+      <WebView fx:id="mapView" layoutX="957.0" layoutY="171.0" prefHeight="212.0" prefWidth="313.0" />
+      <Text fx:id="CountryFlag" layoutX="914.0" layoutY="457.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Flag" />
+      <Button fx:id="Ajou" layoutX="505.0" layoutY="741.0" mnemonicParsing="false" onAction="#Ajou" text="Button" />
    </children>
 </AnchorPane>
