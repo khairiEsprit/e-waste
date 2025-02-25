@@ -13,10 +13,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.ControllerPageTaches">
+<AnchorPane prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.ControllerPageTaches">
 
     <stylesheets>
-        <URL value="@styles/Taches.css" />
+        <URL value="@../styles/Taches.css" />
     </stylesheets>
 
     <children>

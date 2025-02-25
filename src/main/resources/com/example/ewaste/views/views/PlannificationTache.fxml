@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #ace1af;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.ControllerPlannificationTache">
+<AnchorPane prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #ace1af;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.ControllerPlannificationTache">
     <stylesheets>
-        <URL value="@styles/Taches.css" />
+        <URL value="@../styles/Taches.css" />
     </stylesheets>
 
     <children>
@@ -30,11 +30,11 @@
         </Label>
         <DatePicker fx:id="datePicker" layoutX="516.0" layoutY="249.0" prefHeight="47.0" prefWidth="250.0" />
 
-        <Label fx:id="labelIdTache" disable="true" layoutX="334.0" layoutY="121.0" prefHeight="22.0" prefWidth="150.0" text="ID Tâche :">
+        <Label fx:id="labelIdTache" disable="true" layoutX="334.0" layoutY="121.0" opacity="0.0" prefHeight="22.0" prefWidth="150.0" text="ID Tâche :">
             <font>
                 <Font name="Consolas" size="18.0" />
             </font></Label>
-        <TextField fx:id="fieldIdTache" disable="true" editable="false" layoutX="515.0" layoutY="115.0" prefHeight="26.0" prefWidth="300.0" />
+        <TextField fx:id="fieldIdTache" disable="true" editable="false" layoutX="515.0" layoutY="115.0" opacity="0.0" prefHeight="26.0" prefWidth="300.0" />
 
         <Button fx:id="btnAjouter" layoutX="435.0" layoutY="346.0" onAction="#ajouterPlanification" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Ajouter" />
         <Button fx:id="btnModifier" layoutX="541.0" layoutY="346.0" onAction="#modifierPlanification" style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Modifier" />

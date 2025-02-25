@@ -7,11 +7,11 @@
 <?import java.net.URL?>
 
 
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.controllers.ControllerGanttDiagram">
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.ControllerGanttDiagram">
 
     <!-- Appliquer le fichier CSS -->
     <stylesheets>
-        <URL value="@styles/Taches.css" />
+        <URL value="@../styles/Taches.css" />
     </stylesheets>
 
     <!-- LineChart avec un ID pour le style CSS -->

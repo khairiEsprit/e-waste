@@ -1,9 +1,9 @@
-package com.example.ewaste.controllers;
+package com.example.ewaste.Controllers;
 
-import com.example.ewaste.entities.Tache;
-import com.example.ewaste.entities.PlanificationTache;
-import com.example.ewaste.repository.TacheRepository;
-import com.example.ewaste.repository.PlanificationTacheRepository;
+import com.example.ewaste.Entities.Tache;
+import com.example.ewaste.Entities.PlanificationTache;
+import com.example.ewaste.Repository.TacheRepository;
+import com.example.ewaste.Repository.PlanificationTacheRepository;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.CategoryAxis;

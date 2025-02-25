@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.ControllerPageTaches">
+   <stylesheets>
+      <URL value="@../styles/Taches.css" />
+   </stylesheets>
+   <children>
+      <BorderPane layoutX="215.0" layoutY="151.0" prefHeight="586.0" prefWidth="760.0" style="-fx-border-color: #29ab87; -fx-border-width: 2; -fx-background-color: #ace1af; -fx-padding: 20;">
+         <top>
+            <Label prefHeight="58.0" prefWidth="298.0" styleClass="table-title" text="Liste des tâches :" textFill="#050505" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="Arabic Typesetting" size="18.0" />
+               </font>
+            </Label>
+         </top>
+         <center>
+            <VBox spacing="10">
+               <HBox prefHeight="49.0" prefWidth="716.0" spacing="10">
+                  <TextField fx:id="searchField" prefHeight="38.0" prefWidth="295.0" promptText="Rechercher une tâche..." styleClass="text-field" />
+                  <Button fx:id="searchButton" styleClass="button" text="🔍" />
+                  <Button fx:id="btnAjouter" onAction="#ouvrirAjouterTache" text="➕" />
+                  <Button fx:id="btnModifier" onAction="#ouvrirModifierTache" text="🔄" textFill="WHITE" />
+                  <Button fx:id="btnSupprimer" onAction="#supprimerTache" text="❌" />
+                  <Button onAction="#ouvrirPlannification" text="📋 Plannification" />
+               </HBox>
+               <TableView fx:id="tableTaches" prefHeight="413.0" prefWidth="722.0" styleClass="table-view">
+                  <columns>
+                     <TableColumn fx:id="colId" prefWidth="50.0" styleClass="table-column" text="ID" />
+                     <TableColumn fx:id="colEmploye" prefWidth="150.0" styleClass="table-column" text="Nom Employé" />
+                     <TableColumn fx:id="colMessage" prefWidth="150.0" styleClass="table-column" text="Message" />
+                     <TableColumn fx:id="colLatitude" prefWidth="100.0" styleClass="table-column" text="Altitude" />
+                     <TableColumn fx:id="colLongitude" prefWidth="100.0" styleClass="table-column" text="Longitude" />
+                     <TableColumn fx:id="colEtat" prefWidth="150.0" styleClass="table-column" text="État" />
+                  </columns>
+               </TableView>
+            </VBox>
+         </center>
+      </BorderPane>
+      <Label fx:id="labelTemperature" layoutX="438.0" layoutY="27.0" prefHeight="90.0" prefWidth="291.0" styleClass="label-temperature" text="Température: --°C" />
+      <WebView fx:id="mapMain" layoutX="981.0" layoutY="151.0" prefHeight="586.0" prefWidth="318.0" />
+   </children>
+</AnchorPane>

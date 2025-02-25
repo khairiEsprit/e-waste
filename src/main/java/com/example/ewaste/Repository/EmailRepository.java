@@ -1,4 +1,4 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.*;

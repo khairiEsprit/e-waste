@@ -1,7 +1,7 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
-import com.example.ewaste.interfaces.IService;
-import com.example.ewaste.entities.PlanificationTache;
+import com.example.ewaste.Interfaces.IService;
+import com.example.ewaste.Entities.PlanificationTache;
 import com.example.ewaste.utils.DataBase;
 
 import java.sql.*;

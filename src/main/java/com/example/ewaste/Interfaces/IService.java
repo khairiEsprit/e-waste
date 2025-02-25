@@ -1,4 +1,4 @@
-package com.example.ewaste.interfaces;
+package com.example.ewaste.Interfaces;
 
 import java.sql.SQLException;
 import java.util.List;
