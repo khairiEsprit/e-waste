@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.web.WebView?>
+<?import javafx.scene.control.Button?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.ewaste.Controllers.GoogleAuthController">
+    <center>
+        <StackPane>
+            <!-- Google Button -->
+            <Button fx:id="googleButton" text="Sign in with Google" onAction="#handleGoogleButtonAction"/>
+            <!-- WebView (initially hidden) -->
+            <WebView fx:id="webView" visible="false"/>
+        </StackPane>
+    </center>
+</BorderPane>

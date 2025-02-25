@@ -1,6 +1,5 @@
 package com.example.ewaste.Controllers;
 
-import com.example.ewaste.Main;
 import com.example.ewaste.Entities.ApplicationContext;
 import com.example.ewaste.Entities.User;
 import com.example.ewaste.Entities.UserRole;
@@ -176,7 +175,7 @@ public class UseraccountController implements Initializable {
         if(actionEvent.getSource()==ConfirmDelete1_User)
         {
             ur.deleteEntity(userId);
-            Parent root = FXMLLoader.load(Main.class.getResource("views/mainLoginSignUp.fxml"));
+            Parent root = FXMLLoader.load(com.example.ewaste.Main.class.getResource("views/mainLoginSignUp.fxml"));
             Stage window = (Stage) ConfirmDelete1_User.getScene().getWindow();
             window.setScene(new Scene(root,x,y));
         }
@@ -185,7 +184,7 @@ public class UseraccountController implements Initializable {
 
 
     void afficherdetails() {
-        User a = ur.getUserById(userId);
+        User a = ur.getUserById(23);
         if (a.getPhotoUrl() != null) {
             try {
                 Image image = new Image(a.getPhotoUrl());
@@ -238,7 +237,7 @@ public class UseraccountController implements Initializable {
             Optional<ButtonType> option = alert.showAndWait();
             if (option.get().equals(ButtonType.OK)) {
                 Logout_Btn.getScene().getWindow().hide();
-                Parent root = FXMLLoader.load(Main.class.getResource("views/mainLoginSignUp.fxml"));
+                Parent root = FXMLLoader.load(com.example.ewaste.Main.class.getResource("views/mainLoginSignUp.fxml"));
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
                 root.setOnMousePressed((MouseEvent event) -> {

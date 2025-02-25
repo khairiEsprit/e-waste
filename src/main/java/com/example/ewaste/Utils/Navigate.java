@@ -1,6 +1,5 @@
 package com.example.ewaste.Utils;
 
-import com.example.ewaste.Main;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -39,7 +38,7 @@ public class Navigate {
         fadeOut.setToValue(0.0);
 
         // Load the new FXML file
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlPath));
+        FXMLLoader fxmlLoader = new FXMLLoader(com.example.ewaste.Main.class.getResource(fxmlPath));
         Parent newRoot;
         try {
             newRoot = fxmlLoader.load();

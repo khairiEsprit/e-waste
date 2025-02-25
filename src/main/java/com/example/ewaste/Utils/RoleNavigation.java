@@ -1,6 +1,5 @@
 package com.example.ewaste.Utils;
 
-import com.example.ewaste.Main;
 import com.example.ewaste.Entities.UserRole;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import javafx.animation.FadeTransition;
@@ -49,7 +48,7 @@ public class RoleNavigation {
             fxmlResource = "views/EmployeeInterface.fxml";
         }
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlResource));
+        FXMLLoader fxmlLoader = new FXMLLoader(com.example.ewaste.Main.class.getResource(fxmlResource));
         Parent newRoot = fxmlLoader.load();
 
         // Prepare fade in transition for the new scene

@@ -4,34 +4,58 @@ package com.example.ewaste.Controllers;
 import com.example.ewaste.Entities.User;
 import com.example.ewaste.Entities.UserRole;
 import com.example.ewaste.Entities.UserSession;
+import com.example.ewaste.Main;
 import com.example.ewaste.Repository.AuthRepository;
+import com.example.ewaste.Repository.GoogleAuthRepository;
 import com.example.ewaste.Repository.UserRepository;
 import com.example.ewaste.Utils.Modals;
+import com.example.ewaste.Utils.OAuthCallbackServer;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
+import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
+import java.util.Map;
 
 import static com.example.ewaste.Utils.RoleNavigation.navigateUser;
 import static com.example.ewaste.Utils.Validator.isValidEmail;
 
 public class SignupController {
 
+    public Button google_sign_up_button;
+    public ProgressBar passwordStrengthBar;
+    public Label passwordStrengthLabel;
     @FXML
     private TextField fullNameField;
+    @FXML
+    private PasswordField passwordField;
 
+  
     @FXML
     private TextField emailField;
-    @FXML
-    private TextField passwordField;
+
 
     @FXML
     private DatePicker birthDateField;
@@ -41,20 +65,109 @@ public class SignupController {
     @FXML private Label roleErrorLabel;
     @FXML private Label passwordErrorLabel;
     @FXML private Label fullNameErrorLabel;
-
+    @FXML
+    private FontAwesomeIconView eyeIcon;
     @FXML
     private ComboBox<UserRole> roleComboBox;
 
     @FXML
+    private HBox passwordHBox;
+
+
+    @FXML
     private Button sign_up_button;
+
+
+    private TextField textField; // To store the TextField when showing password
+    private boolean isPasswordVisible = false;
     @FXML
     private void initialize() {
         roleComboBox.getItems().setAll(UserRole.values());
         roleComboBox.getSelectionModel().select(UserRole.ADMIN);
+
+
+        textField = new TextField();
+        textField.setStyle("-fx-prompt-text-fill: black;");
+        textField.setPromptText("Password");
+        textField.getStyleClass().add("tf_box");
+        textField.setPrefHeight(40.0);
+        HBox.setHgrow(textField, Priority.ALWAYS);
+
+        passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
+            updatePasswordStrength(newValue);
+        });
+
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            updatePasswordStrength(newValue);
+            if (!isPasswordVisible) {
+                passwordField.setText(newValue);
+            }
+        });
+    }
+
+    @FXML
+    private void togglePasswordVisibility() {
+        if (isPasswordVisible) {
+            // Switch to PasswordField (hide password)
+            passwordField.setText(textField.getText());
+            passwordHBox.getChildren().set(0, passwordField);
+            eyeIcon.setGlyphName("EYE");
+            isPasswordVisible = false;
+        } else {
+            // Switch to TextField (show password)
+            textField.setText(passwordField.getText());
+            passwordHBox.getChildren().set(0, textField);
+            eyeIcon.setGlyphName("EYE_SLASH");
+            isPasswordVisible = true;
+        }
+    }
+
+
+    private void updatePasswordStrength(String password) {
+        double strength = calculatePasswordStrength(password);
+        passwordStrengthBar.setProgress(strength);
+        FadeTransition ft = new FadeTransition(Duration.millis(300), passwordStrengthBar);
+        ft.setFromValue(0.5);
+        ft.setToValue(1.0);
+        ft.play();
+        // Update label and color based on strength
+        if (strength < 0.4) {
+            passwordStrengthLabel.setText("Weak");
+            passwordStrengthLabel.setTextFill(Color.RED);
+            passwordStrengthBar.setStyle("-fx-accent: red;");
+        } else if (strength < 0.7) {
+            passwordStrengthLabel.setText("Medium");
+            passwordStrengthLabel.setTextFill(Color.ORANGE);
+            passwordStrengthBar.setStyle("-fx-accent: orange;");
+        } else {
+            passwordStrengthLabel.setText("Strong");
+            passwordStrengthLabel.setTextFill(Color.GREEN);
+            passwordStrengthBar.setStyle("-fx-accent: green;");
+        }
+    }
+
+    private double calculatePasswordStrength(String password) {
+        if (password == null || password.isEmpty()) return 0.0;
+
+        double score = 0.0;
+        int length = password.length();
+
+        // Length check
+        if (length >= 8) score += 0.3;
+        if (length >= 12) score += 0.2;
+
+        // Character type checks
+        if (password.matches(".*[A-Z].*")) score += 0.2; // Uppercase
+        if (password.matches(".*[0-9].*")) score += 0.2; // Numbers
+        if (password.matches(".*[!@#$%^&*].*")) score += 0.1; // Special characters
+
+        // Cap the score at 1.0
+        return Math.min(score, 1.0);
     }
 
 
 
+    private final GoogleAuthRepository googleAuthRepository = new GoogleAuthRepository();
 
     AuthRepository auth = new AuthRepository();
     UserRepository u = new UserRepository();
@@ -170,6 +283,71 @@ public class SignupController {
                 }
 
             }
+    }
+
+    @FXML
+    private void handleGoogleButtonAction() {
+        new Thread(() -> {
+            try {
+                // Start local HTTP server to listen for OAuth callback
+                OAuthCallbackServer server = new OAuthCallbackServer();
+
+                // Open system browser to Google auth URL
+                String authUrl = googleAuthRepository.buildAuthUrl();
+                Desktop.getDesktop().browse(new URI(authUrl));
+
+                // Wait for the authorization code (blocking call)
+                while (server.getAuthCode() == null) {
+                    Thread.sleep(500); // Wait until the code is received
+                }
+
+                String authorizationCode = server.getAuthCode();
+                System.out.println("Authorization Code: " + authorizationCode);
+
+                // Exchange authorization code for access token
+                String accessToken = googleAuthRepository.getAccessToken(authorizationCode);
+                System.out.println("Access Token: " + accessToken);
+
+                // Fetch user info using the access token
+                Map<String, Object> userInfo = googleAuthRepository.getUserInfo(accessToken);
+                googleAuthRepository.createUser(
+                        userInfo.get("name").toString(),
+                        userInfo.get("given_name").toString(),
+                        userInfo.get("family_name").toString(),
+                        userInfo.get("picture").toString(),
+                        userInfo.get("email").toString(),
+                        String.valueOf(userInfo.get("email_verified")), // Ensure correct boolean handling
+                        "CITOYEN"
+                );
+
+//                System.out.println("User authenticated and saved successfully: " );
+
+                // Now that authentication is complete, load the dashboard on the JavaFX Application Thread.
+                Platform.runLater(() -> loadUserAccount());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+
+    private void loadUserAccount() {
+        try {
+            // Load dashboard FXML file
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/UserAccount.fxml"));
+            Parent root = loader.load();
+
+            // Get current stage from any UI component (e.g., webView)
+            Stage stage = (Stage) google_sign_up_button.getScene().getWindow();
+
+            // Replace the current scene with the dashboard scene
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Failed to load dashboard interface.");
+        }
     }
 
 

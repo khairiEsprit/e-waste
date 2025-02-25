@@ -1,11 +1,10 @@
-
-.parent{
+.parent {
     -fx-background-color: transparent;
 }
-.pane{
+.pane {
     -fx-background-color: #00693E;
 }
-.trans-btn-white-border{
+.trans-btn-white-border {
     -fx-background-color: #29AB87;
     -fx-background-radius: 5px;
     -fx-border-color: #cccccc;
@@ -13,49 +12,57 @@
     -fx-border-width: 1px;
     -fx-text-fill: whitesmoke;
 }
-.white-pane{
+.white-pane {
     -fx-background-color: #ffffff;
 }
-.blue-panel{
+.blue-panel {
     -fx-background-color: #013220;
 }
-.tf_box{
+.tf_box {
     -fx-background-color: #ACE1AF;
     -fx-border-color: #DEDEE4;
     -fx-border-width: 0px 0px 1px 0px;
     -fx-pref-height: 40px;
-
-
-
 }
 .header-label {
     -fx-font-size: 36px;
     -fx-font-weight: bold;
     -fx-text-fill: #ACE1AF;
 }
-.tf{
+.tf {
     -fx-background-color: transparent;
 }
-.blue-btn{
+.blue-btn {
     -fx-background-color: #29AB87;
     -fx-background-radius: 5px;
-    -fx-text-fill: #fffff;
-
-
+    -fx-text-fill: #fffff; /* Typo: should be #ffffff */
 }
-
-/* Style for the title labels in the smart waste management theme */
 .smart-title {
     -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: #29AB87;  /* Example color matching the theme */
+    -fx-text-fill: #29AB87;
     -fx-padding: 5px 0;
 }
-
-/* Style for the descriptive text labels */
 .smart-description {
     -fx-font-size: 16px;
     -fx-font-style: italic;
     -fx-text-fill: #FFFFFF;
     -fx-padding: 5px 0;
+}
+.error-label {
+    -fx-font-size: 12px;
+    -fx-padding: 2px 0;
+}
+.strength-bar {
+    -fx-pref-height: 10px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+.strength-bar .track {
+    -fx-background-color: #d3d3d3; /* Light gray */
+}
+/* Dynamic bar color will be set via -fx-accent in the controller */
+.strength-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
 }

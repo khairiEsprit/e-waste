@@ -213,3 +213,17 @@
     -fx-padding: 20px;  /* Added padding inside the map container */
     -fx-background-color: #FFFFFF;
 }
+
+.info-panel {
+    -fx-background-color: #f4f4f4;
+    -fx-border-color: #d3d3d3;
+    -fx-border-width: 1;
+}
+.info-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+}
+.info-content {
+    -fx-padding: 10;
+}
