@@ -69,6 +69,12 @@ public class HistoriquePoubelleRepository implements IService<Historique_Poubell
         }
         return historiquePoubelles;
     }
+
+    @Override
+    public List<Historique_Poubelle> afficher(int idCentre) throws SQLException {
+        return List.of();
+    }
+
     public List<Historique_Poubelle> recupererParPoubelle(int idPoubelle) throws SQLException {
         String sql = "SELECT * FROM historique WHERE id_poubelle = ?";
         PreparedStatement ps = connection.prepareStatement(sql);

@@ -41,6 +41,6 @@
 
     <!-- Styles -->
     <stylesheets>
-        <URL value="@../style/style.css"/>
+        <URL value="@../styles/style.css"/>
     </stylesheets>
 </AnchorPane>

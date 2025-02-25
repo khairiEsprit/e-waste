@@ -1,5 +1,7 @@
 package com.example.ewaste.Interfaces;
 
+import com.example.ewaste.Entities.Tache;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -8,5 +10,7 @@ import java.util.List;
         void supprimer (int id) throws SQLException;
         void modifier (T m) throws SQLException;
         List<T> recuperer() throws SQLException;
-    }
+
+                List<T> afficher(int idCentre) throws SQLException;
+        }
 

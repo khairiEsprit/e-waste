@@ -1,0 +1,137 @@
+/* Styles généraux avec animation de fond */
+.anchor-pane {
+    -fx-background-color: linear-gradient(to bottom right, #ace1af, #29ab87, #00693e);
+    -fx-padding: 40px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 20, 0.5, 0, 0);
+}
+
+/* Titre animé */
+#labelTitre {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 15, 0.5, 0, 1);
+    animation: title-float 3s ease-in-out infinite;
+}
+
+@keyframes title-float {
+    0%, 100% { -fx-translate-y: 0; }
+    50% { -fx-translate-y: -5px; }
+}
+
+/* Boutons avec effet 3D et transition */
+.button {
+    -fx-background-color: linear-gradient(to bottom, #ffffff 0%, #f1f1f1 100%);
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-padding: 12px 25px;
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0.5, 0, 1);
+    transition: all 0.3s ease;
+    -fx-border-width: 2px;
+    -fx-border-color: transparent;
+}
+
+.button:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0.5, 0, 2);
+    -fx-translate-y: -2px;
+}
+
+.button:pressed {
+    -fx-translate-y: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0.5, 0, 1);
+}
+
+#btnAjouter {
+    -fx-background-color: linear-gradient(to bottom, #4CAF50 0%, #45a049 100%);
+    -fx-border-color: #45a049;
+}
+
+#btnModifier {
+    -fx-background-color: linear-gradient(to bottom, #2196F3 0%, #1e88e5 100%);
+    -fx-border-color: #1e88e5;
+}
+
+#btnSupprimer {
+    -fx-background-color: linear-gradient(to bottom, #f44336 0%, #e53935 100%);
+    -fx-border-color: #e53935;
+}
+
+/* Champs de texte avec effet de focus */
+.text-field {
+    -fx-background-color: rgba(255,255,255,0.9);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 12px;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.1), 5, 0.5, 0, 0);
+    transition: all 0.3s ease;
+}
+
+.text-field:focused {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(76,175,80,0.3), 10, 0.5, 0, 0);
+    -fx-border-color: #4CAF50;
+    -fx-border-width: 2px;
+}
+
+/* DatePicker stylisé */
+.date-picker {
+    -fx-background-color: rgba(255,255,255,0.9);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0.5, 0, 0);
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: linear-gradient(to bottom, #29ab87 0%, #1e7a5e 100%);
+    -fx-background-radius: 0 10px 10px 0;
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #1e7a5e 0%, #00693e 100%);
+}
+
+/* ComboBox animé */
+.combo-box {
+    -fx-background-color: rgba(255,255,255,0.9);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0.5, 0, 0);
+    transition: all 0.3s ease;
+}
+
+.combo-box:hover {
+    -fx-effect: dropshadow(gaussian, rgba(76,175,80,0.3), 10, 0.5, 0, 0);
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: linear-gradient(to bottom, #29ab87 0%, #1e7a5e 100%);
+    -fx-background-radius: 0 10px 10px 0;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: linear-gradient(to right, #ace1af 0%, rgba(172,225,175,0.3) 100%);
+}
+
+/* Effet de pulsation pour les éléments importants */
+@keyframes pulse {
+    0% { -fx-scale-x: 1; -fx-scale-y: 1; }
+    50% { -fx-scale-x: 1.02; -fx-scale-y: 1.02; }
+    100% { -fx-scale-x: 1; -fx-scale-y: 1; }
+}
+
+.highlight {
+    animation: pulse 2s infinite;
+}
+
+/* Effet de transition pour les apparitions */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { -fx-opacity: 0; }
+    to { -fx-opacity: 1; }
+}

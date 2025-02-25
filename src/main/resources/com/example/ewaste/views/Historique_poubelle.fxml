@@ -11,7 +11,7 @@
 
     <!-- Styles CSS -->
     <stylesheets>
-        <URL value="@../style/style.css"/>
+        <URL value="@../styles/style.css"/>
     </stylesheets>
 
     <VBox spacing="10" layoutX="50" layoutY="20">

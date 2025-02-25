@@ -20,7 +20,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.ewaste.Controllers.Modifier_Poubelle"
             prefHeight="500.0" prefWidth="800.0"
-            stylesheets="@../style/style.css">
+            stylesheets="@../styles/style.css">
 
     <VBox spacing="20" alignment="CENTER" prefWidth="800" prefHeight="500" styleClass="container">
         <Label text="Modifier la Poubelle" styleClass="header-title"/>

@@ -90,6 +90,12 @@ public class PoubelleRepository implements IService<poubelle>
         }
         return poubelles;
     }
+
+    @Override
+    public List<poubelle> afficher(int idCentre) throws SQLException {
+        return List.of();
+    }
+
     public void viderPoubelle(int poubelleId) throws SQLException {
         CapteurRepository capteurRepo = new CapteurRepository();
         PoubelleRepository poubelleRepo = new PoubelleRepository();

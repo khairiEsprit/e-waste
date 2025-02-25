@@ -10,7 +10,7 @@
             fx:controller="com.example.ewaste.Controllers.Ajouter_poubelle_controller"
             prefHeight="450.0"
             prefWidth="600.0"
-            stylesheets="@../style/style.css">
+            stylesheets="@../styles/style.css">
 
     <VBox spacing="20" styleClass="main-container"
           AnchorPane.topAnchor="20" AnchorPane.rightAnchor="20"
