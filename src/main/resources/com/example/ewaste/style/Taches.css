@@ -1,0 +1,253 @@
+.root {
+    -fx-background-color: linear-gradient(
+            from 0% 0% to 100% 100%, /* Direction du dégradé (diagonale) */
+            #00693e, /* Première couleur */
+            #29ab87, /* Deuxième couleur */
+            #ace1af  /* Troisième couleur */
+    );
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 128, 255, 0.4), 30, 0.9, 0, 0);
+}
+
+/* TableView */
+.table-view {
+    -fx-background-color: #ffffff; /* Fond blanc pour la table */
+    -fx-border-color: #00693e; /* Bordure verte foncée */
+    -fx-border-width: 1px;
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Taches.css */
+.table-title {
+    -fx-font-family: "Consolas";
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+
+/* En-têtes de TableView */
+.table-view .column-header {
+    -fx-background-color: #00693e; /* En-têtes vert foncé */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-padding: 10px;
+    -fx-start-margin: 24px;
+}
+
+/* Colonnes de TableView */
+.table-column {
+    -fx-alignment: CENTER;
+    -fx-font-size: 14px;
+}
+
+/* Champs de texte */
+.text-field {
+    -fx-background-color: #ffffff; /* Fond blanc */
+    -fx-border-color: #00693e; /* Bordure verte */
+    -fx-border-radius: 5px;
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 250px;
+}
+
+.text-field:focused {
+    -fx-border-color: #29ab87; /* Bordure verte claire au focus */
+}
+
+/* Boutons */
+.button {
+    -fx-background-color: #00693e; /* Fond vert moyen */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 2, 2);
+}
+
+/* Effet de survol des boutons */
+.button:hover {
+    -fx-background-color: #29ab87; /* Fond vert clair au survol */
+}
+
+/* Bouton "Ajouter" */
+#btnAjouter {
+    -fx-background-color: #29ab87; /* Vert clair */
+}
+
+#btnAjouter:hover {
+    -fx-background-color: #ace1af; /* Vert pastel au survol */
+}
+
+/* Bouton "Modifier" */
+#btnModifier {
+    -fx-background-color: #013220; /* Vert foncé */
+}
+
+#btnModifier:hover {
+    -fx-background-color: #00693e; /* Vert moyen au survol */
+}
+
+/* Bouton "Supprimer" */
+#btnSupprimer {
+    -fx-background-color: #FF6347; /* Tomate pour l'alerte de suppression */
+    -fx-font-size: 14px;
+}
+
+#btnSupprimer:hover {
+    -fx-background-color: #D32F2F;
+}
+
+/* Espacement entre les éléments */
+.anchor-pane {
+    -fx-padding: 20px;
+}
+
+/* Centrer les boutons */
+.button {
+    -fx-alignment: center;
+}
+
+/* Espacement entre les boutons */
+.button {
+    -fx-spacing: 15px;
+}
+
+/* Bordure légère pour les TextFields */
+.text-field {
+    -fx-border-color: #00693e;
+    -fx-border-radius: 5px;
+}
+
+/* Mise en page des boutons en bas */
+.button-container {
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+    -fx-padding: 20px;
+}
+
+/* Style pour les ComboBox */
+.combo-box {
+    -fx-background-color: #ffffff; /* Fond blanc */
+    -fx-border-color: #00693e; /* Bordure verte */
+    -fx-border-radius: 5px;
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 250px;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #00693e; /* Fond vert pour la flèche */
+    -fx-border-radius: 5px;
+}
+
+.combo-box .arrow-button:hover {
+    -fx-background-color: #29ab87; /* Fond vert clair au survol */
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #ffffff; /* Fond blanc pour les éléments */
+    -fx-text-fill: #013220; /* Texte vert foncé */
+    -fx-padding: 5px;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #ace1af; /* Vert pastel au survol */
+}
+
+.combo-box:focused {
+    -fx-border-color: #29ab87; /* Bordure verte claire au focus */
+}
+
+
+
+
+/* styles.css */
+
+/* Style général du LineChart */
+.chart {
+    -fx-background-color: #f4f4f4; /* Couleur de fond du graphique */
+    -fx-padding: 20px; /* Espacement intérieur */
+}
+
+/* Style du titre du graphique */
+.chart-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333; /* Couleur du texte */
+}
+
+/* Style des axes */
+.axis {
+    -fx-tick-label-fill: #555555; /* Couleur des étiquettes des axes */
+    -fx-tick-length: 10px; /* Longueur des ticks */
+    -fx-minor-tick-length: 5px;
+    -fx-tick-mark-visible: true;
+}
+
+.axis-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #444444; /* Couleur du texte des labels des axes */
+}
+
+/* Style des séries de données (barres) */
+.chart-series-line {
+    -fx-stroke-width: 2px; /* Épaisseur des lignes */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0, 0); /* Ombre des lignes */
+}
+
+.default-color0.chart-series-line { -fx-stroke: #1f77b4; } /* Couleur de la série 1 */
+.default-color1.chart-series-line { -fx-stroke: #ff7f0e; } /* Couleur de la série 2 */
+.default-color2.chart-series-line { -fx-stroke: #2ca02c; } /* Couleur de la série 3 */
+
+/* Style des points de données */
+.chart-line-symbol {
+    -fx-background-color: #ffffff, #1f77b4; /* Couleur des points */
+    -fx-background-radius: 5px; /* Rayon des points */
+    -fx-padding: 5px; /* Taille des points */
+}
+
+/* Style de la légende */
+.chart-legend {
+    -fx-background-color: transparent; /* Fond transparent */
+    -fx-padding: 10px;
+}
+
+.chart-legend-item-symbol {
+    -fx-background-radius: 5px; /* Rayon des symboles de la légende */
+}
+
+.chart-legend-item {
+    -fx-text-fill: #333333; /* Couleur du texte de la légende */
+    -fx-font-size: 12px;
+}
+
+/* Style de la grille */
+.chart-vertical-grid-lines {
+    -fx-stroke: #dddddd; /* Couleur des lignes verticales de la grille */
+    -fx-stroke-width: 1px;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #dddddd; /* Couleur des lignes horizontales de la grille */
+    -fx-stroke-width: 1px;
+}
+
+.label-temperature {
+    -fx-font-family: 'Arabic Typesetting';
+    -fx-font-size: 36px;
+    -fx-text-fill: #333333;
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #4CAF50;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10 20 10 50;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);
+    -fx-graphic-text-gap: 15;
+}

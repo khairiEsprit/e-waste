@@ -104,4 +104,9 @@ public class CapteurRepository implements IService<capteur> {
         }
         return capteurs;
     }
+
+    @Override
+    public List<capteur> afficher(int idCentre) throws SQLException {
+        return List.of();
+    }
 }

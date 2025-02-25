@@ -1,0 +1,77 @@
+/* Style général */
+.root {
+    -fx-background-color: #f8f9fa;
+}
+
+/* En-tête */
+.header {
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0 0 10px 0;
+}
+
+.subheader {
+    -fx-text-fill: #7f8c8d;
+    -fx-padding: 0 0 20px 0;
+}
+
+/* Champs de saisie */
+.modern-input {
+    -fx-background-color: white;
+    -fx-border-color: #dfe6e9;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+.coordinate-field {
+    -fx-pref-width: 160px;
+    -fx-background-insets: 0;
+}
+
+/* Carte */
+.map-container {
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 3);
+    -fx-border-color: #e0e0e0;
+}
+
+.map-label {
+    -fx-text-fill: #34495e;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 8px 0;
+}
+
+/* Boutons */
+.primary-button {
+    -fx-background-color: linear-gradient(to right, #29AB87, #1F8A6E);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 25px;
+    -fx-background-radius: 25px;
+    -fx-effect: dropshadow(three-pass-box, rgba(41,171,135,0.3), 8, 0, 0, 2);
+}
+
+.secondary-button {
+    -fx-background-color: #ecf0f1;
+    -fx-text-fill: #7f8c8d;
+    -fx-border-radius: 25px;
+    -fx-padding: 12px 25px;
+}
+
+.primary-button:hover {
+    -fx-background-color: linear-gradient(to right, #1F8A6E, #29AB87);
+    -fx-effect: dropshadow(three-pass-box, rgba(41,171,135,0.4), 10, 0, 0, 3);
+}
+
+.secondary-button:hover {
+    -fx-background-color: #dfe6e9;
+}
+
+/* Effets de focus */
+.modern-input:focused {
+    -fx-border-color: #29AB87;
+    -fx-effect: dropshadow(three-pass-box, rgba(41,171,135,0.2), 8, 0, 0, 2);
+}
