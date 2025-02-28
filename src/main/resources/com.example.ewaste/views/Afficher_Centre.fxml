@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import java.net.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<AnchorPane prefHeight="800" prefWidth="1300" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.AfficherCentreController">
+
+    <stylesheets>
+        <URL value="@../styles/CentreView.css" />
+    </stylesheets>
+
+   <children>
+      <TextField fx:id="NomCentre" layoutX="1028.0" layoutY="39.0" prefHeight="71.0" prefWidth="293.0" promptText="Nom du Centre">
+         <font>
+            <Font size="30.0" />
+         </font></TextField>
+      <TextField fx:id="LongitudeCentre" layoutX="992.0" layoutY="181.0" opacity="0.0" prefHeight="71.0" promptText="Longitude" />
+      <Text layoutX="1043.0" layoutY="54.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom du Centre">
+         <font>
+            <Font size="24.0" />
+         </font></Text>
+      <Text layoutX="1063.0" layoutY="163.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Localisation">
+         <font>
+            <Font size="24.0" />
+         </font></Text>
+      <Text layoutX="1069.0" layoutY="402.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Telephone">
+         <font>
+            <Font size="24.0" />
+         </font></Text>
+      <Text layoutX="1096.0" layoutY="523.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+         <font>
+            <Font size="24.0" />
+         </font></Text>
+      <Button fx:id="Contrats" layoutX="822.0" layoutY="14.0" mnemonicParsing="false" onAction="#GoToContrat" prefHeight="60.0" prefWidth="153.0" text="Contrats" />
+      <TextField fx:id="AltitudeCentre" layoutX="988.0" layoutY="293.0" opacity="0.0" prefHeight="71.0" promptText="Altitude" />
+
+      <TextField fx:id="TelephoneCentre" layoutX="1028.0" layoutY="373.0" prefHeight="71.0" promptText="Téléphone" />
+      <TextField fx:id="EmailCentre" layoutX="1028.0" layoutY="478.0" prefHeight="71.0" promptText="Email" />
+      <WebView fx:id="mapView" layoutX="1038.0" layoutY="130.0" prefHeight="212.0" prefWidth="256.0" />
+      <Text fx:id="CountryFlag" layoutX="914.0" layoutY="457.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Flag" />
+      <Accordion layoutX="-8.0" layoutY="61.0" />
+      <VBox layoutX="339.0" layoutY="74.0" prefHeight="557.0" prefWidth="673.0">
+         <children>
+            <HBox prefHeight="63.0" prefWidth="673.0">
+               <children>
+                  <Button fx:id="Ajout" mnemonicParsing="false" onAction="#GoToAjout" prefHeight="52.0" prefWidth="133.0" text="Button" />
+                  <TextField fx:id="Recherche" prefHeight="52.0" prefWidth="241.0" />
+                  <Button fx:id="Modifier" mnemonicParsing="false" onAction="#ModifierCentre" prefHeight="60.0" prefWidth="153.0" text="Modifier" />
+                  <Button fx:id="btnSupprimer" mnemonicParsing="false" onAction="#Supprimer" prefHeight="60.0" prefWidth="153.0" text="Supprimer" />
+               </children>
+            </HBox>
+            <ListView fx:id="affichage" prefHeight="519.0" prefWidth="791.0" />
+         </children>
+      </VBox>
+      <Button fx:id="AjouterCentre" layoutX="35.0" layoutY="44.0" mnemonicParsing="false" opacity="0.0" prefHeight="60.0" prefWidth="153.0" text="Ajouter" />
+   </children>
+</AnchorPane>

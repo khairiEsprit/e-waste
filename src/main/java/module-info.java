@@ -17,12 +17,12 @@ module com.example.ewaste {
     requires mysql.connector.j;
     requires jakarta.mail;
     requires itextpdf;
-    opens com.example.ewaste.controllers to javafx.fxml;
-    exports com.example.ewaste.controllers;
-    opens com.example.ewaste.entities to javafx.base;
+    opens com.example.ewaste.Controllers to javafx.fxml;
+    exports com.example.ewaste.Controllers;
+    opens com.example.ewaste.Entities to javafx.base;
 
     opens com.example.ewaste to javafx.fxml;
     exports com.example.ewaste;
-    exports com.example.ewaste.repository;
-    opens com.example.ewaste.repository to javafx.fxml;
+    exports com.example.ewaste.Repository;
+    opens com.example.ewaste.Repository to javafx.fxml;
 }
