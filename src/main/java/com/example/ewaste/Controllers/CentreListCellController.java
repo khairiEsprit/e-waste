@@ -29,17 +29,18 @@ public class CentreListCellController extends ListCell<Centre> {
             // Création des labels pour les informations du centre
             Label nomLabel = new Label("🏢 Nom: " + centre.getNom());
             Label idLabel = new Label("ID: " + centre.getId());
-            Label longitudeLabel = new Label("📍 Longitude: " + centre.getLongitude());
-            Label latitudeLabel = new Label("📍 Latitude: " + centre.getLatitude());
+            Label addressLabel = new Label("Adresse: Chargement...");
+           // Label longitudeLabel = new Label("📍 Longitude: " + centre.getLongitude());
+           // Label latitudeLabel = new Label("📍 Latitude: " + centre.getLatitude());
             Label telephoneLabel = new Label("📞 Téléphone: " + centre.getTelephone());
             Label emailLabel = new Label("✉️ Email: " + centre.getEmail());
-            Label addressLabel = new Label("Adresse: Chargement...");
+
 
             // Appliquer des styles CSS pour améliorer l'affichage
             nomLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #00693e;");
             idLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #888;");
-            longitudeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #444;");
-            latitudeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #444;");
+            //longitudeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #444;");
+            //latitudeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #444;");
             telephoneLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
             emailLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
             addressLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
@@ -77,7 +78,7 @@ public class CentreListCellController extends ListCell<Centre> {
             webEngine.loadContent(mapHtml);
 
             // Organiser les labels dans une VBox
-            VBox vbox = new VBox(nomLabel, idLabel, latitudeLabel, longitudeLabel, telephoneLabel, emailLabel, addressLabel, webView);
+            VBox vbox = new VBox(nomLabel, idLabel,  telephoneLabel, emailLabel, addressLabel, webView);
             vbox.setSpacing(5); // Espacement entre les éléments
             vbox.setPadding(new Insets(10, 10, 10, 10)); // Espacement interne
 

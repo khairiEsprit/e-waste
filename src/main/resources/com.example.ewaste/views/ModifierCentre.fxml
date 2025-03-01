@@ -10,7 +10,7 @@
     <children>
         <VBox layoutX="205.0" layoutY="15.0" spacing="15">
             <children>
-                <Label alignment="CENTER" prefHeight="35.0" prefWidth="203.0" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="Ajouter" />
+                <Label alignment="CENTER" prefHeight="35.0" prefWidth="203.0" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="Modifier Centre" />
 
                 <!-- Champ Nom du Centre -->
                 <TextField fx:id="NomCentre" promptText="Nom du Centre" style="-fx-background-radius: 15px; -fx-padding: 10px;" />
@@ -27,7 +27,8 @@
                 <!-- Bouton Ajouter -->
                 <HBox alignment="CENTER" spacing="20">
                     <children>
-                        <Button fx:id="Ajouter" onAction="#AjouterCentre" style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-background-radius: 15px;" text="Ajouter" />
+                        <Button fx:id="Modifier" onAction="#ModifierCentre" style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-background-radius: 15px;" text="Modifier" />
+                  <Button fx:id="Supprimer" layoutX="63.0" layoutY="10.0" onAction="#SupprimerFromModifier" style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-background-radius: 15px;" text="Supprimer" />
                     </children>
                 </HBox>
 
@@ -36,11 +37,11 @@
 
         <!-- Champ Latitude -->
         <TextField fx:id="AltitudeCentre" layoutX="-18.0" layoutY="198.0" opacity="0.0" promptText="Latitude" style="-fx-background-radius: 15px; -fx-padding: 10px;" />
-        <TextField fx:id="Recherche" layoutX="-119.0" layoutY="126.0" opacity="0.0" prefHeight="52.0" prefWidth="241.0" />
+        <TextField fx:id="Recherche" opacity="0.0" prefHeight="52.0" prefWidth="241.0" />
 
         <!-- Champ Longitude -->
-        <TextField fx:id="LongitudeCentre" layoutX="-193.0" layoutY="132.0" opacity="0.0" promptText="Longitude" style="-fx-background-radius: 15px; -fx-padding: 10px;" />
-          <ListView fx:id="affichage" layoutX="-31.0" layoutY="32.0" opacity="0.0" prefHeight="41.0" prefWidth="27.0" />
+        <TextField fx:id="LongitudeCentre" layoutX="-26.0" layoutY="137.0" opacity="0.0" promptText="Longitude" style="-fx-background-radius: 15px; -fx-padding: 10px;" />
+          <ListView fx:id="affichage" layoutX="105.0" layoutY="62.0" opacity="0.0" prefHeight="41.0" prefWidth="27.0" />
           <Text layoutX="-1.0" layoutY="466.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom du Centre">
               <font>
                   <Font size="24.0" />

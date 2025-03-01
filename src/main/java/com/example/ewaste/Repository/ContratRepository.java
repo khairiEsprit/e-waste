@@ -103,8 +103,19 @@ public class ContratRepository implements IService<Contrat> {
         }
         return centres; // Retourne la liste des centres
     }
-
     public List<String> getEmployeNames() throws SQLException {
+        List<String> employeNames = new ArrayList<>();
+        String query = "SELECT nom FROM utilisateur WHERE role = 'EMPLOYE'"; // Récupère tous les noms des utilisateurs
+
+        try (PreparedStatement ps = connection.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                employeNames.add(rs.getString("nom"));
+            }
+        }
+        return employeNames;
+    }
+    public List<String> getEmployeNamess() throws SQLException {
         List<String> employeNames = new ArrayList<>();
         String query = "SELECT nom, prenom FROM utilisateur WHERE role = 'EMPLOYE'"; // Récupère nom et prénom des employés
 

@@ -76,7 +76,7 @@
 .combo-box {
     -fx-background-color: #ffffff;
     -fx-border-color: #00693e;
-    -fx-border-radius: 6px;
+    -fx-border-radius: 15px;
     -fx-padding: 10px;
     -fx-font-size: 14px;
     -fx-pref-width: 250px;
@@ -84,7 +84,7 @@
 
 .combo-box .arrow-button {
     -fx-background-color: #00693e;
-    -fx-border-radius: 6px;
+    -fx-border-radius: 15px;
 }
 
 .combo-box .arrow-button:hover {
