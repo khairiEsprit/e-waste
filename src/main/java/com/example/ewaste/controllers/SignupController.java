@@ -6,31 +6,50 @@ import com.example.ewaste.Entities.UserRole;
 import com.example.ewaste.Entities.UserSession;
 import com.example.ewaste.Main;
 import com.example.ewaste.Repository.AuthRepository;
+import com.example.ewaste.Repository.FaceRecognitionRepository;
 import com.example.ewaste.Repository.GoogleAuthRepository;
 import com.example.ewaste.Repository.UserRepository;
+import com.example.ewaste.Utils.FaceDetector;
 import com.example.ewaste.Utils.Modals;
 import com.example.ewaste.Utils.OAuthCallbackServer;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import org.bytedeco.opencv.global.opencv_imgcodecs;
+import org.bytedeco.opencv.opencv_core.Mat;
+import org.bytedeco.opencv.opencv_videoio.VideoCapture;
+
+
 import java.awt.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
+import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -42,6 +61,7 @@ import java.util.Map;
 import static com.example.ewaste.Utils.RoleNavigation.navigateUser;
 import static com.example.ewaste.Utils.Validator.isValidEmail;
 
+import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 public class SignupController {
 
     public Button google_sign_up_button;
@@ -78,10 +98,14 @@ public class SignupController {
     private Button sign_up_button;
 
 
+
     private TextField textField; // To store the TextField when showing password
     private boolean isPasswordVisible = false;
     @FXML
     private void initialize() {
+
+
+
         roleComboBox.getItems().setAll(UserRole.values());
         roleComboBox.getSelectionModel().select(UserRole.ADMIN);
 
@@ -104,6 +128,11 @@ public class SignupController {
             }
         });
     }
+
+
+
+
+
 
     @FXML
     private void togglePasswordVisibility() {

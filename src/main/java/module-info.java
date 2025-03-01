@@ -20,6 +20,8 @@ module com.example.ewaste {
     requires java.sql;
     requires nanohttpd;
     requires de.jensd.fx.glyphs.fontawesome;
+    requires org.bytedeco.opencv;
+    requires javafx.swing;
     opens com.example.ewaste.Controllers to javafx.fxml;
     exports com.example.ewaste.Controllers;
     opens com.example.ewaste.Entities to javafx.base;

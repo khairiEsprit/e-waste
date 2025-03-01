@@ -23,26 +23,36 @@
                     <top>
                         <AnchorPane prefHeight="40.0" prefWidth="1100.0" styleClass="semi-top-form" stylesheets="@../styles/dashboard-style.css" BorderPane.alignment="CENTER">
                             <children>
-                                <AnchorPane prefHeight="35.0" prefWidth="1100.0" styleClass="top-form" stylesheets="@../styles/dashboard-style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <children>
-                                        <!--                                        <FontIcon iconColor="WHITE" iconLiteral="fas-graduation-cap" iconSize="32" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="2.5" />-->
-                                        <Label layoutX="59.0" layoutY="8.0" text="Admin management Dasboard" textFill="WHITE" AnchorPane.leftAnchor="59.0">
+                                <BorderPane prefHeight="35.0" prefWidth="1100.0" styleClass="top-form" stylesheets="@../styles/dashboard-style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <left>
+                                        <Label text="Admin management Dashboard" textFill="WHITE">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
                                         </Label>
-                                        <Button fx:id="close_btn" alignment="CENTER" layoutX="1024.0" layoutY="7.0" mnemonicParsing="false" onAction="#close_btn_OnAction" prefHeight="38.0" prefWidth="45.0" styleClass="close" stylesheets="@../styles/dashboard-style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <graphic>
-                                                <FontIcon iconColor="WHITE" iconLiteral="fa-close" iconSize="20" />
-                                            </graphic>
-                                        </Button>
-                                        <Button fx:id="minimize_btn" alignment="CENTER" layoutX="1010.0" mnemonicParsing="false" onAction="#minimize_btn_onAction" prefHeight="38.0" prefWidth="45.0" styleClass="minimize" stylesheets="@../styles/dashboard-style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <graphic>
-                                                <FontIcon iconColor="WHITE" iconLiteral="far-window-minimize" iconSize="20" />
-                                            </graphic>
-                                        </Button>
-                                    </children>
-                                </AnchorPane>
+                                    </left>
+                                    <center>
+                                        <HBox fx:id="navbar" spacing="15" alignment="CENTER">
+                                            <Button fx:id="friend1Button" text="Friend 1" onAction="#switchFormOnAction" styleClass="nav-btn" stylesheets="@../styles/dashboard-style.css" />
+                                            <Button fx:id="friend2Button" text="Friend 2" onAction="#switchFormOnAction" styleClass="nav-btn" stylesheets="@../styles/dashboard-style.css" />
+                                            <!-- Add more buttons here as needed, e.g., <Button fx:id="friend3Button" text="Friend 3" ... /> -->
+                                        </HBox>
+                                    </center>
+                                    <right>
+                                        <HBox spacing="5" alignment="CENTER_RIGHT">
+                                            <Button fx:id="minimize_btn" mnemonicParsing="false" onAction="#minimize_btn_onAction" prefHeight="38.0" prefWidth="45.0" styleClass="minimize" stylesheets="@../styles/dashboard-style.css">
+                                                <graphic>
+                                                    <FontIcon iconColor="WHITE" iconLiteral="far-window-minimize" iconSize="20" />
+                                                </graphic>
+                                            </Button>
+                                            <Button fx:id="close_btn" mnemonicParsing="false" onAction="#close_btn_OnAction" prefHeight="38.0" prefWidth="45.0" styleClass="close" stylesheets="@../styles/dashboard-style.css">
+                                                <graphic>
+                                                    <FontIcon iconColor="WHITE" iconLiteral="fa-close" iconSize="20" />
+                                                </graphic>
+                                            </Button>
+                                        </HBox>
+                                    </right>
+                                </BorderPane>
                             </children>
                         </AnchorPane>
                     </top>
