@@ -69,18 +69,7 @@
                                 </ImageView>
                             </graphic>
                         </Button>
-<!--                        <Button fx:id="Documents_Btn" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#onDocumentsButtonClick" prefHeight="47.0" prefWidth="232.0" styleClass="sidebar-link" text="Documents" textFill="WHITE">-->
-<!--                            <font>-->
-<!--                                <Font name="System Bold" size="19.0" />-->
-<!--                            </font>-->
-<!--                            <graphic>-->
-<!--                                <ImageView>-->
-<!--                                    <image>-->
-<!--                                        <Image url="@../assets/IoDocumentTextOutline.png" />-->
-<!--                                    </image>-->
-<!--                                </ImageView>-->
-<!--                            </graphic>-->
-<!--                        </Button>-->
+
                         <Button fx:id="Events_Btn" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#onEventsButtonClick" prefHeight="47.0" prefWidth="232.0" styleClass="sidebar-link" text="Events" textFill="WHITE">
                             <font>
                                 <Font name="System Bold" size="19.0" />
@@ -93,30 +82,19 @@
                                 </ImageView>
                             </graphic>
                         </Button>
-<!--                        <Button fx:id="Projects_Btn" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#onProjectsButtonClick" prefHeight="47.0" prefWidth="232.0" styleClass="sidebar-link" text="Projects" textFill="WHITE">-->
-<!--                            <font>-->
-<!--                                <Font name="System Bold" size="19.0" />-->
-<!--                            </font>-->
-<!--                            <graphic>-->
-<!--                                <ImageView>-->
-<!--                                    <image>-->
-<!--                                        <Image url="@../assets/AiOutlineProject.png" />-->
-<!--                                    </image>-->
-<!--                                </ImageView>-->
-<!--                            </graphic>-->
-<!--                        </Button>-->
-<!--                        <Button fx:id="Associations_Btn" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#onAssociationsButtonClick" prefHeight="47.0" prefWidth="232.0" styleClass="sidebar-link" text="Associations" textFill="WHITE">-->
-<!--                            <font>-->
-<!--                                <Font name="System Bold" size="19.0" />-->
-<!--                            </font>-->
-<!--                            <graphic>-->
-<!--                                <ImageView>-->
-<!--                                    <image>-->
-<!--                                        <Image url="@../assets/IoStorefrontOutline.png" />-->
-<!--                                    </image>-->
-<!--                                </ImageView>-->
-<!--                            </graphic>-->
-<!--                        </Button>-->
+                        <Button fx:id="takePhotoButton" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="232.0" styleClass="sidebar-link" text="setUp face recognition" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="10.0" />
+                            </font>
+                            <graphic>
+                                <ImageView fitHeight="20" fitWidth="20">
+                                    <image>
+                                        <Image url="@../assets/faceLogoPng.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+
                     </children>
                 </VBox>
                 <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="10.0" VBox.vgrow="ALWAYS" />
@@ -173,6 +151,7 @@
                                            onAction="#changeImage" prefHeight="30.0" prefWidth="120.0"
                                            style="-fx-background-color: #29AB87; -fx-text-fill: white;" />
                             </children>
+
                         </Pane>
 
                         <MFXGenericDialog fx:id="DialogConfirm_Delete" layoutX="313.0" layoutY="297.0" prefHeight="238.0" prefWidth="400.0" showAlwaysOnTop="false" showClose="false" showMinimize="false" visible="false" style="-fx-background-color: #ACE1AF">
@@ -294,20 +273,36 @@
                                 </MFXButton>
                             </top>
                         </MFXGenericDialog>
-<!--                        <MFXGenericDialog fx:id="Dialog_Camera" prefHeight="534.0" prefWidth="590.0" showAlwaysOnTop="false" showClose="false" showMinimize="false" translateX="140.0" translateY="100.0" visible="false">-->
-<!--                            <center>-->
-<!--                                <Pane prefHeight="510.0" prefWidth="620.0" BorderPane.alignment="CENTER">-->
-<!--                                    <children>-->
-<!--                                        <Label fx:id="counter_Label" layoutX="184.0" layoutY="412.0" prefHeight="52.0" prefWidth="201.0" textFill="WHITE">-->
-<!--                                            <font>-->
-<!--                                                <Font name="System Bold" size="54.0" />-->
-<!--                                            </font>-->
-<!--                                        </Label>-->
-<!--                                        <ImageView fx:id="Camer_Label" fitHeight="368.0" fitWidth="502.0" layoutX="45.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />-->
-<!--                                    </children>-->
-<!--                                </Pane>-->
-<!--                            </center>-->
-<!--                        </MFXGenericDialog>-->
+                        <MFXGenericDialog fx:id="faceSetupDialog" prefHeight="500.0" prefWidth="600.0" translateX="150.0" translateY="100.0" visible="false" style="-fx-background-color: #ACE1AF">
+                            <center>
+                                <VBox alignment="CENTER" spacing="20.0" prefHeight="450.0" prefWidth="600.0">
+                                    <children>
+                                        <Label text="Set Up Face Recognition" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                                        <ImageView fx:id="webcamPreview" fitHeight="300.0" fitWidth="400.0" preserveRatio="true" />
+                                        <Label fx:id="statusLabel" text="Position your face in front of the camera" style="-fx-font-size: 14px;" />
+                                        <HBox alignment="CENTER" spacing="20.0">
+                                            <MFXButton fx:id="captureButton" text="Capture" onAction="#captureFace" prefHeight="38.0" prefWidth="100.0" style="-fx-background-color: #29AB87; -fx-text-fill: white; -fx-background-radius: 10px;" />
+                                            <MFXButton fx:id="saveButton" text="Save" onAction="#saveFace" prefHeight="38.0" prefWidth="100.0" style="-fx-background-color: #29AB87; -fx-text-fill: white; -fx-background-radius: 10px;" disable="true" />
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </center>
+                            <top>
+                                <MFXButton fx:id="closeFaceDialogButton" contentDisplay="GRAPHIC_ONLY" onAction="#closeFaceDialog" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 10px;" translateX="280.0">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="@../assets/cross.png" />
+                                            </image>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </ImageView>
+                                    </graphic>
+                                </MFXButton>
+                            </top>
+                        </MFXGenericDialog>
+
                     </children>
                 </Pane>
             </children>

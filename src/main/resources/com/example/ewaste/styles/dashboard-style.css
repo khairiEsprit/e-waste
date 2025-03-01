@@ -25,6 +25,19 @@
 .nav-form{
     -fx-background-color:linear-gradient(to bottom right, #013220, #00693E);
 }
+
+
+
+.top-nav-btn {
+    -fx-background-color: #013220;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 5 15 5 15;
+}
+
+.top-nav-btn:hover {
+    -fx-background-color: #00693E;
+}
 .nav-btn{
     -fx-background-color: transparent;
     -fx-cursor: hand;

@@ -23,31 +23,48 @@
                     <top>
                         <AnchorPane prefHeight="40.0" prefWidth="1100.0" styleClass="semi-top-form" stylesheets="@../styles/dashboard-style.css" BorderPane.alignment="CENTER">
                             <children>
-                                <AnchorPane prefHeight="35.0" prefWidth="1100.0" styleClass="top-form" stylesheets="@../styles/dashboard-style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <children>
-                                        <!--                                        <FontIcon iconColor="WHITE" iconLiteral="fas-graduation-cap" iconSize="32" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="2.5" />-->
-                                        <Label layoutX="59.0" layoutY="8.0" text="Admin management Dasboard" textFill="WHITE" AnchorPane.leftAnchor="59.0">
-                                            <font>
-                                                <Font size="20.0" />
-                                            </font>
-                                        </Label>
-                                        <Button fx:id="close_btn" alignment="CENTER" layoutX="1024.0" layoutY="7.0" mnemonicParsing="false" onAction="#close_btn_OnAction" prefHeight="38.0" prefWidth="45.0" styleClass="close" stylesheets="@../styles/dashboard-style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <graphic>
-                                                <FontIcon iconColor="WHITE" iconLiteral="fa-close" iconSize="20" />
-                                            </graphic>
-                                        </Button>
-                                        <Button fx:id="minimize_btn" alignment="CENTER" layoutX="1010.0" mnemonicParsing="false" onAction="#minimize_btn_onAction" prefHeight="38.0" prefWidth="45.0" styleClass="minimize" stylesheets="@../styles/dashboard-style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <graphic>
-                                                <FontIcon iconColor="WHITE" iconLiteral="far-window-minimize" iconSize="20" />
-                                            </graphic>
-                                        </Button>
-                                    </children>
-                                </AnchorPane>
+                                <BorderPane prefHeight="35.0" prefWidth="1100.0" styleClass="top-form" stylesheets="@../styles/dashboard-style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <left>
+                                        <HBox spacing="10" alignment="CENTER_LEFT">
+                                            <Button fx:id="backButton" visible="false" onAction="#backToDashboard" styleClass="icon-btn" stylesheets="@../styles/dashboard-style.css">
+                                                <graphic>
+                                                    <FontIcon iconColor="WHITE" iconLiteral="fas-arrow-left" iconSize="20" />
+                                                </graphic>
+                                            </Button>
+                                            <Label text="Admin management Dashboard" textFill="WHITE">
+                                                <font>
+                                                    <Font size="20.0" />
+                                                </font>
+                                            </Label>
+                                        </HBox>
+                                    </left>
+                                    <center>
+                                        <HBox fx:id="navbar" spacing="15" alignment="CENTER">
+                                            <Button fx:id="CentrePage" text="Centres" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
+                                            <Button fx:id="AvisPage" text="Avis" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
+                                            <!-- Add more buttons here as needed, e.g., <Button fx:id="friend3Button" text="Friend 3" ... /> -->
+                                        </HBox>
+                                    </center>
+                                    <right>
+                                        <HBox spacing="5" alignment="CENTER_RIGHT">
+                                            <Button fx:id="minimize_btn" mnemonicParsing="false" onAction="#minimize_btn_onAction" prefHeight="38.0" prefWidth="45.0" styleClass="minimize" stylesheets="@../styles/dashboard-style.css">
+                                                <graphic>
+                                                    <FontIcon iconColor="WHITE" iconLiteral="far-window-minimize" iconSize="20" />
+                                                </graphic>
+                                            </Button>
+                                            <Button fx:id="close_btn" mnemonicParsing="false" onAction="#close_btn_OnAction" prefHeight="38.0" prefWidth="45.0" styleClass="close" stylesheets="@../styles/dashboard-style.css">
+                                                <graphic>
+                                                    <FontIcon iconColor="WHITE" iconLiteral="fa-close" iconSize="20" />
+                                                </graphic>
+                                            </Button>
+                                        </HBox>
+                                    </right>
+                                </BorderPane>
                             </children>
                         </AnchorPane>
                     </top>
                     <left>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <AnchorPane fx:id="sidebar" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                             <children>
                                 <AnchorPane layoutX="15.0" layoutY="109.0" prefHeight="557.0" prefWidth="215.0" styleClass="nav-form" stylesheets="@../styles/dashboard-style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
@@ -104,7 +121,7 @@
                         </AnchorPane>
                     </left>
                     <center>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <AnchorPane fx:id="centerContent" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                             <children>
                                 <AnchorPane fx:id="home_form" layoutX="101.0" layoutY="161.0" prefHeight="560.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
