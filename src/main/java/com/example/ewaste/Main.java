@@ -1,25 +1,21 @@
 package com.example.ewaste;
 
-import com.teamdev.jxbrowser.engine.Engine;
-import com.teamdev.jxbrowser.engine.EngineOptions;
-import com.teamdev.jxbrowser.view.javafx.BrowserView;
+import com.example.ewaste.Config.GoogleConfig;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
-
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+
 //
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("views/Dashboard.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("views/dashboard.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
@@ -30,10 +26,43 @@ public class Main extends Application {
         launch();
     }
 }
+//
+//public class Main extends Application {
+//    public static void main(String[] args) {
+//        // Validate environment variables on startup
+//        try {
+//            GoogleConfig.getClientId();
+//            GoogleConfig.getClientSecret();
+//        } catch (IllegalStateException e) {
+//            System.err.println("Configuration error: " + e.getMessage());
+//            System.exit(1);
+//        }
+//
+//        launch(args);
+//    }
+//
+//    @Override
+//    public void start(Stage stage) throws Exception {
+//        // Load the FXML file from resources
+//        FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/Google.fxml"));
+//        Parent root = loader.load();
+//
+//        // Set up the main scene
+//        Scene scene = new Scene(root, 800, 600);
+//
+//        // Configure the primary stage
+//        stage.setTitle("E-Waste Management System - Login");
+//        stage.setScene(scene);
+//        stage.setResizable(false);
+//
+//        // Show the window
+//        stage.show();
+//    }
+//}
 
 
 //
-//public class Main extends Application {
+//public class com.example.ewaste.Main extends Application {
 //
 //    @Override
 //    public void start(Stage stage) {
@@ -54,7 +83,7 @@ public class Main extends Application {
 //    }
 //}
 
-//public final class Main extends Application {
+//public final class com.example.ewaste.Main extends Application {
 //
 //    @Override
 //    public void start(Stage primaryStage) {

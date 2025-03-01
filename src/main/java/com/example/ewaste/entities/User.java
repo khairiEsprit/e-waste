@@ -28,6 +28,8 @@ public class User {
         this.role = role;
     }
 
+    // Constructor for Google User Data
+
     public String getPhotoUrl() {
         return photoUrl;
     }
@@ -129,6 +131,9 @@ public class User {
     public void setRole(UserRole role) {
         this.role = role;
     }
+
+
+
 
     @Override
     public String toString() {

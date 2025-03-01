@@ -23,31 +23,48 @@
                     <top>
                         <AnchorPane prefHeight="40.0" prefWidth="1100.0" styleClass="semi-top-form" stylesheets="@../styles/dashboard-style.css" BorderPane.alignment="CENTER">
                             <children>
-                                <AnchorPane prefHeight="35.0" prefWidth="1100.0" styleClass="top-form" stylesheets="@../styles/dashboard-style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <children>
-                                        <!--                                        <FontIcon iconColor="WHITE" iconLiteral="fas-graduation-cap" iconSize="32" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="2.5" />-->
-                                        <Label layoutX="59.0" layoutY="8.0" text="Admin management Dasboard" textFill="WHITE" AnchorPane.leftAnchor="59.0">
-                                            <font>
-                                                <Font size="20.0" />
-                                            </font>
-                                        </Label>
-                                        <Button fx:id="close_btn" alignment="CENTER" layoutX="1024.0" layoutY="7.0" mnemonicParsing="false" onAction="#close_btn_OnAction" prefHeight="38.0" prefWidth="45.0" styleClass="close" stylesheets="@../styles/dashboard-style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <graphic>
-                                                <FontIcon iconColor="WHITE" iconLiteral="fa-close" iconSize="20" />
-                                            </graphic>
-                                        </Button>
-                                        <Button fx:id="minimize_btn" alignment="CENTER" layoutX="1010.0" mnemonicParsing="false" onAction="#minimize_btn_onAction" prefHeight="38.0" prefWidth="45.0" styleClass="minimize" stylesheets="@../styles/dashboard-style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <graphic>
-                                                <FontIcon iconColor="WHITE" iconLiteral="far-window-minimize" iconSize="20" />
-                                            </graphic>
-                                        </Button>
-                                    </children>
-                                </AnchorPane>
+                                <BorderPane prefHeight="35.0" prefWidth="1100.0" styleClass="top-form" stylesheets="@../styles/dashboard-style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <left>
+                                        <HBox spacing="10" alignment="CENTER_LEFT">
+                                            <Button fx:id="backButton" visible="false" onAction="#backToDashboard" styleClass="icon-btn" stylesheets="@../styles/dashboard-style.css">
+                                                <graphic>
+                                                    <FontIcon iconColor="WHITE" iconLiteral="fas-arrow-left" iconSize="20" />
+                                                </graphic>
+                                            </Button>
+                                            <Label text="Admin management Dashboard" textFill="WHITE">
+                                                <font>
+                                                    <Font size="20.0" />
+                                                </font>
+                                            </Label>
+                                        </HBox>
+                                    </left>
+                                    <center>
+                                        <HBox fx:id="navbar" spacing="15" alignment="CENTER">
+                                            <Button fx:id="CentrePage" text="Centres" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
+                                            <Button fx:id="AvisPage" text="Avis" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
+                                            <!-- Add more buttons here as needed, e.g., <Button fx:id="friend3Button" text="Friend 3" ... /> -->
+                                        </HBox>
+                                    </center>
+                                    <right>
+                                        <HBox spacing="5" alignment="CENTER_RIGHT">
+                                            <Button fx:id="minimize_btn" mnemonicParsing="false" onAction="#minimize_btn_onAction" prefHeight="38.0" prefWidth="45.0" styleClass="minimize" stylesheets="@../styles/dashboard-style.css">
+                                                <graphic>
+                                                    <FontIcon iconColor="WHITE" iconLiteral="far-window-minimize" iconSize="20" />
+                                                </graphic>
+                                            </Button>
+                                            <Button fx:id="close_btn" mnemonicParsing="false" onAction="#close_btn_OnAction" prefHeight="38.0" prefWidth="45.0" styleClass="close" stylesheets="@../styles/dashboard-style.css">
+                                                <graphic>
+                                                    <FontIcon iconColor="WHITE" iconLiteral="fa-close" iconSize="20" />
+                                                </graphic>
+                                            </Button>
+                                        </HBox>
+                                    </right>
+                                </BorderPane>
                             </children>
                         </AnchorPane>
                     </top>
                     <left>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <AnchorPane fx:id="sidebar" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                             <children>
                                 <AnchorPane layoutX="15.0" layoutY="109.0" prefHeight="557.0" prefWidth="215.0" styleClass="nav-form" stylesheets="@../styles/dashboard-style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
@@ -104,7 +121,7 @@
                         </AnchorPane>
                     </left>
                     <center>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <AnchorPane fx:id="centerContent" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                             <children>
                                 <AnchorPane fx:id="home_form" layoutX="101.0" layoutY="161.0" prefHeight="560.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
@@ -135,36 +152,52 @@
                                                                 </Label>
                                                             </children>
                                                         </AnchorPane>
-                                                        <AnchorPane layoutX="303.0" layoutY="14.0" prefHeight="129.0" prefWidth="268.0" styleClass="card" stylesheets="@../styles/dashboard-style.css">
-                                                            <children>
-                                                                <Label layoutX="61.0" layoutY="94.0" text="Les Employees" textFill="WHITE">
-                                                                    <font>
-                                                                        <Font size="15.0" />
-                                                                    </font>
-                                                                </Label>
-                                                                <Label fx:id="home_totalEmployee" alignment="CENTER_RIGHT" layoutX="86.0" layoutY="18.0" prefHeight="30.0" prefWidth="168.0" text="0" textFill="WHITE">
-                                                                    <font>
-                                                                        <Font size="25.0" />
-                                                                    </font>
-                                                                </Label>
-                                                                <FontIcon iconColor="WHITE" iconLiteral="fa-users" iconSize="60" layoutX="14.0" layoutY="85.0" />
-                                                            </children>
-                                                        </AnchorPane>
-                                                        <AnchorPane layoutX="591.0" layoutY="14.0" prefHeight="129.0" prefWidth="268.0" styleClass="card" stylesheets="@../styles/dashboard-style.css">
-                                                            <children>
-                                                                <FontIcon iconColor="WHITE" iconLiteral="fa-users" iconSize="60" layoutX="14.0" layoutY="84.0" />
-                                                                <Label layoutX="78.0" layoutY="93.0" text="Les Citoyens" textFill="WHITE">
-                                                                    <font>
-                                                                        <Font size="15.0" />
-                                                                    </font>
-                                                                </Label>
-                                                                <Label fx:id="home_totalCitoyen" alignment="CENTER_RIGHT" layoutX="86.0" layoutY="18.0" prefHeight="30.0" prefWidth="168.0" text="0" textFill="WHITE">
-                                                                    <font>
-                                                                        <Font size="25.0" />
-                                                                    </font>
-                                                                </Label>
-                                                            </children>
-                                                        </AnchorPane>
+
+
+                                                            <!-- Employee Card -->
+                                                            <AnchorPane fx:id="employeeCard" layoutX="303.0" layoutY="14.0" prefHeight="129.0" prefWidth="268.0"
+                                                                        styleClass="card" stylesheets="@../styles/dashboard-style.css"
+                                                                        onMouseClicked="#handleEmployeeCardClick">
+                                                                <children>
+                                                                    <Label layoutX="61.0" layoutY="94.0" text="Les Employees" textFill="WHITE">
+                                                                        <font>
+                                                                            <Font size="15.0" />
+                                                                        </font>
+                                                                    </Label>
+                                                                    <Label fx:id="home_totalEmployee" alignment="CENTER_RIGHT" layoutX="86.0" layoutY="18.0"
+                                                                           prefHeight="30.0" prefWidth="168.0" text="0" textFill="WHITE">
+                                                                        <font>
+                                                                            <Font size="25.0" />
+                                                                        </font>
+                                                                    </Label>
+                                                                    <FontIcon iconColor="WHITE" iconLiteral="fa-users" iconSize="60" layoutX="14.0" layoutY="85.0" />
+                                                                </children>
+                                                            </AnchorPane>
+
+                                                            <!-- Citoyen Card -->
+                                                            <AnchorPane fx:id="citoyenCard" layoutX="591.0" layoutY="14.0" prefHeight="129.0" prefWidth="268.0"
+                                                                        styleClass="card" stylesheets="@../styles/dashboard-style.css"
+                                                                        onMouseClicked="#handleCitoyenCardClick">
+                                                                <children>
+                                                                    <FontIcon iconColor="WHITE" iconLiteral="fa-users" iconSize="60" layoutX="14.0" layoutY="84.0" />
+                                                                    <Label layoutX="78.0" layoutY="93.0" text="Les Citoyens" textFill="WHITE">
+                                                                        <font>
+                                                                            <Font size="15.0" />
+                                                                        </font>
+                                                                    </Label>
+                                                                    <Label fx:id="home_totalCitoyen" alignment="CENTER_RIGHT" layoutX="86.0" layoutY="18.0"
+                                                                           prefHeight="30.0" prefWidth="168.0" text="0" textFill="WHITE">
+                                                                        <font>
+                                                                            <Font size="25.0" />
+                                                                        </font>
+                                                                    </Label>
+                                                                </children>
+                                                            </AnchorPane>
+
+                                                            <!-- A placeholder pane for swapping in the detailed view -->
+<!--                                                            <AnchorPane fx:id="contentArea" layoutX="0" layoutY="150.0" prefWidth="900" prefHeight="500" />-->
+
+
                                                     </children>
                                                 </AnchorPane>
                                                 <AnchorPane layoutX="14.0" layoutY="168.0" prefHeight="355.0" prefWidth="421.0" stylesheets="@../styles/dashboard-style.css">
@@ -235,6 +268,7 @@
                                                     <children>
                                                         <TextField fx:id="addEmployee_search" layoutX="14.0" layoutY="14.0" onKeyPressed="#addEmployee_search_onKeyTyped" prefHeight="24.0" prefWidth="270.0" promptText="Search" styleClass="search" stylesheets="@../styles/dashboard-style.css" />
                                                         <FontIcon iconLiteral="fa-search" iconSize="20" layoutX="21.0" layoutY="33.0" />
+                                                        <Label fx:id="tableTitle" layoutX="14.0" layoutY="30.0" text="" />
                                                         <TableView fx:id="addEmployee_tableView" layoutX="14.0" layoutY="53.0" onMouseClicked="#addEmployeeSelect" prefHeight="200.0" prefWidth="847.0">
                                                             <columns>
                                                                 <TableColumn fx:id="addEmployee_col_employeeNum" prefWidth="75.0" text="Employee#" />
@@ -366,12 +400,25 @@
                                         <Label text="Maps Activity" styleClass="real-time-label" prefWidth="900.0"
                                                AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                                alignment="CENTER"/>
-                                        <!-- Container for the map with margins -->
+
+                                        <!-- Container for the map with adjusted width to accommodate info panel -->
                                         <AnchorPane fx:id="mapContainer" layoutY="40.0" styleClass="map-container"
-                                                    AnchorPane.topAnchor="80.0"
-                                        AnchorPane.bottomAnchor="20.0"
-                                        AnchorPane.leftAnchor="20.0"
-                                        AnchorPane.rightAnchor="20.0"/> <!-- Added right margin -->
+                                                    AnchorPane.topAnchor="80.0" AnchorPane.bottomAnchor="20.0"
+                                                    AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="260.0"/> <!-- Adjusted right anchor for sidebar -->
+
+                                        <!-- New sidebar for marker information -->
+                                        <VBox fx:id="markerInfoPanel" prefWidth="240.0" styleClass="map-container"
+                                              AnchorPane.topAnchor="80.0" AnchorPane.bottomAnchor="20.0"
+                                              AnchorPane.rightAnchor="20.0">
+                                            <children>
+                                                <Label text="Marker Information" styleClass="info-title" alignment="CENTER" prefWidth="240.0"/>
+                                                <ScrollPane fx:id="infoScrollPane" fitToWidth="true" prefViewportHeight="460.0" prefViewportWidth="240.0">
+                                                    <content>
+                                                        <VBox fx:id="infoContent" spacing="10.0" styleClass="info-content"/>
+                                                    </content>
+                                                </ScrollPane>
+                                            </children>
+                                        </VBox>
                                     </children>
                                 </AnchorPane>
 

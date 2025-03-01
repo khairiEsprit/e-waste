@@ -25,6 +25,19 @@
 .nav-form{
     -fx-background-color:linear-gradient(to bottom right, #013220, #00693E);
 }
+
+
+
+.top-nav-btn {
+    -fx-background-color: #013220;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 5 15 5 15;
+}
+
+.top-nav-btn:hover {
+    -fx-background-color: #00693E;
+}
 .nav-btn{
     -fx-background-color: transparent;
     -fx-cursor: hand;
@@ -212,4 +225,18 @@
     -fx-effect: dropshadow(gaussian, rgba(172, 225, 175, 0.75), 10, 0.5, 0, 0);
     -fx-padding: 20px;  /* Added padding inside the map container */
     -fx-background-color: #FFFFFF;
+}
+
+.info-panel {
+    -fx-background-color: #f4f4f4;
+    -fx-border-color: #d3d3d3;
+    -fx-border-width: 1;
+}
+.info-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+}
+.info-content {
+    -fx-padding: 10;
 }

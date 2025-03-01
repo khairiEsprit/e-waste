@@ -19,7 +19,11 @@ public class AuthRepository {
     private static final SecureRandom random = new SecureRandom();
 
 
-//    public static boolean verifyPassword(String inputPassword, String storedHash) throws NoSuchAlgorithmException {
+
+
+
+
+    //    public static boolean verifyPassword(String inputPassword, String storedHash) throws NoSuchAlgorithmException {
 //        // Séparation de la chaîne stockée en sel et hachage du mot de passe
 //        String[] parts = storedHash.split(":");
 //        String storedSalt = parts[0];

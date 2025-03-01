@@ -29,6 +29,29 @@ public class UserRepository implements EntityCrud<User> {
     }
 
 
+    public List<User> getUsersByRole(String role) throws SQLException {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT * FROM utilisateur WHERE role = ?";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setString(1, role);
+        ResultSet rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            User user = new User();
+            user.setId(rs.getInt("id")); // Adjust column name if different
+            user.setTelephone((rs.getInt("telephone")));
+            user.setNom(rs.getString("nom"));
+            user.setPrenom(rs.getString("prenom"));
+            user.setEmail(rs.getString("email"));
+            user.setDateNss(rs.getDate("DateNss")); // Adjust format if needed
+            user.setStatus(rs.getString("status"));
+            user.setPhotoUrl(rs.getString("photo"));
+            users.add(user);
+        }
+        return users;
+    }
+
+
 
     // Create
     public void addEntity(User user) {

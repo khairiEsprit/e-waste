@@ -8,9 +8,6 @@ import com.example.ewaste.Utils.DataBase;
 import com.example.ewaste.Entities.User;
 import com.example.ewaste.Utils.FloatingChatbotButton;
 import com.example.ewaste.Utils.OpenAiApi;
-import com.gluonhq.maps.MapLayer;
-import com.gluonhq.maps.MapPoint;
-import com.gluonhq.maps.MapView;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,8 +17,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -32,11 +27,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -72,6 +64,18 @@ public class DashboardController implements Initializable {
     @FXML
     public AnchorPane MapsDisplay;
     public AnchorPane mapContainer;
+    public AnchorPane employeeCard;
+    public AnchorPane citizenCard;
+    public Label tableTitle;
+    public AnchorPane citoyenCard;
+    public AnchorPane contentArea;
+    public ScrollPane infoScrollPane;
+    public VBox infoContent;
+    public AnchorPane centerContent;
+    public AnchorPane sidebar;
+    public Button CentrePage;
+    public Button AvisPage;
+    public Button backButton;
 
     @FXML
     private Button addEmployee_addBtn;
@@ -234,10 +238,13 @@ public class DashboardController implements Initializable {
     private double yOffset = 0;
 
     private String[] statusList = {"Disponible", "Non Disponible"};
-    private final MapPoint point = new MapPoint(48.85,2.29);
+//    private final MapPoint point = new MapPoint(48.85,2.29);
+    private List<AnchorPane> allSections;
+    private List<Button> sidebarButtons;
+    private List<Button> navbarButtons;
+    private Map<String, Pane> friendPages = new HashMap<>();
 
-
-
+    ChatBotInterface chat = new ChatBotInterface();
 
     CitoyenRepository cr = new CitoyenRepository();
     EmployeeRepository er = new EmployeeRepository();
@@ -254,23 +261,14 @@ private final  MapBox map = new MapBox();
     public void initialize (URL url, ResourceBundle resourceBundle) {
 
 
-        FloatingChatbotButton chatbotButton = new FloatingChatbotButton();
+        FloatingChatbotButton chatbotButton = new FloatingChatbotButton(chat::openChatbot);
         main_form.getChildren().add(chatbotButton.getButton());
 
         // Positioning the button at the bottom-right corner
         AnchorPane.setBottomAnchor(chatbotButton.getButton(), 20.0);
         AnchorPane.setRightAnchor(chatbotButton.getButton(), 20.0);
 
-        try {
-            homeDisplayTotalCitoyen();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            homeDisplayTotalEmployee();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
 
         homeDisplayCitoyenChart();
         homeDisplayEmployeeChart();
@@ -278,6 +276,28 @@ private final  MapBox map = new MapBox();
             addEmployeeShowListData();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+
+        sidebarButtons = Arrays.asList(home_btn, addEmployee_btn, Map_view, generate_rapport);
+
+        // Initialize navbar (friend) buttons
+        navbarButtons = Arrays.asList(CentrePage, AvisPage);
+
+        // Initialize all sections
+        allSections = new ArrayList<>();
+        allSections.add(home_form);
+        allSections.add(addEmployee_form);
+        allSections.add(MapsDisplay);
+        allSections.add(rapportDisplay);
+
+        // Show home section by default
+        showSection(home_form, home_btn);
+        try {
+            homeDisplayTotalCitoyen();
+            homeDisplayTotalEmployee();
+            // Add other initialization methods as needed
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         Image image = new Image(Main.class.getResourceAsStream("/com/example/ewaste/assets/iconLoadingGIF.gif"));
@@ -313,32 +333,27 @@ private final  MapBox map = new MapBox();
 
 
     public void displayPoubellesAndRoute(int CENTER_ID) {
-        // Fetch all poubelles
+        // Fetch center location and poubelles
         List<Poubelle> poubelleBins = pr.getPoubellesByCenter(CENTER_ID);
-        System.out.println(poubelleBins.get(1).toString());
         float[] centerLocation;
         try {
             centerLocation = ctr.getLatitudeLongitude(CENTER_ID);
-            System.out.println(centerLocation[0]);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        // Mark the center location
+        // Update Map: Mark the center and each poubelle on the map (as already implemented)
         map.addCustomMarker(centerLocation[0], centerLocation[1], "black", true, "Center of Ariana");
 
         // Sort poubelles by fill level (highest first)
         poubelleBins.sort((p1, p2) -> Float.compare(p2.getFillLevel(), p1.getFillLevel()));
 
-        // Create waypoints for optimized route
         List<String> waypoints = new ArrayList<>();
         waypoints.add(centerLocation[1] + "," + centerLocation[0]); // Start from center
 
-        // Loop through bins and mark them
         for (Poubelle bin : poubelleBins) {
             String color;
             float fillLevel = bin.getFillLevel();
-
             if (fillLevel > 80) {
                 color = "red";
             } else if (fillLevel > 60) {
@@ -348,244 +363,51 @@ private final  MapBox map = new MapBox();
             } else {
                 color = "green";
             }
-
-            // Mark bin on the map
             map.addCustomMarker(bin.getLatitude(), bin.getLongitude(), color, false, "Fill: " + fillLevel + "%");
-
-            // Add to waypoints for routing
             waypoints.add(bin.getLongitude() + "," + bin.getLatitude());
         }
-
-        // Request and draw optimized route
         map.drawRoute(waypoints);
+
+        // Update Info Panel:
+        infoContent.getChildren().clear();
+
+        // **Static Explanation for the Admin**
+        Label explanation = new Label(
+                "This map displays the optimized collection route for waste bins.\n" +
+                        " - The black marker represents the center.\n" +
+                        " - Colored markers represent waste bins:\n" +
+                        "     - Red: Over 80% full (high priority)\n" +
+                        "     - Orange: 60-80% full\n" +
+                        "     - Yellow: 40-60% full\n" +
+                        "     - Green: Less than 40% full (low priority)\n" +
+                        "The route starts at the center and prioritizes bins based on their fill level, \n" +
+                        "ensuring the most filled bins are collected first."
+        );
+        explanation.setWrapText(true);
+        explanation.getStyleClass().add("admin-explanation");  // Custom style if needed
+        infoContent.getChildren().add(explanation);
+
+        // Separator
+        Separator separator1 = new Separator();
+        infoContent.getChildren().add(separator1);
+
+        // Display center information
+        Label centerInfo = new Label("Center: Ariana\nCoordinates: " + centerLocation[0] + ", " + centerLocation[1]);
+        centerInfo.getStyleClass().add("center-info");
+        infoContent.getChildren().add(centerInfo);
+
+        // Separator
+        Separator separator2 = new Separator();
+        infoContent.getChildren().add(separator2);
+
+        // Display each poubelle information
+        for (Poubelle bin : poubelleBins) {
+            String infoText = "Bin at (" + bin.getLatitude() + ", " + bin.getLongitude() + ")\nFill: " + bin.getFillLevel() + "%";
+            Label binLabel = new Label(infoText);
+            binLabel.getStyleClass().add("bin-info");
+            infoContent.getChildren().add(binLabel);
+        }
     }
-
-    //  maps code gluon :!!!!!!!
-//
-//     private static final int CENTER_ID = 1; // Change dynamically if needed
-//     PoubelleRepository pr = new PoubelleRepository();
-//
-//    private static final int FULL_THRESHOLD = 70;
-//
-//    private MapView CreateMapView() {
-//        MapView map = new MapView();
-//        map.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-//        map.setZoom(18);
-//
-//        // Set your center point (e.g., collection center)
-//        MapPoint centerLocation = getCenterLocation(CENTER_ID);
-//        map.flyTo(0, centerLocation, 0.1);
-//
-//        // Add a marker for the center (without a route number)
-////        map.addLayer(new CustomMapLayer(centerLocation, "Collection Center", Color.BLUE, null));
-//        map.addLayer(new CenterMapLayer(centerLocation, "Center of Ariana"));
-//
-//        // Fetch poubelle bins for this center
-//        List<Poubelle> poubelleBins = pr.getPoubellesByCenter(CENTER_ID);
-//
-//        // First, compute the route ordering:
-//        // We want: center -> first full trash bin -> then all low filled bins
-//        Map<Poubelle, Integer> routePriority = new HashMap<>();
-//        Poubelle firstFullBin = null;
-//        List<Poubelle> lowBins = new ArrayList<>();
-//
-//        for (Poubelle poubelle : poubelleBins) {
-//            if (poubelle.getFillLevel() >= FULL_THRESHOLD) {
-//                // Pick the first bin that is full
-//                if (firstFullBin == null) {
-//                    firstFullBin = poubelle;
-//                }
-//            } else {
-//                lowBins.add(poubelle);
-//            }
-//        }
-//
-//        int prio = 1;
-//        if (firstFullBin != null) {
-//            routePriority.put(firstFullBin, prio++);
-//        }
-//        for (Poubelle bin : lowBins) {
-//            routePriority.put(bin, prio++);
-//        }
-//
-//        // Add markers for trash bins.
-//        // If the trash bin is part of the route, pass its route priority so that it appears inside the circle.
-//        for (Poubelle poubelle : poubelleBins) {
-//            MapPoint poubelleLocation = new MapPoint(poubelle.getLatitude(), poubelle.getLongitude());
-//            Color fillColor = getFillColor(poubelle.getFillLevel());
-//            String tooltipText = "Trash Bin\nFill Level: " + poubelle.getFillLevel() + "%\nStatus: "
-//                    + (poubelle.isWorking() ? "Working" : "Broken");
-//
-//            // Get the route priority if available; otherwise, null.
-//            Integer routeNum = routePriority.get(poubelle);
-//            map.addLayer(new CustomMapLayer(poubelleLocation, tooltipText, fillColor, routeNum));
-//        }
-//
-//        // Build the route polyline:
-//        List<MapPoint> routePoints = new ArrayList<>();
-//        routePoints.add(centerLocation);
-//        if (firstFullBin != null) {
-//            routePoints.add(new MapPoint(firstFullBin.getLatitude(), firstFullBin.getLongitude()));
-//        }
-//        for (Poubelle bin : lowBins) {
-//            routePoints.add(new MapPoint(bin.getLatitude(), bin.getLongitude()));
-//        }
-//
-//        // Add the polyline route to the map.
-//        map.addLayer(new CustomPolylineLayer(routePoints, Color.RED));
-//
-//        return map;
-//    }
-//
-//    private class CustomMapLayer extends MapLayer {
-//        private final MapPoint location;
-//        private final Node marker;
-//
-//        /**
-//         * @param location    Geographic location of the marker.
-//         * @param tooltipText Text for the tooltip.
-//         * @param markerColor Color of the circle.
-//         * @param priority    Optional route priority number to display inside the circle (or null).
-//         */
-//        public CustomMapLayer(MapPoint location, String tooltipText, Color markerColor, Integer priority) {
-//            this.location = location;
-//            // Create the circle for the marker.
-//            Circle circle = new Circle(10, markerColor);
-//
-//            // Use a StackPane so that we can layer the circle and an optional number.
-//            StackPane markerPane = new StackPane();
-//            markerPane.getChildren().add(circle);
-//
-//            // If a priority number is provided, add it as a label.
-//            if (priority != null) {
-//                Label label = new Label(priority.toString());
-//                label.setTextFill(Color.WHITE);
-//                // Optionally, style the label font size or weight:
-//                label.setStyle("-fx-font-weight: bold;");
-//                markerPane.getChildren().add(label);
-//            }
-//
-//            // Install a tooltip on the marker.
-//            Tooltip.install(markerPane, new Tooltip(tooltipText));
-//            marker = markerPane;
-//            getChildren().add(marker);
-//        }
-//
-//        @Override
-//        protected void layoutLayer() {
-//            // Convert geographic coordinates to screen coordinates.
-//            Point2D screenPoint = getMapPoint(location.getLatitude(), location.getLongitude());
-//            marker.setTranslateX(screenPoint.getX());
-//            marker.setTranslateY(screenPoint.getY());
-//        }
-//    }
-//
-//
-//    // Custom layer for the center marker with a different shape and a fixed label.
-//    private class CenterMapLayer extends MapLayer {
-//        private final MapPoint location;
-//        private final Node marker;
-//
-//        /**
-//         * @param location  The geographic location for the center.
-//         * @param labelText The text to display (e.g., "Center of Ariana").
-//         */
-//        public CenterMapLayer(MapPoint location, String labelText) {
-//            this.location = location;
-//
-//            // Create a rectangle as the marker shape.
-//            Rectangle rectangle = new Rectangle(120, 40);
-//            rectangle.setFill(Color.DARKBLUE);
-//            rectangle.setArcWidth(10);
-//            rectangle.setArcHeight(10);
-//
-//            // Create a label to display on the marker.
-//            Label label = new Label(labelText);
-//            label.setTextFill(Color.WHITE);
-//            label.setStyle("-fx-font-weight: bold; -fx-font-size: 10;");
-//            label.setWrapText(true);
-//            label.setAlignment(Pos.CENTER);
-//
-//            // Use a StackPane to overlay the label on the rectangle.
-//            StackPane markerPane = new StackPane();
-//            markerPane.getChildren().addAll(rectangle, label);
-//
-//            marker = markerPane;
-//            getChildren().add(marker);
-//        }
-//
-//        @Override
-//        protected void layoutLayer() {
-//            // Convert geographic coordinates to screen coordinates.
-//            Point2D screenPoint = getMapPoint(location.getLatitude(), location.getLongitude());
-//            marker.setTranslateX(screenPoint.getX());
-//            marker.setTranslateY(screenPoint.getY());
-//        }
-//    }
-//
-//
-//
-//
-//    private class CustomPolylineLayer extends MapLayer {
-//        private final List<MapPoint> points;
-//        private final Polyline polyline;
-//
-//        public CustomPolylineLayer(List<MapPoint> points, Color lineColor) {
-//            this.points = points;
-//            polyline = new Polyline();
-//            polyline.setStroke(lineColor);
-//            polyline.setStrokeWidth(2);
-//            getChildren().add(polyline);
-//        }
-//
-//        @Override
-//        protected void layoutLayer() {
-//            ObservableList<Double> coords = polyline.getPoints();
-//            coords.clear();
-//            for (MapPoint mp : points) {
-//                Point2D pt = getMapPoint(mp.getLatitude(), mp.getLongitude());
-//                coords.add(pt.getX());
-//                coords.add(pt.getY());
-//            }
-//        }
-//    }
-//
-//    private MapPoint getCenterLocation(int centerId) {
-//        // Hardcoded for now, but you can fetch from DB
-//        return new MapPoint(36.8022, 10.1811);
-//    }
-//
-//
-//
-//    private Color getFillColor(int fillLevel) {
-//        if (fillLevel < 30) return Color.GREEN;
-//        if (fillLevel < 70) return Color.ORANGE;
-//        return Color.RED;
-//    }
-
-//    public class MapLayer extends Pane {
-//        // Your custom functionality here
-//    }
-
-//    private MapLayer drawRoute(MapPoint start, MapPoint end) {
-//        MapLayer routeLayer = new MapLayer();
-//
-//        Line route = new Line();
-//        route.setStartX(start.getLatitude());
-//        route.setStartY(start.getLongitude());
-//        route.setEndX(end.getLatitude());
-//        route.setEndY(end.getLongitude());
-//        route.setStrokeWidth(2);
-//        route.setStroke(Color.DARKGRAY);
-//
-//        routeLayer.getChildren().add(route);
-//        return routeLayer;
-//    }
-
-    // maps code !!!!!
-
-
-
 
 
 
@@ -717,55 +539,91 @@ private final  MapBox map = new MapBox();
     }
 
 
-    //    START CODE FOR FORM SWITCHING
-    private void showSection(AnchorPane sectionToShow, Button activeButton) {
-        // Hide all sections
-        home_form.setVisible(false);
-        addEmployee_form.setVisible(false);
-        MapsDisplay.setVisible(false);
-        rapportDisplay.setVisible(false);
-
-
-        // Show the selected section
-        sectionToShow.setVisible(true);
-
-        // Reset button styles
-        home_btn.setStyle("-fx-background-color: transparent");
-        addEmployee_btn.setStyle("-fx-background-color: transparent");
-        Map_view.setStyle("-fx-background-color: transparent");
-        generate_rapport.setStyle("-fx-background-color: transparent");
-
-        // Highlight the active button
-        activeButton.setStyle("-fx-background-color: linear-gradient(to bottom right, #29AB87, #ACE1AF);");
-    }
-
-    public void switchFormOnAction(ActionEvent event) throws IOException, InterruptedException, SQLException {
-        if (event.getSource() == home_btn) {
-            showSection(home_form, home_btn);
-            homeDisplayTotalCitoyen();
-            homeDisplayTotalEmployee();
-            homeDisplayCitoyenChart();
-            homeDisplayEmployeeChart();
-
-
-
-        } else if (event.getSource() == addEmployee_btn) {
-            showSection(addEmployee_form, addEmployee_btn);
-            addEmployeeShowListData();
-
-            addEmployee_search_onKeyTyped();
-
-        } else if (event.getSource() == generate_rapport) {
-            showSection(rapportDisplay, generate_rapport);
-            generateRapport_btn.setStyle("-fx-background-color: linear-gradient(to bottom right, #29AB87, #ACE1AF);");
-        }else  if (event.getSource() == Map_view){
-            map.flyToLocation(36.8065, 10.1815, 12);
-
-            showSection(MapsDisplay,Map_view);
-
+    private void hideAllSections() {
+        for (AnchorPane section : allSections) {
+            section.setVisible(false);
         }
     }
 
+    // Reset styles of all buttons
+    private void resetAllButtons() {
+        for (Button btn : sidebarButtons) {
+            btn.setStyle("-fx-background-color: transparent");
+        }
+        for (Button btn : navbarButtons) {
+            btn.setStyle("-fx-background-color: transparent");
+        }
+    }
+
+    // Show a built-in section and highlight its button
+    private void showSection(AnchorPane sectionToShow, Button activeButton) {
+        hideAllSections();
+        resetAllButtons();
+        sectionToShow.setVisible(true);
+        backButton.setVisible(false);
+        activeButton.setStyle("-fx-background-color: linear-gradient(to bottom right, #29AB87, #ACE1AF);");
+        sidebar.setVisible(true); // Show sidebar for non-friend sections
+    }
+
+    @FXML
+    private void backToDashboard(ActionEvent event) {
+        showSection(home_form, home_btn); // Replace with your home section and button
+        backButton.setVisible(false); // Hide the back button
+    }
+
+    // Show a friend page and highlight its button
+    private void showFriendPage(Button button, String fxmlFile) {
+        Pane page = friendPages.get(button); // Use Pane instead of AnchorPane
+        if (page == null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/" + fxmlFile));
+                page = loader.load();
+                // Add to centerContent and anchor it to fill the space
+                centerContent.getChildren().add(page);
+                AnchorPane.setTopAnchor(page, 0.0);
+                AnchorPane.setBottomAnchor(page, 0.0);
+                AnchorPane.setLeftAnchor(page, 0.0);
+                AnchorPane.setRightAnchor(page, 0.0);
+                friendPages.put(String.valueOf(button), page); // Store the loaded page
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+        hideAllSections();
+        resetAllButtons();
+        page.setVisible(true);
+        backButton.setVisible(true);
+        button.setStyle("-fx-background-color: linear-gradient(to bottom right, #29AB87, #ACE1AF);");
+        sidebar.setVisible(false); // Hide sidebar for friend pages
+    }
+
+    // Handle button clicks for sidebar and friend buttons
+    @FXML
+    public void switchFormOnAction(ActionEvent event) throws IOException, SQLException {
+        Object source = event.getSource();
+
+        // Sidebar buttons
+        if (source == home_btn) {
+            showSection(home_form, home_btn);
+            homeDisplayTotalCitoyen();
+            homeDisplayTotalEmployee();
+        } else if (source == addEmployee_btn) {
+            showSection(addEmployee_form, addEmployee_btn);
+            addEmployeeShowListData();
+        } else if (source == generate_rapport) {
+            showSection(rapportDisplay, generate_rapport);
+        } else if (source == Map_view) {
+            showSection(MapsDisplay, Map_view);
+            // Add your map.flyToLocation() call here if applicable
+        }
+        // Friend buttons
+        else if (source == CentrePage) {
+            showFriendPage(CentrePage, "ForgotPassword.fxml");
+        } else if (source == AvisPage) {
+            showFriendPage(AvisPage, "friend2.fxml");
+        }
+    }
 
     public void logout_btn_onAction() {
         try {
@@ -907,6 +765,47 @@ private final  MapBox map = new MapBox();
     }
 
 
+    @FXML
+    private void handleEmployeeCardClick(MouseEvent event) {
+        // Load the detailed view for employees
+        loadUserTableView("EMPLOYEE");
+    }
+
+    @FXML
+    private void handleCitoyenCardClick(MouseEvent event) {
+        // Load the detailed view for citoyens
+        loadUserTableView("CITOYEN");
+    }
+
+    /**
+     * Loads the detailed table view into the contentArea pane.
+     *
+     * @param role The role to filter users by ("EMPLOYEE" or "CITOYEN").
+     */
+    private void loadUserTableView(String role) {
+        try {
+            // Load the FXML file for the user table view.
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/UserTableView.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller of the loaded FXML and pass the role to it.
+            UserTableController controller = loader.getController();
+            controller.loadData(role);
+
+            // Create a new stage (separate window)
+            Stage tableStage = new Stage();
+            tableStage.setTitle("User Details - " + role);
+            tableStage.setScene(new Scene(root));
+
+            // Optionally, make the new stage modal so it blocks interaction with the dashboard
+            tableStage.initModality(Modality.APPLICATION_MODAL);
+
+            // Show the new stage
+            tableStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private  ObservableList<User> addEmployeeListD;
     @FXML
