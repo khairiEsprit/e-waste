@@ -26,11 +26,7 @@
                                 <BorderPane prefHeight="35.0" prefWidth="1100.0" styleClass="top-form" stylesheets="@../styles/dashboard-style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <left>
                                         <HBox spacing="10" alignment="CENTER_LEFT">
-                                            <Button fx:id="backButton" visible="false" onAction="#backToDashboard" styleClass="icon-btn" stylesheets="@../styles/dashboard-style.css">
-                                                <graphic>
-                                                    <FontIcon iconColor="WHITE" iconLiteral="fas-arrow-left" iconSize="20" />
-                                                </graphic>
-                                            </Button>
+
                                             <Label text="Admin management Dashboard" textFill="WHITE">
                                                 <font>
                                                     <Font size="20.0" />

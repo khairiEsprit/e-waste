@@ -339,23 +339,38 @@ public class SignupController {
 
                 // Fetch user info using the access token
                 Map<String, Object> userInfo = googleAuthRepository.getUserInfo(accessToken);
-                googleAuthRepository.createUser(
-                        userInfo.get("name").toString(),
-                        userInfo.get("given_name").toString(),
-                        userInfo.get("family_name").toString(),
-                        userInfo.get("picture").toString(),
-                        userInfo.get("email").toString(),
-                        String.valueOf(userInfo.get("email_verified")), // Ensure correct boolean handling
-                        "CITOYEN"
-                );
+                String email = userInfo.get("email").toString();
 
-//                System.out.println("User authenticated and saved successfully: " );
+                // Check if the email already exists in the system
+                if (auth.emailExists(email)) {
+                    // Display error modal on the JavaFX Application Thread
+                    Platform.runLater(() -> Modals.displayError(
+                            "Invalid Email",
+                            "un compte associé à cet email est déjà créé"
+                    ));
+                } else {
+                    // Create the user with the fetched information
+                    googleAuthRepository.createUser(
+                            userInfo.get("name").toString(),
+                            userInfo.get("given_name").toString(),
+                            userInfo.get("family_name").toString(),
+                            userInfo.get("picture").toString(),
+                            email,
+                            String.valueOf(userInfo.get("email_verified")),
+                            "CITOYEN"
+                    );
 
-                // Now that authentication is complete, load the dashboard on the JavaFX Application Thread.
-                Platform.runLater(() -> loadUserAccount());
+                    // Load the user account interface on the JavaFX Application Thread
+                    Platform.runLater(() -> loadUserAccount());
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
+                // Optionally, display an error modal for unexpected exceptions
+                Platform.runLater(() -> Modals.displayError(
+                        "Authentication Error",
+                        "An error occurred during Google sign-up. Please try again."
+                ));
             }
         }).start();
     }

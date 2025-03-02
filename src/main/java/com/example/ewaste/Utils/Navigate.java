@@ -17,8 +17,8 @@ import java.io.IOException;
 
 public class Navigate {
 
-    private static final int width = 1200;
-    private static final int height = 700;
+    private static final int width = 1100;
+    private static final int height = 600;
     public static void navigate(Button button, String fxmlPath, Stage stage) {
         button.setDisable(true); // Prevent multiple clicks
 

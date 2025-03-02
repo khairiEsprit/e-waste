@@ -16,10 +16,27 @@ import javafx.util.Duration;
 import java.io.IOException;
 
 public class RoleNavigation {
-   static int width = 1200;
-   static int height = 700;
 
     public static void navigateUser(Stage stage, UserRole role) throws IOException {
+        // Determine FXML resource and dimensions based on role
+        String fxmlResource;
+        double width;
+        double height;
+
+        if (role == UserRole.ADMIN) {
+            fxmlResource = "views/Dashboard.fxml";
+            width = 1200.0;
+            height = 600.0;
+        } else if (role == UserRole.CITOYEN) {
+            fxmlResource = "views/UserAccount.fxml";
+            width = 1300.0;
+            height = 700.0;
+        } else {
+            fxmlResource = "views/EmployeeInterface.fxml";
+            width = 1300.0;
+            height = 700.0;
+        }
+
         // Create a progress indicator
         MFXProgressSpinner progressIndicator = new MFXProgressSpinner();
         progressIndicator.setPrefSize(70, 70);
@@ -35,19 +52,7 @@ public class RoleNavigation {
         fadeOut.setFromValue(1.0);
         fadeOut.setToValue(0.0);
 
-        // Choose the FXML resource based on the role.
-        // For example, if admin, load the admin view; else load a different view.
-        String fxmlResource;
-        if (role == UserRole.ADMIN) {
-            fxmlResource = "views/Dashboard.fxml";
-        } else if(role == UserRole.CITOYEN) {
-            // Add more roles as needed; here is a default:
-            fxmlResource = "views/UserAccount.fxml";
-        }else {
-            // Add more roles as needed; here is a default:
-            fxmlResource = "views/EmployeeInterface.fxml";
-        }
-
+        // Load the new FXML
         FXMLLoader fxmlLoader = new FXMLLoader(com.example.ewaste.Main.class.getResource(fxmlResource));
         Parent newRoot = fxmlLoader.load();
 
@@ -59,7 +64,7 @@ public class RoleNavigation {
         // Timeline to switch the scene after fade out
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0.5), e -> {
-                    // Replace the scene with the new root
+                    // Replace the scene with the new root using dynamic dimensions
                     stage.setScene(new Scene(newRoot, width, height));
                     fadeIn.play();
                 })
@@ -69,8 +74,7 @@ public class RoleNavigation {
         fadeOut.setOnFinished(e -> timeline.play());
         fadeOut.play();
 
-        // Set the progress indicator scene immediately
+        // Set the progress indicator scene immediately with dynamic dimensions
         stage.setScene(new Scene(container, width, height));
     }
-
 }

@@ -538,91 +538,58 @@ private final  MapBox map = new MapBox();
         }
     }
 
+    private void openFriendPage(String fxmlFile, String title) {
+        try {
+            // Load the FXML file for the friend page
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/" + fxmlFile));
+            Parent root = loader.load();
 
-    private void hideAllSections() {
-        for (AnchorPane section : allSections) {
-            section.setVisible(false);
+            // Create a new stage for the friend page
+            Stage stage = new Stage();
+            stage.setTitle(title);  // Set window title (e.g., "Centres" or "Avis")
+            stage.setScene(new Scene(root));  // Set the loaded FXML as the scene
+            stage.show();  // Display the new stage
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle any loading errors
         }
     }
 
-    // Reset styles of all buttons
-    private void resetAllButtons() {
-        for (Button btn : sidebarButtons) {
-            btn.setStyle("-fx-background-color: transparent");
-        }
-        for (Button btn : navbarButtons) {
-            btn.setStyle("-fx-background-color: transparent");
-        }
-    }
-
-    // Show a built-in section and highlight its button
-    private void showSection(AnchorPane sectionToShow, Button activeButton) {
-        hideAllSections();
-        resetAllButtons();
-        sectionToShow.setVisible(true);
-        backButton.setVisible(false);
-        activeButton.setStyle("-fx-background-color: linear-gradient(to bottom right, #29AB87, #ACE1AF);");
-        sidebar.setVisible(true); // Show sidebar for non-friend sections
-    }
-
+    // Handle button clicks
     @FXML
-    private void backToDashboard(ActionEvent event) {
-        showSection(home_form, home_btn); // Replace with your home section and button
-        backButton.setVisible(false); // Hide the back button
-    }
-
-    // Show a friend page and highlight its button
-    private void showFriendPage(Button button, String fxmlFile) {
-        Pane page = friendPages.get(button); // Use Pane instead of AnchorPane
-        if (page == null) {
-            try {
-                FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/" + fxmlFile));
-                page = loader.load();
-                // Add to centerContent and anchor it to fill the space
-                centerContent.getChildren().add(page);
-                AnchorPane.setTopAnchor(page, 0.0);
-                AnchorPane.setBottomAnchor(page, 0.0);
-                AnchorPane.setLeftAnchor(page, 0.0);
-                AnchorPane.setRightAnchor(page, 0.0);
-                friendPages.put(String.valueOf(button), page); // Store the loaded page
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-        }
-        hideAllSections();
-        resetAllButtons();
-        page.setVisible(true);
-        backButton.setVisible(true);
-        button.setStyle("-fx-background-color: linear-gradient(to bottom right, #29AB87, #ACE1AF);");
-        sidebar.setVisible(false); // Hide sidebar for friend pages
-    }
-
-    // Handle button clicks for sidebar and friend buttons
-    @FXML
-    public void switchFormOnAction(ActionEvent event) throws IOException, SQLException {
+    public void switchFormOnAction(ActionEvent event) {
         Object source = event.getSource();
 
-        // Sidebar buttons
-        if (source == home_btn) {
+        // Handle friend page buttons
+        if (source == CentrePage) {
+            openFriendPage("Afficher_Centre.fxml", "Centres");
+        } else if (source == AvisPage) {
+            openFriendPage("friend2.fxml", "Avis");
+        }
+        // Handle dashboard section buttons (example)
+        else if (source == home_btn) {
             showSection(home_form, home_btn);
-            homeDisplayTotalCitoyen();
-            homeDisplayTotalEmployee();
         } else if (source == addEmployee_btn) {
             showSection(addEmployee_form, addEmployee_btn);
-            addEmployeeShowListData();
         } else if (source == generate_rapport) {
             showSection(rapportDisplay, generate_rapport);
         } else if (source == Map_view) {
             showSection(MapsDisplay, Map_view);
-            // Add your map.flyToLocation() call here if applicable
         }
-        // Friend buttons
-        else if (source == CentrePage) {
-            showFriendPage(CentrePage, "Afficher_Centre.fxml");
-        } else if (source == AvisPage) {
-            showFriendPage(AvisPage, "friend2.fxml");
-        }
+    }
+
+    // Helper method to show dashboard sections (not used for friend pages)
+    private void showSection(AnchorPane sectionToShow, Button activeButton) {
+        hideAllSections();
+        sectionToShow.setVisible(true);
+        activeButton.setStyle("-fx-background-color: linear-gradient(to bottom right, #29AB87, #ACE1AF);");
+    }
+
+    // Hide all dashboard sections
+    private void hideAllSections() {
+        home_form.setVisible(false);
+        addEmployee_form.setVisible(false);
+        rapportDisplay.setVisible(false);
+        MapsDisplay.setVisible(false);
     }
 
     public void logout_btn_onAction() {
