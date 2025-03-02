@@ -18,8 +18,8 @@
             <TableColumn fx:id="emailColumn" text="Email Utilisateur" prefWidth="150"/>
             <TableColumn fx:id="messageColumn" text="Message" prefWidth="200"/>
             <TableColumn fx:id="typeColumn" text="Type" prefWidth="100"/>
-            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="200"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="350"/>
         </columns>
     </TableView>
-
+    <Button text="Générer PDF" onAction="#generatePDF" />
 </VBox>

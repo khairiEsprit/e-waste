@@ -4,11 +4,13 @@ package com.example.ewaste.contollers;
 import com.example.ewaste.entities.Demande;
 import com.example.ewaste.repository.DemandeRepository;
 import com.example.ewaste.utils.AlertUtil;
+import com.example.ewaste.utils.BadWordFilter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
@@ -29,65 +31,86 @@ public class FormDemandeController {
     private final DemandeRepository demandeRepository = new DemandeRepository();
 
 
-public void handleSubmit(ActionEvent actionEvent) {
-    String adresse = adresseField.getText().trim();
-    String email = emailField.getText().trim();
-    String message = messageField.getText().trim();
-    String type = (String) typeField.getValue();
+    public void handleSubmit(ActionEvent actionEvent) {
+        String adresse = adresseField.getText().trim();
+        String email = emailField.getText().trim();
+        String message = messageField.getText().trim();
+        String type = (String) typeField.getValue();
 
-    // Hide error messages
-    resetErrorMessages();
+        // Hide error messages
+        resetErrorMessages();
 
-    boolean isValid = true;
+        boolean isValid = true;
 
-    if (adresse.isEmpty()) {
-        adresseError.setText("Veuillez saisir une adresse.");
-        adresseError.setVisible(true);
-        isValid = false;
-    }
-
-    if (email.isEmpty() || !email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-        emailError.setText("Veuillez saisir un email valide.");
-        emailError.setVisible(true);
-        isValid = false;
-    }
-
-    if (message.isEmpty()) {
-        messageError.setText("Le message ne peut pas être vide.");
-        messageError.setVisible(true);
-        isValid = false;
-    }
-
-    if (type == null) {
-        typeError.setText("Veuillez sélectionner un type.");
-        typeError.setVisible(true);
-        isValid = false;
-    }
-
-    if (!isValid) return;
-
-    try {
-        if (demandeToEdit == null) {
-            Demande newDemande = new Demande(adresse, email, message, type);
-            demandeRepository.ajouter(newDemande);
-            AlertUtil.showAlert("Succès", "Demande ajoutée avec succès.", Alert.AlertType.INFORMATION);
-        } else {
-            demandeToEdit.setAdresse(adresse);
-            demandeToEdit.setEmailUtilisateur(email);
-            demandeToEdit.setMessage(message);
-            demandeToEdit.setType(type);
-            demandeRepository.modifier(demandeToEdit);
-            AlertUtil.showAlert("Succès", "Demande modifiée avec succès.", Alert.AlertType.INFORMATION);
+        if (adresse.isEmpty()) {
+            adresseError.setText("Veuillez saisir une adresse.");
+            adresseError.setVisible(true);
+            isValid = false;
         }
 
-        ((Stage) saveButton.getScene().getWindow()).close();
-        openDemandeView();
+        if (email.isEmpty() || !email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            emailError.setText("Veuillez saisir un email valide.");
+            emailError.setVisible(true);
+            isValid = false;
+        }
 
-    } catch (SQLException e) {
-        e.printStackTrace();
-        AlertUtil.showAlert("Erreur", "Une erreur s'est produite lors de l'enregistrement.", Alert.AlertType.ERROR);
+        if (message.isEmpty()) {
+            messageError.setText("Le message ne peut pas être vide.");
+            messageError.setVisible(true);
+            isValid = false;
+        }
+
+        if (type == null) {
+            typeError.setText("Veuillez sélectionner un type.");
+            typeError.setVisible(true);
+            isValid = false;
+        }
+
+        if (!isValid) return;
+
+        try {
+            String filteredMessage= BadWordFilter.filterBadWords(message);
+            if (demandeToEdit == null) {
+
+                Demande newDemande = new Demande(adresse, email, filteredMessage, type);
+                demandeRepository.ajouter(newDemande);
+                showCustomAlert("Succès", "Demande Ajoutée avec succès !");
+            } else {
+                demandeToEdit.setAdresse(adresse);
+                demandeToEdit.setEmailUtilisateur(email);
+                demandeToEdit.setMessage(filteredMessage);
+                demandeToEdit.setType(type);
+                demandeRepository.modifier(demandeToEdit);
+                showCustomAlert("Succès", "Demande modifiée avec succès !");
+            }
+
+            ((Stage) saveButton.getScene().getWindow()).close();
+            openDemandeView();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            AlertUtil.showAlert("Erreur", "Une erreur s'est produite lors de l'enregistrement.", Alert.AlertType.ERROR);
+        }
     }
-}
+
+    private void showCustomAlert(String title, String message) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/CustomAlert.fxml"));
+            Parent root = loader.load();
+
+            CustomAlertController controller = loader.getController();
+            controller.setMessage(title);
+            controller.setDetails(message);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle(title);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void resetErrorMessages() {
         adresseError.setVisible(false);

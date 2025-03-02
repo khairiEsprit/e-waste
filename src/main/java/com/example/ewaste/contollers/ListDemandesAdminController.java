@@ -1,9 +1,10 @@
 package com.example.ewaste.contollers;
 
-
 import com.example.ewaste.entities.Demande;
 import com.example.ewaste.repository.DemandeRepository;
 import com.example.ewaste.utils.AlertUtil;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -17,13 +18,17 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
 
 public class ListDemandesAdminController implements Initializable {
     private static ListDemandesAdminController instance;
@@ -63,10 +68,10 @@ public class ListDemandesAdminController implements Initializable {
         setupTableColumns();
         loadDemandeData();
         setupFiltering();
-
     }
 
     private void setupFiltering() {
+        // Implement filtering logic here if needed
     }
 
     public void loadDemandeData() {
@@ -94,7 +99,6 @@ public class ListDemandesAdminController implements Initializable {
         messageColumn.setCellValueFactory(new PropertyValueFactory<>("message"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
 
-
         actionsColumn.setCellFactory(param -> new TableCell<>() {
             private final Button editButton = new Button("Modifier");
             private final Button deleteButton = new Button("Supprimer");
@@ -117,17 +121,17 @@ public class ListDemandesAdminController implements Initializable {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    HBox buttons = new HBox(5, detailButton, editButton, deleteButton,traitementButton);
+                    HBox buttons = new HBox(5, detailButton, editButton, deleteButton, traitementButton);
                     setGraphic(buttons);
                 }
             }
         });
     }
+
     private void editDemande(Demande demande) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/FormDemande.fxml"));
             Parent root = loader.load();
-
 
             FormDemandeController controller = loader.getController();
             controller.setDemandeToEdit(demande);
@@ -166,7 +170,6 @@ public class ListDemandesAdminController implements Initializable {
                 }
             }
         });
-
     }
 
     private void showDemandeDetail(Demande demande) {
@@ -187,6 +190,7 @@ public class ListDemandesAdminController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void showTraitementDetails(int idDemande) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/TaitementByDemandeAdmin.fxml"));
@@ -196,9 +200,9 @@ public class ListDemandesAdminController implements Initializable {
             traitementController.setDemandeId(idDemande);
             traitementController.loadTraitementByDemande(idDemande);
 
-
             Stage stage = new Stage();
-            stage.setScene(new Scene(root));
+            Scene scene=new Scene(root,900,600);
+            stage.setScene(scene);
             stage.setTitle("Détails du Traitement");
             stage.show();
         } catch (IOException e) {
@@ -208,7 +212,6 @@ public class ListDemandesAdminController implements Initializable {
     }
 
     public void filterList() {
-        // ta5ou ay heja da5elha fel input mta3 recherche w tfiltrilik el list mta3 demande selon id address type w email
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredDemandeList.setPredicate(demande -> {
                 if (newValue == null || newValue.isEmpty()) {
@@ -224,5 +227,81 @@ public class ListDemandesAdminController implements Initializable {
                         demande.getType().toLowerCase().contains(lowerCaseFilter));
             });
         });
+    }
+
+    @FXML
+    private void generatePDF() {
+        Document document = new Document();
+        try {
+            // Specify the file path where the PDF will be saved
+            PdfWriter.getInstance(document, new FileOutputStream("ListeDesDemandes.pdf"));
+            document.open();
+
+            // Add a title with custom font and styling
+            com.itextpdf.text.Font titleFont = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 18, com.itextpdf.text.Font.BOLD);
+            Paragraph title = new Paragraph("Liste des Demandes", titleFont);
+            title.setAlignment(Paragraph.ALIGN_CENTER);
+            title.setSpacingAfter(20); // Add space after the title
+            document.add(title);
+
+            // Create a table with the same columns as the TableView
+            PdfPTable pdfTable = new PdfPTable(5); // 5 columns: ID, Adresse, Email, Message, Type
+            pdfTable.setWidthPercentage(100); // Table width as 100% of the page
+            pdfTable.setSpacingBefore(10); // Add space before the table
+            pdfTable.setSpacingAfter(10); // Add space after the table
+
+            // Define custom fonts for headers and cells
+            com.itextpdf.text.Font headerFont = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 12, com.itextpdf.text.Font.BOLD);
+            com.itextpdf.text.Font cellFont = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 10);
+
+            // Add table headers with custom font and background color
+            PdfPCell headerCell;
+            headerCell = new PdfPCell(new Phrase("ID", headerFont));
+            headerCell.setBackgroundColor(new com.itextpdf.text.BaseColor(200, 200, 200)); // Light gray background
+            pdfTable.addCell(headerCell);
+
+            headerCell = new PdfPCell(new Phrase("Adresse", headerFont));
+            headerCell.setBackgroundColor(new com.itextpdf.text.BaseColor(200, 200, 200));
+            pdfTable.addCell(headerCell);
+
+            headerCell = new PdfPCell(new Phrase("Email Utilisateur", headerFont));
+            headerCell.setBackgroundColor(new com.itextpdf.text.BaseColor(200, 200, 200));
+            pdfTable.addCell(headerCell);
+
+            headerCell = new PdfPCell(new Phrase("Message", headerFont));
+            headerCell.setBackgroundColor(new com.itextpdf.text.BaseColor(200, 200, 200));
+            pdfTable.addCell(headerCell);
+
+            headerCell = new PdfPCell(new Phrase("Type", headerFont));
+            headerCell.setBackgroundColor(new com.itextpdf.text.BaseColor(200, 200, 200));
+            pdfTable.addCell(headerCell);
+
+            // Add rows from the TableView data with custom font
+            for (Demande demande : demandeList) {
+                pdfTable.addCell(new Phrase(String.valueOf(demande.getId()), cellFont));
+                pdfTable.addCell(new Phrase(demande.getAdresse(), cellFont));
+                pdfTable.addCell(new Phrase(demande.getEmailUtilisateur(), cellFont));
+                pdfTable.addCell(new Phrase(demande.getMessage(), cellFont));
+                pdfTable.addCell(new Phrase(demande.getType(), cellFont));
+            }
+
+            // Add the table to the document
+            document.add(pdfTable);
+
+            // Add a footer
+            Paragraph footer = new Paragraph("Généré le: " + new java.util.Date(), cellFont);
+            footer.setAlignment(Paragraph.ALIGN_CENTER);
+            footer.setSpacingBefore(20); // Add space before the footer
+            document.add(footer);
+
+            // Close the document
+            document.close();
+
+            // Show a success message
+            AlertUtil.showAlert("Succès", "PDF généré avec succès.", Alert.AlertType.INFORMATION);
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            AlertUtil.showAlert("Erreur", "Erreur lors de la génération du PDF.", Alert.AlertType.ERROR);
+        }
     }
 }

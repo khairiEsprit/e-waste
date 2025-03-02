@@ -1,6 +1,7 @@
 package com.example.ewaste.contollers;
 
 
+import com.example.ewaste.entities.Demande;
 import com.example.ewaste.entities.Traitement;
 import com.example.ewaste.repository.TraitementRepository;
 import com.example.ewaste.utils.AlertUtil;
@@ -46,6 +47,11 @@ public class TaitementByDemandeAdminController implements Initializable {
     @FXML
     private TableColumn<Traitement, String> commentaireColumn;
 
+    @FXML
+    private Button addTraitementButton;
+
+
+
     private final TraitementRepository traitementRepository = new TraitementRepository();
     private ObservableList<Traitement> traitementList = FXCollections.observableArrayList();
 
@@ -56,6 +62,9 @@ public class TaitementByDemandeAdminController implements Initializable {
             List<Traitement> traitements = traitementRepository.getTraitementByDemande(idDemande);
             traitementList.setAll(traitements);
             traitementTable.setItems(traitementList);
+
+            // Disable the "Ajouter Traitement" button if a Traitement already exists
+            addTraitementButton.setDisable(traitementRepository.traitementExistsForDemande(idDemande));
         } catch (SQLException e) {
             AlertUtil.showAlert("Erreur", "Impossible de charger les traitements.", Alert.AlertType.ERROR);
         }
@@ -107,19 +116,11 @@ public class TaitementByDemandeAdminController implements Initializable {
     }
     @FXML
     private void openAddTraitementForm(ActionEvent event) {
-//        Traitement selectedTraitement = traitementTable.getSelectionModel().getSelectedItem();
-//
-//        if (selectedTraitement == null) {
-//            AlertUtil.showAlert("Erreur", "Veuillez sélectionner un traitement pour ajouter une action.", Alert.AlertType.ERROR);
-//            return;
-//        }
-//
-//        openAddTraitementForm(selectedTraitement.getIdDemande());
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/TraitementForm.fxml"));
             Parent root = loader.load();
             TraitementFormController controller = loader.getController();
-             controller.setDemandeId(currentDemandeId);
+            controller.setDemandeId(currentDemandeId);
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Ajouter un Traitement");
@@ -127,7 +128,6 @@ public class TaitementByDemandeAdminController implements Initializable {
         } catch (IOException e) {
             AlertUtil.showAlert("Erreur", "Impossible d'ouvrir le formulaire.", Alert.AlertType.ERROR);
         }
-
     }
 
 

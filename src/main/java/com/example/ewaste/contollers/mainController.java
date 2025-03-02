@@ -13,6 +13,7 @@ import java.io.IOException;
 public class mainController {
     @FXML
     private StackPane contentArea;
+
     public void showDemande(ActionEvent actionEvent) throws IOException {
         loadContent("/com/example/ewaste/views/FormDemande.fxml");
     }
@@ -32,7 +33,7 @@ public class mainController {
         // Create a new stage (window)
         Stage stage = new Stage();
         stage.setTitle("Demande List");
-        stage.setScene(new Scene(root, 1400, 900));
+        stage.setScene(new Scene(root, 800, 700));
         stage.show();
     }
 }

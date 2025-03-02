@@ -72,6 +72,17 @@ public class TraitementRepository implements IService<Traitement> {
         return traitements;
     }
 
+    public boolean traitementExistsForDemande(int idDemande) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM `traitement` WHERE id_demande = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, idDemande);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+        return false;
+    }
+
     public List<Traitement> getTraitementByDemande(int idDemande) throws SQLException {
         List<Traitement> traitements = new ArrayList<>();
         //Récupère les traitements liés à une demande spécifique (id_demande).

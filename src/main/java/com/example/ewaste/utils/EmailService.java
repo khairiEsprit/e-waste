@@ -1,4 +1,4 @@
-package com.example.ewaste.service;
+package com.example.ewaste.utils;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;

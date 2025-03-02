@@ -55,29 +55,8 @@ public class ListeDemandeUserController implements Initializable {
     }
 
     private VBox createDemandeCard(Demande demande) {
-//        VBox card = new VBox();
-//        card.setSpacing(10);
-//        card.setStyle("-fx-background-color: #FFFFFF; -fx-padding: 15; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #ddd;");
-//        card.setEffect(new DropShadow(10, Color.GRAY));
-//
-//
-//
-//        Label typeLabel = new Label("Type: " + demande.getType());
-//        Label adresseLabel = new Label("Adresse: " + demande.getAdresse());
-//        Label emailLabel = new Label("Email: " + demande.getEmailUtilisateur());
-//
-//        Button seeTreatmentButton = new Button("See Treatment");
-//        seeTreatmentButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 8 15;");
-//        seeTreatmentButton.setOnAction(event -> handleSeeTreatment(demande));
-//
-//        HBox buttonContainer = new HBox(seeTreatmentButton);
-//        buttonContainer.setSpacing(10);
-//
-//        card.getChildren().addAll(typeLabel, adresseLabel, emailLabel, buttonContainer);
-//        return card;
-
         VBox card = new VBox();
-        card.getStyleClass().add("event-card"); // Using the same style as Event
+        card.getStyleClass().add("event-card");
         card.setSpacing(10);
 
         // Image for request type

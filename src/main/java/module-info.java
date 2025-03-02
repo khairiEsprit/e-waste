@@ -10,6 +10,9 @@ module org.example.ewaste.pihoussem {
     requires java.net.http;
     requires javafx.fxml;
     requires java.mail;
+    requires java.desktop;
+    requires itextpdf;
+    requires org.json;
 
     opens com.example.ewaste.contollers to javafx.fxml;
     exports com.example.ewaste.contollers;

@@ -63,26 +63,7 @@ public class TraitementCardsController implements Initializable {
     }
 
     private VBox createTraitementCard(Traitement traitement) {
-//        VBox card = new VBox();
-//        card.setSpacing(10);
-//        card.setStyle("-fx-background-color: #FFFFFF; -fx-padding: 15; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #ddd;");
-//        card.setEffect(new DropShadow(10, Color.GRAY));
-//
-//        Label statusLabel = new Label("Status: " + traitement.getStatus());
-//        statusLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-//
-//        Label dateLabel = new Label("Date: " + traitement.getDateTraitement());
-//        Label commentLabel = new Label("Comment: " + traitement.getCommentaire());
-//
-//        Button closeButton = new Button("Close");
-//        closeButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 8 15;");
-//        closeButton.setOnAction(event -> closeWindow());
-//
-//        HBox buttonContainer = new HBox(closeButton);
-//        buttonContainer.setSpacing(10);
-//
-//        card.getChildren().addAll(statusLabel, dateLabel, commentLabel, buttonContainer);
-//        return card;
+
         VBox card = new VBox();
         card.getStyleClass().add("event-card"); // Applying the same style as Event
         card.setSpacing(10);

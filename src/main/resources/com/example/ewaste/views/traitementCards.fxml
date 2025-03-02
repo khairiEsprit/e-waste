@@ -1,66 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.ewaste.contollers.TraitementCardsController">
+<AnchorPane prefHeight="511.0" prefWidth="844.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.contollers.TraitementCardsController">
 
-    <HBox spacing="20" styleClass="root" stylesheets="@../styles/style2.css">
+    <HBox layoutX="5.0" layoutY="7.0" prefHeight="502.0" prefWidth="832.0" spacing="20" styleClass="root" stylesheets="@../styles/style2.css">
         <padding>
-            <Insets top="20" right="20" bottom="20" left="20"/>
+            <Insets bottom="20" left="20" right="20" top="20" />
         </padding>
 
-        <!-- Sidebar -->
-        <VBox styleClass="sidebar" spacing="20" prefWidth="200">
-            <!-- Logo -->
-            <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
-                <image>
-                    <Image url="@../assets/logo.png"/>
-                </image>
-            </ImageView>
-
-            <!-- Navigation Buttons -->
-            <Button text="Poubelle" styleClass="sidebar-button"/>
-            <Button text="Demande" styleClass="sidebar-button"/>
-            <Button text="Réclamation" styleClass="sidebar-button"/>
-            <Button text="Événement" styleClass="sidebar-button"/>
-        </VBox>
 
         <!-- Main Content -->
-        <VBox spacing="20" style="-fx-padding: 0 0 0 20;" HBox.hgrow="ALWAYS">
-            <Label text="Liste des Traitements" styleClass="main-title"/>
+        <VBox prefHeight="247.0" prefWidth="806.0" spacing="20" style="-fx-padding: 0 0 0 20;" HBox.hgrow="ALWAYS">
 
             <!-- Main Container with Scroll and Info Card -->
-            <HBox spacing="20" HBox.hgrow="ALWAYS">
-                <!-- Traitement List -->
-                <ScrollPane fitToWidth="true" styleClass="scroll-pane" HBox.hgrow="ALWAYS">
-                    <GridPane fx:id="gridPane" hgap="20" vgap="20" styleClass="grid-pane">
+            <HBox spacing="20" HBox.hgrow="ALWAYS" />
+            <Label alignment="CENTER" prefHeight="66.0" prefWidth="325.0" styleClass="main-title" text="Liste des Traitements" />
+             <!-- Traitement List -->
+             <ScrollPane fitToWidth="true" prefHeight="358.0" prefWidth="773.0" styleClass="scroll-pane">
+                 <GridPane fx:id="gridPane" hgap="20" styleClass="grid-pane" vgap="20">
                         <!-- Traitements will be loaded dynamically here -->
                     </GridPane>
-                </ScrollPane>
-
-                <!-- Information Card -->
-                <VBox styleClass="info-card" spacing="10" prefWidth="400">
-                    <!-- Traitement Count -->
-                    <Label text="NB Traitements" styleClass="info-title"/>
-                    <ImageView fitHeight="80" fitWidth="80" preserveRatio="true"/>
-                    <Label text="10" styleClass="info-label"/>
-
-                    <!-- Traitement Status -->
-                    <Label text="Traitements Terminés" styleClass="info-title"/>
-                    <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
-                        <image>
-                            <Image url="@../assets/status-icon.png"/>
-                        </image>
-                    </ImageView>
-                    <Label text="5 Validés" styleClass="info-label"/>
-                </VBox>
-            </HBox>
+             </ScrollPane>
         </VBox>
     </HBox>
 </AnchorPane>

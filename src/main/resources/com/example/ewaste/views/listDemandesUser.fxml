@@ -1,71 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.contollers.ListeDemandeUserController">
+<AnchorPane prefHeight="600" prefWidth="800" stylesheets="@../styles/tache.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.contollers.ListeDemandeUserController">
 
-    <HBox spacing="20" styleClass="root" stylesheets="@../styles/tache.css">
+    <HBox spacing="20" styleClass="root" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
         <padding>
             <Insets bottom="20" left="20" right="20" top="20" />
         </padding>
 
-        <!-- Sidebar -->
-        <VBox prefWidth="200" spacing="20" styleClass="sidebar">
-            <!-- Logo -->
-            <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
-                <image>
-                    <Image url="@../assets/logo.png" />
-                </image>
-            </ImageView>
 
-            <!-- Navigation Buttons -->
-            <Button styleClass="sidebar-button" text="Poubelle" />
-            <Button styleClass="sidebar-button" text="Demande" />
-            <Button styleClass="sidebar-button" text="Réclamation" />
-            <Button styleClass="sidebar-button" text="Événement" />
-        </VBox>
 
         <!-- Main Content -->
         <VBox spacing="20" style="-fx-padding: 0 0 0 20;" HBox.hgrow="ALWAYS">
             <Label styleClass="main-title" text="Liste des Demandes" />
 
-            <!-- Search & Filter -->
-            <HBox spacing="10" style="-fx-padding: 10;">
-                <TextField fx:id="searchField" promptText="Rechercher par type..." styleClass="search-field" />
-                <Button prefHeight="38.0" prefWidth="130.0" styleClass="button" text="Trier par date" />
-            </HBox>
+
 
             <!-- Main Container with Requests & Info Card -->
             <HBox spacing="20" HBox.hgrow="ALWAYS">
                 <!-- Request List -->
-                <ScrollPane fitToWidth="true" styleClass="scroll-pane" HBox.hgrow="ALWAYS">
-                    <GridPane fx:id="gridPane" hgap="20" style="-fx-padding: 10;" vgap="20">
+                <ScrollPane fitToWidth="true" prefHeight="531.0" prefWidth="562.0" styleClass="scroll-pane" HBox.hgrow="ALWAYS">
+                    <GridPane fx:id="gridPane" hgap="20" styleClass="grid-pane" vgap="20">
                         <!-- Requests will be loaded dynamically here -->
                     </GridPane>
                 </ScrollPane>
-
-                <!-- Information Card -->
-                <VBox prefHeight="342.0" prefWidth="234.0" spacing="10" styleClass="info-card">
-                    <!-- Request Count -->
-                    <Label styleClass="info-title" text="NB Demandes" />
-                    <ImageView fitHeight="80" fitWidth="80" preserveRatio="true" />
-                    <Label styleClass="info-label" text="15" />
-
-                    <!-- Treatment Count -->
-                    <Label styleClass="info-title" text="Traitements Associés" />
-                    <ImageView fitHeight="80" fitWidth="80" preserveRatio="true" />
-                    <Label styleClass="info-label" text="10 Traitements" />
-                </VBox>
             </HBox>
         </VBox>
     </HBox>
