@@ -102,21 +102,4 @@ public class CentreRepository implements IService<Centre> {
         return centre;
     }
 
-
-    public float[] getLatitudeLongitude(int id) throws SQLException {
-        String query = "SELECT latitude, langitude FROM centre WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    float latitude = rs.getFloat("latitude");
-                    float longitude = rs.getFloat("langitude");
-                    return new float[]{latitude, longitude};
-                } else {
-                    return null;
-                }
-            }
-        }
-    }
-
 }

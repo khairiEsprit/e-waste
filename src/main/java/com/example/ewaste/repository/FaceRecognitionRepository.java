@@ -138,7 +138,7 @@ public class FaceRecognitionRepository {
         System.out.println("Available labels: " + labelToUserId.keySet());
 
         // Adjust threshold to 100 (or tune based on your data)
-        double CONFIDENCE_THRESHOLD = 80.0;
+        double CONFIDENCE_THRESHOLD = 100.0;
         if (confidence[0] < CONFIDENCE_THRESHOLD && label[0] >= 0 && labelToUserId.containsKey(label[0])) {
             Integer userId = labelToUserId.get(label[0]);
             System.out.println("Accepted - Recognized userId: " + userId + " with confidence: " + confidence[0]);

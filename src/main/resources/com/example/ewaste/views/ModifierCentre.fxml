@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="524.0" prefWidth="600" style="-fx-background-color: linear-gradient(to bottom, #ace1af, #4caf50); -fx-padding: 20px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.AfficherCentreController">
+    <children>
+        <VBox layoutX="205.0" layoutY="15.0" spacing="15">
+            <children>
+                <Label alignment="CENTER" prefHeight="35.0" prefWidth="203.0" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="Modifier Centre" />
+
+                <!-- Champ Nom du Centre -->
+                <TextField fx:id="NomCentre" promptText="Nom du Centre" style="-fx-background-radius: 15px; -fx-padding: 10px;" />
+
+                <!-- WebView pour la carte -->
+                <WebView fx:id="mapView" prefHeight="200.0" prefWidth="200.0" />
+
+                <!-- Champ Téléphone -->
+                <TextField fx:id="TelephoneCentre" promptText="Téléphone" style="-fx-background-radius: 15px; -fx-padding: 10px;" />
+
+                <!-- Champ E-mail -->
+                <TextField fx:id="EmailCentre" promptText="E-mail" style="-fx-background-radius: 15px; -fx-padding: 10px;" />
+
+                <!-- Bouton Ajouter -->
+                <HBox alignment="CENTER" spacing="20">
+                    <children>
+                        <Button fx:id="Modifier" onAction="#ModifierCentre" style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-background-radius: 15px;" text="Modifier" />
+                  <Button fx:id="Supprimer" layoutX="63.0" layoutY="10.0" onAction="#SupprimerFromModifier" style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-background-radius: 15px;" text="Supprimer" />
+                    </children>
+                </HBox>
+
+            </children>
+        </VBox>
+
+        <!-- Champ Latitude -->
+        <TextField fx:id="AltitudeCentre" layoutX="-18.0" layoutY="198.0" opacity="0.0" promptText="Latitude" style="-fx-background-radius: 15px; -fx-padding: 10px;" />
+        <TextField fx:id="Recherche" opacity="0.0" prefHeight="52.0" prefWidth="241.0" />
+
+        <!-- Champ Longitude -->
+        <TextField fx:id="LongitudeCentre" layoutX="-26.0" layoutY="137.0" opacity="0.0" promptText="Longitude" style="-fx-background-radius: 15px; -fx-padding: 10px;" />
+          <ListView fx:id="affichage" layoutX="105.0" layoutY="62.0" opacity="0.0" prefHeight="41.0" prefWidth="27.0" />
+          <Text layoutX="-1.0" layoutY="466.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom du Centre">
+              <font>
+                  <Font size="24.0" />
+              </font>
+      </Text>
+          <Text layoutX="-25.0" layoutY="393.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Localisation">
+              <font>
+                  <Font size="24.0" />
+              </font>
+      </Text>
+          <Text layoutX="-5.0" layoutY="544.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Telephone">
+              <font>
+                  <Font size="24.0" />
+              </font>
+      </Text>
+          <Text layoutX="-37.0" layoutY="312.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+              <font>
+                  <Font size="24.0" />
+              </font>
+      </Text>      <Text fx:id="CountryFlag" layoutX="132.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Flag" />
+    </children>
+</AnchorPane>

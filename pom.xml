@@ -16,15 +16,26 @@
 
   </properties>
     <repositories>
-        <!-- Configures the Maven repository for JxBrowser. -->
         <repository>
-            <id>com.teamdev</id>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- Your TeamDev repository can remain if you need it for other dependencies -->
+        <repository>
+            <id>teamdev</id>
+            <name>TeamDev Repository</name>
             <url>https://europe-maven.pkg.dev/jxbrowser/releases</url>
         </repository>
-
-
     </repositories>
-  <dependencies>
+
+    <dependencies>
       <dependency>
           <groupId>com.teamdev.jxbrowser</groupId>
           <artifactId>jxbrowser-cross-platform</artifactId>
@@ -303,7 +314,19 @@
           <groupId>com.itextpdf</groupId>
           <artifactId>layout</artifactId>
           <version>7.2.6</version>
-      </dependency> </dependencies>
+      </dependency>
+
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>html2pdf</artifactId>
+      <version>4.0.4</version>
+    </dependency>
+
+
+
+
+  </dependencies>
+
 
   <build>
     <plugins>

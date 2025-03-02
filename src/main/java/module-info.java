@@ -22,6 +22,10 @@ module com.example.ewaste {
     requires de.jensd.fx.glyphs.fontawesome;
     requires org.bytedeco.opencv;
     requires javafx.swing;
+    requires jdk.jsobject;
+    requires kernel;
+    requires layout;
+    requires io;
     opens com.example.ewaste.Controllers to javafx.fxml;
     exports com.example.ewaste.Controllers;
     opens com.example.ewaste.Entities to javafx.base;

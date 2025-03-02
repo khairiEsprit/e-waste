@@ -619,7 +619,7 @@ private final  MapBox map = new MapBox();
         }
         // Friend buttons
         else if (source == CentrePage) {
-            showFriendPage(CentrePage, "ForgotPassword.fxml");
+            showFriendPage(CentrePage, "Afficher_Centre.fxml");
         } else if (source == AvisPage) {
             showFriendPage(AvisPage, "friend2.fxml");
         }
