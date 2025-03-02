@@ -20,23 +20,40 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
 public class AfficherContratController {
+
+    @FXML
+    private ComboBox<String> idCentreMod;
+
+    @FXML
+    private ComboBox<String> idEmployeMod;
+
+    @FXML
+    private DatePicker DateDebutMod;
+
+    @FXML
+    private DatePicker DateFinMod;
+
+    @FXML
+    private Canvas signatureMod;
 
     @FXML
     private DatePicker DateFin;
@@ -65,17 +82,44 @@ public class AfficherContratController {
     @FXML
     private Canvas signature;
 
+    @FXML
+    private TextField Recherche;
+
     private ContratRepository contratRepository = new ContratRepository();
 
     private boolean signatureAffichee = false;
 
-    private Contrat contratToModify; // Field to store the contract being modified
+    private Contrat contratToModify;// Field to store the contract being modified
+
+    @FXML
+    private Button chatbotSubmitButton;
+
+    @FXML
+    private TextArea chatbotResponseArea;
+
+    @FXML
+    private TextField chatbotQuestionField;
+
+    private static final String QUESTION_FILE = "question.txt";
+    private static final String RESPONSE_FILE = "response.txt";
+
+
+    @FXML
+    private VBox mainContent; // Ajouter cette référence au contenu principal
+
+    @FXML
+    private VBox ajouterForm;
+
+    @FXML
+    private VBox modifierForm;
 
     @FXML
     public void initialize() {
         loadData();
         loadComboBoxData();
+        setupSearch();
 
+        // Initialisation du canvas pour l'ajout
         if (signature == null) {
             System.out.println("Canvas non trouvé !");
         } else {
@@ -83,40 +127,107 @@ public class AfficherContratController {
             GraphicsContext gc = signature.getGraphicsContext2D();
             gc.setFill(Color.WHITE);
             gc.fillRect(0, 0, signature.getWidth(), signature.getHeight());
+            setupSignatureCanvas(signature);
+        }
 
-            signature.setOnMousePressed(e -> {
-                if (signatureAffichee) {
-                    gc.setFill(Color.WHITE);
-                    gc.fillRect(0, 0, signature.getWidth(), signature.getHeight());
-                    signatureAffichee = false;
-                }
-                gc.beginPath();
-                gc.moveTo(e.getX(), e.getY());
-                gc.stroke();
-            });
-
-            signature.setOnMouseDragged(e -> {
-                gc.lineTo(e.getX(), e.getY());
-                gc.stroke();
-            });
+        // Initialisation du canvas pour la modification
+        if (signatureMod == null) {
+            System.out.println("Canvas de modification non trouvé !");
+        } else {
+            System.out.println("Canvas de modification chargé avec succès !");
+            GraphicsContext gc = signatureMod.getGraphicsContext2D();
+            gc.setFill(Color.WHITE);
+            gc.fillRect(0, 0, signatureMod.getWidth(), signatureMod.getHeight());
+            setupSignatureCanvas(signatureMod);
         }
 
         afficher.setCellFactory(param -> new ContratListCellController());
 
+        // Désactiver les éditeurs des DatePickers
         DateDebut.getEditor().setDisable(true);
         DateDebut.getEditor().setOpacity(1);
         DateFin.getEditor().setDisable(true);
         DateFin.getEditor().setOpacity(1);
+        DateDebutMod.getEditor().setDisable(true);
+        DateDebutMod.getEditor().setOpacity(1);
+        DateFinMod.getEditor().setDisable(true);
+        DateFinMod.getEditor().setOpacity(1);
 
-        // Listener for ListView selection to open Modifier window and preserve contract
+        // Listener pour afficher le formulaire de modification
         afficher.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newSelection) -> {
             if (newSelection != null) {
-                contratToModify = newSelection; // Preserve the selected contract
+                contratToModify = newSelection;
                 afficherDetailsContrat(newSelection);
-                afficherSignature(newSelection.getId());
-                openModifierContratWindow(newSelection); // Open Modifier Contrat window
+                afficherSignature(newSelection.getId(),signature);
+                showModifierForm(null); // Afficher le formulaire de modification
             }
         });
+    }
+
+    // Nouvelle méthode utilitaire pour configurer les canvas
+    private void setupSignatureCanvas(Canvas canvas) {
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        canvas.setOnMousePressed(e -> {
+            if (signatureAffichee) {
+                gc.setFill(Color.WHITE);
+                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                signatureAffichee = false;
+            }
+            gc.beginPath();
+            gc.moveTo(e.getX(), e.getY());
+            gc.stroke();
+        });
+
+        canvas.setOnMouseDragged(e -> {
+            gc.lineTo(e.getX(), e.getY());
+            gc.stroke();
+        });
+    }
+
+
+    @FXML
+    private void submitQuestion(ActionEvent event) {
+        String question = chatbotQuestionField.getText();
+        if (question == null || question.trim().isEmpty()) {
+            chatbotResponseArea.setText("Veuillez entrer une question.");
+            return;
+        }
+
+        try {
+            // Write the question to a file
+            Files.write(Paths.get(QUESTION_FILE), question.getBytes());
+
+            // Poll for the response (simplified; could use a more robust mechanism like a timer)
+            String response = pollForResponse();
+            chatbotResponseArea.setText(response.isEmpty() ? "Aucune réponse reçue." : response);
+
+        } catch (IOException e) {
+            chatbotResponseArea.setText("Erreur: Impossible d'écrire/lire le fichier - " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private String pollForResponse() throws IOException {
+        int maxAttempts = 10; // Limit to prevent infinite loop
+        int attempt = 0;
+        long sleepTime = 1000; // 1 second between checks
+
+        while (attempt < maxAttempts) {
+            if (Files.exists(Paths.get(RESPONSE_FILE))) {
+                String response = new String(Files.readAllBytes(Paths.get(RESPONSE_FILE)));
+                // Clear the response file after reading
+                Files.deleteIfExists(Paths.get(RESPONSE_FILE));
+                return response.trim();
+            }
+            try {
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return "Erreur: Interruption lors de l'attente de la réponse.";
+            }
+            attempt++;
+        }
+        return "Aucune réponse reçue après " + maxAttempts + " tentatives.";
     }
 
     private void afficherDetailsContrat(Contrat contrat) {
@@ -163,6 +274,18 @@ public class AfficherContratController {
     }
 
     @FXML
+    void showAjouterForm(ActionEvent event) {
+        // Appliquer l'effet de flou au contenu principal
+        mainContent.setEffect(new GaussianBlur(5));
+
+        // Afficher le formulaire d'ajout
+        ajouterForm.setVisible(true);
+        ajouterForm.setManaged(true);
+
+        // Réinitialiser les champs si nécessaire
+        clearForm();
+    }
+   /* @FXML
     void GoToAjout(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/AjouterContrat.fxml"));
@@ -187,43 +310,48 @@ public class AfficherContratController {
             e.printStackTrace();
             showAlert("Erreur lors de l'ouverture de la fenêtre d'ajout.");
         }
-    }
+    }*/
+   @FXML
+   void hideAjouterForm(ActionEvent event) {
+       // Supprimer l'effet de flou
+       mainContent.setEffect(null);
 
-    private void openModifierContratWindow(Contrat selectedContrat) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/ModifierContrat.fxml"));
-            Parent root = loader.load();
-            AfficherContratController controller = loader.getController();
-            controller.setContratData(selectedContrat);
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Modifier Contrat");
-            dialogStage.setScene(new Scene(root));
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(afficher.getScene().getWindow());
-            dialogStage.showAndWait();
-            loadData();
-            Contrat selected = afficher.getSelectionModel().getSelectedItem();
-            if (selected != null) {
-                contratToModify = selected; // Preserve selection after modifying
-                afficherDetailsContrat(selected);
-                afficherSignature(selected.getId());
-            } else {
-                clearForm();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Erreur Impossible de charger la fenêtre de modification.");
+       // Masquer le formulaire d'ajout
+       ajouterForm.setVisible(false);
+       ajouterForm.setManaged(false);
+   }
+
+    @FXML
+    void showModifierForm(ActionEvent event) {
+        if (contratToModify != null) {
+            mainContent.setEffect(new GaussianBlur(5));
+            modifierForm.setVisible(true);
+            modifierForm.setManaged(true);
+            setContratData(contratToModify); // Charger les données dans le formulaire
+        } else {
+            showAlert("Veuillez sélectionner un contrat à modifier.");
         }
     }
+
+    @FXML
+    void hideModifierForm(ActionEvent event) {
+        mainContent.setEffect(null);
+        modifierForm.setVisible(false);
+        modifierForm.setManaged(false);
+    }
+
 
     public void setContratData(Contrat contrat) {
         contratToModify = contrat;
         try {
-            idCentre.setValue(contratRepository.getCentreNameById(contrat.getIdCentre()));
-            idEmploye.setValue(contratRepository.getEmployeNameById(contrat.getIdEmploye()));
-            DateDebut.setValue(contrat.getDateDebut());
-            DateFin.setValue(contrat.getDateFin());
-            afficherSignature(contrat.getId());
+            idCentreMod.setValue(contratRepository.getCentreNameById(contrat.getIdCentre()));
+            idEmployeMod.setValue(contratRepository.getEmployeNameById(contrat.getIdEmploye()));
+            DateDebutMod.setValue(contrat.getDateDebut());
+            DateFinMod.setValue(contrat.getDateFin());
+            // Réutiliser les listes des ComboBox d'ajout pour les options
+            idCentreMod.setItems(idCentre.getItems());
+            idEmployeMod.setItems(idEmploye.getItems());
+            afficherSignature(contrat.getId(), signatureMod); // Afficher la signature dans le canvas de modification
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Erreur lors du chargement des données du contrat.");
@@ -290,6 +418,7 @@ public class AfficherContratController {
                     // MailRepository.sendEmail(recipientEmail, subject, message, pdfPath);
                 }
             }
+            hideAjouterForm(event);
 
             loadData();
             idCentre.setValue(null);
@@ -356,8 +485,9 @@ public class AfficherContratController {
                 }
 
                 contratRepository.modifier(contratToModify);
+                hideModifierForm(event);
                 loadData();
-                afficherSignature(contratToModify.getId());
+                afficherSignature(contratToModify.getId(),signatureMod);
             } catch (SQLException e) {
                 e.printStackTrace();
                 showAlert("Erreur lors de la modification du contrat.");
@@ -371,10 +501,10 @@ public class AfficherContratController {
     void ModifierContrat(ActionEvent event) {
         if (contratToModify != null) {
             try {
-                String newCentre = idCentre.getValue();
-                String newEmploye = idEmploye.getValue();
-                LocalDate newDateDebut = DateDebut.getValue();
-                LocalDate newDateFin = DateFin.getValue();
+                String newCentre = idCentreMod.getValue();
+                String newEmploye = idEmployeMod.getValue();
+                LocalDate newDateDebut = DateDebutMod.getValue();
+                LocalDate newDateFin = DateFinMod.getValue();
 
                 if (newCentre == null || newEmploye == null || newDateDebut == null || newDateFin == null) {
                     showAlert("Veuillez remplir tous les champs avant de modifier.");
@@ -418,9 +548,11 @@ public class AfficherContratController {
                 }
 
                 contratRepository.modifier(contratToModify);
+                hideModifierForm(event);
+                loadData();
                 showAlert("Succès Le contrat a été modifié avec succès.");
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.close(); // Close the modal window
+               // Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+               // stage.close(); // Close the modal window
             } catch (SQLException e) {
                 e.printStackTrace();
                 showAlert("Erreur lors de la modification du contrat.");
@@ -481,15 +613,19 @@ public class AfficherContratController {
 
     private String enregistrerSignature(int contratId) {
         try {
-            File signatureFile = new File("signatures/contrat_" + contratId + ".png");
-            if (!signatureFile.getParentFile().exists()) {
-                signatureFile.getParentFile().mkdirs();
+            String baseDir = "C:\\Users\\Asus\\Desktop\\e-waste(Signature+Map+Mail+Adresse)";
+            File signatureDir = new File(baseDir, "signatures");
+            if (!signatureDir.exists()) {
+                signatureDir.mkdirs();  // Crée le dossier signatures s'il n'existe pas
             }
+            File signatureFile = new File(signatureDir, "contrat_" + contratId + ".png");
             WritableImage image = signature.snapshot(null, null);
             BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
             ImageIO.write(bufferedImage, "png", signatureFile);
-            return signatureFile.getAbsolutePath();
+            System.out.println("Chemin de signature enregistré : " + signatureFile.getAbsolutePath());
+            return signatureFile.getAbsolutePath();  // Retourne un chemin absolu
         } catch (IOException e) {
+            System.out.println("Erreur lors de l'enregistrement de la signature : " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -508,17 +644,20 @@ public class AfficherContratController {
         return true;
     }
 
-    private void afficherSignature(int contratId) {
-        File file = new File(SIGNATURE_FOLDER + "/contrat_" + contratId + ".png");
+    private void afficherSignature(int contratId, Canvas canvas) {
+        String baseDir = "C:\\Users\\Asus\\Desktop\\e-waste(Signature+Map+Mail+Adresse)"; // Chemin absolu explicite
+        File file = new File(baseDir, "signatures/contrat_" + contratId + ".png");
+        System.out.println("Chemin utilisé pour afficher la signature : " + file.getAbsolutePath());
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
         if (file.exists()) {
             try {
                 Image image = new Image(file.toURI().toString());
-                GraphicsContext gc = signature.getGraphicsContext2D();
                 gc.setFill(Color.WHITE);
-                gc.fillRect(0, 0, signature.getWidth(), signature.getHeight());
-                gc.drawImage(image, 0, 0, signature.getWidth(), signature.getHeight());
+                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                gc.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight());
                 signatureAffichee = true;
-                System.out.println("✅ Signature chargée depuis : " + file.getAbsolutePath());
+                System.out.println("✅ Signature chargée dans le canvas depuis : " + file.getAbsolutePath());
             } catch (Exception e) {
                 System.err.println("❌ Erreur lors du chargement de la signature !");
                 e.printStackTrace();
@@ -526,9 +665,8 @@ public class AfficherContratController {
         } else {
             System.out.println("⚠️ Aucune signature trouvée pour le contrat " + contratId);
             signatureAffichee = false;
-            GraphicsContext gc = signature.getGraphicsContext2D();
             gc.setFill(Color.WHITE);
-            gc.fillRect(0, 0, signature.getWidth(), signature.getHeight());
+            gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         }
     }
 
@@ -539,7 +677,8 @@ public class AfficherContratController {
                 showAlert("Aucun contrat trouvé !");
                 return null;
             }
-            String filePath = "contrats/contrat_" + lastId + ".pdf";
+            String baseDir = "C:\\Users\\Asus\\Desktop\\e-waste(Signature+Map+Mail+Adresse)";
+            String filePath = baseDir + "\\contrats\\contrat_" + lastId + ".pdf";
             Document document = new Document();
             File file = new File(filePath);
             file.getParentFile().mkdirs();
@@ -598,14 +737,21 @@ public class AfficherContratController {
 
             String signaturePath = contrat.getSignaturePath();
             if (signaturePath != null && !signaturePath.isEmpty()) {
+                System.out.println("Chemin de signature dans generatePDF : " + signaturePath);
                 File signatureFile = new File(signaturePath);
                 if (signatureFile.exists()) {
+                    System.out.println("Signature trouvée à : " + signatureFile.getAbsolutePath());
                     com.itextpdf.text.Image signatureImage = com.itextpdf.text.Image.getInstance(signatureFile.getAbsolutePath());
                     signatureImage.scaleToFit(150, 50);
                     signatureImage.setAlignment(Element.ALIGN_CENTER);
                     document.add(new Paragraph("\n\nSignature :", normalFont));
                     document.add(signatureImage);
+                } else {
+                    System.out.println("Signature non trouvée à : " + signatureFile.getAbsolutePath());
+                    System.out.println("SignaturePath retourné par enregistrerSignature : " + signaturePath);
                 }
+            } else {
+                System.out.println("Chemin de signature null ou vide dans generatePDF");
             }
 
             document.close();
@@ -660,6 +806,41 @@ public class AfficherContratController {
                 " se termine le " + contrat.getDateFin() + ".\n\nVeuillez prendre les mesures nécessaires.";
         // Uncomment if mail sending is implemented
         // MailRepository.sendEmailWithoutAttachment(email, subject, body);
+    }
+
+    private void setupSearch() {
+        Recherche.textProperty().addListener((observable, oldValue, newValue) -> {
+            List<Contrat> filteredContrats;
+            try {
+                ContratRepository contratRepository = new ContratRepository(); // Assurez-vous que cette instance est bien initialisée
+                filteredContrats = contratRepository.afficher().stream()
+                        .filter(contrat -> {
+                            if (newValue == null || newValue.isEmpty()) {
+                                return true; // Si le champ de recherche est vide, afficher tous les contrats
+                            }
+                            try {
+                                // Récupérer le nom du centre et de l'employé associés au contrat
+                                String centreNom = contratRepository.getCentreNameById(contrat.getIdCentre());
+                                String employeNom = contratRepository.getEmployeNameById(contrat.getIdEmploye());
+                                String employePrenom = contratRepository.getEmployePrenameById(contrat.getIdEmploye());
+
+                                // Vérifier si le texte de recherche correspond au nom du centre ou au nom/prénom de l'employé
+                                String searchText = newValue.toLowerCase();
+                                return (centreNom != null && centreNom.toLowerCase().contains(searchText)) ||
+                                        (employeNom != null && employeNom.toLowerCase().contains(searchText)) ||
+                                        (employePrenom != null && employePrenom.toLowerCase().contains(searchText));
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                                return false; // En cas d'erreur SQL, exclure ce contrat du filtre
+                            }
+                        })
+                        .toList();
+                afficher.setItems(FXCollections.observableArrayList(filteredContrats));
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert("Erreur Erreur lors du filtrage des contrats.");
+            }
+        });
     }
 }
 

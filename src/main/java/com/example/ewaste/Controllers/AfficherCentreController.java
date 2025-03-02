@@ -1,6 +1,7 @@
 package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Utils.DataBase;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,13 +10,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.stage.Modality;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import com.example.ewaste.Entities.Centre;
@@ -60,258 +63,200 @@ public class AfficherCentreController {
     private TextField Recherche;
 
     @FXML
-    private WebView Map; // Note: Unused; mapView is used instead
+    private WebView mapView;
+
+    @FXML
+    private WebView mapViewAjouter;
+
+    @FXML
+    private WebView mapViewModifier;
+
+    @FXML
+    private VBox mainContent;
+
+    @FXML
+    private VBox ajouterForm;
+
+    @FXML
+    private VBox modifierForm;
+
+    @FXML
+    private TextField NomCentreMod;
+
+    @FXML
+    private TextField LongitudeCentreMod;
+
+    @FXML
+    private TextField AltitudeCentreMod;
+
+    @FXML
+    private TextField TelephoneCentreMod;
+
+    @FXML
+    private TextField EmailCentreMod;
+
+    @FXML
+    private Text CountryFlagMod;
+
+    @FXML
+    private Button btnAjouter;
+
+    @FXML
+    private Button btnModifier;
+
+    @FXML
+    private Button btnSupprimer;
+
+    private WebEngine webEngineMain;
+    private WebEngine webEngineAjouter;
+    private WebEngine webEngineModifier;
 
     private CentreRepository centreRepository = new CentreRepository();
 
-    @FXML
-    private WebView mapView;
-    private WebEngine webEngine;
+    private Centre centreToModify;
 
-    private Centre centreToModify; // Field to store the centre being modified
-
-
-
-    @FXML
-    void GoToAjout(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/AjouterCentre.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Ajouter un Centre");
-            dialogStage.setScene(scene);
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(((Node) event.getSource()).getScene().getWindow());
-            dialogStage.showAndWait();
-            // Refresh ListView and update map after modal closes, similar to ModifierCentre
-            loadData();
-            Centre selected = affichage.getSelectionModel().getSelectedItem();
-            if (selected != null && mapView != null) {
-                setLocation(selected.getLatitude(), selected.getLongitude());
-            } else if (mapView != null) {
-                webEngine.executeScript("if (marker) { map.removeLayer(marker); }");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger la boîte de dialogue.");
-        }
-    }
+    private String activeForm = "main";
 
     @FXML
     public void initialize() {
         loadData();
         affichage.setCellFactory(param -> new CentreListCellController());
-        LongitudeCentre.setEditable(false);
-        AltitudeCentre.setEditable(false);
+        LongitudeCentre.setEditable(true);
+        AltitudeCentre.setEditable(true);
+        LongitudeCentreMod.setEditable(true);
+        AltitudeCentreMod.setEditable(true);
         detectUserLocation();
         setupSearch();
 
-        if (mapView != null) {
-            webEngine = mapView.getEngine();
-            URL mapUrl = getClass().getResource("/com.example.ewaste/views/map.html");
-            if (mapUrl != null) {
-                webEngine.load(mapUrl.toExternalForm());
-                webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-                    if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
-                        JSObject window = (JSObject) webEngine.executeScript("window");
-                        window.setMember("javaApp", this);
-                        Centre selected = affichage.getSelectionModel().getSelectedItem();
-                        if (selected != null) {
-                            setLocation(selected.getLatitude(), selected.getLongitude());
-                        }
-                    } else if (newState == javafx.concurrent.Worker.State.FAILED) {
-                        System.out.println("Erreur : Échec du chargement de map.html");
-                    }
-                });
-            } else {
-                System.out.println("Erreur : Fichier map.html introuvable !");
-            }
-        }
+        initializeWebView(mapView, "main", engine -> webEngineMain = engine);
+        initializeWebView(mapViewAjouter, "ajouter", engine -> webEngineAjouter = engine);
+        initializeWebView(mapViewModifier, "modifier", engine -> webEngineModifier = engine);
 
         affichage.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                NomCentre.setText(newSelection.getNom());
-                LongitudeCentre.setText(String.valueOf(newSelection.getLongitude()));
-                AltitudeCentre.setText(String.valueOf(newSelection.getLatitude()));
-                TelephoneCentre.setText(String.valueOf(newSelection.getTelephone()));
-                EmailCentre.setText(newSelection.getEmail());
-                if (mapView != null) {
-                    setLocation(newSelection.getLatitude(), newSelection.getLongitude());
-                    setCoordinates(newSelection.getLatitude(), newSelection.getLongitude());
-                }
-                openModifierCentreWindow(newSelection);
+                centreToModify = newSelection;
+                showModifierForm(null);
             }
         });
     }
 
-    public void setCentreData(Centre centre) {
-        centreToModify = centre;
-        NomCentre.setText(centre.getNom());
-        LongitudeCentre.setText(String.valueOf(centre.getLongitude()));
-        AltitudeCentre.setText(String.valueOf(centre.getLatitude()));
-        TelephoneCentre.setText(String.valueOf(centre.getTelephone()));
-        EmailCentre.setText(centre.getEmail());
-    }
-
-    private void openModifierCentreWindow(Centre selectedCentre) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/ModifierCentre.fxml"));
-            Parent root = loader.load();
-            AfficherCentreController controller = loader.getController();
-            controller.setCentreData(selectedCentre);
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Modifier Centre");
-            dialogStage.setScene(new Scene(root));
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(affichage.getScene().getWindow());
-            dialogStage.showAndWait();
-            loadData();
-            Centre selected = affichage.getSelectionModel().getSelectedItem();
-            if (selected != null && mapView != null) {
-                setLocation(selected.getLatitude(), selected.getLongitude());
-            } else if (mapView != null) {
-                webEngine.executeScript("if (marker) { map.removeLayer(marker); }");
+    private void initializeWebView(WebView webView, String type, java.util.function.Consumer<WebEngine> engineSetter) {
+        if (webView != null) {
+            WebEngine engine = webView.getEngine();
+            URL mapUrl = getClass().getResource("/com.example.ewaste/views/map.html");
+            if (mapUrl != null) {
+                System.out.println("Chargement de map.html pour " + type + " : " + mapUrl.toExternalForm());
+                engine.load(mapUrl.toExternalForm());
+                engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                    System.out.println("État du WebEngine pour " + type + " : " + newState);
+                    if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                        JSObject window = (JSObject) engine.executeScript("window");
+                        window.setMember("javaApp", this);
+                        System.out.println("Carte chargée avec succès pour " + type);
+                        if (type.equals("main") && affichage.getSelectionModel().getSelectedItem() != null) {
+                            Centre selected = affichage.getSelectionModel().getSelectedItem();
+                            setLocation(selected.getLatitude(), selected.getLongitude(), engine);
+                        }
+                    } else if (newState == javafx.concurrent.Worker.State.FAILED) {
+                        System.out.println("Erreur : Échec du chargement de map.html pour " + type);
+                    }
+                });
+            } else {
+                System.out.println("Erreur : Fichier map.html introuvable pour " + type + " !");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger la fenêtre de modification.");
+            engineSetter.accept(engine);
+        } else {
+            System.out.println("WebView null pour " + type);
         }
     }
 
     public void setCoordinates(double lat, double lon) {
-        LongitudeCentre.setText(String.valueOf(lon));
-        AltitudeCentre.setText(String.valueOf(lat));
-        setLocation(lat, lon);
-    }
-
-    public void setLocation(double lat, double lon) {
-        if (webEngine != null && webEngine.getLoadWorker().getState() == javafx.concurrent.Worker.State.SUCCEEDED) {
-            try {
-                String script = "updateLocation(" + lat + ", " + lon + ")";
-                webEngine.executeScript(script);
-            } catch (netscape.javascript.JSException e) {
-                System.out.println("Erreur JavaScript : " + e.getMessage());
-            }
-        } else {
-            System.out.println("WebEngine non prêt ou page non chargée. Latitude: " + lat + ", Longitude: " + lon);
+        System.out.println("Coordonnées reçues : lat=" + lat + ", lon=" + lon + ", formulaire actif=" + activeForm);
+        if ("ajouter".equals(activeForm)) {
+            AltitudeCentre.setText(String.valueOf(lat));
+            LongitudeCentre.setText(String.valueOf(lon));
+        } else if ("modifier".equals(activeForm)) {
+            AltitudeCentreMod.setText(String.valueOf(lat));
+            LongitudeCentreMod.setText(String.valueOf(lon));
         }
     }
 
     @FXML
-    private void afficherCentre(Centre centre) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/Afficher_Centre.fxml"));
-        try {
-            Parent root = loader.load();
-            AfficherCentreController controller = loader.getController();
-            if (centre != null) {
-                controller.setLocation(centre.getLatitude(), centre.getLongitude());
-            } else {
-                System.out.println("Erreur : Centre non trouvé !");
-            }
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadData() {
-        try {
-            List<Centre> centreList = centreRepository.afficher();
-            ObservableList<Centre> observableCentres = FXCollections.observableArrayList(centreList);
-            affichage.setItems(observableCentres);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Erreur lors du chargement des données.");
+    void showAjouterForm(ActionEvent event) {
+        mainContent.setEffect(new GaussianBlur(5));
+        ajouterForm.setVisible(true);
+        ajouterForm.setManaged(true);
+        clearAjouterForm();
+        activeForm = "ajouter";
+        if (webEngineAjouter != null) {
+            setLocation(36.8065, 10.1815, webEngineAjouter);
         }
     }
 
     @FXML
-    public void Supprimer(ActionEvent actionEvent) {
-        Centre centreSelectionne = affichage.getSelectionModel().getSelectedItem();
-        if (centreSelectionne != null) {
-            try {
-                centreRepository.supprimer(centreSelectionne.getId());
-                affichage.getItems().remove(centreSelectionne);
-                System.out.println("Centre supprimé : " + centreSelectionne);
-                if (mapView != null) {
-                    webEngine.executeScript("if (marker) { map.removeLayer(marker); }");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                showAlert("Erreur", "Erreur lors de la suppression du centre.");
-            }
-        } else {
-            showAlert("Erreur", "Aucun centre sélectionné pour la suppression.");
-        }
+    void hideAjouterForm(ActionEvent event) {
+        mainContent.setEffect(null);
+        ajouterForm.setVisible(false);
+        ajouterForm.setManaged(false);
+        activeForm = "main";
     }
 
     @FXML
-    public void SupprimerFromModifier(ActionEvent event) {
+    void showModifierForm(ActionEvent event) {
         if (centreToModify != null) {
-            try {
-                centreRepository.supprimer(centreToModify.getId());
-                affichage.getItems().remove(centreToModify);
-                showAlert("Succès", "Le centre a été supprimé avec succès.");
-                if (mapView != null) {
-                    webEngine.executeScript("if (marker) { map.removeLayer(marker); }");
-                }
-                centreToModify = null;
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                showAlert("Erreur", "Erreur lors de la suppression du centre.");
-            }
-        } else {
-            showAlert("Erreur", "Aucun centre n'est disponible pour suppression.");
-        }
-    }
-
-    @FXML
-    void ModifierCentre(ActionEvent event) {
-        if (centreToModify != null) {
-            if (validateInputs()) {
-                centreToModify.setNom(NomCentre.getText());
-                centreToModify.setLongitude(Float.parseFloat(LongitudeCentre.getText()));
-                centreToModify.setLatitude(Float.parseFloat(AltitudeCentre.getText()));
-                centreToModify.setTelephone(Integer.parseInt(TelephoneCentre.getText()));
-                centreToModify.setEmail(EmailCentre.getText());
-
-                String sql = "UPDATE centre SET nom=?, longitude=?, altitude=?, telephone=?, email=? WHERE id=?";
-                try (Connection conn = DataBase.getInstance().getConnection();
-                     PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    stmt.setString(1, centreToModify.getNom());
-                    stmt.setFloat(2, centreToModify.getLongitude());
-                    stmt.setFloat(3, centreToModify.getLatitude());
-                    stmt.setInt(4, centreToModify.getTelephone());
-                    stmt.setString(5, centreToModify.getEmail());
-                    stmt.setInt(6, centreToModify.getId());
-
-                    stmt.executeUpdate();
-                    showAlert("Succès", "Le centre a été modifié avec succès.");
-                    if (mapView != null) {
-                        setLocation(centreToModify.getLatitude(), centreToModify.getLongitude());
+            mainContent.setEffect(new GaussianBlur(5));
+            modifierForm.setVisible(true);
+            modifierForm.setManaged(true);
+            setCentreData(centreToModify);
+            activeForm = "modifier";
+            // Forcer le rendu et la mise à jour après que le formulaire soit visible
+            Platform.runLater(() -> {
+                if (webEngineModifier != null) {
+                    if (webEngineModifier.getLoadWorker().getState() != javafx.concurrent.Worker.State.SUCCEEDED) {
+                        System.out.println("Rechargement de map.html pour modifier...");
+                        URL mapUrl = getClass().getResource("/com.example.ewaste/views/map.html");
+                        if (mapUrl != null) {
+                            webEngineModifier.load(mapUrl.toExternalForm());
+                        }
                     }
-                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    stage.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    showAlert("Erreur", "Erreur lors de la modification du centre.");
+                    // Attendre que le chargement soit terminé avant de mettre à jour
+                    webEngineModifier.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                        if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                            setLocation(centreToModify.getLatitude(), centreToModify.getLongitude(), webEngineModifier);
+                        }
+                    });
+                    // Forcer une mise à jour si déjà chargé
+                    if (webEngineModifier.getLoadWorker().getState() == javafx.concurrent.Worker.State.SUCCEEDED) {
+                        setLocation(centreToModify.getLatitude(), centreToModify.getLongitude(), webEngineModifier);
+                    }
                 }
-            } else {
-                System.out.println("Les données sont invalides.");
-            }
+            });
         } else {
-            showAlert("Erreur", "Aucun centre n'est disponible pour modification.");
+            showAlert("Erreur", "Veuillez sélectionner un centre à modifier.");
         }
+    }
+
+    @FXML
+    void hideModifierForm(ActionEvent event) {
+        mainContent.setEffect(null);
+        modifierForm.setVisible(false);
+        modifierForm.setManaged(false);
+        activeForm = "main";
+    }
+
+    public void setCentreData(Centre centre) {
+        centreToModify = centre;
+        NomCentreMod.setText(centre.getNom());
+        LongitudeCentreMod.setText(String.valueOf(centre.getLongitude()));
+        AltitudeCentreMod.setText(String.valueOf(centre.getLatitude()));
+        TelephoneCentreMod.setText(String.valueOf(centre.getTelephone()));
+        EmailCentreMod.setText(centre.getEmail());
+        CountryFlagMod.setText(CountryFlag.getText());
     }
 
     @FXML
     void AjouterCentre(ActionEvent event) {
-        if (validateInputs()) {
+        if (validateInputs(NomCentre, LongitudeCentre, AltitudeCentre, TelephoneCentre, EmailCentre)) {
             String nom = NomCentre.getText();
             float longitude = Float.parseFloat(LongitudeCentre.getText());
             float altitude = Float.parseFloat(AltitudeCentre.getText());
@@ -326,19 +271,11 @@ public class AfficherCentreController {
                 }
                 Centre centre = new Centre(nom, longitude, altitude, telephone, email);
                 centreRepository.ajouter(centre);
-                NomCentre.clear();
-                LongitudeCentre.clear();
-                AltitudeCentre.clear();
-                EmailCentre.clear();
-                TelephoneCentre.clear();
-                loadData(); // Refresh the ListView
-                if (mapView != null) {
-                    setLocation(altitude, longitude); // Update map with new centre
+                loadData();
+                if (webEngineMain != null) {
+                    setLocation(altitude, longitude, webEngineMain);
                 }
-                System.out.println("Centre ajouté : " + centre);
-                // Close the Ajouter Centre window
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.close();
+                hideAjouterForm(event);
             } catch (SQLException e) {
                 e.printStackTrace();
                 showAlert("Erreur", "Erreur lors de l'ajout du centre.");
@@ -349,12 +286,98 @@ public class AfficherCentreController {
         }
     }
 
-    private boolean validateInputs() {
-        String nom = NomCentre.getText();
-        String longitudeText = LongitudeCentre.getText();
-        String altitudeText = AltitudeCentre.getText();
-        String email = EmailCentre.getText();
-        String phoneText = TelephoneCentre.getText();
+    @FXML
+    void ModifierCentre(ActionEvent event) {
+        if (centreToModify != null && validateInputs(NomCentreMod, LongitudeCentreMod, AltitudeCentreMod, TelephoneCentreMod, EmailCentreMod)) {
+            centreToModify.setNom(NomCentreMod.getText());
+            centreToModify.setLongitude(Float.parseFloat(LongitudeCentreMod.getText()));
+            centreToModify.setLatitude(Float.parseFloat(AltitudeCentreMod.getText()));
+            centreToModify.setTelephone(Integer.parseInt(TelephoneCentreMod.getText()));
+            centreToModify.setEmail(EmailCentreMod.getText());
+
+            String sql = "UPDATE centre SET nom=?, longitude=?, altitude=?, telephone=?, email=? WHERE id=?";
+            try (Connection conn = DataBase.getInstance().getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, centreToModify.getNom());
+                stmt.setFloat(2, centreToModify.getLongitude());
+                stmt.setFloat(3, centreToModify.getLatitude());
+                stmt.setInt(4, centreToModify.getTelephone());
+                stmt.setString(5, centreToModify.getEmail());
+                stmt.setInt(6, centreToModify.getId());
+
+                stmt.executeUpdate();
+                showAlert("Succès", "Le centre a été modifié avec succès.");
+                if (webEngineMain != null) {
+                    setLocation(centreToModify.getLatitude(), centreToModify.getLongitude(), webEngineMain);
+                }
+                hideModifierForm(event);
+                loadData();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert("Erreur", "Erreur lors de la modification du centre.");
+            }
+        } else {
+            showAlert("Erreur", "Aucun centre n'est disponible pour modification ou les données sont invalides.");
+        }
+    }
+
+    @FXML
+    public void SupprimerFromModifier(ActionEvent event) {
+        if (centreToModify != null) {
+            try {
+                centreRepository.supprimer(centreToModify.getId());
+                affichage.getItems().remove(centreToModify);
+                showAlert("Succès", "Le centre a été supprimé avec succès.");
+                if (webEngineMain != null) {
+                    webEngineMain.executeScript("if (marker) { map.removeLayer(marker); }");
+                }
+                centreToModify = null;
+                hideModifierForm(event);
+                loadData();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert("Erreur", "Erreur lors de la suppression du centre.");
+            }
+        } else {
+            showAlert("Erreur", "Aucun centre n'est disponible pour suppression.");
+        }
+    }
+
+    private void loadData() {
+        try {
+            List<Centre> centreList = centreRepository.afficher();
+            ObservableList<Centre> observableCentres = FXCollections.observableArrayList(centreList);
+            affichage.setItems(observableCentres);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Erreur lors du chargement des données.");
+        }
+    }
+
+    public void setLocation(double lat, double lon, WebEngine engine) {
+        if (engine != null && engine.getLoadWorker().getState() == javafx.concurrent.Worker.State.SUCCEEDED) {
+            try {
+                String script = "updateLocation(" + lat + ", " + lon + ")";
+                engine.executeScript(script);
+                System.out.println("Mise à jour de la carte pour latitude: " + lat + ", longitude: " + lon);
+            } catch (netscape.javascript.JSException e) {
+                System.out.println("Erreur JavaScript : " + e.getMessage());
+            }
+        } else {
+            System.out.println("WebEngine non prêt ou non chargé pour cette mise à jour.");
+        }
+    }
+
+    public void setLocation(double lat, double lon) {
+        setLocation(lat, lon, webEngineMain);
+    }
+
+    private boolean validateInputs(TextField nomField, TextField longitudeField, TextField altitudeField, TextField phoneField, TextField emailField) {
+        String nom = nomField.getText();
+        String longitudeText = longitudeField.getText();
+        String altitudeText = altitudeField.getText();
+        String email = emailField.getText();
+        String phoneText = phoneField.getText();
 
         if (nom.isEmpty() || longitudeText.isEmpty() || altitudeText.isEmpty() || email.isEmpty() || phoneText.isEmpty()) {
             showAlert("Erreur", "Tous les champs doivent être remplis !");
@@ -382,6 +405,14 @@ public class AfficherCentreController {
             return false;
         }
         return true;
+    }
+
+    private void clearAjouterForm() {
+        NomCentre.clear();
+        LongitudeCentre.clear();
+        AltitudeCentre.clear();
+        TelephoneCentre.clear();
+        EmailCentre.clear();
     }
 
     private void showAlert(String title, String content) {
@@ -418,6 +449,11 @@ public class AfficherCentreController {
             String countryCode = json.getString("countryCode");
             String countryName = json.getString("country");
             updatePhoneField(countryCode, countryName);
+            if (json.has("lat") && json.has("lon") && webEngineMain != null) {
+                double lat = json.getDouble("lat");
+                double lon = json.getDouble("lon");
+                setLocation(lat, lon, webEngineMain);
+            }
         } catch (IOException e) {
             System.out.println("Erreur lors de la récupération de la localisation.");
             e.printStackTrace();
@@ -443,6 +479,8 @@ public class AfficherCentreController {
         }
         TelephoneCentre.setPromptText(phoneCode);
         CountryFlag.setText(flagEmoji + " " + countryName);
+        TelephoneCentreMod.setPromptText(phoneCode);
+        CountryFlagMod.setText(flagEmoji + " " + countryName);
     }
 
     private void setupSearch() {

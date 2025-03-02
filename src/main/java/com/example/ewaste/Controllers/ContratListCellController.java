@@ -31,11 +31,12 @@ public class ContratListCellController extends ListCell<Contrat> {
                 // 🔹 Récupérer les noms du centre et de l'employé
                 String centreNom = contratRepository.getCentreNameById(contrat.getIdCentre());
                 String employeNom = contratRepository.getEmployeNameById(contrat.getIdEmploye());
+                String employePrenom = contratRepository.getEmployePrenameById(contrat.getIdEmploye());
 
                 // 🔹 Création des labels
                 Label idLabel = new Label("🆔 ID Contrat: " + contrat.getId());
                 Label centreLabel = new Label("🏢 Centre: " + centreNom);
-                Label employeLabel = new Label("👤 Employé: " + employeNom);
+                Label employeLabel = new Label("👤 Employé: " + employeNom + " " + employePrenom);
                 Label dateDebutLabel = new Label("📅 Début: " + contrat.getDateDebut());
                 Label dateFinLabel = new Label("📅 Fin: " + contrat.getDateFin());
 
