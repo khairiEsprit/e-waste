@@ -68,28 +68,6 @@ public class TraitementCardsController implements Initializable {
         card.getStyleClass().add("event-card"); // Applying the same style as Event
         card.setSpacing(10);
 
-        // Image for the treatment status
-        ImageView imageView = new ImageView();
-        try {
-            String imagePath = traitement.getStatus().equalsIgnoreCase("Validé")
-                    ? "/assets/valid-icon.png"
-                    : "/assets/pending-icon.png";
-
-            // ✅ Correct way to load the image from `resources/assets`
-            Image image = new Image(getClass().getResourceAsStream(imagePath));
-
-            if (image.isError()) {
-                throw new Exception("Image not found: " + imagePath);
-            }
-
-            imageView.setImage(image);
-        } catch (Exception e) {
-            System.err.println("Erreur de chargement de l'image: " + e.getMessage());
-        }
-
-        imageView.setFitWidth(80);
-        imageView.setFitHeight(80);
-        imageView.setPreserveRatio(true);
 
         // Ajout des informations du traitement
         Label statusLabel = new Label("Statut: " + traitement.getStatus());
@@ -107,7 +85,7 @@ public class TraitementCardsController implements Initializable {
         closeButton.setOnAction(event -> closeWindow());
 
         // Adding elements to the card
-        card.getChildren().addAll(imageView, statusLabel, dateLabel, commentLabel, closeButton);
+        card.getChildren().addAll(statusLabel, dateLabel, commentLabel, closeButton);
 
         return card;
     }

@@ -59,27 +59,7 @@ public class ListeDemandeUserController implements Initializable {
         card.getStyleClass().add("event-card");
         card.setSpacing(10);
 
-        // Image for request type
-        ImageView imageView = new ImageView();
-        try {
-            String imagePath = demande.getType().equalsIgnoreCase("Collecte")
-                    ? "/assets/collect-icon.png"
-                    : "/assets/request-icon.png";
 
-            Image image = new Image(getClass().getResourceAsStream(imagePath));
-
-            if (image.isError()) {
-                throw new Exception("Image not found: " + imagePath);
-            }
-
-            imageView.setImage(image);
-        } catch (Exception e) {
-            System.err.println("Erreur de chargement de l'image: " + e.getMessage());
-        }
-
-        imageView.setFitWidth(80);
-        imageView.setFitHeight(80);
-        imageView.setPreserveRatio(true);
 
         // Demande Information
         //// Affichage du type, adresse, et email de l’utilisateur ayant fait la demande.
@@ -98,7 +78,7 @@ public class ListeDemandeUserController implements Initializable {
         seeTreatmentButton.setOnAction(event -> handleSeeTreatment(demande));
 
         // Adding elements to the card
-        card.getChildren().addAll(imageView, typeLabel, adresseLabel, emailLabel, seeTreatmentButton);
+        card.getChildren().addAll(typeLabel, adresseLabel, emailLabel, seeTreatmentButton);
         return card;
     }
 //Affichage des détails d’un traitement
