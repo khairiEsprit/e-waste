@@ -4,6 +4,7 @@ package com.example.ewaste.Repository;
 
 import com.example.ewaste.Entities.Centre;
 import com.example.ewaste.Entities.Contrat;
+import com.example.ewaste.Entities.PlanificationTache;
 import com.example.ewaste.Interfaces.IService;
 import com.example.ewaste.Utils.DataBase;
 
@@ -42,6 +43,11 @@ public class ContratRepository implements IService<Contrat> {
     }
 
     @Override
+    public List<PlanificationTache> recuperer() throws SQLException {
+        return List.of();
+    }
+
+    @Override
     public void supprimer(int id) throws SQLException {
         String sql = "DELETE FROM `contrat` WHERE id =?";
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -60,6 +66,11 @@ public class ContratRepository implements IService<Contrat> {
             contrats.add(new Contrat(rs.getInt("id"), rs.getInt("id_centre"), rs.getInt("id_employe"), rs.getDate("date_debut").toLocalDate(), rs.getDate("date_fin").toLocalDate(), rs.getString("signaturePath")));
         }
         return contrats;
+    }
+
+    @Override
+    public List<PlanificationTache> afficher(int id_centre) throws SQLException {
+        return List.of();
     }
 
 

@@ -4,6 +4,7 @@ import com.example.ewaste.Entities.ApplicationContext;
 import com.example.ewaste.Entities.User;
 import com.example.ewaste.Entities.UserRole;
 import com.example.ewaste.Entities.UserSession;
+import com.example.ewaste.Main;
 import com.example.ewaste.Repository.AuthRepository;
 import com.example.ewaste.Repository.FaceRecognitionRepository;
 import com.example.ewaste.Repository.UserRepository;
@@ -223,6 +224,22 @@ public class UseraccountController implements Initializable {
             trainThread.start();
         } catch (Exception e) {
             showAlert("Error saving face data: " + e.getMessage());
+        }
+    }
+
+    private void openFriendPage(String fxmlFile, String title) {
+        try {
+            // Load the FXML file for the friend page
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/" + fxmlFile));
+            Parent root = loader.load();
+
+            // Create a new stage for the friend page
+            Stage stage = new Stage();
+            stage.setTitle(title);  // Set window title (e.g., "Centres" or "Avis")
+            stage.setScene(new Scene(root));  // Set the loaded FXML as the scene
+            stage.show();  // Display the new stage
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle any loading errors
         }
     }
 
@@ -461,6 +478,10 @@ public class UseraccountController implements Initializable {
     }
 
     public void onEventsButtonClick(ActionEvent actionEvent) {
+        if(actionEvent.getSource()==Events_Btn)
+        {
+            openFriendPage("ListEvenement-view.fxml", "Events");
+        }
     }
 
     public void onLogoutButtonClick(ActionEvent actionEvent) {

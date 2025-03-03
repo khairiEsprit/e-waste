@@ -1,6 +1,7 @@
 package com.example.ewaste.Repository;
 
 import com.example.ewaste.Entities.Centre;
+import com.example.ewaste.Entities.PlanificationTache;
 import com.example.ewaste.Interfaces.IService;
 import com.example.ewaste.Utils.DataBase;
 
@@ -45,6 +46,11 @@ public class CentreRepository implements IService<Centre> {
     }
 
     @Override
+    public List<PlanificationTache> recuperer() throws SQLException {
+        return List.of();
+    }
+
+    @Override
     public void supprimer(int id) throws SQLException {
         String sql = "DELETE FROM `centre` WHERE `id`=?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -66,6 +72,11 @@ public class CentreRepository implements IService<Centre> {
             }
         }
         return centres;
+    }
+
+    @Override
+    public List<PlanificationTache> afficher(int id_centre) throws SQLException {
+        return List.of();
     }
 
     public boolean existeCentre(float longitude, float altitude) throws SQLException {
@@ -104,13 +115,13 @@ public class CentreRepository implements IService<Centre> {
 
 
     public float[] getLatitudeLongitude(int id) throws SQLException {
-        String query = "SELECT latitude, langitude FROM centre WHERE id = ?";
+        String query = "SELECT altitude, longitude FROM centre WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    float latitude = rs.getFloat("latitude");
-                    float longitude = rs.getFloat("langitude");
+                    float latitude = rs.getFloat("altitude");
+                    float longitude = rs.getFloat("longitude");
                     return new float[]{latitude, longitude};
                 } else {
                     return null;

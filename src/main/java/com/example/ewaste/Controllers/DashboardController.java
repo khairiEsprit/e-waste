@@ -74,8 +74,9 @@ public class DashboardController implements Initializable {
     public AnchorPane centerContent;
     public AnchorPane sidebar;
     public Button CentrePage;
-    public Button AvisPage;
+    public Button TachePage;
     public Button backButton;
+    public Button AjoutEvent;
 
     @FXML
     private Button addEmployee_addBtn;
@@ -239,11 +240,8 @@ public class DashboardController implements Initializable {
 
     private String[] statusList = {"Disponible", "Non Disponible"};
 //    private final MapPoint point = new MapPoint(48.85,2.29);
-    private List<AnchorPane> allSections;
-    private List<Button> sidebarButtons;
     private List<Button> navbarButtons;
-    private Map<String, Pane> friendPages = new HashMap<>();
-
+    private List<Button> sidebarButtons; // No initializer here    private List<Button> sidebarButtons = List.of(home_btn, addEmployee_btn, generate_rapport, Map_view);
     ChatBotInterface chat = new ChatBotInterface();
 
     CitoyenRepository cr = new CitoyenRepository();
@@ -279,16 +277,9 @@ private final  MapBox map = new MapBox();
         }
 
         sidebarButtons = Arrays.asList(home_btn, addEmployee_btn, Map_view, generate_rapport);
+        navbarButtons = Arrays.asList(CentrePage, TachePage);
 
-        // Initialize navbar (friend) buttons
-        navbarButtons = Arrays.asList(CentrePage, AvisPage);
-
-        // Initialize all sections
-        allSections = new ArrayList<>();
-        allSections.add(home_form);
-        allSections.add(addEmployee_form);
-        allSections.add(MapsDisplay);
-        allSections.add(rapportDisplay);
+        sidebarButtons = List.of(home_btn, addEmployee_btn, generate_rapport, Map_view);
 
         // Show home section by default
         showSection(home_form, home_btn);
@@ -562,8 +553,11 @@ private final  MapBox map = new MapBox();
         // Handle friend page buttons
         if (source == CentrePage) {
             openFriendPage("Afficher_Centre.fxml", "Centres");
-        } else if (source == AvisPage) {
-            openFriendPage("friend2.fxml", "Avis");
+        } else if (source == TachePage) {
+            openFriendPage("PageTaches.fxml", "Taches");
+        }
+        else if (source == AjoutEvent) {
+            openFriendPage("AjouterEvenement.fxml", "Ajout Event");
         }
         // Handle dashboard section buttons (example)
         else if (source == home_btn) {
@@ -573,6 +567,7 @@ private final  MapBox map = new MapBox();
         } else if (source == generate_rapport) {
             showSection(rapportDisplay, generate_rapport);
         } else if (source == Map_view) {
+            map.flyToLocation(36.8065, 10.1815, 12);
             showSection(MapsDisplay, Map_view);
         }
     }
@@ -580,10 +575,10 @@ private final  MapBox map = new MapBox();
     // Helper method to show dashboard sections (not used for friend pages)
     private void showSection(AnchorPane sectionToShow, Button activeButton) {
         hideAllSections();
+        resetAllButtons(); // Reset all sidebar buttons first
         sectionToShow.setVisible(true);
         activeButton.setStyle("-fx-background-color: linear-gradient(to bottom right, #29AB87, #ACE1AF);");
     }
-
     // Hide all dashboard sections
     private void hideAllSections() {
         home_form.setVisible(false);
@@ -592,6 +587,11 @@ private final  MapBox map = new MapBox();
         MapsDisplay.setVisible(false);
     }
 
+    private void resetAllButtons() {
+        for (Button btn : sidebarButtons) {
+            btn.setStyle("-fx-background-color: transparent"); // Reset to default style
+        }
+    }
     public void logout_btn_onAction() {
         try {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

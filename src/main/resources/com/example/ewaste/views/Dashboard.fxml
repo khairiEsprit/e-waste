@@ -37,7 +37,9 @@
                                     <center>
                                         <HBox fx:id="navbar" spacing="15" alignment="CENTER">
                                             <Button fx:id="CentrePage" text="Centres" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
-                                            <Button fx:id="AvisPage" text="Avis" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
+                                            <Button fx:id="TachePage" text="Taches" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
+                                            <Button fx:id="AjoutEvent" text="Events" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
+
                                             <!-- Add more buttons here as needed, e.g., <Button fx:id="friend3Button" text="Friend 3" ... /> -->
                                         </HBox>
                                     </center>
@@ -359,8 +361,8 @@
                                         <!-- Generate Rapport Button -->
                                         <Button fx:id="generateRapport_btn" layoutX="140.0" layoutY="15.0" mnemonicParsing="false"
                                                 onAction="#generateRapport" prefHeight="35.0" prefWidth="180.0"
-                                                styleClass="nav-btn" stylesheets="@../styles/dashboard-style.css"
-                                                text="Generate Rapport">
+                                                styleClass="nav-form" stylesheets="@../styles/dashboard-style.css"
+                                                text="Generate Rapport" textFill="white">
                                             <graphic>
                                                 <FontIcon iconColor="WHITE" iconLiteral="fas-file-alt" />
                                             </graphic>

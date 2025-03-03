@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.paint.Color?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.ewaste.Controllers.ListParticipationController"
+            stylesheets="@../styles/ListParticipation.css" prefHeight="600.0" prefWidth="1100.0">
+
+    <!-- En-tête -->
+    <top>
+        <HBox styleClass="header-band" alignment="CENTER" spacing="20">
+            <Label text="Liste des Participations" styleClass="header-title"/>
+        </HBox>
+    </top>
+
+    <!-- Contenu principal -->
+    <center>
+        <VBox fx:id="mainContainer" spacing="20" style="-fx-padding: 20;">
+            <!-- Barre de recherche et boutons -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Rechercher par nom..." styleClass="text-field"/>
+                <Button text="Modifier" fx:id="editButton" styleClass="button" onAction="#handleEditAction" disable="true"/>
+                <Button text="Supprimer" fx:id="deleteButton" styleClass="button" onAction="#handleDeleteAction" disable="true"/>
+            </HBox>
+
+            <!-- TableView pour afficher les participations -->
+            <TableView fx:id="participationTable" styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="firstNameColumn" text="Nom" prefWidth="155" />
+                    <TableColumn fx:id="lastNameColumn" text="Prénom" prefWidth="155" />
+                    <TableColumn fx:id="emailColumn" text="Email" prefWidth="400" /> <!-- Colonne Email plus large -->
+                    <TableColumn fx:id="phoneColumn" text="Téléphone" prefWidth="155" />
+                    <TableColumn fx:id="cityColumn" text="Ville" prefWidth="155" />
+                    <TableColumn fx:id="countryColumn" text="Pays" prefWidth="155" />
+                    <TableColumn fx:id="zipCodeColumn" text="Code Postal" prefWidth="155" />
+                    <TableColumn fx:id="pointsEarnedColumn" text="Points Gagnés" prefWidth="155" /> <!-- Nouvelle colonne pour les points -->
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <!-- Bouton Retour en bas à gauche de l'interface -->
+    <bottom>
+        <HBox alignment="BOTTOM_LEFT" style="-fx-padding: 10;">
+            <Button text="Retour" styleClass="button" onAction="#handleRetour"/>
+        </HBox>
+    </bottom>
+</BorderPane>

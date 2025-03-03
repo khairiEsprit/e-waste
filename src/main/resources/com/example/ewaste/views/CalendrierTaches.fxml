@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import java.net.URL?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.ewaste.Controllers.ControllerCalendrierTaches"
+      spacing="10" styleClass="root">
+
+    <stylesheets>
+        <URL value="@../styles/CalendrierTaches.css" />
+    </stylesheets>
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Calendrier des Tâches" styleClass="title"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <ComboBox fx:id="moisCombo" promptText="Sélectionner un mois"/>
+        <ComboBox fx:id="anneeCombo" promptText="Sélectionner une année"/>
+        <Button fx:id="btnAfficher" text="Afficher" onAction="#afficherCalendrier"/>
+    </HBox>
+
+    <GridPane fx:id="calendrierGrid" hgap="5" vgap="5" alignment="CENTER">
+        <!-- Les cellules seront générées dynamiquement -->
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="btnRafraichir" text="Rafraîchir" onAction="#rafraichirCalendrier"/>
+        <Button fx:id="btnFermer" text="Fermer" onAction="#fermerFenetre"/>
+    </HBox>
+</VBox>

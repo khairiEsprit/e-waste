@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="600" prefWidth="1100" spacing="20" styleClass="root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.ControllerTachesEmploye">
+
+    <stylesheets>
+        <URL value="@../styles/TachesEmploye.css" />
+    </stylesheets>
+
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
+
+    <Label styleClass="title" text="Mes Tâches Assignées" />
+
+    <!-- Nouvelle section de contrôles -->
+    <HBox spacing="20" styleClass="controls-container">
+        <TextField fx:id="Recherche" promptText="Rechercher une tâche..." styleClass="search-field" />
+        <Button onAction="#ouvrirCalendrier" styleClass="calendar-button" text="Calendrier" />
+        <Button onAction="#telechargerListeTachesCSV" styleClass="calendar-button" text="CSV" />
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+        <content>
+            <TilePane fx:id="tilePaneTaches" hgap="20" prefColumns="3" styleClass="task-container" vgap="20" />
+        </content>
+    </ScrollPane>
+</VBox>

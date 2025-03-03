@@ -1,6 +1,7 @@
 package com.example.ewaste.Utils;
 
 import com.example.ewaste.Entities.UserRole;
+import com.example.ewaste.Main;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -25,15 +26,15 @@ public class RoleNavigation {
 
         if (role == UserRole.ADMIN) {
             fxmlResource = "views/Dashboard.fxml";
-            width = 1200.0;
+            width = 1100.0;
             height = 600.0;
         } else if (role == UserRole.CITOYEN) {
             fxmlResource = "views/UserAccount.fxml";
-            width = 1300.0;
+            width = 1200.0;
             height = 700.0;
         } else {
-            fxmlResource = "views/EmployeeInterface.fxml";
-            width = 1300.0;
+            fxmlResource = "views/tachesEmploye.fxml";
+            width = 1200.0;
             height = 700.0;
         }
 
@@ -53,7 +54,7 @@ public class RoleNavigation {
         fadeOut.setToValue(0.0);
 
         // Load the new FXML
-        FXMLLoader fxmlLoader = new FXMLLoader(com.example.ewaste.Main.class.getResource(fxmlResource));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlResource));
         Parent newRoot = fxmlLoader.load();
 
         // Prepare fade in transition for the new scene
