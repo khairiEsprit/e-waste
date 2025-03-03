@@ -75,7 +75,7 @@ public class TaitementByDemandeAdminController implements Initializable {
         instance = this;
         setupTableColumns();
     }
-
+//Configuration des colonnes du tableau
     private void setupTableColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -114,6 +114,7 @@ public class TaitementByDemandeAdminController implements Initializable {
 
         traitementTable.getColumns().add(actionsColumn);
     }
+    //Ajout d'une colonne "Actions" avec les boutons Modifier/Supprimer :
     @FXML
     private void openAddTraitementForm(ActionEvent event) {
         try {
@@ -130,7 +131,7 @@ public class TaitementByDemandeAdminController implements Initializable {
         }
     }
 
-
+//Ouvrir le formulaire d'ajout
     public void openAddTraitementForm(int idDemande) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/TraitementForm.fxml"));
@@ -145,6 +146,7 @@ public class TaitementByDemandeAdminController implements Initializable {
             AlertUtil.showAlert("Erreur", "Impossible d'ouvrir le formulaire.", Alert.AlertType.ERROR);
         }
     }
+    //Modification d'un traitement
     private void openEditTraitementForm(Traitement traitement) {
         Traitement selectedTraitement = traitementTable.getSelectionModel().getSelectedItem();
       System.out.println(selectedTraitement);
@@ -169,7 +171,7 @@ public class TaitementByDemandeAdminController implements Initializable {
             AlertUtil.showAlert("Erreur", "Impossible d'ouvrir la modification.", Alert.AlertType.ERROR);
         }
     }
-
+//Suppression d'un traitement
     private void confirmAndDeleteTraitement(Traitement traitement) {
         // Create a confirmation alert
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);

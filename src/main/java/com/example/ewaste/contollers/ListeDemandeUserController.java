@@ -82,6 +82,7 @@ public class ListeDemandeUserController implements Initializable {
         imageView.setPreserveRatio(true);
 
         // Demande Information
+        //// Affichage du type, adresse, et email de l’utilisateur ayant fait la demande.
         Label typeLabel = new Label("Type: " + demande.getType());
         typeLabel.getStyleClass().add("event-title");
 
@@ -91,7 +92,7 @@ public class ListeDemandeUserController implements Initializable {
         Label emailLabel = new Label("Email: " + demande.getEmailUtilisateur());
         emailLabel.getStyleClass().add("event-description");
 
-        // Action Button
+        // Ce bouton permet d'afficher les détails du traitement d'une demande.
         Button seeTreatmentButton = new Button("See Treatment");
         seeTreatmentButton.getStyleClass().add("button");
         seeTreatmentButton.setOnAction(event -> handleSeeTreatment(demande));
@@ -100,6 +101,7 @@ public class ListeDemandeUserController implements Initializable {
         card.getChildren().addAll(imageView, typeLabel, adresseLabel, emailLabel, seeTreatmentButton);
         return card;
     }
+//Affichage des détails d’un traitement
 
     private void handleSeeTreatment(Demande demande) {
         System.out.println("Handling Treatment for Demande ID: " + demande.getId());

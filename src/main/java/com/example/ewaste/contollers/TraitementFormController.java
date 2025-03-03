@@ -69,7 +69,7 @@ public class TraitementFormController implements Initializable {
             AlertUtil.showAlert("Error", "CKEditor could not be loaded.", Alert.AlertType.ERROR);
         }
     }
-
+//Gestion du bouton "Enregistrer"
     public void handleSubmit(ActionEvent actionEvent) {
         try {
             String status = statusField.getValue();
@@ -104,7 +104,7 @@ public class TraitementFormController implements Initializable {
             AlertUtil.showAlert("Error", "An error occurred while saving.", Alert.AlertType.ERROR);
         }
     }
-
+//Cette méthode génère le contenu de l'email à envoyer à l'utilisateur.
     private String buildEmailContent(Demande demande, String status, String commentaire) {
         StringBuilder emailContent = new StringBuilder();
 

@@ -25,7 +25,7 @@ public class mainController {
         contentArea.getChildren().setAll(content);
     }
 
-
+    //Cette méthode est appelée lorsqu'on clique sur le bouton "Consulter"
     public void show(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/listDemandesUser.fxml"));
         Parent root = loader.load();

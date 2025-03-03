@@ -77,7 +77,7 @@ public class DemandeDetailController {
             com.itextpdf.text.Font headerFont = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 12, com.itextpdf.text.Font.BOLD);
             com.itextpdf.text.Font cellFont = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 10);
 
-            // Add rows to the table
+            // Ajoute chaque information de la demande dans le tableau.
             addRowToTable(pdfTable, "ID Utilisateur", String.valueOf(demande.getIdUtilisateur()), headerFont, cellFont);
             addRowToTable(pdfTable, "ID Centre", String.valueOf(demande.getIdCentre()), headerFont, cellFont);
             addRowToTable(pdfTable, "Adresse", demande.getAdresse(), headerFont, cellFont);

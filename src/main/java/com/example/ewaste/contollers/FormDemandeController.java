@@ -30,7 +30,7 @@ public class FormDemandeController {
     private Demande demandeToEdit = null;
     private final DemandeRepository demandeRepository = new DemandeRepository();
 
-
+    //Quand on clique sur le bouton "Envoyer", cette méthode est exécutée.
     public void handleSubmit(ActionEvent actionEvent) {
         String adresse = adresseField.getText().trim();
         String email = emailField.getText().trim();
@@ -41,7 +41,7 @@ public class FormDemandeController {
         resetErrorMessages();
 
         boolean isValid = true;
-
+//Si l'utilisateur ne remplit pas l'adresse, on affiche un message d'erreur et on bloque l'envoi
         if (adresse.isEmpty()) {
             adresseError.setText("Veuillez saisir une adresse.");
             adresseError.setVisible(true);
@@ -67,7 +67,7 @@ public class FormDemandeController {
         }
 
         if (!isValid) return;
-
+//On enregistre la demande dans la base avec demandeRepository.ajouter(newDemande).
         try {
             String filteredMessage= BadWordFilter.filterBadWords(message);
             if (demandeToEdit == null) {
@@ -92,7 +92,7 @@ public class FormDemandeController {
             AlertUtil.showAlert("Erreur", "Une erreur s'est produite lors de l'enregistrement.", Alert.AlertType.ERROR);
         }
     }
-
+//Affiche une alerte personnalisée
     private void showCustomAlert(String title, String message) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/CustomAlert.fxml"));
@@ -111,7 +111,7 @@ public class FormDemandeController {
             e.printStackTrace();
         }
     }
-
+    //Une méthode qui cache tous les messages d'erreur :
     private void resetErrorMessages() {
         adresseError.setVisible(false);
         emailError.setVisible(false);
@@ -119,7 +119,7 @@ public class FormDemandeController {
         typeError.setVisible(false);
     }
 
-
+//Ouvre la vue des demandes
     private void openDemandeView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/ListDemandesAdmin.fxml"));
@@ -141,7 +141,7 @@ public class FormDemandeController {
         messageField.clear();
         typeField.getSelectionModel().clearSelection();
     }
-
+//Remplit le formulaire avec une demande existante pour la modification
     public void setDemandeToEdit(Demande demande) {
         if (demande != null) {
             this.demandeToEdit = demande;

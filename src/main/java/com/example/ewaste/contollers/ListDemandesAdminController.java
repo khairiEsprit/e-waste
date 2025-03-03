@@ -71,7 +71,7 @@ public class ListDemandesAdminController implements Initializable {
     }
 
     private void setupFiltering() {
-        // Implement filtering logic here if needed
+        //Cette méthode récupère les demandes depuis la base et les affiche dans la table.
     }
 
     public void loadDemandeData() {
@@ -91,14 +91,14 @@ public class ListDemandesAdminController implements Initializable {
             e.printStackTrace();
         }
     }
-
+    //Cette méthode définit comment chaque colonne affiche les données.
     private void setupTableColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         adresseColumn.setCellValueFactory(new PropertyValueFactory<>("adresse"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("emailUtilisateur"));
         messageColumn.setCellValueFactory(new PropertyValueFactory<>("message"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-
+//Ajout des boutons d'action
         actionsColumn.setCellFactory(param -> new TableCell<>() {
             private final Button editButton = new Button("Modifier");
             private final Button deleteButton = new Button("Supprimer");
@@ -127,7 +127,7 @@ public class ListDemandesAdminController implements Initializable {
             }
         });
     }
-
+    //Ouvre un formulaire pour modifier une demande.
     private void editDemande(Demande demande) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/FormDemande.fxml"));
@@ -210,7 +210,7 @@ public class ListDemandesAdminController implements Initializable {
             AlertUtil.showAlert("Erreur", "Impossible d'ouvrir la fenêtre du traitement.", Alert.AlertType.ERROR);
         }
     }
-
+    // ta5ou ay heja da5elha fel input mta3 recherche w tfiltrilik el list mta3 demande selon id address type w email
     public void filterList() {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredDemandeList.setPredicate(demande -> {
@@ -277,6 +277,7 @@ public class ListDemandesAdminController implements Initializable {
             pdfTable.addCell(headerCell);
 
             // Add rows from the TableView data with custom font
+            //Ajout des données du TableView dans le PDF
             for (Demande demande : demandeList) {
                 pdfTable.addCell(new Phrase(String.valueOf(demande.getId()), cellFont));
                 pdfTable.addCell(new Phrase(demande.getAdresse(), cellFont));

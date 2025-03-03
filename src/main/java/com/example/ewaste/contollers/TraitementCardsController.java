@@ -27,7 +27,7 @@ public class TraitementCardsController implements Initializable {
 
     private TraitementRepository traitementRepository = new TraitementRepository();
 
-    private int demandeId; // Will be set dynamically
+    private int demandeId; // représente l'ID de la demande associée aux traitements.
 
     public void setDemandeId(int demandeId) {
         this.demandeId = demandeId;
@@ -46,7 +46,7 @@ public class TraitementCardsController implements Initializable {
     }
 
     private void displayTraitements(List<Traitement> traitements) {
-        gridPane.getChildren().clear(); // Clear previous cards
+        gridPane.getChildren().clear(); // Effacer les anciennes cartes
         int column = 0;
         int row = 0;
 
@@ -55,7 +55,7 @@ public class TraitementCardsController implements Initializable {
             gridPane.add(card, column, row);
 
             column++;
-            if (column == 2) { // 2 cards per row
+            if (column == 2) { // 2 cartes par ligne
                 column = 0;
                 row++;
             }
@@ -91,7 +91,7 @@ public class TraitementCardsController implements Initializable {
         imageView.setFitHeight(80);
         imageView.setPreserveRatio(true);
 
-        // Treatment Information
+        // Ajout des informations du traitement
         Label statusLabel = new Label("Statut: " + traitement.getStatus());
         statusLabel.getStyleClass().add("event-title"); // Matching event title style
 
