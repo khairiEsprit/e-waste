@@ -2,10 +2,8 @@ package com.example.ewaste.Repository;
 
 import com.example.ewaste.Entities.Event;
 import com.example.ewaste.Entities.Participation;
-import com.example.ewaste.Utils.DataBaseConn;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -152,5 +150,39 @@ public class ListEvenementRepository {
             System.err.println("Erreur lors de la recherche des événements : " + e.getMessage());
         }
         return evenements;
+    }
+
+    // Méthode pour récupérer le total des points d'un citoyen
+    public int getTotalPointsByEmail(String email) {
+        String query = "SELECT SUM(pointsEarned) AS totalPoints FROM participations WHERE email = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("totalPoints");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des points : " + e.getMessage());
+        }
+        return 0; // Retourne 0 si le citoyen n'a pas de points
+    }
+
+    // Méthode pour réinitialiser les points d'un citoyen
+    public boolean resetPoints(String email) {
+        String query = "UPDATE participations SET pointsEarned = 0 WHERE email = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            int rowsUpdated = pstmt.executeUpdate();
+            return rowsUpdated > 0; // Retourne true si les points ont été réinitialisés
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la réinitialisation des points : " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Méthode pour vérifier si un citoyen a gagné une remise
+    public boolean hasWonRemise(String email) {
+        int totalPoints = getTotalPointsByEmail(email);
+        return totalPoints >= 100; // Retourne true si le citoyen a atteint 100 points
     }
 }

@@ -1,20 +1,19 @@
 package com.example.ewaste.Controllers;
 
+import com.example.ewaste.Entities.CitizenPoints;
 import com.example.ewaste.Entities.Event;
+import com.example.ewaste.Repository.CitizenPointsRepository;
 import com.example.ewaste.Repository.EventRepository;
 import com.example.ewaste.Utils.Navigate;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,9 +35,10 @@ public class ListEvenementController {
     private ComboBox<String> statusFilter;
 
     @FXML
-    private Label totalEventsLabel; // Référence au Label pour afficher le nombre total d'événements
+    private Label totalEventsLabel;
 
     private final EventRepository eventRepository = new EventRepository();
+    private final CitizenPointsRepository citizenPointsRepository = new CitizenPointsRepository(DataBaseConn.getInstance().getConnection());
     private List<Event> events;
 
     public void initialize() {
@@ -56,6 +56,13 @@ public class ListEvenementController {
         statusFilter.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             filterEventsByStatus(newValue);
         });
+    }
+
+    // Méthode pour naviguer vers l'interface Avis
+    @FXML
+    private void goToAvis() {
+        Stage stage = (Stage) leftEventContainer.getScene().getWindow();
+        Navigate.navigate(new Button(), "/com.example.ewaste/views/Avis.fxml", stage); // Utilisez un Button si nécessaire
     }
 
     // Méthode pour mettre à jour le nombre total d'événements
@@ -122,6 +129,12 @@ public class ListEvenementController {
             targetContainer.getChildren().add(createEventCard(events.get(i)));
         }
 
+        // Ajouter le bouton Avis à la colonne de gauche
+        Button avisButton = new Button("Avis");
+        avisButton.getStyleClass().add("button");
+        avisButton.setOnAction(event -> goToAvis());
+        leftEventContainer.getChildren().add(avisButton);
+
         // Mettre à jour le nombre total d'événements
         updateTotalEventsLabel();
     }
@@ -166,11 +179,84 @@ public class ListEvenementController {
         actionButton.setOnAction(evt -> {
             Stage stage = (Stage) actionButton.getScene().getWindow();
             Navigate.navigate(actionButton, "/com.example.ewaste/views/participation-form.fxml", stage);
+
+            // Ajouter 10 points au citoyen
+            String email = "citoyen@example.com"; // Remplacez par l'e-mail du citoyen actuel
+            citizenPointsRepository.addPoints(email, 10);
+
+            // Vérifier si le citoyen a atteint 100 points
+            CitizenPoints citizenPoints = citizenPointsRepository.getCitizenPoints(email);
+            if (citizenPoints != null && citizenPoints.getTotalPoints() >= 100) {
+                showAlert("Félicitations !", "Vous avez atteint 100 points et gagné une remise de cadeau !");
+                citizenPointsRepository.addPoints(email, -100); // Réinitialiser les points après la remise
+            }
         });
 
+        // Bouton Détails
+        Button detailsButton = new Button("Détails");
+        detailsButton.getStyleClass().add("button");
+        detailsButton.setOnAction(evt -> showEventDetails(event));
+
         // Ajouter les éléments à la carte de l'événement
-        card.getChildren().addAll(imageView, title, description, date, location, places, actionButton);
+        card.getChildren().addAll(imageView, title, description, date, location, places, actionButton, detailsButton);
 
         return card;
+    }
+
+    private void showEventDetails(Event event) {
+        // Créer une boîte de dialogue pour afficher les détails de l'événement
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Détails de l'événement");
+        dialog.setHeaderText(event.getTitle());
+
+        // Appliquer les styles CSS à la boîte de dialogue
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/com.example.ewaste/styles/ListEvenement.css").toExternalForm());
+        dialog.getDialogPane().getStyleClass().add("dialog-pane");
+
+        // Créer les champs pour afficher les détails
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        grid.add(new Label("Description:"), 0, 0);
+        TextArea descriptionArea = new TextArea(event.getDescription());
+        descriptionArea.setEditable(false);
+        grid.add(descriptionArea, 1, 0);
+
+        grid.add(new Label("Date:"), 0, 1);
+        grid.add(new Label(event.getDate().toString()), 1, 1);
+
+        grid.add(new Label("Lieu:"), 0, 2);
+        grid.add(new Label(event.getLocation()), 1, 2);
+
+        grid.add(new Label("Places disponibles:"), 0, 3);
+        grid.add(new Label(String.valueOf(event.getRemainingPlaces())), 1, 3);
+
+        // Ajouter les nouveaux champs
+        grid.add(new Label("Début de l'événement:"), 0, 4);
+        grid.add(new Label("10h"), 1, 4); // Remplacez "10h" par la valeur réelle de l'événement
+
+        grid.add(new Label("Fin de l'événement:"), 0, 5);
+        grid.add(new Label("14h30"), 1, 5); // Remplacez "14h30" par la valeur réelle de l'événement
+
+        grid.add(new Label("Points gagnés:"), 0, 6);
+        grid.add(new Label("10 points"), 1, 6); // Remplacez "10 points" par la valeur réelle de l'événement
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Ajouter un bouton Fermer
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+
+        // Afficher la boîte de dialogue
+        dialog.showAndWait();
+    }
+
+    // Méthode pour afficher une alerte
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

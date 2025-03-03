@@ -9,36 +9,40 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="mainContainer" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.ListAvisController" stylesheets="@../styles/ListAvis.css" spacing="10.0">
-    <!-- Définir le padding correctement -->
+<VBox fx:id="mainContainer" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.ewaste.Controllers.ListAvisController"
+      stylesheets="@../styles/ListAvis.css" spacing="10.0" prefHeight="600.0" prefWidth="1100.0">
+
+    <!-- Padding général -->
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
 
     <!-- Titre -->
-    <Label text="Liste des Avis" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+    <HBox styleClass="header-band" alignment="CENTER">
+        <Label text="Liste des Avis" styleClass="header-title"/>
+    </HBox>
 
-    <!-- Barre de recherche -->
+    <!-- Barre de recherche et actions -->
     <HBox spacing="10.0" alignment="CENTER_LEFT">
-        <Label text="Rechercher :" />
-        <TextField fx:id="searchField" promptText="Entrez un nom ou une description" />
-        <!-- Boutons d'actions -->
-        <Button fx:id="editButton" text="Modifier" onAction="#handleEditAction" disable="true" />
-        <Button fx:id="deleteButton" text="Supprimer" onAction="#handleDeleteAction" disable="true" />
+        <Label text="Rechercher :"/>
+        <TextField fx:id="searchField" promptText="Entrez un nom ou une description"/>
+        <Button fx:id="editButton" text="Modifier" onAction="#handleEditAction" disable="true"/>
+        <Button fx:id="deleteButton" text="Supprimer" onAction="#handleDeleteAction" disable="true"/>
     </HBox>
 
     <!-- TableView pour afficher les avis -->
     <TableView fx:id="avisTable">
         <columns>
-            <!-- Colonne Nom -->
-            <TableColumn fx:id="nameColumn" text="Nom" prefWidth="150" />
-            <!-- Colonne Description -->
-            <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="300" />
-            <!-- Colonne Note -->
-            <TableColumn fx:id="ratingColumn" text="Note" prefWidth="100" />
+            <TableColumn fx:id="nameColumn" text="Nom" prefWidth="150"/>
+            <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="300"/>
+            <TableColumn fx:id="ratingColumn" text="Note" prefWidth="100"/>
         </columns>
     </TableView>
 
-    <!-- Bouton de retour à la page Avis -->
-    <Button fx:id="returnButton" text="Retour à Avis" onAction="#handleReturnAction" />
+    <!-- Bouton de retour -->
+    <HBox alignment="CENTER">
+        <Button fx:id="returnButton" text="Retour à Avis" onAction="#handleReturnAction"/>
+    </HBox>
+
 </VBox>

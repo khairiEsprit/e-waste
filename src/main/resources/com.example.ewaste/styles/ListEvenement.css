@@ -87,7 +87,6 @@
     -fx-font-size: 25px;
     -fx-text-fill: #013220; /* Texte vert foncé */
     -fx-alignment: center;
-
 }
 
 .sidebar {
@@ -146,24 +145,6 @@
     -fx-background-color: #29AB87; /* Vert foncé au survol */
 }
 
-
-.info-label {
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
-    -fx-text-fill: white; /* Texte blanc */
-    -fx-background-color: #29AB87; /* Fond vert clair */
-    -fx-padding: 8px 12px;
-    -fx-border-radius: 5px;
-    -fx-background-radius: 5px;
-    -fx-alignment: center;
-    -fx-margin-right: 20px; /* Ajouter une marge à droite si nécessaire */
-}
-
-.info-label:hover {
-    -fx-background-color: #00693E; /* Vert foncé au survol */
-}
-
-
 /* Classe combinée .button.info-label */
 .button .nombre {
     -fx-font-weight: bold;
@@ -175,4 +156,53 @@
     -fx-background-radius: 5px;
     -fx-alignment: center;
     -fx-margin-right: 20px; /* Ajouter une marge à droite si nécessaire */
+}
+
+.icon-button {
+    -fx-background-color: #013220; /* Fond transparent */
+    -fx-border-color: transparent; /* Pas de bordure */
+    -fx-padding: 0; /* Pas de rembourrage */
+    -fx-background-radius: 0; /* Pas de bord arrondi */
+    -fx-border-radius: 0; /* Pas de bord arrondi */
+}
+
+.icon-button:hover {
+    -fx-opacity: 0.8; /* Effet de survol : légère transparence */
+}
+
+.icon-button:pressed {
+    -fx-opacity: 0.6; /* Effet lors du clic */
+}
+
+/* Style pour la boîte de dialogue des détails */
+.dialog-pane {
+    -fx-background-color: #FEFEFA; /* Fond de la boîte de dialogue */
+    -fx-border-color: #29AB87; /* Bordure de la boîte de dialogue */
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+.dialog-pane .label {
+    -fx-text-fill: #013220; /* Couleur du texte des labels */
+    -fx-font-size: 14px;
+}
+
+.dialog-pane .text-area {
+    -fx-background-color: #ACE1AF; /* Fond des zones de texte */
+    -fx-text-fill: #013220; /* Couleur du texte */
+    -fx-border-color: #29AB87; /* Bordure */
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.dialog-pane .button {
+    -fx-background-color: #29AB87; /* Fond des boutons */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte */
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px 10px;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #00693E; /* Couleur au survol */
 }

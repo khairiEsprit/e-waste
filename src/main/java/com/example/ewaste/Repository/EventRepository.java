@@ -1,10 +1,8 @@
 package com.example.ewaste.Repository;
 
 import com.example.ewaste.Entities.Event;
-import com.example.ewaste.Utils.DataBaseConn;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

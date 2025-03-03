@@ -2,16 +2,22 @@ package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Entities.Event;
 import com.example.ewaste.Repository.EventRepository;
+import com.example.ewaste.Utils.QwenApiClientEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.time.LocalDate;
+import java.util.Base64;
+
 
 public class AjouterEvenementController {
 
@@ -34,6 +40,9 @@ public class AjouterEvenementController {
     private Button imageButton;
 
     @FXML
+    private ImageView imageView;
+
+    @FXML
     private Button ajouterButton;
 
     @FXML
@@ -41,6 +50,9 @@ public class AjouterEvenementController {
 
     @FXML
     private Button supprimerButton;
+
+    @FXML
+    private Button generateButton; // Bouton pour générer la description
 
     @FXML
     private TableView<Event> eventTable;
@@ -61,45 +73,39 @@ public class AjouterEvenementController {
     private TableColumn<Event, Integer> placesColumn;
 
     @FXML
-    private VBox mainContainer; // Conteneur principal
+    private VBox mainContainer;
 
-    private File imageFile;
+    private String imageUrl; // L'image est maintenant stockée sous forme de String (URL ou chemin)
     private final EventRepository eventRepository = new EventRepository();
     private Event selectedEvent;
 
     @FXML
     public void initialize() {
-        // Configurer les colonnes de la TableView
         titreColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         lieuColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         placesColumn.setCellValueFactory(new PropertyValueFactory<>("remainingPlaces"));
 
-        // Charger les événements dans la TableView
         eventTable.getItems().addAll(eventRepository.getEvents());
 
-        // Activer/désactiver les boutons en fonction de la sélection
         eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                // Un événement est sélectionné
                 selectedEvent = newSelection;
                 modifierButton.setDisable(false);
                 supprimerButton.setDisable(false);
+                populateForm(selectedEvent);
             } else {
-                // Aucun événement n'est sélectionné
                 selectedEvent = null;
                 modifierButton.setDisable(true);
                 supprimerButton.setDisable(true);
+                clearForm();
             }
         });
 
-        // Ajouter un écouteur d'événements pour désélectionner la ligne lors d'un clic en dehors de la TableView
         if (mainContainer != null) {
             mainContainer.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-                // Vérifier si le clic est en dehors de la TableView
                 if (!eventTable.getBoundsInParent().contains(event.getX(), event.getY())) {
-                    // Désélectionner la ligne sélectionnée
                     eventTable.getSelectionModel().clearSelection();
                 }
             });
@@ -115,50 +121,87 @@ public class AjouterEvenementController {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg")
         );
-        imageFile = fileChooser.showOpenDialog(new Stage());
-        if (imageFile != null) {
-            imageButton.setText(imageFile.getName());
+        File selectedFile = fileChooser.showOpenDialog(new Stage());
+        if (selectedFile != null) {
+            // Check if the file is a supported image type
+            if (isImageFileValid(selectedFile)) {
+                // Convert the image to base64
+                String base64Image = encodeImageToBase64(selectedFile);
+                if (base64Image != null) {
+                    imageUrl = base64Image; // Use base64-encoded image
+                    Image image = new Image(selectedFile.toURI().toString());
+                    imageView.setImage(image);
+                } else {
+                    showAlert("Erreur", "Impossible de convertir l'image en base64.");
+                }
+            } else {
+                showAlert("Erreur", "Le type d'image n'est pas supporté. Veuillez sélectionner une image au format JPEG ou PNG.");
+            }
+        }
+    }
+    private boolean isImageFileValid(File file) {
+        // Check file extension
+        String fileName = file.getName().toLowerCase();
+        if (!fileName.endsWith(".jpg") && !fileName.endsWith(".jpeg") && !fileName.endsWith(".png")) {
+            return false;
+        }
+
+        // Check file size (e.g., limit to 5MB)
+        long fileSize = file.length();
+        if (fileSize > 5 * 1024 * 1024) { // 5MB limit
+            return false;
+        }
+
+        // You can add more checks here (e.g., image dimensions)
+
+        return true;
+    }
+    private String encodeImageToBase64(File file) {
+        try (FileInputStream imageInputStream = new FileInputStream(file)) {
+            byte[] imageBytes = new byte[(int) file.length()];
+            imageInputStream.read(imageBytes);
+            return Base64.getEncoder().encodeToString(imageBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
     @FXML
     private void handleAjouterButtonAction() {
         if (ajouterButton.getText().equals("Ajouter")) {
-            // Ajouter un nouvel événement
             Event event = new Event(
-                    0, // ID sera généré par la base de données
+                    0,
                     titreField.getText(),
                     descriptionField.getText(),
-                    imageFile != null ? imageFile.toURI().toString() : null,
+                    imageUrl, // Utiliser l'URL de l'image
                     Integer.parseInt(placesField.getText()),
                     lieuField.getText(),
                     dateField.getValue()
             );
 
             eventRepository.addEvent(event);
-            eventTable.getItems().add(event); // Ajouter l'événement à la TableView
+            eventTable.getItems().add(event);
         } else {
-            // Modifier l'événement existant
             selectedEvent.setTitle(titreField.getText());
             selectedEvent.setDescription(descriptionField.getText());
             selectedEvent.setDate(dateField.getValue());
             selectedEvent.setLocation(lieuField.getText());
             selectedEvent.setRemainingPlaces(Integer.parseInt(placesField.getText()));
-            selectedEvent.setImageUrl(imageFile != null ? imageFile.toURI().toString() : null);
+            selectedEvent.setImageUrl(imageUrl); // Utiliser l'URL de l'image
 
             eventRepository.updateEvent(selectedEvent);
-            eventTable.refresh(); // Rafraîchir la TableView
+            eventTable.refresh();
         }
 
-        // Réinitialiser le formulaire
         clearForm();
-        ajouterButton.setText("Ajouter"); // Remettre le texte du bouton à "Ajouter"
+        ajouterButton.setText("Ajouter");
     }
 
     @FXML
     private void handleModifierButtonAction() {
         if (selectedEvent != null) {
-            showEditDialog(selectedEvent); // Afficher la boîte de dialogue de modification
+            showEditDialog(selectedEvent);
         } else {
             showAlert("Erreur", "Veuillez sélectionner un événement à modifier.");
         }
@@ -167,15 +210,54 @@ public class AjouterEvenementController {
     @FXML
     private void handleSupprimerButtonAction() {
         if (selectedEvent != null) {
-            // Supprimer l'événement sélectionné de la base de données
             eventRepository.deleteEvent(selectedEvent.getId());
-
-            // Mettre à jour la TableView
             eventTable.getItems().remove(selectedEvent);
-
-            // Réinitialiser le formulaire
             clearForm();
         }
+    }
+
+    @FXML
+    private void generateDescription() {
+        if (imageUrl == null) {
+            showAlert("Erreur", "Veuillez sélectionner une image avant de générer la description.");
+            return;
+        }
+
+        // Générer la description à partir de l'URL de l'image
+        String generatedDescription = QwenApiClientEvent.generateTextFromImage("Générer une description en 2 lignes à partir de cette photo d'événement.", imageUrl);
+        System.out.println(imageUrl);
+        // Vérifier si la description contient une erreur
+        if (generatedDescription.startsWith("API Error:") || generatedDescription.startsWith("Unexpected API response:")) {
+            showAlert("Erreur API", generatedDescription);
+        } else {
+            // Mettre à jour le champ de description
+            descriptionField.setText(generatedDescription);
+        }
+    }
+
+    private void populateForm(Event event) {
+        titreField.setText(event.getTitle());
+        descriptionField.setText(event.getDescription());
+        dateField.setValue(event.getDate());
+        lieuField.setText(event.getLocation());
+        placesField.setText(String.valueOf(event.getRemainingPlaces()));
+        if (event.getImageUrl() != null) {
+            imageUrl = event.getImageUrl();
+            Image image = new Image(imageUrl);
+            imageView.setImage(image);
+        } else {
+            imageView.setImage(null);
+        }
+    }
+
+    private void clearForm() {
+        titreField.clear();
+        descriptionField.clear();
+        dateField.setValue(null);
+        lieuField.clear();
+        placesField.clear();
+        imageView.setImage(null);
+        imageUrl = null;
     }
 
     private void showEditDialog(Event event) {
@@ -183,6 +265,11 @@ public class AjouterEvenementController {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Modifier Événement");
         dialog.setHeaderText("Modifier les détails de l'événement");
+
+        // Appliquer le style CSS à la boîte de dialogue
+        dialog.getDialogPane().getStylesheets().add(
+                getClass().getResource("/com.example.ewaste/styles/AjouterEvenement.css").toExternalForm()
+        );
 
         // Créer les champs de texte pour la modification
         TextField titreField = new TextField(event.getTitle());
@@ -199,6 +286,7 @@ public class AjouterEvenementController {
                 new Label("Lieu:"), lieuField,
                 new Label("Places:"), placesField
         );
+        vbox.setSpacing(10); // Espacement entre les éléments
         dialog.getDialogPane().setContent(vbox);
 
         // Ajouter les boutons OK et Annuler
@@ -225,16 +313,6 @@ public class AjouterEvenementController {
                 showAlert("Succès", "Événement modifié avec succès.");
             }
         });
-    }
-
-    private void clearForm() {
-        titreField.clear();
-        descriptionField.clear();
-        dateField.setValue(null);
-        lieuField.clear();
-        placesField.clear();
-        imageButton.setText("Télécharger une image");
-        imageFile = null;
     }
 
     private void showAlert(String title, String message) {

@@ -10,37 +10,55 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.GridPane?>
 
 <VBox fx:id="mainContainer" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.example.ewaste.Controllers.AjouterEvenementController"
-      spacing="10" stylesheets="@../styles/AjouterEvenement.css">
+      spacing="10" stylesheets="@../styles/AjouterEvenement.css" prefHeight="600.0" prefWidth="1100.0">
 
     <!-- Padding général -->
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
 
-    <!-- Titre de l'interface -->
-    <Label text="Ajouter/Modifier un Événement" styleClass="title-label" />
+    <!-- Bande verte en haut avec le titre -->
+    <HBox styleClass="header-band">
+        <Label text="Ajouter/Modifier un Événement" styleClass="header-title" />
+    </HBox>
 
-    <!-- Formulaire pour ajouter/modifier un événement -->
-    <Label text="Titre de l'événement:" styleClass="form-label" />
-    <TextField fx:id="titreField" styleClass="form-field" />
+    <!-- Conteneur principal pour le formulaire et l'image -->
+    <HBox spacing="20" alignment="TOP_LEFT">
+        <GridPane hgap="20" vgap="10" alignment="TOP_LEFT">
+            <!-- Formulaire à gauche (colonne 0) -->
+            <VBox spacing="10" GridPane.columnIndex="0">
+                <Label text="Titre de l'événement:" styleClass="form-label" />
+                <TextField fx:id="titreField" styleClass="form-field" />
 
-    <Label text="Description:" styleClass="form-label" />
-    <TextArea fx:id="descriptionField" styleClass="form-field" />
+                <Label text="Description:" styleClass="form-label" />
+                <TextArea fx:id="descriptionField" styleClass="form-field" />
 
-    <Label text="Date de l'événement:" styleClass="form-label" />
-    <DatePicker fx:id="dateField" styleClass="form-field" />
+                <!-- Bouton pour générer la description -->
+                <Button fx:id="generateButton" text="Générer Description" onAction="#generateDescription" styleClass="form-button" />
 
-    <Label text="Lieu de l'événement:" styleClass="form-label" />
-    <TextField fx:id="lieuField" styleClass="form-field" />
+                <Label text="Date de l'événement:" styleClass="form-label" />
+                <DatePicker fx:id="dateField" styleClass="form-field" />
 
-    <Label text="Nombre de places:" styleClass="form-label" />
-    <TextField fx:id="placesField" styleClass="form-field" />
+                <Label text="Lieu de l'événement:" styleClass="form-label" />
+                <TextField fx:id="lieuField" styleClass="form-field" />
 
-    <Label text="Image de l'événement:" styleClass="form-label" />
-    <Button fx:id="imageButton" text="Télécharger une image" onAction="#handleImageButtonAction" styleClass="form-button" />
+                <Label text="Nombre de places:" styleClass="form-label" />
+                <TextField fx:id="placesField" styleClass="form-field" />
+            </VBox>
+
+            <!-- Section pour l'image à droite (colonne 1) -->
+            <VBox spacing="10" alignment="TOP_CENTER" GridPane.columnIndex="1">
+                <Label text="Image de l'événement:" styleClass="form-label" />
+                <Button fx:id="imageButton" text="Télécharger une image" onAction="#handleImageButtonAction" styleClass="form-button" />
+                <ImageView fx:id="imageView" fitWidth="300" fitHeight="300" preserveRatio="true" />
+            </VBox>
+        </GridPane>
+    </HBox>
 
     <!-- Boutons pour ajouter, modifier et supprimer -->
     <HBox spacing="10" alignment="CENTER_RIGHT">

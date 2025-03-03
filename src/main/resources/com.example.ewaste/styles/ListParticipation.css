@@ -1,106 +1,136 @@
-/* Palette de couleurs */
+/* Style général de la fenêtre */
 .root {
-    -fx-primary-color: #013220; /* Vert foncé */
-    -fx-secondary-color: #00693E; /* Vert moyen */
-    -fx-accent-color: #29AB87; /* Vert clair */
-    -fx-light-color: #ACE1AF; /* Vert très clair */
-    -fx-background-color: #FEFEFA; /* Blanc cassé */
+    -fx-background-color: #FEFEFA; /* Fond principal */
 }
 
-/* Style pour l'en-tête */
-.header {
-    -fx-background-color: -fx-primary-color; /* Fond vert foncé */
-    -fx-padding: 15px;
+.header-band {
+    -fx-background-color: #29AB87; /* Couleur de fond de la bande verte */
+    -fx-padding: 20px; /* Espacement interne */
+    -fx-alignment: center; /* Centrer le contenu */
 }
 
-.title {
-    -fx-text-fill: white; /* Texte blanc */
-    -fx-font-size: 24px;
+.header-title {
+    -fx-font-size: 50px;
     -fx-font-weight: bold;
+    -fx-text-fill: #FEFEFA; /* Couleur du texte du titre */
 }
 
-/* Style pour les boutons */
-.button {
-    -fx-background-color: -fx-secondary-color; /* Vert moyen */
-    -fx-text-fill: white; /* Texte blanc */
+/* Style des labels */
+.label {
+    -fx-text-fill: #013220; /* Couleur du texte */
     -fx-font-size: 14px;
-    -fx-padding: 10px 20px;
+}
+
+/* Style des champs de texte */
+.text-field {
+    -fx-background-color: #ACE1AF; /* Fond des champs de texte */
+    -fx-text-fill: #013220; /* Couleur du texte */
+    -fx-prompt-text-fill: #00693E; /* Couleur du texte d'invite */
+    -fx-border-color: #29AB87; /* Bordure */
     -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+/* Style des boutons */
+.button {
+    -fx-background-color: #29AB87; /* Fond des boutons */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte */
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
 }
 
 .button:hover {
-    -fx-background-color: -fx-accent-color; /* Vert clair au survol */
+    -fx-background-color: #00693E; /* Couleur au survol */
 }
 
-.button:disabled {
-    -fx-opacity: 0.5; /* Rendre le bouton semi-transparent */
-    -fx-cursor: default; /* Changer le curseur par défaut */
-}
-
-/* Style pour le champ de recherche */
-.search-field {
-    -fx-prompt-text-fill: gray;
-    -fx-font-size: 14px;
-    -fx-padding: 5px;
-    -fx-border-radius: 5px;
-    -fx-border-color: -fx-light-color; /* Bordure vert très clair */
-    -fx-background-color: white; /* Fond blanc */
-}
-
-/* Style pour la TableView */
+/* Style du TableView */
 .table-view {
-    -fx-background-color: white; /* Fond blanc */
-    -fx-border-color: -fx-light-color; /* Bordure vert très clair */
+    -fx-background-color: #FEFEFA; /* Fond du tableau */
+    -fx-border-color: #29AB87; /* Bordure du tableau */
     -fx-border-radius: 5px;
 }
 
-/* Style pour les en-têtes de colonnes */
-.table-view .column-header,
-.table-view .column-header-background {
-    -fx-background-color: -fx-primary-color; /* Fond vert foncé */
-    -fx-text-fill: white; /* Texte blanc */
-    -fx-font-size: 14px;
-    -fx-alignment: CENTER;
-    -fx-pref-height: 40px; /* Hauteur des en-têtes de colonnes */
+.table-view .column-header {
+    -fx-background-color: #29AB87; /* Fond des en-têtes de colonnes */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte des en-têtes */
+    -fx-font-weight: bold;
 }
 
-/* Style pour les cellules de la TableView */
 .table-view .table-row-cell {
-    -fx-background-color: white; /* Fond blanc pour toutes les lignes */
-    -fx-text-fill: -fx-primary-color; /* Texte vert foncé */
-    -fx-font-size: 14px;
-    -fx-alignment: CENTER;
-    -fx-cell-size: 40px; /* Hauteur des cellules */
+    -fx-background-color: #ACE1AF; /* Fond des lignes */
+    -fx-text-fill: #013220; /* Couleur du texte des lignes */
 }
 
-/* Style pour les cellules sélectionnées */
-.table-view .table-row-cell:selected {
-    -fx-background-color: #29AB87; /* Couleur de sélection (vert clair) */
-    -fx-text-fill: white; /* Texte blanc pour la sélection */
-}
-
-/* Style pour les colonnes */
-.table-view .table-column {
-    -fx-background-color: white; /* Fond blanc */
-    -fx-text-fill: -fx-primary-color; /* Texte vert foncé */
-    -fx-font-size: 14px;
-    -fx-alignment: CENTER;
-    -fx-pref-width: 213px; /* Largeur des colonnes */
-
-}
-
-/* Style pour les cellules sélectionnées dans les colonnes */
-.table-view .table-row-cell:selected .table-cell {
-    -fx-background-color: #29AB87; /* Couleur de sélection pour les cellules */
-    -fx-text-fill: white; /* Texte blanc pour la sélection */
-}
-
-/* Style pour les lignes impaires */
 .table-view .table-row-cell:odd {
-    -fx-background-color: -fx-light-color; /* Fond vert très clair pour les lignes impaires */
+    -fx-background-color: #FEFEFA; /* Fond des lignes impaires */
 }
 
-/* Style pour les lignes paires */
-.table-view .table-row-cell:even {
-    -fx-background-color: white; /* Fond blanc pour les lignes paires */
+.table-view .table-row-cell:selected {
+    -fx-background-color: #00693E; /* Fond de la ligne sélectionnée */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte de la ligne sélectionnée */
 }
+
+/* Styles pour le ContextMenu (menu contextuel) */
+.context-menu {
+    -fx-background-color: #29AB87; /* Fond du menu */
+    -fx-border-color: #00693E; /* Bordure du menu */
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+/* Styles pour les MenuItem (éléments du menu) */
+.menu-item {
+    -fx-background-color: #29AB87; /* Fond des éléments */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte */
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+}
+
+/* Style au survol des MenuItem */
+.menu-item:hover {
+    -fx-background-color: #00693E; /* Fond au survol */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte au survol */
+}
+
+/* Style pour le label des MenuItem */
+.menu-item .label {
+    -fx-text-fill: #FEFEFA; /* Couleur du texte */
+}
+
+/* Style pour la boîte de dialogue de modification */
+.dialog-pane {
+    -fx-background-color: #FEFEFA; /* Fond de la boîte de dialogue */
+    -fx-border-color: #29AB87; /* Bordure de la boîte de dialogue */
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+.dialog-pane .label {
+    -fx-text-fill: #013220; /* Couleur du texte des labels */
+    -fx-font-size: 14px;
+}
+
+.dialog-pane .text-field {
+    -fx-background-color: #ACE1AF; /* Fond des champs de texte */
+    -fx-text-fill: #013220; /* Couleur du texte */
+    -fx-prompt-text-fill: #00693E; /* Couleur du texte d'invite */
+    -fx-border-color: #29AB87; /* Bordure */
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.dialog-pane .button {
+    -fx-background-color: #29AB87; /* Fond des boutons */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte */
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px 10px;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #00693E; /* Couleur au survol */
+}
+
+/* Style pour les onglets */

@@ -9,11 +9,12 @@ public class Participation {
     private String city;
     private String country;
     private String zipCode;
+    private int pointsEarned; // Nouveau champ pour les points gagnés
 
     // Constructeurs
     public Participation() {}
 
-    public Participation(int id, String firstName, String lastName, String email, String phone, String city, String country, String zipCode) {
+    public Participation(int id, String firstName, String lastName, String email, String phone, String city, String country, String zipCode, int pointsEarned) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,6 +23,7 @@ public class Participation {
         this.city = city;
         this.country = country;
         this.zipCode = zipCode;
+        this.pointsEarned = pointsEarned;
     }
 
     // Getters et Setters
@@ -89,6 +91,14 @@ public class Participation {
         this.zipCode = zipCode;
     }
 
+    public int getPointsEarned() {
+        return pointsEarned;
+    }
+
+    public void setPointsEarned(int pointsEarned) {
+        this.pointsEarned = pointsEarned;
+    }
+
     @Override
     public String toString() {
         return "Participation{" +
@@ -100,6 +110,7 @@ public class Participation {
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
                 ", zipCode='" + zipCode + '\'' +
+                ", pointsEarned=" + pointsEarned +
                 '}';
     }
 }

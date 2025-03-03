@@ -1,6 +1,6 @@
 module com.example.ewaste {
-    requires javafx.controls; // Ajoutez ce module si vous utilisez des contrôles JavaFX
-    requires javafx.fxml;     // Module pour FXML
+    // Ajoutez ce module si vous utilisez des contrôles JavaFX
+    // Module pour FXML
     requires javafx.web;      // Module pour JavaFX Web
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
@@ -8,8 +8,15 @@ module com.example.ewaste {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
-    requires java.sql;        // Module pour JDBC
+    // Module pour JDBC
     requires jdk.jfr;         // Module pour Java Flight Recorder
+
+    requires com.fasterxml.jackson.databind;
+    requires java.net.http;
+    requires com.google.gson;
+    requires io.github.cdimascio.dotenv.java;
+    requires java.sql;
+    requires org.json;
     requires MaterialFX;      // Module pour MaterialFX
 
     // Ouvrir les packages nécessaires à JavaFX

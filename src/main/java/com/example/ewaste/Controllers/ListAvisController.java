@@ -2,7 +2,7 @@ package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Entities.Avis;
 import com.example.ewaste.Repository.AvisRepository;
-import com.example.ewaste.Utils.DataBaseConn;
+import com.example.ewaste.Utils.TranslationService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,11 +14,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ListAvisController {
     @FXML
@@ -36,27 +37,27 @@ public class ListAvisController {
     @FXML
     private Button deleteButton;
     @FXML
-    private Button returnButton; // Nouveau bouton pour retourner à la page Avis
+    private Button returnButton;
 
     @FXML
-    private TextField searchField; // Champ de recherche
+    private TextField searchField;
 
     @FXML
-    private VBox mainContainer; // Conteneur principal
+    private VBox mainContainer;
 
     private final ObservableList<Avis> avisList = FXCollections.observableArrayList();
     private final AvisRepository avisRepository;
+    private final TranslationService translationService = new TranslationService();
+    private final Map<String, String> translationCache = new HashMap<>(); // Cache pour stocker les traductions
 
     public ListAvisController() {
-        // Obtenir la connexion à la base de données
         Connection conn = DataBaseConn.getInstance().getConnection();
-        // Initialiser AvisRepository avec la connexion
         this.avisRepository = new AvisRepository(conn);
     }
 
     @FXML
     public void initialize() {
-        // Configuration des colonnes
+        // Configuration des colonnes existantes
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
@@ -71,17 +72,15 @@ public class ListAvisController {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    // Créer un HBox pour afficher les étoiles
                     HBox starContainer = new HBox();
                     starContainer.setSpacing(2);
 
-                    // Ajouter des étoiles en fonction de la note
                     for (int i = 1; i <= 5; i++) {
                         Label star = new Label("★");
                         if (i <= rating) {
-                            star.setStyle("-fx-text-fill: gold;"); // Étoile sélectionnée
+                            star.setStyle("-fx-text-fill: gold;");
                         } else {
-                            star.setStyle("-fx-text-fill: gray;"); // Étoile non sélectionnée
+                            star.setStyle("-fx-text-fill: gray;");
                         }
                         starContainer.getChildren().add(star);
                     }
@@ -90,6 +89,32 @@ public class ListAvisController {
                 }
             }
         });
+
+        // Ajouter une colonne pour le bouton "Traduire"
+        TableColumn<Avis, Void> translateColumn = new TableColumn<>("Traduire");
+        translateColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button translateButton = new Button("Traduire");
+
+            {
+                translateButton.setOnAction(event -> {
+                    Avis avis = getTableView().getItems().get(getIndex());
+                    handleTranslateAction(avis, translateButton); // Appeler la méthode de traduction
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(translateButton);
+                }
+            }
+        });
+
+        // Ajouter la colonne de traduction à la TableView
+        avisTable.getColumns().add(translateColumn);
 
         // Charger les données
         loadAvis();
@@ -102,11 +127,9 @@ public class ListAvisController {
         // Ajouter un écouteur de sélection à la TableView
         avisTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                // Activer les boutons si une ligne est sélectionnée
                 editButton.setDisable(false);
                 deleteButton.setDisable(false);
             } else {
-                // Désactiver les boutons si aucune ligne n'est sélectionnée
                 editButton.setDisable(true);
                 deleteButton.setDisable(true);
             }
@@ -114,15 +137,13 @@ public class ListAvisController {
 
         // Ajouter un écouteur de texte pour la recherche
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterAvis(newValue); // Filtrer les avis en fonction du texte saisi
+            filterAvis(newValue);
         });
 
         // Vérifier que mainContainer n'est pas null avant d'ajouter l'écouteur
         if (mainContainer != null) {
             mainContainer.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-                // Vérifier si le clic est en dehors de la TableView
                 if (!avisTable.getBoundsInParent().contains(event.getX(), event.getY())) {
-                    // Désélectionner la ligne sélectionnée
                     avisTable.getSelectionModel().clearSelection();
                 }
             });
@@ -133,10 +154,8 @@ public class ListAvisController {
 
     private void filterAvis(String searchText) {
         if (searchText == null || searchText.isEmpty()) {
-            // Si le champ de recherche est vide, afficher tous les avis
             avisTable.setItems(avisList);
         } else {
-            // Filtrer les avis en fonction du texte saisi
             ObservableList<Avis> filteredList = FXCollections.observableArrayList();
             for (Avis avis : avisList) {
                 if (avis.getName().toLowerCase().contains(searchText.toLowerCase()) ||
@@ -156,14 +175,9 @@ public class ListAvisController {
     @FXML
     private void handleReturnAction() {
         try {
-            // Charger l'interface Avis.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/Avis.fxml"));
             Parent root = loader.load();
-
-            // Obtenir la scène actuelle
             Scene currentScene = returnButton.getScene();
-
-            // Remplacer la scène actuelle par la nouvelle scène
             currentScene.setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
@@ -202,17 +216,19 @@ public class ListAvisController {
     }
 
     private void showEditDialog(Avis avis) {
-        // Créer une nouvelle boîte de dialogue
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Modifier Avis");
         dialog.setHeaderText("Modifier les détails de l'avis");
 
-        // Créer les champs de texte pour la modification
+        // Appliquer le style CSS à la boîte de dialogue
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/com.example.ewaste/styles/ListAvis.css").toExternalForm());
+
+        // Créer les champs de texte
         TextField nameField = new TextField(avis.getName());
         TextField descriptionField = new TextField(avis.getDescription());
         TextField ratingField = new TextField(String.valueOf(avis.getRating()));
 
-        // Ajouter les champs à la boîte de dialogue
+        // Créer le contenu de la boîte de dialogue
         VBox vbox = new VBox(
                 new Label("Nom:"), nameField,
                 new Label("Description:"), descriptionField,
@@ -234,7 +250,7 @@ public class ListAvisController {
             return null;
         });
 
-        // Afficher la boîte de dialogue et attendre la réponse de l'utilisateur
+        // Afficher la boîte de dialogue et attendre la réponse
         dialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
@@ -258,5 +274,47 @@ public class ListAvisController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void handleTranslateAction(Avis avis, Button translateButton) {
+        // Créer un ContextMenu pour les langues
+        ContextMenu contextMenu = new ContextMenu();
+
+        // Ajouter les langues disponibles
+        MenuItem frenchItem = new MenuItem("Français");
+        MenuItem englishItem = new MenuItem("Anglais");
+        MenuItem arabicItem = new MenuItem("Arabe");
+
+        // Gérer les actions pour chaque langue
+        frenchItem.setOnAction(event -> translateAvis(avis, "fr")); // Traduire en français
+        englishItem.setOnAction(event -> translateAvis(avis, "en")); // Traduire en anglais
+        arabicItem.setOnAction(event -> translateAvis(avis, "ar")); // Traduire en arabe
+
+        // Ajouter les MenuItem au ContextMenu
+        contextMenu.getItems().addAll(frenchItem, englishItem, arabicItem);
+
+        // Afficher le ContextMenu près du bouton "Traduire"
+        contextMenu.show(translateButton, javafx.geometry.Side.BOTTOM, 0, 0);
+    }
+
+    private void translateAvis(Avis avis, String targetLanguage) {
+        // Vérifier si la traduction est déjà dans le cache
+        String cacheKey = avis.getDescription() + "|" + targetLanguage;
+        if (translationCache.containsKey(cacheKey)) {
+            avis.setDescription(translationCache.get(cacheKey));
+            avisTable.refresh();
+            return;
+        }
+
+        // Traduire l'avis
+        try {
+            String translatedText = translationService.translateText(avis.getDescription(), targetLanguage);
+            avis.setDescription(translatedText);
+            translationCache.put(cacheKey, translatedText); // Ajouter la traduction au cache
+            avisTable.refresh();
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la traduction : " + e.getMessage());
+            showAlert("Erreur", "Impossible de traduire le texte. Vérifiez votre connexion ou votre clé API.");
+        }
     }
 }

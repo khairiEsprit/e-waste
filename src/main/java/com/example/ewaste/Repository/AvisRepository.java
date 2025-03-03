@@ -140,4 +140,39 @@ public class AvisRepository {
         }
         return false;
     }
+
+    public int getTotalReviews() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM avis";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1); // Retourne le nombre total d'avis
+            }
+        }
+        return 0;
+    }
+
+    public double getAverageRating() throws SQLException {
+        String sql = "SELECT AVG(note) AS average FROM avis";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble(1); // Retourne la note moyenne
+            }
+        }
+        return 0.0;
+    }
+
+    // Ajout de la méthode pour compter les avis par note
+    public int getReviewCountByRating(int rating) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM avis WHERE note = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, rating);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1); // Retourne le nombre d'avis pour la note donnée
+            }
+        }
+        return 0;
+    }
 }

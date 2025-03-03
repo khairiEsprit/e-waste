@@ -11,32 +11,10 @@
 <?import java.lang.String?>
 <HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.example.ewaste.Controllers.ListEvenementController"
-      spacing="20" styleClass="root" stylesheets="@../styles/ListEvenement.css">
+      spacing="20" styleClass="root" stylesheets="@../styles/ListEvenement.css" prefHeight="600.0" prefWidth="1100.0">
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
-
-    <!-- Sidebar à gauche -->
-    <VBox styleClass="sidebar" spacing="20" prefWidth="200">
-        <!-- Logo -->
-        <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
-            <image>
-                <Image url="@../assets/logo.png"/>
-            </image>
-        </ImageView>
-
-        <!-- Champ Poubelle -->
-        <Button text="Poubelle" styleClass="sidebar-button"/>
-
-        <!-- Champ Demande -->
-        <Button text="Demande" styleClass="sidebar-button"/>
-
-        <!-- Champ Réclamation -->
-        <Button text="Réclamation" styleClass="sidebar-button"/>
-
-        <!-- Champ Événement -->
-        <Button text="Événement" styleClass="sidebar-button"/>
-    </VBox>
 
     <!-- Contenu principal -->
     <VBox spacing="20" style="-fx-padding: 0 0 0 20;" HBox.hgrow="ALWAYS">
@@ -76,7 +54,10 @@
             <ScrollPane fitToWidth="true" styleClass="scroll-pane" HBox.hgrow="ALWAYS">
                 <GridPane fx:id="eventGrid" hgap="20" vgap="20" style="-fx-padding: 10;">
                     <!-- Colonne de gauche -->
-                    <VBox fx:id="leftEventContainer" spacing="15" GridPane.columnIndex="0"/>
+                    <VBox fx:id="leftEventContainer" spacing="15" GridPane.columnIndex="0">
+                        <!-- Bouton Avis ajouté ici -->
+                        <Button text="Avis" onAction="#goToAvis" styleClass="button" />
+                    </VBox>
 
                     <!-- Colonne du milieu -->
                     <VBox fx:id="middleEventContainer" spacing="15" GridPane.columnIndex="1"/>
@@ -95,7 +76,7 @@
                         <Image url="@../assets/event-icon.png"/>
                     </image>
                 </ImageView>
-                <Label text="5" styleClass="info-label"/>
+                <Label text="1" styleClass="info-label"/>
 
                 <!-- Titre et icône pour Points -->
                 <Label text="NB Points" styleClass="info-title"/>
@@ -104,7 +85,7 @@
                         <Image url="@../assets/points-icon.png"/>
                     </image>
                 </ImageView>
-                <Label text="1K" styleClass="info-label"/>
+                <Label text="10" styleClass="info-label"/>
 
                 <!-- Titre et icône pour Amis -->
                 <Label text="NB Amis" styleClass="info-title"/>
@@ -113,7 +94,7 @@
                         <Image url="@../assets/friends-icon.png"/>
                     </image>
                 </ImageView>
-                <Label text="500" styleClass="info-label"/>
+                <Label text="2" styleClass="info-label"/>
             </VBox>
         </HBox>
     </VBox>

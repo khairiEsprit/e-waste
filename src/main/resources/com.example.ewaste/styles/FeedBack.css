@@ -176,3 +176,14 @@
     -fx-border-color: #ACE1AF;
     -fx-background-color: white;
 }
+
+.rating-label {
+    -fx-font-size: 25px;
+    -fx-text-fill: #013220;
+}
+
+.warning-label {
+    -fx-text-fill: #ff0000; /* Couleur du texte en rouge */
+    -fx-font-size: 12px; /* Taille de la police */
+    -fx-font-weight: bold; /* Texte en gras */
+}

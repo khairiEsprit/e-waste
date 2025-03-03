@@ -34,6 +34,8 @@ public class ListParticipationController {
     private TableColumn<Participation, String> countryColumn;
     @FXML
     private TableColumn<Participation, String> zipCodeColumn;
+    @FXML
+    private TableColumn<Participation, Integer> pointsEarnedColumn;// Nouvelle colonne pour les points
 
     @FXML
     private Button editButton;
@@ -59,6 +61,7 @@ public class ListParticipationController {
         cityColumn.setCellValueFactory(new PropertyValueFactory<>("city"));
         countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
         zipCodeColumn.setCellValueFactory(new PropertyValueFactory<>("zipCode"));
+        pointsEarnedColumn.setCellValueFactory(new PropertyValueFactory<>("pointsEarned")); // Ajout de la colonne des points
 
         // Charger les données
         loadParticipations();
@@ -170,8 +173,12 @@ public class ListParticipationController {
     private void showEditDialog(Participation participation) {
         // Créer une nouvelle boîte de dialogue
         Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Edit Participation");
-        dialog.setHeaderText("Edit Participation Details");
+        dialog.setTitle("Modifier la participation");
+        dialog.setHeaderText("Modifier les détails de la participation");
+
+        // Appliquer les styles CSS à la boîte de dialogue
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/com.example.ewaste/styles/ListParticipation.css").toExternalForm());
+        dialog.getDialogPane().getStyleClass().add("dialog-pane");
 
         // Créer les champs de texte pour la modification
         TextField firstNameField = new TextField(participation.getFirstName());
@@ -181,16 +188,21 @@ public class ListParticipationController {
         TextField cityField = new TextField(participation.getCity());
         TextField countryField = new TextField(participation.getCountry());
         TextField zipCodeField = new TextField(participation.getZipCode());
+        TextField pointsEarnedField = new TextField(String.valueOf(participation.getPointsEarned()));
+
+        // Désactiver le champ des points gagnés
+        pointsEarnedField.setEditable(false);
 
         // Ajouter les champs à la boîte de dialogue
         VBox vbox = new VBox(
-                new Label("First Name:"), firstNameField,
-                new Label("Last Name:"), lastNameField,
+                new Label("Prénom:"), firstNameField,
+                new Label("Nom:"), lastNameField,
                 new Label("Email:"), emailField,
-                new Label("Phone:"), phoneField,
-                new Label("City:"), cityField,
-                new Label("Country:"), countryField,
-                new Label("Zip Code:"), zipCodeField
+                new Label("Téléphone:"), phoneField,
+                new Label("Ville:"), cityField,
+                new Label("Pays:"), countryField,
+                new Label("Code Postal:"), zipCodeField,
+                new Label("Points gagnés:"), pointsEarnedField
         );
         dialog.getDialogPane().setContent(vbox);
 
@@ -207,6 +219,8 @@ public class ListParticipationController {
                 participation.setCity(cityField.getText());
                 participation.setCountry(countryField.getText());
                 participation.setZipCode(zipCodeField.getText());
+                // Ne pas mettre à jour les points gagnés
+                // participation.setPointsEarned(Integer.parseInt(pointsEarnedField.getText()));
                 return ButtonType.OK;
             }
             return null;
@@ -218,9 +232,9 @@ public class ListParticipationController {
                 boolean success = participationRepository.updateParticipation(participation);
                 if (success) {
                     participationTable.refresh();
-                    showAlert("Success", "Participation updated successfully.");
+                    showAlert("Succès", "Participation mise à jour avec succès.");
                 } else {
-                    showAlert("Error", "Failed to update participation.");
+                    showAlert("Erreur", "Échec de la mise à jour de la participation.");
                 }
             }
         });

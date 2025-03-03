@@ -1,7 +1,6 @@
 package com.example.ewaste.Repository;
 
 import com.example.ewaste.Entities.Participation;
-import com.example.ewaste.Utils.DataBaseConn;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ public class ParticipationRepository {
 
     // Create (Insert) a new participation
     public boolean create(Participation participation) {
-        String sql = "INSERT INTO participation (firstName, lastName, email, phone, city, country, zipCode) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO participation (firstName, lastName, email, phone, city, country, zipCode, pointsEarned) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, participation.getFirstName());
             stmt.setString(2, participation.getLastName());
@@ -21,6 +20,7 @@ public class ParticipationRepository {
             stmt.setString(5, participation.getCity());
             stmt.setString(6, participation.getCountry());
             stmt.setString(7, participation.getZipCode());
+            stmt.setInt(8, participation.getPointsEarned()); // Ajout du champ pointsEarned
             return stmt.executeUpdate() > 0;  // Retourne true si une ligne a été insérée
         } catch (SQLException e) {
             if (e.getSQLState().equals("23000")) {  // Code d'erreur pour violation de contrainte d'unicité
@@ -46,8 +46,9 @@ public class ParticipationRepository {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("city"),
-                        rs.getString("country"),  // Ajout du champ country
-                        rs.getString("zipCode")
+                        rs.getString("country"),
+                        rs.getString("zipCode"),
+                        rs.getInt("pointsEarned") // Ajout du champ pointsEarned
                 );
             }
         } catch (SQLException e) {
@@ -70,8 +71,9 @@ public class ParticipationRepository {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("city"),
-                        rs.getString("country"),  // Ajout du champ country
-                        rs.getString("zipCode")
+                        rs.getString("country"),
+                        rs.getString("zipCode"),
+                        rs.getInt("pointsEarned") // Ajout du champ pointsEarned
                 ));
             }
         } catch (SQLException e) {
@@ -82,16 +84,17 @@ public class ParticipationRepository {
 
     // Update an existing participation
     public boolean updateParticipation(Participation participation) {
-        String sql = "UPDATE participation SET firstName = ?, lastName = ?, email = ?, phone = ?, city = ?, country = ?, zipCode = ? WHERE id = ?";
+        String sql = "UPDATE participation SET firstName = ?, lastName = ?, email = ?, phone = ?, city = ?, country = ?, zipCode = ?, pointsEarned = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, participation.getFirstName());
             stmt.setString(2, participation.getLastName());
             stmt.setString(3, participation.getEmail());
             stmt.setString(4, participation.getPhone());
             stmt.setString(5, participation.getCity());
-            stmt.setString(6, participation.getCountry()); // Ajout du champ country
+            stmt.setString(6, participation.getCountry());
             stmt.setString(7, participation.getZipCode());
-            stmt.setInt(8, participation.getId());
+            stmt.setInt(8, participation.getPointsEarned()); // Ajout du champ pointsEarned
+            stmt.setInt(9, participation.getId());
             return stmt.executeUpdate() > 0;  // Retourne true si une ligne a été mise à jour
         } catch (SQLException e) {
             e.printStackTrace();
@@ -124,5 +127,38 @@ public class ParticipationRepository {
             e.printStackTrace();
         }
         return false;
+    }
+
+    // Méthode pour récupérer le total des points d'un citoyen
+    public int getTotalPointsByEmail(String email) {
+        String sql = "SELECT SUM(pointsEarned) AS totalPoints FROM participation WHERE email = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("totalPoints");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0; // Retourne 0 si le citoyen n'a pas de points
+    }
+
+    // Méthode pour réinitialiser les points d'un citoyen
+    public boolean resetPoints(String email) {
+        String sql = "UPDATE participation SET pointsEarned = 0 WHERE email = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            return stmt.executeUpdate() > 0; // Retourne true si les points ont été réinitialisés
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Méthode pour vérifier si un citoyen a gagné une remise
+    public boolean hasWonRemise(String email) {
+        int totalPoints = getTotalPointsByEmail(email);
+        return totalPoints >= 100; // Retourne true si le citoyen a atteint 100 points
     }
 }
