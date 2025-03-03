@@ -2,6 +2,7 @@ package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Entities.Centre;
 import com.example.ewaste.Entities.Contrat;
+import com.example.ewaste.Main;
 import com.example.ewaste.Repository.ContratRepository;
 
 import javafx.collections.FXCollections;
@@ -16,7 +17,9 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,11 +40,28 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 public class AfficherContratController {
+
+    @FXML
+    private ComboBox<String> idCentreMod;
+
+    @FXML
+    private ComboBox<String> idEmployeMod;
+
+    @FXML
+    private DatePicker DateDebutMod;
+
+    @FXML
+    private DatePicker DateFinMod;
+
+    @FXML
+    private Canvas signatureMod;
 
     @FXML
     private DatePicker DateFin;
@@ -70,11 +90,36 @@ public class AfficherContratController {
     @FXML
     private Canvas signature;
 
+    @FXML
+    private TextField Recherche;
+
     private ContratRepository contratRepository = new ContratRepository();
 
     private boolean signatureAffichee = false;
 
-    private Contrat contratToModify; // Field to store the contract being modified
+    private Contrat contratToModify;// Field to store the contract being modified
+
+    @FXML
+    private Button chatbotSubmitButton;
+
+    @FXML
+    private TextArea chatbotResponseArea;
+
+    @FXML
+    private TextField chatbotQuestionField;
+
+    private static final String QUESTION_FILE = "question.txt";
+    private static final String RESPONSE_FILE = "response.txt";
+
+
+    @FXML
+    private VBox mainContent; // Ajouter cette référence au contenu principal
+
+    @FXML
+    private VBox ajouterForm;
+
+    @FXML
+    private VBox modifierForm;
 
     @FXML
     public void initialize() {
@@ -123,6 +168,84 @@ public class AfficherContratController {
             }
         });
     }
+
+    @FXML
+    void showAjouterForm(ActionEvent event) {
+//         Appliquer l'effet de flou au contenu principal
+        mainContent.setEffect(new GaussianBlur(5));
+
+        // Afficher le formulaire d'ajout
+        ajouterForm.setVisible(true);
+        ajouterForm.setManaged(true);
+
+        // Réinitialiser les champs si nécessaire
+        clearForm();
+    }
+
+    @FXML
+    void hideAjouterForm(ActionEvent event) {
+//        // Supprimer l'effet de flou
+        mainContent.setEffect(null);
+
+        // Masquer le formulaire d'ajout
+        ajouterForm.setVisible(false);
+        ajouterForm.setManaged(false);
+    }
+
+
+    @FXML
+    void hideModifierForm(ActionEvent event) {
+        mainContent.setEffect(null);
+        modifierForm.setVisible(false);
+        modifierForm.setManaged(false);
+    }
+
+
+    @FXML
+    private void submitQuestion(ActionEvent event) {
+        String question = chatbotQuestionField.getText();
+        if (question == null || question.trim().isEmpty()) {
+            chatbotResponseArea.setText("Veuillez entrer une question.");
+            return;
+        }
+
+        try {
+            // Write the question to a file
+            Files.write(Paths.get(QUESTION_FILE), question.getBytes());
+
+            // Poll for the response (simplified; could use a more robust mechanism like a timer)
+            String response = pollForResponse();
+            chatbotResponseArea.setText(response.isEmpty() ? "Aucune réponse reçue." : response);
+
+        } catch (IOException e) {
+            chatbotResponseArea.setText("Erreur: Impossible d'écrire/lire le fichier - " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private String pollForResponse() throws IOException {
+        int maxAttempts = 10; // Limit to prevent infinite loop
+        int attempt = 0;
+        long sleepTime = 1000; // 1 second between checks
+
+        while (attempt < maxAttempts) {
+            if (Files.exists(Paths.get(RESPONSE_FILE))) {
+                String response = new String(Files.readAllBytes(Paths.get(RESPONSE_FILE)));
+                // Clear the response file after reading
+                Files.deleteIfExists(Paths.get(RESPONSE_FILE));
+                return response.trim();
+            }
+            try {
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return "Erreur: Interruption lors de l'attente de la réponse.";
+            }
+            attempt++;
+        }
+        return "Aucune réponse reçue après " + maxAttempts + " tentatives.";
+    }
+
 
     private void afficherDetailsContrat(Contrat contrat) {
         if (contrat != null) {
@@ -472,7 +595,7 @@ public class AfficherContratController {
     @FXML
     void GoToCentre(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/Afficher_Centre.fxml"));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/Afficher_Centre.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));

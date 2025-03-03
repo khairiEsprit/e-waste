@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import java.lang.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import java.net.URL?>
 
-<AnchorPane prefHeight="524.0" prefWidth="600" style="-fx-background-color: linear-gradient(to bottom, #ace1af, #4caf50); -fx-padding: 20px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.AfficherCentreController">
+<AnchorPane prefHeight="524.0" prefWidth="600" style=" -fx-padding: 20px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.AfficherCentreController">
+    <stylesheets>
+        <URL value="@../styles/CentreView.css" />
+    </stylesheets>
     <children>
         <VBox layoutX="205.0" layoutY="15.0" spacing="15">
             <children>
-                <Label alignment="CENTER" prefHeight="35.0" prefWidth="203.0" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="Modifier Centre" />
+                <Label alignment="CENTER" prefHeight="35.0" prefWidth="251.0" style="-fx-font-size: 24px; -fx-text-fill: #29ab87; -fx-font-weight: bold;" text="Modifier Centre" />
 
                 <!-- Champ Nom du Centre -->
                 <TextField fx:id="NomCentre" promptText="Nom du Centre" style="-fx-background-radius: 15px; -fx-padding: 10px;" />
@@ -27,8 +32,8 @@
                 <!-- Bouton Ajouter -->
                 <HBox alignment="CENTER" spacing="20">
                     <children>
-                        <Button fx:id="Modifier" onAction="#ModifierCentre" style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-background-radius: 15px;" text="Modifier" />
-                  <Button fx:id="Supprimer" layoutX="63.0" layoutY="10.0" onAction="#SupprimerFromModifier" style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-background-radius: 15px;" text="Supprimer" />
+                        <Button fx:id="Modifier" onAction="#ModifierCentre" style="-fx-text-fill: white; -fx-padding: 10px 20px; -fx-background-radius: 15px;" text="Modifier" />
+                  <Button fx:id="Supprimer" layoutX="63.0" layoutY="10.0" onAction="#SupprimerFromModifier" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-background-radius: 15px;" text="Supprimer" />
                     </children>
                 </HBox>
 

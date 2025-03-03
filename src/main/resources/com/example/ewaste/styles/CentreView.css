@@ -1,7 +1,12 @@
 /* Fond de la scène */
 .root {
-    -fx-background-color: linear-gradient(to bottom, #ace1af, #4caf50);
+    -fx-background-color: #E8ECEF; /* Grayish-white background */
     -fx-padding: 20px;
+}
+signature {
+    -fx-border-color: #00693e; /* Vert foncé */
+    -fx-border-width: 2px;     /* Épaisseur du contour */
+    -fx-border-radius: 8px;    /* Coins arrondis */
 }
 
 /* TableView */
@@ -32,7 +37,7 @@
 
 /* Champs de texte */
 .text-field {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #E8F5E9; /* Very pale green */
     -fx-border-color: #00693e;
     -fx-border-radius: 6px;
     -fx-padding: 10px;
@@ -43,16 +48,16 @@
 
 .text-field:focused {
     -fx-border-color: #29ab87;
-    -fx-background-color: #ace1af;
+    -fx-background-color: #C8E6C9; /* Slightly darker pale green */
 }
 
 /* Boutons */
 .button {
-    -fx-background-color: #00693e;
+    -fx-background-color: linear-gradient(to bottom, #4CAF50, #2E7D32); /* Green gradient */
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-padding: 12px 24px;
-    -fx-border-radius: 6px;
+    -fx-border-radius: 15px;
     -fx-cursor: hand;
     -fx-font-weight: bold;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 2, 2);
