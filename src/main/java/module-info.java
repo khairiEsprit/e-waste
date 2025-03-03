@@ -10,6 +10,9 @@ module com.example.ewaste {
     requires jakarta.mail;
     requires java.net.http;
     requires org.json;
+    requires com.google.gson;
+    requires io.github.cdimascio.dotenv.java;
+    requires java.base;
     //requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.sql;

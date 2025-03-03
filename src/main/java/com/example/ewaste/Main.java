@@ -14,8 +14,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("views/simulation_capteur.fxml"));
-        primaryStage.setTitle("Gestion des Poubelles");
+        Parent root = FXMLLoader.load(getClass().getResource("views/TachesEmploye.fxml"));
+        primaryStage.setTitle("E-WASTE");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

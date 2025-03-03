@@ -166,4 +166,24 @@ public class TacheRepository implements IService<Tache> {
         return email;
     }
 
+    public List<Tache> getTachesByEmploye(int employeId) throws SQLException {
+        List<Tache> taches = new ArrayList<>();
+        String sql = "SELECT * FROM `tache` WHERE `id_employe` = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, employeId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            taches.add(new Tache(
+                    rs.getInt("id"),
+                    rs.getInt("id_centre"),
+                    rs.getInt("id_employe"),
+                    rs.getFloat("latitude"),
+                    rs.getFloat("longitude"),
+                    rs.getString("message"),
+                    rs.getString("etat")
+            ));
+        }
+        return taches;
+    }
+
 }

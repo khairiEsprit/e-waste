@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
+
+<VBox fx:id="mainContainer" prefHeight="674.0" prefWidth="600.0" styleClass="meteo-dialog" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.ControllerPageTaches">
+
+    <stylesheets>
+        <URL value="@../styles/MeteoDialog.css" />
+    </stylesheets>
+
+    <HBox alignment="CENTER_LEFT" prefHeight="158.0" prefWidth="550.0" spacing="20">
+        <VBox opacity="0.0" spacing="15" styleClass="weather-info">
+            <Label styleClass="section-title" text="🌍 Localisation" />
+
+                  <HBox spacing="10">
+                <ImageView fitHeight="30.0" fitWidth="30.0" styleClass="icon" />
+                <VBox>
+                    <Label styleClass="label" text="Latitude :" />
+                    <Label fx:id="labelLatitude" styleClass="value" />
+                </VBox>
+            </HBox>
+
+                  <HBox spacing="10">
+                <ImageView fitHeight="30.0" fitWidth="30.0" styleClass="icon" />
+                <VBox>
+                    <Label styleClass="label" text="Longitude :" />
+                    <Label fx:id="labelLongitude" styleClass="value" />
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <VBox prefHeight="182.0" prefWidth="221.0" spacing="15" styleClass="weather-info">
+            <Label styleClass="section-title" text="⛅ Conditions Actuelles" />
+
+            <HBox spacing="10">
+                <ImageView fitHeight="50.0" fitWidth="50.0" styleClass="weather-icon" />
+                <Label fx:id="labelTemperature" styleClass="big-value" />
+            </HBox>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+        </VBox>
+    </HBox>
+
+    <VBox prefHeight="419.0" prefWidth="550.0" spacing="15" styleClass="weather-info">
+        <Label styleClass="section-title" text="🌦️ Analyse Météo Gemini" />
+        <ProgressIndicator fx:id="progressIndicator" visible="false" />
+        <TextArea fx:id="geminiResponse" editable="false" prefHeight="308.0" prefWidth="510.0" styleClass="response-area" wrapText="true" />
+      <opaqueInsets>
+         <Insets />
+      </opaqueInsets>
+      <VBox.margin>
+         <Insets top="16.0" />
+      </VBox.margin>
+    </VBox>
+
+    <WebView fx:id="weatherMap" opacity="0.0" prefHeight="42.0" prefWidth="550.0" />
+
+</VBox>

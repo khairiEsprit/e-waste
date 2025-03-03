@@ -4,6 +4,7 @@ import com.example.ewaste.Entities.Tache;
 import com.example.ewaste.Repository.TacheRepository;
 import com.example.ewaste.Repository.EmailRepository;
 import com.example.ewaste.Repository.TemperatureRepository;
+import com.example.ewaste.Utils.GeminiApiTache;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,15 +17,33 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import java.util.Locale;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 
 public class ControllerPageTaches implements Initializable {
 
@@ -33,13 +52,15 @@ public class ControllerPageTaches implements Initializable {
     @FXML private TableColumn<Tache, Integer> colId;
     @FXML private TableColumn<Tache, String> colEmploye;
     @FXML private TableColumn<Tache, String> colMessage;
-    @FXML private TableColumn<Tache, Float> colLatitude;
-    @FXML private TableColumn<Tache, Float> colLongitude;
+    @FXML private TableColumn<Tache, String> colAdresse;
     @FXML private TableColumn<Tache, String> colEtat;
     @FXML private Label labelTemperature;
     @FXML private Button btnAjouter;
     @FXML private Button btnModifier;
     @FXML private WebView mapMain;
+    @FXML
+    private TextField searchField;
+
 
     // Add dialog elements
     @FXML private ComboBox<String> comboEmployeAjout;
@@ -71,6 +92,8 @@ public class ControllerPageTaches implements Initializable {
     private double selectedLatitudeModif;
     private double selectedLongitudeModif;
     private Tache selectedTache;
+    private FilteredList<Tache> filteredData;
+    private SortedList<Tache> sortedData;
 
     private final TacheRepository serviceTache = new TacheRepository();
     private final TemperatureRepository serviceTemperature = new TemperatureRepository();
@@ -78,7 +101,6 @@ public class ControllerPageTaches implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Initialize main page
         if (tableTaches != null) {
             colId.setCellValueFactory(new PropertyValueFactory<>("id"));
             colEmploye.setCellValueFactory(param -> {
@@ -91,37 +113,55 @@ public class ControllerPageTaches implements Initializable {
                 return new SimpleStringProperty(employeeName);
             });
             colMessage.setCellValueFactory(new PropertyValueFactory<>("message"));
-            colLatitude.setCellValueFactory(new PropertyValueFactory<>("latitude"));
-            colLongitude.setCellValueFactory(new PropertyValueFactory<>("longitude"));
+            colAdresse.setCellValueFactory(param -> {
+                Tache tache = param.getValue();
+                return new SimpleStringProperty(
+                        getAddressFromCoordinates(tache.getLatitude(), tache.getLongitude())
+                );
+            });
             colEtat.setCellValueFactory(new PropertyValueFactory<>("etat"));
 
             try {
-                loadTableData();
-                initMapMain(); // Initialize the map first
-                updateTemperature(selectedLatitudeMain, selectedLongitudeMain); // Then update temperature
+                // Charger les tâches une seule fois
+                ObservableList<Tache> allTasks = FXCollections.observableArrayList(serviceTache.afficher(1));
+
+                // Créer un FilteredList à partir des tâches
+                filteredData = new FilteredList<>(allTasks, tache -> true); // Affiche tout par défaut
+
+                // Lier le FilteredList à la TableView
+                tableTaches.setItems(filteredData);
+
+                // Initialiser la carte et la température
+                initMapMain();
+                updateTemperature(selectedLatitudeMain, selectedLongitudeMain);
+
+                // Configurer le filtrage
+                setupSearch();
             } catch (SQLException e) {
                 e.printStackTrace();
+                showAlert("Erreur", "Erreur lors du chargement des tâches.");
             }
 
-            // Update map and temperature when a task is selected
+            // Listener pour la sélection
             tableTaches.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
                 if (newValue != null) {
+                    selectedTache = newValue;
                     selectedLatitudeMain = newValue.getLatitude();
                     selectedLongitudeMain = newValue.getLongitude();
                     updateMapMain(selectedLatitudeMain, selectedLongitudeMain);
                     updateTemperature(selectedLatitudeMain, selectedLongitudeMain);
+                } else {
+                    selectedTache = null;
                 }
             });
         }
 
-        // Initialize Add dialog
+        // Initialiser les dialogues Ajouter et Modifier si nécessaire
         if (comboEmployeAjout != null) {
             loadComboBoxData(comboEtatAjout);
             loadComboEmploye(comboEmployeAjout);
             initMapAjout();
         }
-
-        // Initialize Modify dialog
         if (comboEmployeModif != null) {
             loadComboBoxData(comboEtatModif);
             loadComboEmploye(comboEmployeModif);
@@ -138,7 +178,7 @@ public class ControllerPageTaches implements Initializable {
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.setTitle("Ajouter une tâche");
             dialog.setScene(new Scene(root));
-            dialog.setOnCloseRequest(event -> refreshTable());
+            dialog.setOnHidden(event -> refreshTable());
             dialog.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -172,7 +212,7 @@ public class ControllerPageTaches implements Initializable {
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.setTitle("Modifier une tâche");
             dialog.setScene(new Scene(root));
-            dialog.setOnCloseRequest(event -> refreshTable());
+            dialog.setOnHidden(event -> refreshTable());
             dialog.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -207,10 +247,7 @@ public class ControllerPageTaches implements Initializable {
                     String emailMessage = "Bonjour " + nomEmploye + ",\n\n" +
                             "Nous vous informons qu'une nouvelle tâche vous a été assignée dans le cadre de vos responsabilités :\n\n" +
                             "Description de la tâche : " + message + "\n\n" +
-                            "Localisation :\n" +
-                            //"  - Latitude : " + latitude + "\n" +
-                            //"  - Longitude : " + longitude + "\n\n" +
-                            "  - Adresse : " +googleMapsLink+ "\n\n" +
+                            "Localisation :\n" +googleMapsLink+ "\n\n" +
                             "État initial : " + etat + "\n\n" +
                             "Nous vous prions de prendre connaissance de cette tâche et de la traiter dans les meilleurs délais.\n\n" +
                             "Pour plus de détails ou en cas de questions, n'hésitez pas à contacter le responsable de la planification.\n\n" +
@@ -406,9 +443,9 @@ public class ControllerPageTaches implements Initializable {
     }
 
     private void loadTableData() throws SQLException {
-        List<Tache> taches = serviceTache.afficher(1);
-        ObservableList<Tache> data = FXCollections.observableArrayList(taches);
-        tableTaches.setItems(data);
+        ObservableList<Tache> allTasks = FXCollections.observableArrayList(serviceTache.afficher(1));
+        filteredData = new FilteredList<>(allTasks, tache -> true);
+        tableTaches.setItems(filteredData);
     }
 
     private void refreshTable() {
@@ -439,6 +476,7 @@ public class ControllerPageTaches implements Initializable {
 
     private void initModifData(Tache tache) {
         try {
+            this.selectedTache = tache;
             String employeNom = serviceTache.getEmployeNameById(tache.getId_employe());
             comboEmployeModif.setValue(employeNom);
             fieldMessageModif.setText(tache.getMessage());
@@ -460,4 +498,223 @@ public class ControllerPageTaches implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    // Ajoutez cette méthode dans votre ControllerPageTaches
+    @FXML
+    private void ouvrirAnalyseMeteo() {
+        Tache selectedTache = tableTaches.getSelectionModel().getSelectedItem();
+        if (selectedTache == null) {
+            showAlert("Erreur", "Veuillez sélectionner une tâche pour l'analyse météo.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/AnalyseMeteoDialog.fxml"));
+            Parent root = loader.load();
+            Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.setTitle("Analyse Météorologique");
+
+            // Références aux éléments UI
+            Scene scene = new Scene(root);
+            Label latitudeLabel = (Label) scene.lookup("#labelLatitude");
+            Label longitudeLabel = (Label) scene.lookup("#labelLongitude");
+            Label temperatureLabel = (Label) scene.lookup("#labelTemperature");
+            TextArea geminiResponse = (TextArea) scene.lookup("#geminiResponse");
+            ProgressIndicator progress = (ProgressIndicator) scene.lookup("#progressIndicator");
+            WebView weatherMap = (WebView) scene.lookup("#weatherMap");
+
+            // Mise à jour des coordonnées
+            double lat = selectedTache.getLatitude();
+            double lon = selectedTache.getLongitude();
+            latitudeLabel.setText(String.format("%.4f", lat));
+            longitudeLabel.setText(String.format("%.4f", lon));
+
+            // Récupération température
+            // Récupération température
+            String tempStr = serviceTemperature.getTemperature(lat, lon);
+            temperatureLabel.setText(tempStr);
+
+            double temperature;
+            try {
+                String normalizedTemp = tempStr.replace(",", ".");
+                String cleanedTemp = normalizedTemp.replaceAll("[^0-9.]", "");
+                temperature = Double.parseDouble(cleanedTemp);
+            } catch (NumberFormatException e) {
+                showAlert("Erreur", "Données de température invalides : " + tempStr);
+                return;
+            }
+
+            String prompt = String.format(
+                    "Analyse météo pour la tâche :\n" +
+                            "- Latitude: %.4f\n- Longitude: %.4f\n- Température: %.1f°C\n" +
+                            "Donne une analyse détaillée avec des recommandations pour les travailleurs.",
+                    lat, lon, temperature
+            );
+
+            // Configuration de l'appel API asynchrone
+            progress.setVisible(true);
+            GeminiApiTache geminiApi = new GeminiApiTache();
+
+            Task<String> geminiTask = new Task<>() {
+                @Override
+                protected String call() throws Exception {
+                    return geminiApi.genererAnalyse(prompt);
+                }
+            };
+
+            geminiTask.setOnSucceeded(e -> {
+                geminiResponse.setText(geminiTask.getValue());
+                progress.setVisible(false);
+            });
+
+            geminiTask.setOnFailed(e -> {
+                progress.setVisible(false);
+                showAlert("Erreur", "Échec de l'analyse : " + geminiTask.getException().getMessage());
+            });
+
+            new Thread(geminiTask).start();
+
+            // Carte OpenStreetMap
+            WebEngine webEngine = weatherMap.getEngine();
+            webEngine.load("https://www.openstreetmap.org/?mlat=" + lat + "&mlon=" + lon + "#map=14/" + lat + "/" + lon);
+
+            dialog.setScene(scene);
+            dialog.show();
+
+        } catch (IOException e) {
+            showAlert("Erreur", "Impossible d'ouvrir l'analyse météo");
+        }
+    }
+
+    private String getAddressFromCoordinates(double latitude, double longitude) {
+        try {
+            // Vérification des coordonnées
+            if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+                return "Coordonnées invalides";
+            }
+
+            HttpClient client = HttpClient.newHttpClient();
+            String url = String.format(
+                    Locale.US,
+                    "https://nominatim.openstreetmap.org/reverse?format=json&lat=%.6f&lon=%.6f",
+                    latitude,
+                    longitude
+            );
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("User-Agent", "E-waste/1.0")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            // Vérifiez le code de statut HTTP
+            if (response.statusCode() != 200) {
+                return "Erreur serveur : " + response.statusCode();
+            }
+
+            // Analysez la réponse JSON
+            JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
+            JsonObject address = jsonObject.getAsJsonObject("address");
+
+            // Vérifiez si "address" existe
+            if (address == null) {
+                return "Aucune adresse trouvée dans la réponse";
+            }
+
+            // Récupérez les champs avec des valeurs par défaut si absents
+            String road = address.has("road") ? address.get("road").getAsString() : "Route inconnue";
+            String city = address.has("city") ? address.get("city").getAsString() :
+                    (address.has("town") ? address.get("town").getAsString() :
+                            (address.has("village") ? address.get("village").getAsString() : "Ville inconnue"));
+
+            return road + ", " + city;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Erreur : " + e.getMessage();
+        }
+    }
+
+    private void setupSearch() {
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(tache -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true; // Affiche toutes les tâches si le champ est vide
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+                return String.valueOf(tache.getId_employe()).contains(lowerCaseFilter) ||
+                        tache.getMessage().toLowerCase().contains(lowerCaseFilter) ||
+                        tache.getEtat().toLowerCase().contains(lowerCaseFilter);
+            });
+        });
+    }
+
+    @FXML
+    private void telechargerCSV() {
+        try {
+            // Ouvrir un sélecteur de fichier pour choisir où sauvegarder le CSV
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Sauvegarder la liste des tâches en CSV");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers CSV", "*.csv"));
+            fileChooser.setInitialFileName("liste_taches.csv");
+            Stage stage = (Stage) tableTaches.getScene().getWindow();
+            File file = fileChooser.showSaveDialog(stage);
+
+            if (file == null) {
+                return; // L'utilisateur a annulé
+            }
+
+            // Récupérer les données de la table
+            ObservableList<Tache> taches = tableTaches.getItems();
+            if (taches.isEmpty()) {
+                showAlert("Information", "Aucune tâche à exporter.");
+                return;
+            }
+
+            // Écrire dans le fichier CSV
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
+                // Écrire l'en-tête UTF-8 BOM pour Excel (optionnel, pour compatibilité)
+                writer.write("\uFEFF");
+
+                // Écrire les en-têtes des colonnes
+                String header = "ID,Employé,Message,Adresse,État,Latitude,Longitude\n";
+                writer.write(header);
+
+                // Parcourir chaque tâche et écrire les données
+                for (Tache tache : taches) {
+                    String employeNom = serviceTache.getEmployeNameById(tache.getId_employe());
+                    String adresse = getAddressFromCoordinates(tache.getLatitude(), tache.getLongitude());
+
+                    // Échapper les virgules et guillemets dans les champs
+                    String message = "\"" + tache.getMessage().replace("\"", "\"\"") + "\"";
+                    String etat = "\"" + tache.getEtat().replace("\"", "\"\"") + "\"";
+                    String employe = "\"" + employeNom.replace("\"", "\"\"") + "\"";
+                    String adresseEscaped = "\"" + adresse.replace("\"", "\"\"") + "\"";
+
+                    // Construire la ligne CSV
+                    String line = String.format("%d,%s,%s,%s,%s,%.6f,%.6f%n",
+                            tache.getId(),
+                            employe,
+                            message,
+                            adresseEscaped,
+                            etat,
+                            tache.getLatitude(),
+                            tache.getLongitude());
+                    writer.write(line);
+                }
+
+                showAlert("Succès", "La liste des tâches a été exportée avec succès en CSV !");
+            } catch (IOException e) {
+                showAlert("Erreur", "Erreur lors de l'écriture du fichier CSV : " + e.getMessage());
+            } catch (SQLException e) {
+                showAlert("Erreur", "Erreur lors de la récupération des données : " + e.getMessage());
+            }
+
+        } catch (Exception e) {
+            showAlert("Erreur", "Une erreur inattendue est survenue : " + e.getMessage());
+        }
+    }
+
 }

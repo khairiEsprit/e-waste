@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+
 .root {
     -fx-background-color: linear-gradient(
             from 0% 0% to 100% 100%, /* Direction du dégradé (diagonale) */
@@ -7,6 +10,8 @@
     );
     -fx-background-radius: 10;
     -fx-effect: dropshadow(gaussian, rgba(0, 128, 255, 0.4), 30, 0.9, 0, 0);
+    -fx-font-family: 'Montserrat', sans-serif;
+
 }
 
 /* TableView */
@@ -16,7 +21,6 @@
     -fx-border-width: 1px;
     -fx-padding: 10px;
     -fx-font-size: 14px;
-    -fx-font-family: "Segoe UI", sans-serif;
 }
 
 /* Taches.css */
@@ -250,4 +254,35 @@
     -fx-padding: 10 20 10 50;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);
     -fx-graphic-text-gap: 15;
+}
+
+
+/* Styles pour les états */
+.etat-accomplie {
+    -fx-background-color: #4CAF50; /* Vert */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.etat-en-cours {
+    -fx-background-color: #FFC107; /* Jaune */
+    -fx-text-fill: black;
+}
+
+.etat-en-attente {
+    -fx-background-color: #2196F3; /* Bleu */
+    -fx-text-fill: white;
+}
+
+.etat-annule {
+    -fx-background-color: #F44336; /* Rouge */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Style supplémentaire pour les cellules */
+.table-cell {
+    -fx-alignment: CENTER;
+    -fx-padding: 5px;
+    -fx-border-radius: 3px;
 }

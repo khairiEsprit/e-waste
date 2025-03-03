@@ -43,7 +43,7 @@
         </BorderPane>
 
         <Label fx:id="labelTemperature" layoutX="438.0" layoutY="27.0" prefHeight="89.0" prefWidth="314.0" styleClass="label-temperature" text="Température: --°C" />
-
+        <Button onAction="#ouvrirAnalyseMeteo" text="⛅ Analyse Météo" />
         <Label layoutX="1026.0" layoutY="606.0" text="État :">
             <font>
                 <Font name="Consolas" size="18.0" />

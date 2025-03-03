@@ -119,4 +119,17 @@ public class PlanificationTacheRepository implements IService<PlanificationTache
         }
         return null;
     }
+
+    public String getTacheNomById(int idTache) throws SQLException {
+        String sql = "SELECT message FROM tache WHERE id = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, idTache);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return rs.getString("message");
+        }
+        return "Tâche inconnue"; // Fallback si non trouvée
+    }
+
 }

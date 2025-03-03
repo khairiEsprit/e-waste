@@ -11,15 +11,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<VBox prefHeight="600.0" prefWidth="400.0" spacing="15" xmlns="http://javafx.com/javafx/23.0.1"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.ControllerPageTaches">
+<VBox prefHeight="600.0" prefWidth="400.0" spacing="15" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.ControllerPageTaches">
 
     <stylesheets>
-        <URL value="@../style/AjouterTache.css" />
+        <URL value="@../styles/AjouterTache.css" />
     </stylesheets>
 
     <padding>
-        <Insets bottom="20" left="25" right="25" top="25"/>
+        <Insets bottom="20" left="25" right="25" top="25" />
     </padding>
 
     <children>
@@ -35,22 +34,22 @@
             </font>
         </Label>
 
-        <ComboBox fx:id="comboEmployeAjout" styleClass="modern-input" promptText="👤 Sélectionner un employé" />
-        <TextField fx:id="fieldMessageAjout" styleClass="modern-input" promptText="📝 Message de la tâche" />
+        <ComboBox fx:id="comboEmployeAjout" promptText="👤 Sélectionner un employé" styleClass="modern-input" />
+        <TextField fx:id="fieldMessageAjout" prefHeight="58.0" prefWidth="350.0" promptText="📝 Message de la tâche" styleClass="modern-input" />
 
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <TextField fx:id="fieldLatitudeAjout" styleClass="coordinate-field" promptText="📍 Latitude" />
-            <TextField fx:id="fieldLongitudeAjout" styleClass="coordinate-field" promptText="📍 Longitude" />
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <TextField fx:id="fieldLatitudeAjout" opacity="0.0" promptText="📍 Latitude" styleClass="coordinate-field" />
+            <TextField fx:id="fieldLongitudeAjout" opacity="0.0" promptText="📍 Longitude" styleClass="coordinate-field" />
         </HBox>
 
-        <ComboBox fx:id="comboEtatAjout" styleClass="modern-input" promptText="📌 Statut de la tâche" />
+        <ComboBox fx:id="comboEtatAjout" promptText="📌 Statut de la tâche" styleClass="modern-input" />
 
-        <Label styleClass="map-label" text="🗺 Sélectionnez l'emplacement sur la carte :"/>
-        <WebView fx:id="mapAjout" styleClass="map-container" prefHeight="200.0" prefWidth="350.0" />
+        <Label styleClass="map-label" text="🗺 Sélectionnez l'emplacement sur la carte :" />
+        <WebView fx:id="mapAjout" prefHeight="146.0" prefWidth="350.0" styleClass="map-container" />
 
-        <HBox spacing="20" alignment="CENTER_RIGHT">
-            <Button fx:id="btnFermerAjout" styleClass="secondary-button" onAction="#fermerAjouterDialog" text="Annuler" />
-            <Button fx:id="btnAjouterTache" styleClass="primary-button" onAction="#ajouterTache" text="Créer la tâche" />
+        <HBox alignment="CENTER_RIGHT" spacing="20">
+            <Button fx:id="btnFermerAjout" onAction="#fermerAjouterDialog" styleClass="secondary-button" text="Annuler" />
+            <Button fx:id="btnAjouterTache" onAction="#ajouterTache" styleClass="primary-button" text="Créer la tâche" />
         </HBox>
     </children>
 </VBox>
