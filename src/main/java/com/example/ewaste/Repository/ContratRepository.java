@@ -115,6 +115,23 @@ public class ContratRepository implements IService<Contrat> {
         }
         return employeNames;
     }
+
+    public List<String> getEmployeNamesPren() throws SQLException {
+        List<String> employeNames = new ArrayList<>();
+        String query = "SELECT nom, prenom FROM utilisateur WHERE role = 'EMPLOYE'"; // Récupère nom et prenom
+
+        try (PreparedStatement ps = connection.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                String nom = rs.getString("nom");
+                String prenom = rs.getString("prenom");
+                // Combine nom et prénom dans une seule chaîne
+                String fullName = nom + " " + prenom;
+                employeNames.add(fullName);
+            }
+        }
+        return employeNames;
+    }
     public List<String> getEmployeNamess() throws SQLException {
         List<String> employeNames = new ArrayList<>();
         String query = "SELECT nom, prenom FROM utilisateur WHERE role = 'EMPLOYE'"; // Récupère nom et prénom des employés

@@ -28,12 +28,18 @@
                <padding>
                   <Insets top="30.0" />
                </padding>
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" />
+               </VBox.margin>
             </TextField>
-            <ListView fx:id="affichage" prefHeight="481.0" prefWidth="1100.0" style="-fx-background-radius: 15; -fx-border-radius: 15;">
+            <ListView fx:id="affichage" prefHeight="408.0" prefWidth="1061.0" style="-fx-background-radius: 15; -fx-border-radius: 15;">
                <padding>
                   <Insets left="30.0" right="30.0" top="30.0" />
-               </padding></ListView>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               </padding>
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" />
+               </VBox.margin></ListView>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="300.0">
                <children>
                   <Button fx:id="Contrats" mnemonicParsing="false" onAction="#GoToContrat" prefHeight="38.0" prefWidth="78.0" style="-fx-background-radius: 15; -fx-padding: 10;" text="Contrats" />
                   <Button fx:id="Ajout" mnemonicParsing="false" onAction="#showAjouterForm" prefHeight="40.0" prefWidth="78.0" style="-fx-background-radius: 15; -fx-padding: 10;" text="Ajouter" />

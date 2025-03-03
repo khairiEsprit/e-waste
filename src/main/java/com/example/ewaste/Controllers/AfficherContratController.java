@@ -3,6 +3,7 @@ package com.example.ewaste.Controllers;
 import com.example.ewaste.Entities.Centre;
 import com.example.ewaste.Entities.Contrat;
 import com.example.ewaste.Repository.ContratRepository;
+import com.example.ewaste.Repository.MailRepository;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -114,10 +115,11 @@ public class AfficherContratController {
     private VBox modifierForm;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
         loadData();
         loadComboBoxData();
         setupSearch();
+       // checkEndingContracts();
 
         // Initialisation du canvas pour l'ajout
         if (signature == null) {
@@ -285,32 +287,7 @@ public class AfficherContratController {
         // Réinitialiser les champs si nécessaire
         clearForm();
     }
-   /* @FXML
-    void GoToAjout(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/AjouterContrat.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Ajouter un Contrat");
-            dialogStage.setScene(scene);
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(((Node) event.getSource()).getScene().getWindow());
-            dialogStage.showAndWait();
-            loadData();
-            Contrat selected = afficher.getSelectionModel().getSelectedItem();
-            if (selected != null) {
-                contratToModify = selected; // Preserve selection after adding
-                afficherDetailsContrat(selected);
-                afficherSignature(selected.getId());
-            } else {
-                clearForm();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Erreur lors de l'ouverture de la fenêtre d'ajout.");
-        }
-    }*/
+
    @FXML
    void hideAjouterForm(ActionEvent event) {
        // Supprimer l'effet de flou
@@ -393,21 +370,23 @@ public class AfficherContratController {
                 showAlert("Erreur : Ce contrat existe déjà dans la base de données.");
                 return;
             }
-
-            Contrat nouveauContrat = new Contrat(centreId, employeId, dateDebut, dateFin, null);
-            contratRepository.ajouter(nouveauContrat);
-
             int dernierId = contratRepository.getLastInsertedContratId();
             String signaturePath = enregistrerSignature(dernierId);
             if (signaturePath != null) {
                 contratRepository.updateSignaturePath(dernierId, signaturePath);
+
             } else {
                 showAlert("Erreur : Impossible d'enregistrer la signature.");
                 return;
             }
+            Contrat nouveauContrat = new Contrat(centreId, employeId, dateDebut, dateFin, signaturePath);
+            contratRepository.ajouter(nouveauContrat);
+
+
 
             String recipientEmail = contratRepository.getEmployeEmailById(employeId);
             if (recipientEmail != null && !recipientEmail.isEmpty()) {
+                System.out.println("Avant génération PDF, signaturePath : " + nouveauContrat.getSignaturePath());
                 String pdfPath = generatePDF(nouveauContrat);
                 if (pdfPath != null) {
                     String subject = "[Contrat] Détails de votre contrat";
@@ -727,32 +706,37 @@ public class AfficherContratController {
             document.add(new Paragraph("\n"));
             document.add(new Paragraph("Article 3 : LIEU ET HORAIRES DE TRAVAIL", boldFont));
             document.add(new Paragraph("Le Salarié exercera ses fonctions à l’adresse suivante :", normalFont));
-            document.add(new Paragraph("\n"));
-            document.add(new Paragraph("Fait à Tunis, le " + LocalDate.now(), normalFont));
-            document.add(new Paragraph("\n"));
-            document.add(new Paragraph("Signature de l’Employeur :", boldFont));
-            document.add(new Paragraph("\n\n\n"));
-            document.add(new Paragraph("Signature du Salarié :", boldFont));
-            document.add(new Paragraph("\n\n\n"));
 
+            document.add(new Paragraph("Signature de l’Employeur :", boldFont));
             String signaturePath = contrat.getSignaturePath();
             if (signaturePath != null && !signaturePath.isEmpty()) {
                 System.out.println("Chemin de signature dans generatePDF : " + signaturePath);
                 File signatureFile = new File(signaturePath);
                 if (signatureFile.exists()) {
                     System.out.println("Signature trouvée à : " + signatureFile.getAbsolutePath());
-                    com.itextpdf.text.Image signatureImage = com.itextpdf.text.Image.getInstance(signatureFile.getAbsolutePath());
-                    signatureImage.scaleToFit(150, 50);
-                    signatureImage.setAlignment(Element.ALIGN_CENTER);
-                    document.add(new Paragraph("\n\nSignature :", normalFont));
-                    document.add(signatureImage);
+                    try {
+                        com.itextpdf.text.Image signatureImage = com.itextpdf.text.Image.getInstance(signatureFile.getAbsolutePath());
+                        signatureImage.scaleToFit(200, 150);
+                        signatureImage.setAlignment(Element.ALIGN_CENTER);
+                        document.add(new Paragraph("\n\n", normalFont));
+                        document.add(signatureImage);
+                    } catch (Exception e) {
+                        System.err.println("Erreur lors du chargement de la signature : " + e.getMessage());
+                        e.printStackTrace();
+                    }
                 } else {
                     System.out.println("Signature non trouvée à : " + signatureFile.getAbsolutePath());
-                    System.out.println("SignaturePath retourné par enregistrerSignature : " + signaturePath);
                 }
             } else {
                 System.out.println("Chemin de signature null ou vide dans generatePDF");
             }
+            document.add(new Paragraph("\n\n\n"));
+            document.add(new Paragraph("Signature du Salarié :", boldFont));
+            document.add(new Paragraph("\n\n\n"));
+            document.add(new Paragraph("                                                        Fait à Tunis, le " + LocalDate.now(), normalFont));
+            document.add(new Paragraph("\n"));
+
+
 
             document.close();
             System.out.println("✅ PDF généré : " + filePath);
@@ -805,7 +789,7 @@ public class AfficherContratController {
                 ",\n\nVotre contrat avec le centre " + contratRepository.getCentreNameById(contrat.getIdCentre()) +
                 " se termine le " + contrat.getDateFin() + ".\n\nVeuillez prendre les mesures nécessaires.";
         // Uncomment if mail sending is implemented
-        // MailRepository.sendEmailWithoutAttachment(email, subject, body);
+        MailRepository.sendEmailWithoutAttachment(email, subject, body);
     }
 
     private void setupSearch() {
