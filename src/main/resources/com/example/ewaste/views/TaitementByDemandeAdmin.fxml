@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="20" styleClass="form-container" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.ewaste.Controllers.TaitementByDemandeAdminController"
+      stylesheets="@../styles/style2.css">
+
+    <!-- Title -->
+    <Label text="Détails du Traitement" styleClass="form-title" />
+
+    <!-- Add Treatment Button -->
+    <Button fx:id="addTraitementButton" text="Ajouter Traitement" onAction="#openAddTraitementForm" styleClass="submit-button" />
+    <!-- TableView -->
+    <TableView fx:id="traitementTable" styleClass="styled-table">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="statusColumn" text="Statut" prefWidth="150"/>
+            <TableColumn fx:id="dateColumn" text="Date Traitement" prefWidth="150"/>
+            <TableColumn fx:id="commentaireColumn" text="Commentaire" prefWidth="200"/>
+        </columns>
+    </TableView>
+</VBox>

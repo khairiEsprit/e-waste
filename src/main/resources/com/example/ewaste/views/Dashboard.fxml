@@ -39,6 +39,7 @@
                                             <Button fx:id="CentrePage" text="Centres" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
                                             <Button fx:id="TachePage" text="Taches" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
                                             <Button fx:id="AjoutEvent" text="Events" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
+                                            <Button fx:id="Demande" text="Demandes" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
 
                                             <!-- Add more buttons here as needed, e.g., <Button fx:id="friend3Button" text="Friend 3" ... /> -->
                                         </HBox>
@@ -345,6 +346,7 @@
                                                 <Button fx:id="addEmployee_updateBtn" layoutX="686.0" layoutY="485.0" mnemonicParsing="false" onAction="#addEmployee_updateBtn_onAction" prefHeight="35.0" prefWidth="85.0" styleClass="update-btn" stylesheets="@../styles/dashboard-style.css" text="Update" />
                                                 <Button fx:id="addEmployee_deleteBtn" layoutX="598.0" layoutY="485.0" mnemonicParsing="false" onAction="#addEmployee_deleteBtn_onAction" prefHeight="35.0" prefWidth="85.0" styleClass="delete-btn" stylesheets="@../styles/dashboard-style.css" text="Delete" />
                                                 <Button fx:id="addEmployee_clearBtn" layoutX="510.0" layoutY="485.0" mnemonicParsing="false" onAction="#addEmployee_clearBtn_onAction" prefHeight="35.0" prefWidth="85.0" styleClass="clear-btn" stylesheets="@../styles/dashboard-style.css" text="Clear" />
+
                                             </children>
                                         </AnchorPane>
                                     </children>

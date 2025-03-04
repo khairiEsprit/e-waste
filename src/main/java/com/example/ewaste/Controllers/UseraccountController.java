@@ -82,6 +82,7 @@ public class UseraccountController implements Initializable {
     public MFXButton captureButton;
     public MFXButton saveButton;
     public MFXButton closeFaceDialogButton;
+    public Button Demandes_Btn;
     @FXML
     private MFXButton ChangeImageBtn;
 
@@ -518,6 +519,12 @@ public class UseraccountController implements Initializable {
     }
 
 
+    public void onDemandesButtonClick(ActionEvent actionEvent) {
+        if(actionEvent.getSource()==Demandes_Btn)
+        {
+            openFriendPage("main.fxml", "Demandes");
+        }
+    }
 }
 
 

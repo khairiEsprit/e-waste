@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="20" styleClass="form-container" stylesheets="@../styles/style1.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.FormDemandeController">
+
+    <!-- Form Title -->
+    <Label styleClass="form-title" text="Formulaire de Demande" />
+
+    <!-- Adresse Field -->
+    <VBox spacing="5">
+        <TextField fx:id="adresseField" promptText="Adresse" styleClass="text-field" />
+        <Label fx:id="adresseError" styleClass="error-label" textFill="red" visible="false" />
+    </VBox>
+
+    <!-- Email Field -->
+    <VBox spacing="5">
+        <TextField fx:id="emailField" promptText="Email Utilisateur" styleClass="text-field" />
+        <Label fx:id="emailError" styleClass="error-label" textFill="red" visible="false" />
+    </VBox>
+
+    <!-- Message Field -->
+    <VBox spacing="5">
+        <TextField fx:id="messageField" promptText="Message" styleClass="text-field" />
+        <Label fx:id="messageError" styleClass="error-label" textFill="red" visible="false" />
+    </VBox>
+
+    <!-- Type Field -->
+    <VBox spacing="5">
+        <ComboBox fx:id="typeField" promptText="Choisir un type" styleClass="combo-box">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Demande" />
+                    <String fx:value="Reclamation" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <Label fx:id="typeError" styleClass="error-label" textFill="red" visible="false" />
+    </VBox>
+
+    <!-- Submit Button -->
+    <Button fx:id="saveButton" onAction="#handleSubmit" styleClass="submit-button" text="Envoyer" />
+</VBox>

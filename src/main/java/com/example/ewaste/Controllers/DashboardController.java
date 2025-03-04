@@ -2,7 +2,7 @@ package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Main;
 import com.example.ewaste.Entities.GetData;
-import com.example.ewaste.Entities.Poubelle;
+import com.example.ewaste.Entities.poubelle;
 import com.example.ewaste.Repository.*;
 import com.example.ewaste.Utils.DataBase;
 import com.example.ewaste.Entities.User;
@@ -77,6 +77,7 @@ public class DashboardController implements Initializable {
     public Button TachePage;
     public Button backButton;
     public Button AjoutEvent;
+    public Button Demande;
 
     @FXML
     private Button addEmployee_addBtn;
@@ -325,7 +326,7 @@ private final  MapBox map = new MapBox();
 
     public void displayPoubellesAndRoute(int CENTER_ID) {
         // Fetch center location and poubelles
-        List<Poubelle> poubelleBins = pr.getPoubellesByCenter(CENTER_ID);
+        List<poubelle> poubelleBins = pr.getPoubellesByCenter(CENTER_ID);
         float[] centerLocation;
         try {
             centerLocation = ctr.getLatitudeLongitude(CENTER_ID);
@@ -558,6 +559,9 @@ private final  MapBox map = new MapBox();
         }
         else if (source == AjoutEvent) {
             openFriendPage("AjouterEvenement.fxml", "Ajout Event");
+        } else if (source == Demande) {
+            openFriendPage("ListDemandesAdmin.fxml", "Demandes");
+
         }
         // Handle dashboard section buttons (example)
         else if (source == home_btn) {

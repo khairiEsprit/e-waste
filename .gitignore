@@ -12,8 +12,6 @@ target/
 *.iml
 *.ipr
 
-.env
-
 ### Eclipse ###
 .apt_generated
 .classpath
@@ -32,7 +30,7 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-
+.env
 ### VS Code ###
 .vscode/
 

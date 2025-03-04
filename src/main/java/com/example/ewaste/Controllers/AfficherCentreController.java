@@ -355,7 +355,7 @@ public class AfficherCentreController {
         }
     }
 
-    public void setLocation(double lat, double lon, WebEngine engine) {
+    public static void setLocation(double lat, double lon, WebEngine engine) {
         if (engine != null && engine.getLoadWorker().getState() == javafx.concurrent.Worker.State.SUCCEEDED) {
             try {
                 String script = "updateLocation(" + lat + ", " + lon + ")";

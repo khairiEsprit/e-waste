@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.ewaste.Controllers.ListDemandesAdminController"
+      stylesheets="@../styles/style.css"
+      prefHeight="600" prefWidth="1200"> <!-- Set preferred size for the VBox -->
+    <TextField fx:id="searchField" promptText="Rechercher..." onKeyReleased="#filterList"/>
+
+    <Label text="Liste des Demandes"/>
+
+    <TableView fx:id="demandeTable" styleClass="table-view" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="adresseColumn" text="Adresse" prefWidth="150"/>
+            <TableColumn fx:id="emailColumn" text="Email Utilisateur" prefWidth="150"/>
+            <TableColumn fx:id="messageColumn" text="Message" prefWidth="200"/>
+            <TableColumn fx:id="typeColumn" text="Type" prefWidth="100"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="350"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
+    </TableView>
+    <Button text="Générer PDF" onAction="#generatePDF" />
+</VBox>

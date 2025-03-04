@@ -1,0 +1,63 @@
+[33m7385ec5[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m merge: merged gestion demande final version
+[33mf3bf345[m[33m ([m[1;31morigin/gestion-demande[m[33m, [m[1;32mgestion-demande[m[33m)[m final-final
+[33mcf4f1e1[m merge: merged gestion-tache branch final version
+[33mcb67045[m[33m ([m[1;32mintegration_gestionTache_poubelles[m[33m)[m Merge branch 'integration_gestionTache_poubelles' of https://github.com/khairiEsprit/e-waste into integration_gestionTache_poubelles
+[33me1876a9[m[33m ([m[1;31morigin/integration_gestionTache_poubelles[m[33m)[m Refactor :keep just the gestion tache branch
+[33m28710b0[m refactor code structure
+[33mb8a67ba[m merge: merged gestion centres final version integration
+[33mf47bbf2[m Renamed repository to Repository, controllers to Controllers, and entities to Entities
+[33m46ee140[m[33m ([m[1;31morigin/gestion-centres[m[33m)[m version finale INTEGRATION
+[33md28b1d1[m final
+[33mbbcd647[m version final
+[33m45c0bd8[m version finale
+[33m0c5c7ae[m Temporarily renamed directories to fix casing issue
+[33m1eb974e[m merge: merge gestion-centres branch with main
+[33ma67c1b5[m final touch
+[33m6e6cbe8[m Merge branch 'gestion-user'
+[33mc770c7f[m[33m ([m[1;31morigin/gestion-user[m[33m, [m[1;32mgestion-user[m[33m)[m feat: add face recognition as an auth method & improve the ux
+[33m691de4f[m AJout+Modif alone
+[33m917b22d[m Pré Integration
+[33m23174bf[m Imrpove: add the maps description & and authentication with google & progress bar for password
+[33mc9a829d[m refactor code structure
+[33m35e5d46[m[33m ([m[1;31morigin/gestion-tache[m[33m)[m modifcation des interfaces
+[33ma0afe74[m feat: add trash sensors :V0
+[33mb59262f[m implement email
+[33mde83097[m PDF+Mailing
+[33m2a4f1f4[m Generer PDF et envoyer Mail
+[33ma887c78[m Map + Temperature
+[33mb396bb4[m recherche+detail +supprimer modification
+[33m6fe03bd[m refactor: adjust the design of the chatbot & optimize chatbot logic
+[33m2760ee3[m Merge branch 'gestion-user'
+[33ma9c5b46[m feat: add a helpfull chatbot in the admin dashboard
+[33m8fc116a[m Ajouter Signature et Map
+[33mc8ee5a7[m Merge branch 'gestion-user'
+[33m70e101f[m reset one commit to resolve conflict
+[33maf6edae[m Refactor: change gluon with mapbox for displying maps activity
+[33mc5e1e94[m ajouter signature
+[33me1e5439[m feat: add the maps activity to the admin dashboard
+[33m2572ff9[m feat: add generate Rapport for admin  & UserProfile Dashboard
+[33me2c1561[m interfaces des Poubelles et Historique
+[33m2dd8880[m final style css
+[33m5b93011[m CRUD VERSION FINALE
+[33m023885a[m Complet (Interfaces + CRUD)
+[33m862179b[m CRUD with interfaces
+[33me4bc498[m Interfaces + CRUD
+[33mdb29066[m Merge pull request #6 from khairiEsprit/gestion-user
+[33m3d11762[m added interfaces
+[33mfb17fe9[m interface liste
+[33mc36c492[m Interfaces + CRUD
+[33me81f72d[m design : adjust the admin dashboard design & CRUD employee
+[33mf1555e7[m interface Ajouter une poubelle
+[33m4c29e39[m Interfaces
+[33m1a16f3f[m Merge pull request #5 from khairiEsprit/gestion-user
+[33m6089dda[m add the login and signup & forgot password (design and logic)
+[33ma27a026[m crud de l'entite poubelle et l'entite historique
+[33m50f33cb[m add navigation based on Role and modals for alert
+[33mf5df3cc[m CRUD
+[33m8ffd164[m CRUD user & role-based AUTH
+[33m2e532c4[m crud demande/traitement
+[33m681a4c9[m CRUD WITHOUT INTERFACE
+[33m09d1c4b[m Create CODEOWNERS
+[33m38af55b[m Create CODEOWNERS
+[33m9afd964[m edit the structure of folders and files & database config
+[33mc535ab8[m first commit

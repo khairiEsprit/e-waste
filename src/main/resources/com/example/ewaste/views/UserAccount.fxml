@@ -94,6 +94,18 @@
                                 </ImageView>
                             </graphic>
                         </Button>
+                        <Button fx:id="Demandes_Btn" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#onDemandesButtonClick" prefHeight="47.0" prefWidth="232.0" styleClass="sidebar-link" text="Demandes" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="19.0" />
+                            </font>
+                            <graphic>
+                                <ImageView>
+                                    <image>
+                                        <Image url="@../assets/MdEventNote.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
 
                     </children>
                 </VBox>

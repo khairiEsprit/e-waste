@@ -26,6 +26,10 @@ module com.example.ewaste {
     requires kernel;
     requires layout;
     requires io;
+    requires okhttp3;
+    requires itextpdf;
+    requires com.google.zxing;
+    requires twilio;
     opens com.example.ewaste.Controllers to javafx.fxml;
     exports com.example.ewaste.Controllers;
     opens com.example.ewaste.Entities to javafx.base;
