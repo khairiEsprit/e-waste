@@ -1,4 +1,4 @@
-package com.example.ewaste.repository;
+package com.example.ewaste.Repository;
 
 
 
@@ -6,9 +6,7 @@ package com.example.ewaste.repository;
 
 
 
-import com.example.ewaste.entities.Demande;
-import com.example.ewaste.interfaces.IService;
-import com.example.ewaste.utils.DataBase;
+import com.example.ewaste.Entities.Demande;
 
 import java.sql.*;
 import java.util.ArrayList;

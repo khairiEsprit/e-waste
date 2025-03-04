@@ -1,10 +1,9 @@
-package com.example.ewaste.contollers;
+package com.example.ewaste.Controllers;
 
 
-import com.example.ewaste.entities.Demande;
-import com.example.ewaste.entities.Traitement;
-import com.example.ewaste.repository.TraitementRepository;
-import com.example.ewaste.utils.AlertUtil;
+import com.example.ewaste.Entities.Traitement;
+import com.example.ewaste.Repository.TraitementRepository;
+import com.example.ewaste.Utils.AlertUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

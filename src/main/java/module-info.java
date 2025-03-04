@@ -6,18 +6,19 @@ module org.example.ewaste.pihoussem {
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
 
-    requires java.sql;
     requires java.net.http;
     requires javafx.fxml;
     requires java.mail;
-    requires java.desktop;
     requires itextpdf;
     requires org.json;
+    requires okhttp3;
+    requires com.fasterxml.jackson.databind;
+    requires java.sql;
 
-    opens com.example.ewaste.contollers to javafx.fxml;
-    exports com.example.ewaste.contollers;
-    opens com.example.ewaste.entities to javafx.base;
-    exports com.example.ewaste.entities;
+    opens com.example.ewaste.Controllers to javafx.fxml;
+    exports com.example.ewaste.Controllers;
+    opens com.example.ewaste.Entities to javafx.base;
+    exports com.example.ewaste.Entities;
     opens com.example.ewaste to javafx.fxml;
     exports com.example.ewaste;
 }

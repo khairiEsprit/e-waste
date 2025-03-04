@@ -1,7 +1,7 @@
-package com.example.ewaste.contollers;
+package com.example.ewaste.Controllers;
 
-import com.example.ewaste.entities.Demande;
-import com.example.ewaste.repository.DemandeRepository;
+import com.example.ewaste.Entities.Demande;
+import com.example.ewaste.Repository.DemandeRepository;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,8 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;

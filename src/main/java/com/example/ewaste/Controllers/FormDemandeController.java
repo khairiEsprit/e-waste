@@ -1,10 +1,10 @@
-package com.example.ewaste.contollers;
+package com.example.ewaste.Controllers;
 
 
-import com.example.ewaste.entities.Demande;
-import com.example.ewaste.repository.DemandeRepository;
-import com.example.ewaste.utils.AlertUtil;
-import com.example.ewaste.utils.BadWordFilter;
+import com.example.ewaste.Entities.Demande;
+import com.example.ewaste.Repository.DemandeRepository;
+import com.example.ewaste.Utils.AlertUtil;
+import com.example.ewaste.Utils.BadWordFilter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

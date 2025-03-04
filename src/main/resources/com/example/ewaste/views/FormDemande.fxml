@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20" styleClass="form-container" stylesheets="@../styles/style1.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.contollers.FormDemandeController">
+<VBox alignment="CENTER" spacing="20" styleClass="form-container" stylesheets="@../styles/style1.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.FormDemandeController">
 
     <!-- Form Title -->
     <Label styleClass="form-title" text="Formulaire de Demande" />

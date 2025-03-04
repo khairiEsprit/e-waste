@@ -1,6 +1,6 @@
-package com.example.ewaste.contollers;
+package com.example.ewaste.Controllers;
 
-import com.example.ewaste.entities.Demande;
+import com.example.ewaste.Entities.Demande;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;

@@ -1,4 +1,4 @@
-package com.example.ewaste.utils;
+package com.example.ewaste.Utils;
 
 import org.json.JSONObject;
 

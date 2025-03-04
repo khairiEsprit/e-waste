@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox spacing="20" alignment="CENTER" styleClass="detail-container" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.contollers.DemandeDetailController" stylesheets="@../styles/style.css">
+<VBox spacing="20" alignment="CENTER" styleClass="detail-container" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.DemandeDetailController" stylesheets="@../styles/style.css">
     <!-- Title -->
     <Label text="Détail de la Demande" styleClass="detail-title" />
 

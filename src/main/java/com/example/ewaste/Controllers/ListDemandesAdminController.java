@@ -1,8 +1,8 @@
-package com.example.ewaste.contollers;
+package com.example.ewaste.Controllers;
 
-import com.example.ewaste.entities.Demande;
-import com.example.ewaste.repository.DemandeRepository;
-import com.example.ewaste.utils.AlertUtil;
+import com.example.ewaste.Entities.Demande;
+import com.example.ewaste.Repository.DemandeRepository;
+import com.example.ewaste.Utils.AlertUtil;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import javafx.collections.FXCollections;

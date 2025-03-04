@@ -1,11 +1,10 @@
-package com.example.ewaste.contollers;
+package com.example.ewaste.Controllers;
 
-import com.example.ewaste.entities.Demande;
-import com.example.ewaste.entities.Traitement;
-import com.example.ewaste.repository.DemandeRepository;
-import com.example.ewaste.repository.TraitementRepository;
-import com.example.ewaste.utils.EmailService;
-import com.example.ewaste.utils.AlertUtil;
+import com.example.ewaste.Entities.Demande;
+import com.example.ewaste.Entities.Traitement;
+import com.example.ewaste.Repository.DemandeRepository;
+import com.example.ewaste.Repository.TraitementRepository;
+import com.example.ewaste.Utils.AlertUtil;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

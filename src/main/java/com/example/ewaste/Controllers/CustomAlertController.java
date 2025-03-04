@@ -1,4 +1,4 @@
-package com.example.ewaste.contollers;
+package com.example.ewaste.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

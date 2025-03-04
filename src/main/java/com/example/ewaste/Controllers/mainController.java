@@ -1,4 +1,4 @@
-package com.example.ewaste.contollers;
+package com.example.ewaste.Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,4 +36,19 @@ public class mainController {
         stage.setScene(new Scene(root, 800, 700));
         stage.show();
     }
+
+    public void openChatBot() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/chatbot.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Chatbot OpenAI");
+            stage.setScene(new Scene(root, 400, 400));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
