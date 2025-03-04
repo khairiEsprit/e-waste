@@ -3,6 +3,7 @@ package com.example.ewaste.Controllers;
 import com.example.ewaste.Entities.Message;
 import com.example.ewaste.Entities.Sender;
 import com.example.ewaste.Main;
+import com.example.ewaste.Repository.PoubelleRepository;
 import io.github.cdimascio.dotenv.Dotenv;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;

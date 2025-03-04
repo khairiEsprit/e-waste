@@ -1,5 +1,6 @@
 package com.example.ewaste.Controllers;
 
+import com.example.ewaste.Entities.poubelleK;
 import com.example.ewaste.Main;
 import com.example.ewaste.Entities.GetData;
 import com.example.ewaste.Entities.poubelle;
@@ -78,6 +79,7 @@ public class DashboardController implements Initializable {
     public Button backButton;
     public Button AjoutEvent;
     public Button Demande;
+    public Button Poubelles;
 
     @FXML
     private Button addEmployee_addBtn;
@@ -326,7 +328,7 @@ private final  MapBox map = new MapBox();
 
     public void displayPoubellesAndRoute(int CENTER_ID) {
         // Fetch center location and poubelles
-        List<poubelle> poubelleBins = pr.getPoubellesByCenter(CENTER_ID);
+        List<poubelleK> poubelleBins = pr.getPoubellesByCenter(CENTER_ID);
         float[] centerLocation;
         try {
             centerLocation = ctr.getLatitudeLongitude(CENTER_ID);
@@ -343,7 +345,7 @@ private final  MapBox map = new MapBox();
         List<String> waypoints = new ArrayList<>();
         waypoints.add(centerLocation[1] + "," + centerLocation[0]); // Start from center
 
-        for (Poubelle bin : poubelleBins) {
+        for (poubelleK bin : poubelleBins) {
             String color;
             float fillLevel = bin.getFillLevel();
             if (fillLevel > 80) {
@@ -393,7 +395,7 @@ private final  MapBox map = new MapBox();
         infoContent.getChildren().add(separator2);
 
         // Display each poubelle information
-        for (Poubelle bin : poubelleBins) {
+        for (poubelleK bin : poubelleBins) {
             String infoText = "Bin at (" + bin.getLatitude() + ", " + bin.getLongitude() + ")\nFill: " + bin.getFillLevel() + "%";
             Label binLabel = new Label(infoText);
             binLabel.getStyleClass().add("bin-info");
@@ -561,6 +563,9 @@ private final  MapBox map = new MapBox();
             openFriendPage("AjouterEvenement.fxml", "Ajout Event");
         } else if (source == Demande) {
             openFriendPage("ListDemandesAdmin.fxml", "Demandes");
+
+        }else if (source == Poubelles) {
+            openFriendPage("liste_poubelle.fxml", "Poubelles");
 
         }
         // Handle dashboard section buttons (example)

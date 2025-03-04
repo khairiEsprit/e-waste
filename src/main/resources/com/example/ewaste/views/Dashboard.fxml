@@ -40,6 +40,7 @@
                                             <Button fx:id="TachePage" text="Taches" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
                                             <Button fx:id="AjoutEvent" text="Events" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
                                             <Button fx:id="Demande" text="Demandes" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
+                                            <Button fx:id="Poubelles" text="Poubelles" onAction="#switchFormOnAction" styleClass="top-nav-btn" stylesheets="@../styles/dashboard-style.css" />
 
                                             <!-- Add more buttons here as needed, e.g., <Button fx:id="friend3Button" text="Friend 3" ... /> -->
                                         </HBox>
