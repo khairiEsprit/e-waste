@@ -214,11 +214,37 @@ public class UserRepository implements EntityCrud<User> {
         return -1; // Return -1 if the user is not found
     }
 
-    public User getUserByEmail(String email) {
-        String query = "SELECT * FROM utilisateur WHERE email = ?";
+        public User getUserByEmail(String email) {
+            String query = "SELECT * FROM utilisateur WHERE email = ?";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setString(1, email);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        User user = new User();
+                        user.setId(rs.getInt("id"));
+                        user.setNom(rs.getString("nom"));
+                        user.setPrenom(rs.getString("prenom"));
+                        user.setEmail(rs.getString("email"));
+                        user.setRole(UserRole.valueOf(rs.getString("role")));
+                        user.setTelephone(rs.getInt("telephone"));
+                        user.setDateNss(rs.getDate("DateNss"));
+                        user.setPhotoUrl(rs.getString("photo"));
+                        return user;
+                    }
+                }
+            } catch (SQLException e) {
+                throw new DatabaseException("Failed to retrieve user by email", e);
+            }
+
+            return null; // Return null if the user is not found
+        }
+
+    public User getUserByName(String userName) {
+        String query = "SELECT * FROM utilisateur WHERE nom = ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, email);
+            pstmt.setString(1, userName);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     User user = new User();
@@ -234,11 +260,10 @@ public class UserRepository implements EntityCrud<User> {
                 }
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to retrieve user by email", e);
+            throw new DatabaseException("Failed to retrieve user by name", e);
         }
 
         return null; // Return null if the user is not found
     }
-
 }
 

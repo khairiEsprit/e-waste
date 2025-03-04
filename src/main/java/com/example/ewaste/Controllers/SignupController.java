@@ -1,9 +1,7 @@
 package com.example.ewaste.Controllers;
 
 
-import com.example.ewaste.Entities.User;
-import com.example.ewaste.Entities.UserRole;
-import com.example.ewaste.Entities.UserSession;
+import com.example.ewaste.Entities.*;
 import com.example.ewaste.Main;
 import com.example.ewaste.Repository.AuthRepository;
 import com.example.ewaste.Repository.FaceRecognitionRepository;
@@ -325,9 +323,9 @@ public class SignupController {
                 String authUrl = googleAuthRepository.buildAuthUrl();
                 Desktop.getDesktop().browse(new URI(authUrl));
 
-                // Wait for the authorization code (blocking call)
+                // Wait for the authorization code
                 while (server.getAuthCode() == null) {
-                    Thread.sleep(500); // Wait until the code is received
+                    Thread.sleep(500);
                 }
 
                 String authorizationCode = server.getAuthCode();
@@ -337,60 +335,58 @@ public class SignupController {
                 String accessToken = googleAuthRepository.getAccessToken(authorizationCode);
                 System.out.println("Access Token: " + accessToken);
 
-                // Fetch user info using the access token
+                // Fetch user info as a Map
                 Map<String, Object> userInfo = googleAuthRepository.getUserInfo(accessToken);
+                System.out.println("User Info: " + userInfo);
                 String email = userInfo.get("email").toString();
 
-                // Check if the email already exists in the system
+                // Check if email exists
                 if (auth.emailExists(email)) {
-                    // Display error modal on the JavaFX Application Thread
                     Platform.runLater(() -> Modals.displayError(
                             "Invalid Email",
-                            "un compte associé à cet email est déjà créé"
+                            "Un compte associé à cet email est déjà créé"
                     ));
-                } else {
-                    // Create the user with the fetched information
-                    googleAuthRepository.createUser(
-                            userInfo.get("name").toString(),
-                            userInfo.get("given_name").toString(),
-                            userInfo.get("family_name").toString(),
-                            userInfo.get("picture").toString(),
-                            email,
-                            String.valueOf(userInfo.get("email_verified")),
-                            "CITOYEN"
-                    );
-
-                    // Load the user account interface on the JavaFX Application Thread
-                    Platform.runLater(() -> loadUserAccount());
+                    return;
                 }
+
+                // Create User from Google data
+                User createdUser = googleAuthRepository.createUserFromGoogle(userInfo);
+                if (createdUser == null) {
+                    throw new Exception("User creation failed.");
+                }
+
+                // Initialize session and load UI
+                UserSession.initializeUserSession(createdUser);
+                Platform.runLater(() -> loadUserAccount());
 
             } catch (Exception e) {
                 e.printStackTrace();
-                // Optionally, display an error modal for unexpected exceptions
                 Platform.runLater(() -> Modals.displayError(
                         "Authentication Error",
-                        "An error occurred during Google sign-up. Please try again."
+                        "An error occurred during Google sign-up: " + e.getMessage()
                 ));
             }
         }).start();
     }
-
-
     private void loadUserAccount() {
         try {
-            // Load dashboard FXML file
+            // Load UserAccount FXML file
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/UserAccount.fxml"));
             Parent root = loader.load();
 
-            // Get current stage from any UI component (e.g., webView)
+            // Get the current stage from the button's scene
             Stage stage = (Stage) google_sign_up_button.getScene().getWindow();
 
-            // Replace the current scene with the dashboard scene
+            // Set the new scene
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Failed to load dashboard interface.");
+            System.err.println("Failed to load user account interface.");
+            Platform.runLater(() -> Modals.displayError(
+                    "Interface Error",
+                    "Failed to load the user account interface."
+            ));
         }
     }
 

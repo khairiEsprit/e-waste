@@ -14,6 +14,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
@@ -122,6 +123,32 @@ public class UseraccountController implements Initializable {
         }
     }
 
+
+
+    private void setupButtonAnimation(MFXButton button) {
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), button);
+        scaleTransition.setFromX(1.0);
+        scaleTransition.setFromY(1.0);
+        scaleTransition.setToX(1.05);
+        scaleTransition.setToY(1.05);
+        button.setUserData(scaleTransition); // Store transition in user data
+    }
+
+    @FXML
+    private void onButtonHoverEnter(MouseEvent event) {
+        MFXButton button = (MFXButton) event.getSource();
+        ScaleTransition scaleTransition = (ScaleTransition) button.getUserData();
+        scaleTransition.setRate(1.0); // Forward animation
+        scaleTransition.playFromStart();
+    }
+
+    @FXML
+    private void onButtonHoverExit(MouseEvent event) {
+        MFXButton button = (MFXButton) event.getSource();
+        ScaleTransition scaleTransition = (ScaleTransition) button.getUserData();
+        scaleTransition.setRate(-1.0); // Reverse animation
+        scaleTransition.play();
+    }
     public UseraccountController() {
         URL cascadeUrl = getClass().getResource("/com/example/ewaste/haarcascade_frontalface_default.xml");
         if (cascadeUrl == null) {
@@ -139,6 +166,9 @@ public class UseraccountController implements Initializable {
             showAlert("Error: User session not found. Please log in.");
             return;
         }
+        setupButtonAnimation(Confirmer_AccountUser);
+        setupButtonAnimation(Update_AccountUser);
+        setupButtonAnimation(ConfirmerD0_AccountUser1);
 
         initializeCamera();
         setupFaceRecognitionStatus();
@@ -437,7 +467,8 @@ public class UseraccountController implements Initializable {
 
 
     void afficherdetails() {
-        User a = ur.getUserById(userId);
+        User a = ur.getUserByName(userName);
+        System.out.println(a);
         if (a.getPhotoUrl() != null) {
             try {
                 Image image = new Image(a.getPhotoUrl());

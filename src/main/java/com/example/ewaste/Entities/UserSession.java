@@ -32,6 +32,12 @@ public class UserSession {
         return instance;
     }
 
+    public static UserSession initializeUserSessionGoogle(GoogleUser u1) {
+        instance = new UserSession(1, u1.getName(), u1.getGivenName(), UserRole.CITOYEN);
+        ApplicationContext.getInstance().setUserSession(instance);
+        return instance;
+    }
+
     public int getUserId() {
         return userId;
     }

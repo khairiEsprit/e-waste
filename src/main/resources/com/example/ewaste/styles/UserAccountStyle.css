@@ -61,3 +61,17 @@
     -fx-background-radius: 10px;
     -fx-background-color : #ACE1AF;
 }
+
+
+.user-info-card {
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.text-field:focused {
+    -fx-border-color: #29AB87;
+    -fx-border-width: 0 0 2 0;
+}
+
+.button:hover {
+    -fx-cursor: hand;
+}

@@ -3,6 +3,7 @@ package com.example.ewaste.Repository;
 import com.example.ewaste.Config.GoogleConfig;
 import com.example.ewaste.Entities.GoogleUser;
 import com.example.ewaste.Entities.User;
+import com.example.ewaste.Entities.UserRole;
 import com.example.ewaste.Utils.DataBase;
 import com.example.ewaste.Utils.HttpUtil;
 import com.example.ewaste.Utils.JsonUtil;
@@ -12,9 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -65,30 +64,75 @@ public class GoogleAuthRepository {
 
 
 
-    public void createUser(String name, String givenName, String familyName, String picture, String email, String emailVerified, String role) {
-        String sql = "INSERT INTO utilisateur (nom, prenom, family_name, photo, email, isEmailVerified, role) VALUES (?, ?, ?, ?, ?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE nom=?, prenom=?, family_name=?, photo=?, isEmailVerified=?";
+    public User createUserFromGoogle(Map<String, Object> userInfo) {
+        String sql = "INSERT INTO utilisateur (nom, prenom, email, photo, isEmailVerified, role) " +
+                "VALUES (?, ?, ?, ?, ?, ?) " +
+                "ON DUPLICATE KEY UPDATE nom=?, prenom=?, photo=?, isEmailVerified=?";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            String name = userInfo.get("name").toString();
+            String givenName = userInfo.get("given_name").toString();
+            String email = userInfo.get("email").toString();
+            String picture = userInfo.get("picture") != null ? userInfo.get("picture").toString() : null;
+            boolean emailVerified = Boolean.parseBoolean(userInfo.get("email_verified").toString());
+
             stmt.setString(1, name);
             stmt.setString(2, givenName);
-            stmt.setString(3, familyName);
+            stmt.setString(3, email);
             stmt.setString(4, picture);
-            stmt.setString(5, email);
-            stmt.setBoolean(6, Boolean.parseBoolean(emailVerified)); // Convert String back to Boolean
-            stmt.setString(7, role);
+            stmt.setBoolean(5, emailVerified);
+            stmt.setString(6, "CITOYEN");
 
-            stmt.setString(8, name);
-            stmt.setString(9, givenName);
-            stmt.setString(10, familyName);
-            stmt.setString(11, picture);
-            stmt.setBoolean(12, Boolean.parseBoolean(emailVerified));
+            stmt.setString(7, name);
+            stmt.setString(8, givenName);
+            stmt.setString(9, picture);
+            stmt.setBoolean(10, emailVerified);
 
-            stmt.executeUpdate();
-            System.out.println("User saved/updated successfully!");
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int id = rs.getInt(1);
+                        User user = new User();
+                        user.setId(id);
+                        user.setNom(name);
+                        user.setPrenom(givenName);
+                        user.setEmail(email);
+                        user.setPhotoUrl(picture);
+                        user.setRole(UserRole.CITOYEN);
+                        // Other fields like status, createdAt, etc., could be set by DB defaults
+                        return user;
+                    }
+                }
+            }
+            return null;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to create user from Google data", e);
         }
+    }
+
+    public User getUserById(int id) {
+        String query = "SELECT * FROM utilisateur WHERE id = ?";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    User user = new User();
+                    user.setId(resultSet.getInt("id"));
+                    user.setNom(resultSet.getString("nom"));
+                    user.setPrenom(resultSet.getString("prenom"));
+                    user.setEmail(resultSet.getString("email"));
+                    user.setRole(UserRole.valueOf(resultSet.getString("role")));
+                    user.setTelephone(resultSet.getInt("telephone"));
+                    user.setDateNss(resultSet.getDate("DateNss"));
+                    user.setPhotoUrl(resultSet.getString("photo"));
+                    return user;
+                }
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        return null;
     }
 
     // Method to map Google user info to User object

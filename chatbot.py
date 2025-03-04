@@ -2,9 +2,9 @@ import os
 import time
 import ollama
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import OllamaEmbeddings
-from langchain_core.documents import Document  
+from langchain_chroma import Chroma  # Updated import
+from langchain_ollama import OllamaEmbeddings  # Updated import
+from langchain_core.documents import Document
 
 # Define paths
 TEXT_PATH = "Data.txt"
@@ -26,10 +26,10 @@ if not os.path.exists(CHROMA_DB_PATH):
     text_content = load_text(TEXT_PATH)
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     splits = text_splitter.split_text(text_content)
-    documents = [Document(page_content=line, metadata={"name": line.split("travaille")[0].strip()}) 
+    documents = [Document(page_content=line, metadata={"name": line.split("travaille")[0].strip()})
                  for line in text_content.split("\n\n")]
     vectorstore = Chroma.from_documents(documents=documents, embedding=embeddings, persist_directory=CHROMA_DB_PATH)
-    vectorstore.persist()
+    # No need for persist() as it's handled automatically in newer versions
 else:
     vectorstore = Chroma(persist_directory=CHROMA_DB_PATH, embedding_function=embeddings)
 
@@ -49,11 +49,14 @@ def ollama_llm(question, context):
         f"Context: {context}\n\n"
         f"Question: {question}"
     )
-    response = ollama.chat(model='qwen:0.5b', messages=[{'role': 'user', 'content': formatted_prompt}])
-    answer = response['message']['content']
-    if 'Based on my information, I can\'t respond' not in answer:
-        answer = f"Date de fin du contrat: {answer.strip()}"
-    return answer
+    try:
+        response = ollama.chat(model='qwen:0.5b', messages=[{'role': 'user', 'content': formatted_prompt}])
+        answer = response['message']['content']
+        if 'Based on my information, I can\'t respond' not in answer:
+            answer = f"Date de fin du contrat: {answer.strip()}"
+        return answer
+    except Exception as e:
+        return f"Erreur lors de la communication avec Ollama: {str(e)}"
 
 # RAG chain
 def rag_chain(question):

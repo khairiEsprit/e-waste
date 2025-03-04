@@ -224,7 +224,7 @@ public class AjouterEvenementController {
         }
 
         // Générer la description à partir de l'URL de l'image
-        String generatedDescription = QwenApiClientEvent.generateTextFromImage("Générer une description en 2 lignes à partir de cette photo d'événement.", imageUrl);
+        String generatedDescription = QwenApiClientEvent.generateTextFromImage("Générer une description en  10 mots à partir de cette photo d'événement.", imageUrl);
         System.out.println(imageUrl);
         // Vérifier si la description contient une erreur
         if (generatedDescription.startsWith("API Error:") || generatedDescription.startsWith("Unexpected API response:")) {

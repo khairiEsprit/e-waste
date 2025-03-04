@@ -40,6 +40,7 @@ public class AuthRepository {
 //    }
     public boolean emailExists(String email) {
         String query = "SELECT * FROM utilisateur WHERE email = ?";
+        System.out.println();
         try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setString(1, email);
             try (ResultSet resultSet = statement.executeQuery()) {

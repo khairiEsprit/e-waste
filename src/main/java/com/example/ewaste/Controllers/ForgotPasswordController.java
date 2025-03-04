@@ -1,5 +1,6 @@
 package com.example.ewaste.Controllers;
 
+import com.example.ewaste.Main;
 import com.example.ewaste.Repository.AuthRepository;
 import com.example.ewaste.Repository.UserRepository;
 import com.example.ewaste.Utils.Navigate;
@@ -7,7 +8,11 @@ import com.example.ewaste.Utils.SendMail;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import javafx.animation.FadeTransition;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.BoxBlur;
@@ -30,7 +35,7 @@ public class ForgotPasswordController implements Initializable {
     public MFXGenericDialog Verif_Dialog;
     public TextField tf_codee;
     public MFXButton ValidateCodeBtn;
-
+    public MFXButton backButton;
 
 
     AuthRepository au = new AuthRepository();
@@ -88,6 +93,23 @@ public class ForgotPasswordController implements Initializable {
         Verif_Dialog.setVisible(false);
     }
 
+    @FXML
+    public void goBack() {
+        try {
+            // Load the previous page (e.g., Login.fxml)
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/mainLoginSignUp.fxml"));
+            Parent root = loader.load();
+
+            // Get the current stage and set the new scene
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Optionally, show an error dialog to the user
+        }
+    }
 
     public void validateCode()
 

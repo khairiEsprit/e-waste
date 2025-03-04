@@ -20,7 +20,7 @@ public class TranslationService {
             .directory("C:/Users/User/Documents/e-waste/e-waste") // Ajuste ce chemin si nécessaire
             .filename(".env")
             .load();
-    private static final String API_KEY = dotenv.get("APIKEY");
+    private static final String API_KEY = dotenv.get("OPENAI_API_KEY");
 
     public String translateText(String text, String targetLanguage) {
         try {

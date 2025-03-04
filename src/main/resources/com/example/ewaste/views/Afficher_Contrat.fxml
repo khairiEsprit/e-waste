@@ -21,45 +21,45 @@
         <VBox fx:id="mainContent" layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="1100.0" spacing="10">
 
             <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="LISTE DES CONTRATS" textAlignment="CENTER" wrappingWidth="1098.91015625">
-               <font>
-                  <Font name="System Bold Italic" size="39.0" />
-               </font>
-            </Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="LISTE DES CONTRATS" textAlignment="CENTER" wrappingWidth="1098.91015625">
+                    <font>
+                        <Font name="System Bold Italic" size="39.0" />
+                    </font>
+                </Text>
                 <TextField fx:id="Recherche" prefHeight="42.0" prefWidth="689.0" promptText="Rechercher..." style="-fx-background-radius: 15;">
-               <VBox.margin>
-                  <Insets left="20.0" right="20.0" />
-               </VBox.margin></TextField>
+                    <VBox.margin>
+                        <Insets left="20.0" right="20.0" />
+                    </VBox.margin></TextField>
 
 
                 <ListView fx:id="afficher" prefHeight="261.0" prefWidth="1072.0" style="-fx-background-radius: 15; -fx-border-radius: 15;">
-               <VBox.margin>
-                  <Insets left="20.0" right="20.0" />
-               </VBox.margin></ListView>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="300.0">
-               <children>
-                      <Button fx:id="Ajout" mnemonicParsing="false" onAction="#showAjouterForm" prefHeight="42.0" prefWidth="109.0" style="-fx-background-radius: 15; -fx-padding: 10;" text="Ajout" />
-                      <Button fx:id="Centre" mnemonicParsing="false" onAction="#GoToCentre" prefHeight="24.0" prefWidth="109.0" style="-fx-background-radius: 15; -fx-padding: 10;" text="Centre" />
-               </children>
-            </HBox>
-            <HBox prefHeight="84.0" prefWidth="1083.0" spacing="100.0">
-               <children>
-                  <VBox prefHeight="84.0" prefWidth="211.0">
-                     <children>
-                            <TextField fx:id="chatbotQuestionField" prefHeight="42.0" prefWidth="206.0" promptText="Ask IA..." style="-fx-background-radius: 15;" />
-                            <Button fx:id="chatbotSubmitButton" mnemonicParsing="false" onAction="#submitQuestion" style="-fx-background-radius: 15;" text="Submit">
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Button>
-                     </children>
-                  </VBox>
-                      <TextArea fx:id="chatbotResponseArea" prefHeight="84.0" prefWidth="237.0" style="-fx-background-radius: 15;" />
-               </children>
-               <VBox.margin>
-                  <Insets left="20.0" right="20.0" />
-               </VBox.margin>
-            </HBox>
+                    <VBox.margin>
+                        <Insets left="20.0" right="20.0" />
+                    </VBox.margin></ListView>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="300.0">
+                    <children>
+                        <Button fx:id="Ajout" mnemonicParsing="false" onAction="#showAjouterForm" prefHeight="42.0" prefWidth="109.0" style="-fx-background-radius: 15; -fx-padding: 10;" text="Ajout" />
+                        <Button fx:id="Centre" mnemonicParsing="false" onAction="#GoToCentre" prefHeight="24.0" prefWidth="109.0" style="-fx-background-radius: 15; -fx-padding: 10;" text="Centre" />
+                    </children>
+                </HBox>
+                <HBox prefHeight="84.0" prefWidth="1083.0" spacing="100.0">
+                    <children>
+                        <VBox prefHeight="84.0" prefWidth="211.0">
+                            <children>
+                                <TextField fx:id="chatbotQuestionField" prefHeight="42.0" prefWidth="206.0" promptText="Ask IA..." style="-fx-background-radius: 15;" />
+                                <Button fx:id="chatbotSubmitButton" mnemonicParsing="false" onAction="#submitQuestion" style="-fx-background-radius: 15;" text="Submit">
+                                    <VBox.margin>
+                                        <Insets top="10.0" />
+                                    </VBox.margin>
+                                </Button>
+                            </children>
+                        </VBox>
+                        <TextArea fx:id="chatbotResponseArea" prefHeight="84.0" prefWidth="237.0" style="-fx-background-radius: 15;" />
+                    </children>
+                    <VBox.margin>
+                        <Insets left="20.0" right="20.0" />
+                    </VBox.margin>
+                </HBox>
             </children>
         </VBox>
 
