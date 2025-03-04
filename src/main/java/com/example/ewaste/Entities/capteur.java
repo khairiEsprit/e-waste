@@ -8,20 +8,19 @@ public class capteur {
     private int id_poubelle;
     private float distance_mesuree;
     private Timestamp date_mesure;
-    private float porteeMaximale; // Portée maximale du capteur en cm
-    private float precision; // Précision du capteur en cm (± valeur)
-    private Random random; // Générateur de nombres aléatoires
+    private float porteeMaximale =200.0F; // Portée maximale du capteur en cm
+    private float precision=1.0F; // Précision du capteur en cm (± valeur)
 
     // Constructeurs
     public capteur() {
-        this.random = new Random();
+
     }
     public capteur(int id_poubelle, float distance_mesuree, Timestamp date_mesure) {
         this.id_c = 0; // Valeur par défaut
         this.id_poubelle = id_poubelle;
         this.distance_mesuree = distance_mesuree;
         this.date_mesure = date_mesure;
-        this.porteeMaximale = 150.0f; // Valeur par défaut
+        this.porteeMaximale = 200.0f; // Valeur par défaut
         this.precision = 1.0f; // Valeur par défaut
     }
 
@@ -32,42 +31,7 @@ public class capteur {
         this.date_mesure = date_mesure;
         this.porteeMaximale = porteeMaximale;
         this.precision = precision;
-        this.random = new Random();
-    }
 
-    // Méthode pour simuler la mesure de distance
-    public float simulerDistanceMesuree(int hauteurTotale, float dernierNiveau) {
-        if (hauteurTotale <= 0) {
-            throw new IllegalArgumentException("La hauteur totale doit être supérieure à 0 cm.");
-        }
-
-        // Vérifier que la portée maximale est suffisante
-        if (porteeMaximale < hauteurTotale) {
-            throw new IllegalArgumentException("La portée maximale du capteur doit être supérieure ou égale à la hauteur totale de la poubelle.");
-        }
-
-        // Simuler une variation progressive du niveau de remplissage
-        float variation = (random.nextFloat() * 10) - 5; // Variation aléatoire entre -5 et +5 cm
-        float distanceMesuree = dernierNiveau + variation;
-
-        // Ajouter une marge d'erreur aléatoire pour simuler l'imprécision du capteur
-        float erreur = (random.nextFloat() * 2 * precision) - precision; // Erreur entre -precision et +precision
-        distanceMesuree += erreur;
-
-        // S'assurer que la distance reste dans les limites [0, porteeMaximale]
-        distanceMesuree = Math.max(0, Math.min(porteeMaximale, distanceMesuree));
-
-        // S'assurer que la distance ne dépasse pas la hauteur totale de la poubelle
-        distanceMesuree = Math.min(distanceMesuree, hauteurTotale);
-
-        // Arrondir la distance à 2 décimales
-        distanceMesuree = Math.round(distanceMesuree * 100) / 100.0f;
-
-        // Mettre à jour les attributs de la classe
-        this.distance_mesuree = distanceMesuree;
-        this.date_mesure = new Timestamp(System.currentTimeMillis());
-
-        return distanceMesuree;
     }
 
     // Getters et Setters

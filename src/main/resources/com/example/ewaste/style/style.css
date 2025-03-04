@@ -1,3 +1,96 @@
+/* Styles spécifiques à la page de formulaire */
+.form-page {
+    -fx-background-color: #f9f9f9;
+    -fx-padding: 25;
+    -fx-border-radius: 10;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1;
+}
+
+.form-page .title-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0 0 20 0;
+}
+
+.form-page .form-grid {
+    -fx-background-color: #ffffff;
+    -fx-padding: 25;
+    -fx-border-radius: 10;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.form-page .field-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #34495e;
+    -fx-font-weight: bold;
+}
+
+.form-page .text-field, .form-page .date-picker, .form-page .combo-box {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 5;
+    -fx-border-width: 1;
+    -fx-padding: 8;
+    -fx-font-size: 14px;
+}
+
+.form-page .text-field:focused, .form-page .date-picker:focused, .form-page .combo-box:focused {
+    -fx-border-color: #3498db;
+    -fx-effect: dropshadow(three-pass-box, rgba(52,152,219,0.3), 5, 0, 0, 0);
+}
+
+.form-page .primary-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10 25;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.form-page .primary-button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.form-page .confirmation-box {
+    -fx-background-color: #ffffff;
+    -fx-padding: 25;
+    -fx-border-radius: 10;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.form-page .success-icon {
+    -fx-font-family: "FontAwesome";
+    -fx-font-size: 32px;
+    -fx-text-fill: #27ae60;
+}
+
+.form-page .success-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
+.form-page .close-button {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8 20;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.form-page .close-button:hover {
+    -fx-background-color: #c0392b;
+}
+
+
 /* Style général */
 .content {
     -fx-padding: 20px;
@@ -20,7 +113,7 @@
     -fx-background-color: white;
     -fx-font-size: 14px;
     -fx-prompt-text-fill: #999;
-    -fx-graphic: url("/com/example/ewaste/assetsample/ewaste/assets/search-icon.png"); /* Ajout d'une icône */
+    -fx-graphic: url("../assets/search-icon.png"); /* Ajout d'une icône */
 }
 
 /* Combobox de tri */
@@ -32,7 +125,7 @@
     -fx-background-radius: 5px;
     -fx-background-color: white;
     -fx-font-size: 14px;
-    -fx-graphic: url('/com/example/ewaste/assetsample/ewaste/assets/sort-icon.png'); /* Ajout d'une icône */
+    -fx-graphic: url('../assets/sort-icon.png'); /* Ajout d'une icône */
 }
 
 /* Liste des poubelles */
@@ -576,4 +669,58 @@
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: #4CAF50; /* Couleur verte pour indiquer le niveau */
+}
+/*Notification*/
+.toast {
+    -fx-background-color: rgba(0, 0, 0, 0.8);
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 0);
+}
+
+.toast-success {
+    -fx-background-color: rgba(76, 175, 80, 0.9); /* Vert */
+}
+
+.toast-error {
+    -fx-background-color: rgba(244, 67, 54, 0.9); /* Rouge */
+}
+
+.toast-icon {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+}
+
+
+.pagination {
+    -fx-page-information-visible: false;
+    -fx-padding: 10 0 0 0;
+}
+
+.pagination .page {
+    -fx-opacity: 0;
+}
+
+.pagination .left-arrow, .pagination .right-arrow {
+    -fx-opacity: 1;
+}
+/* dans un fichier CSS associé */
+.stack-pane {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+}
+
+.download-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);
+}
+
+.download-button:hover {
+    -fx-background-color: #45a049;
 }

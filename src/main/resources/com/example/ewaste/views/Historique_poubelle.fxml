@@ -2,107 +2,113 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import java.net.URL?>
+
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.ewaste.Controllers.HistoriquePoubelleController"
-            prefHeight="600.0" prefWidth="800.0">
+            prefHeight="700.0" prefWidth="1200.0"
+            stylesheets="@../style/style.css">
 
-    <!-- Styles CSS -->
-    <stylesheets>
-        <URL value="@../style/style.css"/>
-    </stylesheets>
+    <BorderPane prefHeight="700.0" prefWidth="1200.0" styleClass="container1">
 
-    <VBox spacing="10" layoutX="50" layoutY="20">
-        <!-- Titre -->
-        <Label text="Gestion des Événements de Poubelle" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+        <!-- Sidebar (gauche) -->
+        <left>
+            <VBox spacing="15" styleClass="sidebar" prefWidth="300">
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="sidebar-header">
+                    <FontAwesomeIconView glyphName="TRASH_ALT" glyphSize="24" styleClass="header-icon"/>
+                    <Label text="Gestion des Poubelles" styleClass="header-title"/>
+                </HBox>
 
-        <!-- Champ pour l'ID de la poubelle -->
-        <HBox spacing="10">
-            <Label text="ID Poubelle:"/>
-            <TextField fx:id="poubelleIdField" promptText="Entrez l'ID de la poubelle"/>
-            <Button text="Historique" onAction="#handleAfficherHistorique"/>
-        </HBox>
+                <!-- Séparateur stylisé -->
+                <Separator styleClass="fancy-separator"/>
 
-        <!-- Filtre par type d'événement -->
-        <HBox spacing="10">
-            <Label text="Filtrer par Type :"/>
-            <ComboBox fx:id="typeFilterComboBox" promptText="Tous les types"/>
-        </HBox>
+                <!-- Contrôle du thème -->
+                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="theme-control">
+                    <Label text="Apparence :" styleClass="theme-label"/>
+                    <ToggleButton fx:id="themeToggle" styleClass="theme-toggle"/>
+                </HBox>
+            </VBox>
+        </left>
 
-        <!-- Champ pour la quantité de déchets -->
-        <HBox spacing="10">
-            <Label text="Quantité de Déchets (kg):"/>
-            <TextField fx:id="quantiteDechetsField" promptText="Entrez la quantité de déchets"/>
-        </HBox>
+        <!-- Contenu principal (centre) -->
+        <center>
+            <VBox spacing="15" styleClass="content">
+                <!-- En-tête de recherche et tri -->
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="list-header">
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <TextField fx:id="searchField" promptText="Rechercher..." styleClass="task-name"/>
+                        <ImageView fitHeight="20" fitWidth="20">
+                            <Image url="@../assets/search-icon.png"/>
+                        </ImageView>
+                    </HBox>
 
-        <!-- Boutons pour les événements -->
-        <HBox spacing="10">
-            <Button text="Remplissage" onAction="#handleRemplissageEvent">
-                <!--graphic>
-                    <ImageView>
-                        <Image url="@../assets/fill.png"/>
-                    </ImageView>
-                </graphic!-->
-            </Button>
-            <Button text="Vidage" onAction="#handleVidageEvent">
-                <!--graphic>
-                    <ImageView>
-                        <Image url="@../assets/empty.png"/>
-                    </ImageView>
-                </graphic!-->
-            </Button>
-            <Button text="Panne" onAction="#handlePanneEvent">
-                <!--graphic>
-                    <ImageView>
-                        <Image url="@../assets/error.png"/>
-                    </ImageView>
-                </graphic!-->
-            </Button>
-            <Button text="Réparation" onAction="#handleReparationEvent">
-                <!--graphic>
-                    <ImageView>
-                        <Image url="@../assets/repair.png"/>
-                    </ImageView>
-                </graphic!-->
-            </Button>
-        </HBox>
+                </HBox>
 
-        <!-- Bouton pour l'alerte de remplissage maximal -->
-        <Button text="Supprimer" onAction="#handleSupprimer"/>
+                <!-- Tableau d'historique -->
+                <VBox spacing="10" styleClass="historique-container">
+                    <Label text="Historique des Événements de Poubelle"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
-        <TableView fx:id="historiqueTable" prefHeight="200" prefWidth="700">
-            <columns>
-                <TableColumn fx:id="idColumn" text="ID" prefWidth="50">
-                    <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="idPoubelleColumn" text="ID Poubelle" prefWidth="100">
-                    <cellValueFactory><PropertyValueFactory property="id_poubelle"/></cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="dateEvenementColumn" text="Date Événement" prefWidth="150">
-                    <cellValueFactory><PropertyValueFactory property="date_evenement"/></cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="typeEvenementColumn" text="Type Événement" prefWidth="100">
-                    <cellValueFactory><PropertyValueFactory property="type_evenement"/></cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="200">
-                    <cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="quantiteDechetsColumn" text="Quantité Déchets (kg)" prefWidth="100">
-                    <cellValueFactory><PropertyValueFactory property="quantite_dechets"/></cellValueFactory>
-                </TableColumn>
-            </columns>
-        </TableView>
+                    <TableView fx:id="historiqueTable" prefHeight="200" prefWidth="700">
+                        <columns>
+                            <TableColumn fx:id="idColumn" text="ID" prefWidth="50">
+                                <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="idPoubelleColumn" text="ID Poubelle" prefWidth="100">
+                                <cellValueFactory><PropertyValueFactory property="id_poubelle"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="dateEvenementColumn" text="Date Événement" prefWidth="150">
+                                <cellValueFactory><PropertyValueFactory property="date_evenement"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="typeEvenementColumn" text="Type Événement" prefWidth="100">
+                                <cellValueFactory><PropertyValueFactory property="type_evenement"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="200">
+                                <cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="quantiteDechetsColumn" text="Quantité Déchets (kg)" prefWidth="100">
+                                <cellValueFactory><PropertyValueFactory property="quantite_dechets"/></cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
 
-        <!-- Boutons pour exporter les données -->
-        <HBox spacing="10">
-            <Button text="Exporter en CSV" onAction="#handleExportCSV"/>
-            <!--Button text="Exporter en PDF" onAction="#handleExportPDF"/-->
-        </HBox>
+                    <!-- Boutons pour exporter les données -->
+                    <HBox spacing="10">
+                        <Button text="Exporter en CSV" onAction="#handleExportCSV"/>
+                        <Button text="Gemini" onAction="#handleGemini"/>
+                    </HBox>
+                    <VBox spacing="20" alignment="CENTER">
+                        <Label text="QR Code de la Poubelle" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
 
-        <!-- Label pour afficher le statut -->
-        <Label fx:id="statusLabel" style="-fx-text-fill: green; -fx-font-weight: bold;"/>
-    </VBox>
+                        <StackPane>
+                            <ImageView fx:id="qrCodeImageView"
+                                       fitWidth="100"
+                                       fitHeight="100"
+                                       preserveRatio="true"
+                                       visible="false"/>
 
+                            <ProgressIndicator fx:id="loadingIndicator"
+                                               visible="false"
+                                               style="-fx-progress-color: #2196F3; -fx-max-width: 50; -fx-max-height: 50;"/>
+                        </StackPane>
+
+                        <Button fx:id="downloadButton"
+                                text="Télécharger QR Code"
+                                onAction="#handleDownload"
+                                disable="true"
+                                style="-fx-font-size: 14; -fx-padding: 8 15;"/>
+                    </VBox>
+                    <Label fx:id="statusLabel" style="-fx-text-fill: green; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <!-- Pagination -->
+                <Pagination fx:id="pagination" styleClass="pagination" />
+            </VBox>
+        </center>
+    </BorderPane>
 </AnchorPane>

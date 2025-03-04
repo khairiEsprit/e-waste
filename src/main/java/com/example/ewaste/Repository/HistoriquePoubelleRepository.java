@@ -5,7 +5,10 @@ import com.example.ewaste.Entities.type;
 import com.example.ewaste.Interfaces.IService;
 import com.example.ewaste.Utils.DataBase;
 
+import java.sql.Connection;
 import java.sql.*;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,11 +60,32 @@ public class HistoriquePoubelleRepository implements IService<Historique_Poubell
 
         List<Historique_Poubelle> historiquePoubelles = new ArrayList<>();
         while (rs.next()) {
+            String typeEvenementStr = rs.getString("type_evenement");
+            type typeEvenement;
+
+            // Convertir la chaîne en enum
+            switch (typeEvenementStr.toUpperCase()) {
+                case "REMPLISSAGE":
+                    typeEvenement = type.REMPLISSAGE;
+                    break;
+                case "VIDAGE":
+                    typeEvenement = type.VIDAGE;
+                    break;
+                case "PANNE":
+                    typeEvenement = type.PANNE;
+                    break;
+                case "REPARATION":
+                    typeEvenement = type.REPARATION;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Type d'événement inconnu : " + typeEvenementStr);
+            }
+
             Historique_Poubelle h = new Historique_Poubelle(
                     rs.getInt("id"),
                     rs.getInt("id_poubelle"),
-                    rs.getTimestamp("date_evenement"), // Récupérer Timestamp et le convertir en Date
-                    type.valueOf(rs.getString("type_evenement")), // Convertir String en enum
+                    rs.getTimestamp("date_evenement"),
+                    typeEvenement,
                     rs.getString("description"),
                     rs.getFloat("quantite_dechets")
             );
@@ -81,7 +105,7 @@ public class HistoriquePoubelleRepository implements IService<Historique_Poubell
                     rs.getInt("id"),
                     rs.getInt("id_poubelle"),
                     rs.getTimestamp("date_evenement"),
-                    type.valueOf(rs.getString("type_evenement")),
+                    type.fromString(rs.getString("type_evenement")), // Utiliser fromString
                     rs.getString("description"),
                     rs.getFloat("quantite_dechets")
             );
@@ -122,13 +146,7 @@ public class HistoriquePoubelleRepository implements IService<Historique_Poubell
         }
         return false;
     }
-    public void mettreAJourNiveauRemplissage (int idPoubelle, float niveauRemplissage) throws SQLException {
-        String sql = "UPDATE poubelle SET niveau = ? WHERE id = ?";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setFloat(1, niveauRemplissage);
-        ps.setInt(2, idPoubelle);
-        ps.executeUpdate();
-    }
+
     }
 
 

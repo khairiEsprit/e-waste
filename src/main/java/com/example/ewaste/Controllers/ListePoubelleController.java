@@ -1,7 +1,11 @@
 package com.example.ewaste.Controllers;
 
+import com.example.ewaste.Entities.ToastManager;
 import com.example.ewaste.Entities.poubelle;
+import com.example.ewaste.Repository.CapteurRepository;
 import com.example.ewaste.Repository.PoubelleRepository;
+import com.example.ewaste.Utils.TwilioSMSUtil;
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -23,6 +27,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ListePoubelleController implements Initializable {
@@ -45,8 +51,16 @@ public class ListePoubelleController implements Initializable {
     @FXML
     private Button btnModifier;
 
+    @FXML
+    private Pagination pagination;
+    @FXML
+    private Label statusLabel;
+
     private ObservableList<poubelle> poubelleList = FXCollections.observableArrayList();
     private final PoubelleRepository pr = new PoubelleRepository();
+    private final CapteurRepository cr = new CapteurRepository();
+
+    private static final int ITEMS_PER_PAGE = 10; // Nombre d'éléments par page
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -54,7 +68,55 @@ public class ListePoubelleController implements Initializable {
         setupSorting();
         setupSearch();
         setupThemeToggle();
-        loadData();
+        loadData(); // Charger les données initiales
+        // Simuler des mesures de niveau de remplissage toutes les 5 secondes
+        AnimationTimer timer = new AnimationTimer() {
+            private long lastUpdate = 0;
+
+            @Override
+            public void handle(long now) {
+                if (now - lastUpdate >= 5_000_000_000L) { // 5 secondes en nanosecondes
+                    try {
+                        cr.simulerMesureNiveauRemplissage();
+
+                        // Vérifier chaque poubelle
+                        for (poubelle p : listPoubelles.getItems()) {
+                            if (p.getNiveau() >= 75) {
+                                String message = String.format(
+                                        "[ALERTE] Poubelle #%d - Niveau critique: %d%%\nAdresse: %s\nDate: %s",
+                                        p.getId(),
+                                        p.getNiveau(),
+                                        p.getAdresse(),
+                                        new Date()
+                                );
+
+                                String messageSid = TwilioSMSUtil.sendSMS("+21650340035", message);
+
+                                if (messageSid != null) {
+                                    System.out.println("Alerte SMS envoyée pour la poubelle #" + p.getId());
+                                } else {
+                                    System.err.println("Échec d'envoi SMS pour la poubelle #" + p.getId());
+                                }
+                            }
+                        }
+
+                        refreshList(); // Rafraîchir la liste après la simulation
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        Platform.runLater(() ->
+                                statusLabel.setText("Erreur lors de la mise à jour des niveaux"));
+                    } catch (Exception e) {
+                        Platform.runLater(() ->
+                                statusLabel.setText("Échec d'envoi SMS: " + e.getMessage()));
+                    }
+                    lastUpdate = now;
+                }
+            }
+        };
+        timer.start();
+
+
+        // Configurer la taille minimale de la fenêtre
         Platform.runLater(() -> {
             Stage stage = (Stage) listPoubelles.getScene().getWindow();
             stage.setMinWidth(1000);
@@ -64,6 +126,7 @@ public class ListePoubelleController implements Initializable {
         });
     }
 
+    // Configuration de la ListView
     private void setupList() {
         listPoubelles.setCellFactory(param -> new ListCell<poubelle>() {
             private final GridPane grid = new GridPane();
@@ -71,7 +134,7 @@ public class ListePoubelleController implements Initializable {
             private final Label lblAdresse = new Label();
             private final ProgressBar progressBar = new ProgressBar();
             private final Label lblEtat = new Label();
-            private final Label lblDetails = new Label(); // Ajout pour la date et hauteur
+            private final Label lblDetails = new Label(); // Pour la date et la hauteur
             private final Button deleteButton = new Button("🗑");
 
             {
@@ -86,36 +149,53 @@ public class ListePoubelleController implements Initializable {
                 grid.addColumn(2, lblEtat, lblDetails);
                 grid.add(deleteButton, 3, 0, 1, 2);
 
+                // Gestion de la suppression d'une poubelle
                 deleteButton.setOnAction(event -> {
                     poubelle item = getItem();
                     if (item != null) {
-                        try {
-                            pr.supprimer(item.getId());
-                            poubelleList.remove(item);
-                        } catch (SQLException e) {
-                            showAlert("Erreur SQL", e.getMessage(), Alert.AlertType.ERROR);
-                        }
+                        // Boîte de dialogue de confirmation
+                        Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
+                        confirmationDialog.setTitle("Confirmer la suppression");
+                        confirmationDialog.setHeaderText("Êtes-vous sûr de vouloir supprimer cette poubelle ?");
+                        confirmationDialog.setContentText("Cette action supprimera également les capteurs associés.");
+
+                        confirmationDialog.showAndWait().ifPresent(response -> {
+                            if (response == ButtonType.OK) {
+                                try {
+                                    // Supprimer la poubelle
+                                    pr.supprimer(item.getId());
+                                    poubelleList.remove(item);
+
+                                    // Afficher une notification toast
+                                    Stage ownerStage = (Stage) listPoubelles.getScene().getWindow();
+                                    ToastManager.showToast(ownerStage, "Poubelle et capteur supprimés avec succès", "toast-success");
+                                } catch (SQLException e) {
+                                    showAlert("Erreur SQL", e.getMessage(), Alert.AlertType.ERROR);
+                                }
+                            }
+                        });
                     }
                 });
             }
 
             @Override
-            public void updateItem(poubelle item, boolean empty) {
+            protected void updateItem(poubelle item, boolean empty) {
                 super.updateItem(item, empty);
 
                 if (empty || item == null) {
                     setGraphic(null);
                 } else {
-                   // lblId.setText("ID: " + item.getId());
+                    lblId.setText("ID: " + item.getId());
                     lblAdresse.setText("Adresse: " + item.getAdresse());
                     lblEtat.setText("État: " + item.getEtat());
-                    lblDetails.setText("Date: " + item.getDate_installation() + "\nHauteur: " + item.getHauteurTotale() + " cm"); // Ajouté
+                    lblDetails.setText("Date: " + item.getDate_installation() + "\nHauteur: " + item.getHauteurTotale() + " cm");
                     progressBar.setProgress(item.getNiveau() / 100.0);
                     updateProgressStyle(item.getNiveau());
                     setGraphic(grid);
                 }
             }
 
+            // Mise à jour du style de la barre de progression en fonction du niveau
             private void updateProgressStyle(int niveau) {
                 String style;
                 if (niveau >= 100) {
@@ -132,6 +212,7 @@ public class ListePoubelleController implements Initializable {
         });
     }
 
+    // Configuration de la recherche
     private void setupSearch() {
         FilteredList<poubelle> filteredData = new FilteredList<>(poubelleList, p -> true);
         SortedList<poubelle> sortedData = new SortedList<>(filteredData);
@@ -143,7 +224,7 @@ public class ListePoubelleController implements Initializable {
                 return poubelle.getAdresse().toLowerCase().contains(lowerCaseFilter) ||
                         String.valueOf(poubelle.getId()).contains(lowerCaseFilter) ||
                         poubelle.getEtat().toString().toLowerCase().contains(lowerCaseFilter) ||
-                        String.valueOf(poubelle.getHauteurTotale()).contains(lowerCaseFilter); // Ajouté
+                        String.valueOf(poubelle.getHauteurTotale()).contains(lowerCaseFilter);
             });
         });
 
@@ -161,7 +242,7 @@ public class ListePoubelleController implements Initializable {
                             return Comparator.comparingInt(poubelle::getNiveau);
                         case "Tri par État":
                             return Comparator.comparing(p -> p.getEtat().toString());
-                        case "Tri par Hauteur": // Ajouté
+                        case "Tri par Hauteur":
                             return Comparator.comparingInt(poubelle::getHauteurTotale);
                         default:
                             return null;
@@ -172,13 +253,14 @@ public class ListePoubelleController implements Initializable {
         listPoubelles.setItems(sortedData);
     }
 
+    // Configuration du tri
     private void setupSorting() {
         sortComboBox.getItems().addAll(
                 "Tri par ID",
                 "Tri par Date",
                 "Tri par Niveau",
                 "Tri par État",
-                "Tri par Hauteur" // Ajouté
+                "Tri par Hauteur"
         );
 
         sortComboBox.setValue("Tri par ID");
@@ -198,7 +280,7 @@ public class ListePoubelleController implements Initializable {
                 case "Tri par État":
                     comparator = Comparator.comparing(p -> p.getEtat().toString());
                     break;
-                case "Tri par Hauteur": // Ajouté
+                case "Tri par Hauteur":
                     comparator = Comparator.comparingInt(poubelle::getHauteurTotale);
                     break;
                 default:
@@ -211,6 +293,7 @@ public class ListePoubelleController implements Initializable {
         });
     }
 
+    // Configuration du thème (clair/sombre)
     private void setupThemeToggle() {
         themeToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
@@ -229,14 +312,37 @@ public class ListePoubelleController implements Initializable {
         listPoubelles.getScene().getRoot().setStyle("-fx-base: #f4f4f4;");
     }
 
+    // Chargement des données depuis la base de données
     private void loadData() {
         try {
-            poubelleList.setAll(pr.recuperer());
+            poubelleList.setAll(pr.recuperer()); // Charger les données
+            // setupPagination(); // Configurer la pagination
         } catch (SQLException e) {
             showAlert("Erreur de chargement", e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
+    // Configuration de la pagination
+//    private void setupPagination() {
+//        if (pagination == null) {
+//            System.err.println("Erreur : Le contrôle Pagination n'a pas été injecté correctement.");
+//            return;
+//        }
+//
+//        int pageCount = (int) Math.ceil((double) poubelleList.size() / ITEMS_PER_PAGE);
+//        pagination.setPageCount(pageCount);
+//
+//        pagination.setPageFactory(pageIndex -> {
+//            int fromIndex = pageIndex * ITEMS_PER_PAGE;
+//            int toIndex = Math.min(fromIndex + ITEMS_PER_PAGE, poubelleList.size());
+//            List<poubelle> subList = poubelleList.subList(fromIndex, toIndex);
+//
+//            listPoubelles.setItems(FXCollections.observableArrayList(subList));
+//            return listPoubelles;
+//        });
+//    }
+
+    // Gestion de l'ajout d'une poubelle
     @FXML
     private void handleAdd(ActionEvent event) {
         try {
@@ -247,12 +353,18 @@ public class ListePoubelleController implements Initializable {
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.show();
+            stage.showAndWait(); // Attendre la fermeture de la fenêtre
+
+            // Rafraîchir la liste après l'ajout
+            refreshList();
+            ToastManager.showToast((Stage) listPoubelles.getScene().getWindow(), "Poubelle ajoutée avec succès", "toast-success");
         } catch (IOException e) {
             e.printStackTrace();
+            showAlert("Erreur", "Erreur lors de l'ouverture du formulaire.", Alert.AlertType.ERROR);
         }
     }
 
+    // Gestion de la modification d'une poubelle
     @FXML
     private void handleEdit(ActionEvent event) {
         poubelle selectedPoubelle = listPoubelles.getSelectionModel().getSelectedItem();
@@ -269,7 +381,10 @@ public class ListePoubelleController implements Initializable {
             controller.setSelectedPoubelle(selectedPoubelle);
 
             Stage stage = new Stage();
-            stage.setOnHidden(e -> loadData()); // Rafraîchir après fermeture
+            stage.setOnHidden(e -> {
+                refreshList(); // Rafraîchir après fermeture
+                ToastManager.showToast((Stage) listPoubelles.getScene().getWindow(), "Poubelle modifiée avec succès", "toast-success");
+            });
             stage.setScene(new Scene(root));
             stage.setTitle("Modifier la Poubelle");
             stage.show();
@@ -278,6 +393,12 @@ public class ListePoubelleController implements Initializable {
             showAlert("Erreur", "Erreur lors de l'ouverture du formulaire.", Alert.AlertType.ERROR);
         }
     }
+
+    // Rafraîchir la liste
+    public void refreshList() {
+        loadData(); // Recharger les données
+    }
+
     @FXML
     private void handleHistorique(ActionEvent event) {
         poubelle selectedPoubelle = listPoubelles.getSelectionModel().getSelectedItem();
@@ -288,11 +409,12 @@ public class ListePoubelleController implements Initializable {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/Historique_Poubelle.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/Historique_poubelle.fxml"));
             Parent root = loader.load();
 
             HistoriquePoubelleController historiqueController = loader.getController();
             historiqueController.setPoubelleId(selectedPoubelle.getId());
+            historiqueController.setSelectedPoubelle(selectedPoubelle); // Transmettre la poubelle sélectionnée
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -303,16 +425,12 @@ public class ListePoubelleController implements Initializable {
             showAlert("Erreur", "Une erreur s'est produite lors de l'ouverture de l'historique.", Alert.AlertType.ERROR);
         }
     }
-
+    // Affichage d'une alerte
     private void showAlert(String title, String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    public void refreshList() {
-        loadData();
     }
 }

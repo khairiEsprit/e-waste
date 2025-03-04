@@ -6,10 +6,9 @@ public class poubelle {
     private int id_centre;
     private String adresse;
     private int niveau;
-    private etat etat ;
+    private etat etat;
     private Date date_installation;
     private int hauteurTotale;
-
     public poubelle() {}
 
     public poubelle(int id,int id_centre, String adresse, int niveau, etat etat, Date date_installation, int hauteurTotale) {

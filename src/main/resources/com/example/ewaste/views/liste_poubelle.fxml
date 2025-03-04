@@ -3,10 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.ewaste.Controllers.ListePoubelleController"
@@ -17,7 +17,6 @@
 
         <left>
             <VBox spacing="15" styleClass="sidebar" prefWidth="300">
-
                 <HBox spacing="10" alignment="CENTER_LEFT" styleClass="sidebar-header">
                     <FontAwesomeIconView glyphName="TRASH_ALT" glyphSize="24" styleClass="header-icon"/>
                     <Label text="Gestion des Poubelles" styleClass="header-title"/>
@@ -25,7 +24,7 @@
 
                 <!-- Menu principal -->
                 <VBox spacing="8" styleClass="menu-container">
-                    <Button text="Ajouter" styleClass="menu-btn " onAction="#handleAdd">
+                    <Button text="Ajouter" styleClass="menu-btn" onAction="#handleAdd">
                         <graphic>
                             <FontAwesomeIconView glyphName="PLUS_CIRCLE" glyphSize="16"/>
                         </graphic>
@@ -36,6 +35,7 @@
                             <FontAwesomeIconView glyphName="EDIT" glyphSize="16"/>
                         </graphic>
                     </Button>
+
                     <Button text="Historique Poubelle" styleClass="menu-btn" onAction="#handleHistorique">
                         <graphic>
                             <FontAwesomeIconView glyphName="HISTORY" glyphSize="16"/>
@@ -48,11 +48,9 @@
 
                 <!-- Contrôle du thème -->
                 <HBox spacing="15" alignment="CENTER_LEFT" styleClass="theme-control">
-                    <!--<FontAwesomeIconView glyphName="MOON_O" glyphSize="18" styleClass="theme-icon"/>-->
                     <Label text="Apparence :" styleClass="theme-label"/>
                     <ToggleButton fx:id="themeToggle" styleClass="theme-toggle"/>
                 </HBox>
-
             </VBox>
         </left>
 
@@ -60,28 +58,25 @@
             <VBox spacing="15" styleClass="content">
                 <HBox spacing="10" alignment="CENTER_LEFT" styleClass="list-header">
                     <HBox spacing="5" alignment="CENTER_LEFT">
-
                         <TextField fx:id="searchField" promptText="Rechercher..." styleClass="task-name"/>
                         <ImageView fitHeight="20" fitWidth="20">
                             <Image url="@../assets/search-icon.png"/>
                         </ImageView>
                     </HBox>
-                <HBox spacing="5" alignment="CENTER_LEFT">
-                    <ComboBox fx:id="sortComboBox" promptText="Trier par" styleClass="status-inprogress"/>
-                    <ImageView fitHeight="20" fitWidth="20">
-                        <Image url="@../assets/sort-icon.png"/>
-                    </ImageView>
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <ComboBox fx:id="sortComboBox" promptText="Trier par" styleClass="status-inprogress"/>
+                        <ImageView fitHeight="20" fitWidth="20">
+                            <Image url="@../assets/sort-icon.png"/>
+                        </ImageView>
+                    </HBox>
                 </HBox>
-                </HBox>
 
+                <!-- Liste des poubelles -->
+                <ListView fx:id="listPoubelles" styleClass="task-list" prefHeight="500"/>
 
-                <ListView fx:id="listPoubelles" styleClass="task-list" prefHeight="600"/>
-
-
-
+                <!-- Pagination -->
+                <Pagination fx:id="pagination" styleClass="pagination" />
             </VBox>
         </center>
-
     </BorderPane>
-
 </AnchorPane>

@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.Slider?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -22,36 +11,62 @@
             prefHeight="500.0" prefWidth="800.0"
             stylesheets="@../style/style.css">
 
-    <VBox spacing="20" alignment="CENTER" prefWidth="800" prefHeight="500" styleClass="container">
-        <Label text="Modifier la Poubelle" styleClass="header-title"/>
+    <!-- Conteneur principal -->
+    <VBox spacing="20" alignment="CENTER" styleClass="form-page">
+        <!-- Titre de la page -->
+        <Label text="Modifier la Poubelle" styleClass="title-label" />
 
-        <GridPane hgap="10" vgap="10" alignment="CENTER">
-            <Label text="ID Centre:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-            <TextField fx:id="idCentreField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <!-- Formulaire -->
+        <GridPane hgap="15" vgap="15" alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="150" halignment="RIGHT" />
+                <ColumnConstraints prefWidth="300" />
+            </columnConstraints>
 
-            <Label text="Adresse:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-            <TextField fx:id="adresseField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <!-- ID Centre -->
+            <Label text="Centre" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+            <ComboBox fx:id="centreComboBox" promptText="Sélectionnez un centre"
+                      GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
-            <!-- Niveau -->
-            <Label text="Niveau (%):" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <Slider fx:id="niveauSlider" GridPane.rowIndex="3" GridPane.columnIndex="1" min="0" max="100"/>
-            <ProgressBar fx:id="niveauProgressBar" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-            <!--Hauteur-->
-            <Label text="Hauteur totale (cm):" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-            <TextField fx:id="hauteurTotaleField" GridPane.columnIndex="1" GridPane.rowIndex="2" editable="false"/>
-            <Label text="État:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-            <ComboBox fx:id="etatComboBox" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <!-- Adresse -->
+            <Label text="Adresse:" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <TextField fx:id="adresseField" promptText="Entrez l'adresse"
+                       GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-            <Label text="Date d'Installation:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-            <DatePicker fx:id="dateInstallationPicker"
-                        editable="false"
-                        disable="true"
-                        style="-fx-opacity: 1;"/>        </GridPane>
+            <!-- Hauteur totale -->
+            <Label text="Hauteur totale (cm):" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <TextField fx:id="hauteurTotaleField" promptText="Entrez la hauteur"
+                       GridPane.columnIndex="1" GridPane.rowIndex="2" editable="false" />
 
+            <!-- Distance mesurée -->
+            <Label text="Distance mesurée (cm):" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <TextField fx:id="distanceMesureeField" promptText="Entrez la distance mesurée"
+                       GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-        <Button text="Modifier"
-                onAction="#handleConfirm"
-                styleClass="btn-modifier"/>
+            <!-- Portée maximale -->
+            <Label text="Portée maximale (cm):" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <TextField fx:id="porteeMaximaleField" promptText="Entrez la portée maximale"
+                       GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+            <!-- Précision du capteur -->
+            <Label text="Précision du capteur (cm):" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+            <TextField fx:id="precisionCapteurField" promptText="Entrez la précision"
+                       GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+            <!-- État -->
+            <Label text="État:" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+            <ComboBox fx:id="etatComboBox" promptText="Sélectionnez l'état"
+                      GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+            <!-- Date d'installation -->
+            <Label text="Date d'Installation:" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+            <DatePicker fx:id="dateInstallationPicker" promptText="Sélectionnez une date"
+                        editable="false" disable="true" style="-fx-opacity: 1;"
+                        GridPane.columnIndex="1" GridPane.rowIndex="7" />
+        </GridPane>
+
+        <!-- Bouton Modifier -->
+        <Button text="Modifier" onAction="#handleConfirm"
+                styleClass="primary-button" />
     </VBox>
-
 </AnchorPane>

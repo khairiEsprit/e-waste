@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.ewaste.Repository.GeminiApi"
+      spacing="15"
+      style="-fx-padding: 20; -fx-background-color: #f0f0f0;"
+      prefHeight="600"
+      prefWidth="800">
+
+    <!-- Chat History Area with improved scrolling -->
+    <ScrollPane style="-fx-background: white;"
+                fitToWidth="true"
+                VBox.vgrow="ALWAYS"
+                vvalue="1.0"
+    hvalue="0"> <!-- Directly set hvalue -->
+    <content>
+        <VBox fx:id="chatHistory"
+              spacing="15"
+              style="-fx-padding: 15;"
+              minHeight="450">
+            <padding>
+                <Insets bottom="10"/>
+            </padding>
+        </VBox>
+    </content>
+</ScrollPane>
+
+        <!-- Input Area -->
+<HBox spacing="15"
+      alignment="CENTER"
+      style="-fx-padding: 10 0 0 0;"
+      VBox.vgrow="NEVER">
+<TextField fx:id="userInput"
+           promptText="Type your message..."
+           style="-fx-pref-height: 40; -fx-font-size: 14;"
+           HBox.hgrow="ALWAYS"/>
+<Button text="Send"
+        onAction="#handleSendMessage"
+        style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-pref-width: 80; -fx-pref-height: 40; -fx-font-size: 14;"/>
+</HBox>
+        </VBox>
