@@ -4,7 +4,7 @@ import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
 import com.teamdev.jxbrowser.engine.Engine;
 import com.teamdev.jxbrowser.engine.EngineOptions;
 import com.teamdev.jxbrowser.view.javafx.BrowserView;
-import io.github.cdimascio.dotenv.Dotenv;
+import com.example.ewaste.Utils.JxBrowserLicense;
 import javafx.application.Platform;
 import javafx.scene.Node;
 
@@ -16,18 +16,13 @@ public class MapBox {
     private com.teamdev.jxbrowser.browser.Browser browser;
     private BrowserView browserView;
 
-    Dotenv dotenv = Dotenv.configure()
-            .directory("C:/Users/User/Documents/e-waste/e-waste") // Adjust the path accordingly
-            .filename(".env")
-            .load();
-
-    String licence = dotenv.get("LICENCE_KEY");
-    String mapBoxKey = dotenv.get("MAPBOX_KEY");
+    // Use a hardcoded MapBox key instead of loading from .env
+    String mapBoxKey = "pk.eyJ1IjoiYWhtZWRrYWFuaWNoZSIsImEiOiJjbHRxcnRtcGUwMGJqMmtvNXJyZWJxZWJsIn0.Vc_XLz-j-4k_-FUoLO_Lrw";
 
     public MapBox() {
         // Initialize the engine with hardware acceleration and your license key.
         EngineOptions options = EngineOptions.newBuilder(HARDWARE_ACCELERATED)
-                .licenseKey(licence) // Replace with your actual JxBrowser license key.
+                .licenseKey(JxBrowserLicense.getLicenseKey()) // Using the centralized license key
                 .build();
         engine = Engine.newInstance(options);
 

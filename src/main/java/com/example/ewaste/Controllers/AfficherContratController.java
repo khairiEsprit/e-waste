@@ -120,7 +120,7 @@ public class AfficherContratController {
         loadData();
         loadComboBoxData();
         setupSearch();
-        // checkEndingContracts();
+        checkEndingContracts();
 
         // Initialisation du canvas pour l'ajout
         if (signature == null) {

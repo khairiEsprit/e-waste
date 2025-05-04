@@ -207,7 +207,7 @@ public class DashboardController implements Initializable {
     @FXML
     private Button generate_rapport;
 
-    private MapBox mapboxMap;
+    private WebViewMapBox mapboxMap;
 
 
 
@@ -252,7 +252,7 @@ public class DashboardController implements Initializable {
     PoubelleRepository pr = new PoubelleRepository();
     CentreRepository ctr = new CentreRepository();
     private static final int CENTER_ID = 1;
-private final  MapBox map = new MapBox();
+private final WebViewMapBox map = new WebViewMapBox();
     public void close_btn_OnAction() {
         System.exit(0);
     }

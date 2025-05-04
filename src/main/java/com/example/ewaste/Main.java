@@ -2,9 +2,11 @@ package com.example.ewaste;
 
 import com.example.ewaste.Config.GoogleConfig;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -19,10 +21,29 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
+        stage.setResizable(true);
+
+        // Add a way to close the application with Escape key
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case ESCAPE:
+                    stage.close();
+                    break;
+                default:
+                    break;
+            }
+        });
+
         stage.show();
     }
 
     public static void main(String[] args) {
+        // Register a shutdown hook to ensure clean exit
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Application shutting down...");
+            // Add any cleanup code here if needed
+        }));
+
         launch();
     }
 }
@@ -83,65 +104,5 @@ public class Main extends Application {
 //    }
 //}
 
-//public final class com.example.ewaste.Main extends Application {
-//
-//    @Override
-//    public void start(Stage primaryStage) {
-//        // Initialize Chromium with hardware acceleration and add your license key here.
-//        EngineOptions options = EngineOptions.newBuilder(HARDWARE_ACCELERATED)
-//                .licenseKey("") // Replace with your actual license key.
-//                .build();
-//        Engine engine = Engine.newInstance(options);
-//
-//        // Create a Browser instance.
-//        var browser = engine.newBrowser();
-//
-//        // The HTML content with your Mapbox GL JS map.
-//        String htmlContent = "<!DOCTYPE html>\n" +
-//                "<html>\n" +
-//                "<head>\n" +
-//                "    <meta charset=\"utf-8\">\n" +
-//                "    <title>Mapbox GL JS map</title>\n" +
-//                "    <meta name=\"viewport\" content=\"initial-scale=1,maximum-scale=1,user-scalable=no\">\n" +
-//                "    <link href=\"https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css\" rel=\"stylesheet\">\n" +
-//                "    <script src=\"https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js\"></script>\n" +
-//                "    <style>\n" +
-//                "        body { margin: 0; padding: 0; }\n" +
-//                "        #map { position: absolute; top: 0; bottom: 0; width: 100%; }\n" +
-//                "    </style>\n" +
-//                "</head>\n" +
-//                "<body>\n" +
-//                "    <div id=\"map\"></div>\n" +
-//                "    <script>\n" +
-//                "        // TO MAKE THE MAP APPEAR YOU MUST\n" +
-//                "        // ADD YOUR ACCESS TOKEN FROM\n" +
-//                "        // https://account.mapbox.com\n" +
-//                "        mapboxgl.accessToken = '';\n" +
-//                "        const map = new mapboxgl.Map({\n" +
-//                "            container: 'map', // container ID\n" +
-//                "            center: [-74.5, 40], // starting position [lng, lat]\n" +
-//                "            zoom: 9 // starting zoom\n" +
-//                "        });\n" +
-//                "    </script>\n" +
-//                "</body>\n" +
-//                "</html>";
-//
-//        // Load the HTML content into the main frame.
-//        browser.mainFrame().ifPresent(frame -> frame.loadHtml(htmlContent));
-//
-//        // Create and embed the JavaFX BrowserView component.
-//        var view = BrowserView.newInstance(browser);
-//
-//        var scene = new Scene(new BorderPane(view), 1280, 700);
-//        primaryStage.setTitle("JxBrowser JavaFX - Mapbox");
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
-//
-//        // Shutdown Chromium and release allocated resources when the stage is closed.
-//        primaryStage.setOnCloseRequest(event -> engine.close());
-//    }
-//
-//    public static void main(String[] args) {
-//        launch(args);
-//    }
-//}
+// This commented-out code has been refactored into the MapBox class
+// to better organize the application architecture and avoid license issues.
