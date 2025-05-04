@@ -10,6 +10,9 @@ public class DataBase {
     private static final String URL = "jdbc:mysql://localhost:3306/symfonymaindatabase";
     private static final String USER = "root";
     private static final String PSW = "";
+    // private static final String URL = "jdbc:mysql://172.18.5.39:3306/symfonymaindatabase";
+    // private static final String USER = "khairi";
+    // private static final String PSW = "root";
 
     private static DataBase instance;
 
