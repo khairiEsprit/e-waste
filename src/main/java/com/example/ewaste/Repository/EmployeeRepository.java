@@ -58,24 +58,23 @@ public class EmployeeRepository implements EntityCrud<Employee> {
 
     public ObservableList<User> getEmployeList() throws SQLException {
         ObservableList<User> employees = FXCollections.observableArrayList();
-        String query = "SELECT * FROM utilisateur WHERE role = ?";
+        String query = "SELECT * FROM user WHERE roles LIKE ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, "EMPLOYEE");
+            pstmt.setString(1, "%ROLE_EMPLOYEE%");
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                User user = new User(
-                        rs.getInt("id"),
-                        rs.getString("photo"),  // Corrected order: photoUrl comes first
-                        rs.getString("status"),
-                        rs.getString("nom"),
-                        rs.getString("prenom"),
-                        rs.getString("email"),
-                        rs.getDate("DateNss"),
-                        rs.getInt("telephone"),
-                        UserRole.valueOf(rs.getString("role")) // Ensure the role exists in your enum
-                );
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setProfile_image(rs.getString("profile_image"));
+                user.setActive("active".equalsIgnoreCase(rs.getString("active")));
+                user.setFirst_name(rs.getString("first_name"));
+                user.setLast_name(rs.getString("last_name"));
+                user.setEmail(rs.getString("email"));
+                user.setBirthdate(rs.getDate("birthdate"));
+                user.setPhone(rs.getString("phone"));
+                user.setRoles(rs.getString("roles"));
                 employees.add(user);
             }
         } catch (SQLException e) {

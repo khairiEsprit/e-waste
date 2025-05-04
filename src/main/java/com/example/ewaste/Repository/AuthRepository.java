@@ -10,13 +10,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Base64;
 
 public class AuthRepository {
-    private final Connection conn = DataBase.getInstance().getConnection();
-
-    private static final int SALT_LENGTH = 16;
-    private static final SecureRandom random = new SecureRandom();
+    private final Connection conn = DataBase.getConnection();
 
 
 
@@ -39,12 +37,11 @@ public class AuthRepository {
 //        return storedHashedPassword.equals(hashedPassword);
 //    }
     public boolean emailExists(String email) {
-        String query = "SELECT * FROM utilisateur WHERE email = ?";
-        System.out.println();
+        String query = "SELECT * FROM user WHERE email = ?";
         try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setString(1, email);
             try (ResultSet resultSet = statement.executeQuery()) {
-                return resultSet.next(); // Si resultSet.next() est vrai, cela signifie qu'un enregistrement avec cet e-mail existe
+                return resultSet.next(); // If resultSet.next() is true, it means a record with this email exists
             }
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -62,11 +59,10 @@ public class AuthRepository {
     }
 
     public boolean authenticateUser(String username, String password) {
-        String query = "SELECT * FROM utilisateur WHERE email = ? AND mdp = ?";
+        String query = "SELECT * FROM user WHERE email = ? AND password = ?";
         try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setString(1, username);
             statement.setString(2, hashPassword2(password));
-            System.out.println("testt from authenticate user function");
             try (ResultSet resultSet = statement.executeQuery()) {
                 return resultSet.next(); // If a row is found, the user is authenticated
             }
@@ -80,7 +76,7 @@ public class AuthRepository {
     }
 
     public boolean validerPassword(int id, String password) {
-        String query = "SELECT * FROM utilisateur WHERE mdp = ? AND id = ?";
+        String query = "SELECT * FROM user WHERE password = ? AND id = ?";
         try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setString(1, hashPassword2(password));
             statement.setInt(2, id);
@@ -118,30 +114,34 @@ public class AuthRepository {
     }
 
     public void modifyPassword(int id, String password) {
-        String query = "UPDATE utilisateur SET mdp = ? WHERE id = ?";
+        String query = "UPDATE user SET password = ?, password_requested_at = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, hashPassword2(password));
-            preparedStatement.setInt(2, id);
+            preparedStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setInt(3, id);
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Success");
                 alert.setHeaderText(null);
-                alert.setContentText("Modification effectuée avec succès");
+                alert.setContentText("Password updated successfully");
                 alert.showAndWait();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
-                alert.setContentText("erreur lors de la modification");
+                alert.setContentText("Error updating password");
                 alert.showAndWait();
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             // Handle SQLException appropriately
+            showErrorAlert("SQL Error", "An error occurred while updating the password.");
         } catch (NoSuchAlgorithmException e) {
+            System.err.println(e.getMessage());
+            showErrorAlert("Error", "An error occurred while hashing the password.");
             throw new RuntimeException(e);
         }
     }

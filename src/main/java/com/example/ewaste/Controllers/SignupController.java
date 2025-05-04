@@ -70,7 +70,7 @@ public class SignupController {
     @FXML
     private PasswordField passwordField;
 
-  
+
     @FXML
     private TextField emailField;
 
@@ -289,9 +289,9 @@ public class SignupController {
 
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String formattedDate = selectedDate.format(formatter);
-                    Date date = java.sql.Date.valueOf(formattedDate);
+                    java.sql.Date sqlDate = java.sql.Date.valueOf(formattedDate);
 
-                    User u1 = new User(fullNameField.getText(), emailField.getText(), passwordField.getText(), date, roleComboBox.getSelectionModel().getSelectedItem());
+                    User u1 = new User(fullNameField.getText(), emailField.getText(), passwordField.getText(), sqlDate, roleComboBox.getSelectionModel().getSelectedItem());
                     u.addEntity(u1);
                     if(u.getUserByEmail(emailField.getText()) != null){
                         Modals.displaySuccess("Account Created", "Your account has been created successfully");

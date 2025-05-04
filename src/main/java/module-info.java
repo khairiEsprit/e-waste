@@ -17,7 +17,7 @@ module com.example.ewaste {
     requires org.json;
     requires jdk.compiler;
     requires com.fasterxml.jackson.databind;
-    requires java.sql;
+    requires transitive java.sql;
     requires nanohttpd;
     requires de.jensd.fx.glyphs.fontawesome;
     requires org.bytedeco.opencv;

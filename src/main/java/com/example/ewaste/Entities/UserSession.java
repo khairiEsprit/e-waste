@@ -27,7 +27,7 @@ public class UserSession {
     }
 
     public static UserSession initializeUserSession(User u1) {
-        instance = new UserSession(u1.getId(), u1.getNom(), u1.getPrenom(), u1.getRole());
+        instance = new UserSession(u1.getId(), u1.getFirst_name(), u1.getLast_name(), u1.getRole());
         ApplicationContext.getInstance().setUserSession(instance);
         return instance;
     }
