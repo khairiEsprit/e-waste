@@ -1,6 +1,4 @@
 package com.example.ewaste;
-
-import com.example.ewaste.Utils.DotenvConfig;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,11 +7,21 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application {
+    // Static reference to the application's HostServices
+    private static javafx.application.HostServices hostServices;
+
+    // Getter for the HostServices
+    public static javafx.application.HostServices getAppHostServices() {
+        return hostServices;
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
+        // Store the HostServices instance
+        hostServices = getHostServices();
         try {
-            // Try to load the dashboard view instead of Avis.fxml
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("views/ListEvenement-view.fxml"));
+            // Load the Avis.fxml view with the correct path
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/com.example.ewaste/views/ListEvenement-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             stage.setScene(scene);
             stage.setResizable(true);
@@ -43,11 +51,16 @@ public class Main extends Application {
     public static void main(String[] args) {
         // Initialize DotenvConfig to load environment variables
         try {
-            // This will initialize the DotenvConfig and load the .env file
-            System.out.println("API Key: " + DotenvConfig.get("APIKEY", "Not found"));
+            // Explicitly create a new instance of DotenvConfig to ensure it's loaded
+            System.out.println("Loading environment variables...");
+
+            // Access the DotenvConfig class directly
+            String apiKey = com.example.ewaste.Utils.DotenvConfig.get("APIKEY", "Not found");
+            System.out.println("API Key: " + apiKey);
             System.out.println("Environment variables loaded successfully");
         } catch (Exception e) {
             System.err.println("Error loading environment variables: " + e.getMessage());
+            e.printStackTrace();
             // Continue execution even if environment variables fail to load
             // as we have fallback values
         }
@@ -58,7 +71,8 @@ public class Main extends Application {
             // Add any cleanup code here if needed
         }));
 
-        launch();
+        // Launch the JavaFX application
+        launch(args);
     }
 }
 //

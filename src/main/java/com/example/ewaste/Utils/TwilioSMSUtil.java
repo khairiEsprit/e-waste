@@ -1,32 +1,28 @@
 package com.example.ewaste.Utils;
 
-import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.type.PhoneNumber;
+// No need to import DotenvConfig since it's in the same package
 
-
+// Stub implementation of TwilioSMSUtil without actual Twilio dependencies
 public class TwilioSMSUtil {
     // Twilio credentials - loaded from DotenvConfig
     static String ACCOUNT_SID = DotenvConfig.get("TWILIO_ACCOUNT_SID", "dummy-twilio-sid");
     static String AUTH_TOKEN = DotenvConfig.get("Twilio_AUTH_TOKEN", "dummy-twilio-token");
 
-
     private static final String FROM_NUMBER = "+15157094542";
-
     private static boolean initialized = false;
 
     /**
-     * Initialize the Twilio client with credentials
+     * Initialize the Twilio client with credentials (stub implementation)
      */
     public static void init() {
         if (!initialized) {
-            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+            System.out.println("Twilio initialized with SID: " + ACCOUNT_SID);
             initialized = true;
         }
     }
 
     /**
-     * Send an SMS message using Twilio
+     * Send an SMS message using Twilio (stub implementation)
      *
      * @param toNumber The recipient's phone number (in E.164 format)
      * @param messageBody The content of the SMS message
@@ -38,13 +34,9 @@ public class TwilioSMSUtil {
         }
 
         try {
-            Message message = Message.creator(
-                    new PhoneNumber(toNumber),
-                    new PhoneNumber(FROM_NUMBER),
-                    messageBody
-            ).create();
-
-            return message.getSid();
+            System.out.println("STUB SMS: To: " + toNumber + ", From: " + FROM_NUMBER + ", Message: " + messageBody);
+            // Generate a fake message SID
+            return "SM" + System.currentTimeMillis();
         } catch (Exception e) {
             System.err.println("Failed to send SMS: " + e.getMessage());
             return null;
@@ -52,7 +44,7 @@ public class TwilioSMSUtil {
     }
 
     /**
-     * Send transport reservation confirmation SMS
+     * Send transport reservation confirmation SMS (stub implementation)
      */
     public static String sendTransportReservationConfirmation(String phoneNumber,
                                                               String transportName, String departurePoint, String departureDate, String price) {
@@ -66,7 +58,7 @@ public class TwilioSMSUtil {
     }
 
     /**
-     * Send transport reservation update notification
+     * Send transport reservation update notification (stub implementation)
      */
     public static String sendTransportUpdateNotification(String phoneNumber, String transportName) {
         String message = String.format(

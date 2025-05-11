@@ -1,21 +1,16 @@
 package com.example.ewaste.Utils;
 
 import com.example.ewaste.Main;
-import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -28,7 +23,7 @@ public class Navigate {
         button.setDisable(true); // Prevent multiple clicks
 
         // Create a progress indicator
-        MFXProgressSpinner progressIndicator = new MFXProgressSpinner();
+        CustomProgressSpinner progressIndicator = new CustomProgressSpinner();
         progressIndicator.setPrefSize(70, 70);
         progressIndicator.setStyle("-fx-progress-color: #0C162C;");
 

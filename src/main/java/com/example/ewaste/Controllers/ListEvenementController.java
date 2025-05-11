@@ -39,11 +39,7 @@ public class ListEvenementController {
     private Label totalEventsLabel;
 
     private final EventRepository eventRepository = new EventRepository();
-<<<<<<< Updated upstream
     private final CitizenPointsRepository citizenPointsRepository = new CitizenPointsRepository(DataBaseConn.getInstance().getConnection());
-=======
-    private final CitizenPointsRepository citizenPointsRepository = new CitizenPointsRepository(DataBase.getConnection());
->>>>>>> Stashed changes
     private List<Event> events;
 
     public void initialize() {

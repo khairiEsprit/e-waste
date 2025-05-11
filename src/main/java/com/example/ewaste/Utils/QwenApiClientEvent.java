@@ -1,8 +1,8 @@
 package com.example.ewaste.Utils;
 
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.example.ewaste.Utils.SimpleJsonParser.JSONArray;
+import com.example.ewaste.Utils.SimpleJsonParser.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -11,17 +11,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class QwenApiClientEvent {
-<<<<<<< Updated upstream
-    static Dotenv dotenv = Dotenv.configure()
-            .directory("C:/Users/HP/Desktop/pidev/e-waste") // Adjust the path accordingly
-            .filename(".env")
-            .load();
-    // Replace with your actual API key
-    private static final String API_KEY = dotenv.get("QWEN_API_KEY");
-=======
     // Get API key from DotenvConfig
     private static final String API_KEY = DotenvConfig.get("QWEN_API_KEY", "dummy-qwen-api-key");
->>>>>>> Stashed changes
     private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
     /**
@@ -35,7 +26,7 @@ public class QwenApiClientEvent {
     public static String generateTextFromImage(String promptText, String imageUrl) {
         try {
             // Setup connection
-            URL url = new URL(API_URL);
+            URL url = new java.net.URI(API_URL).toURL();
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Authorization", "Bearer " + API_KEY);

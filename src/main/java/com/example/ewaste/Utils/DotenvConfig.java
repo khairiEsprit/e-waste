@@ -1,33 +1,39 @@
 package com.example.ewaste.Utils;
 
-import io.github.cdimascio.dotenv.Dotenv;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Utility class to handle dotenv configuration in a flexible way
+ * Simplified utility class to handle environment variables without external dependencies
  */
 public class DotenvConfig {
-    private static Dotenv dotenv;
-    
+    private static Map<String, String> envVars = null;
+
     /**
-     * Get the Dotenv instance, initializing it if necessary
-     * @return The Dotenv instance
+     * Get the environment variables, initializing if necessary
+     * @return The map of environment variables
      */
-    public static synchronized Dotenv getDotenv() {
-        if (dotenv == null) {
-            dotenv = loadDotenv();
+    private static synchronized Map<String, String> getEnvVars() {
+        if (envVars == null) {
+            envVars = loadEnvVars();
         }
-        return dotenv;
+        return envVars;
     }
-    
+
     /**
-     * Load the dotenv configuration from various possible locations
-     * @return The Dotenv instance
+     * Load environment variables from .env file
+     * @return Map of environment variables
      */
-    private static Dotenv loadDotenv() {
+    private static Map<String, String> loadEnvVars() {
+        Map<String, String> vars = new HashMap<>();
+
         // Try to find .env file in various locations
         String[] possiblePaths = {
             ".",                                      // Current directory
@@ -36,68 +42,78 @@ public class DotenvConfig {
             System.getProperty("user.home") + "/Desktop/E-wasteJAVA", // User's desktop E-wasteJAVA directory
             "C:/Users/User/Documents/e-waste/e-waste" // Original hardcoded path
         };
-        
+
+        boolean found = false;
         for (String path : possiblePaths) {
-            if (Files.exists(Paths.get(path, ".env"))) {
-                System.out.println("Found .env file at: " + path);
-                return Dotenv.configure()
-                        .directory(path)
-                        .filename(".env")
-                        .load();
+            Path envPath = Paths.get(path, ".env");
+            if (Files.exists(envPath)) {
+                System.out.println("Found .env file at: " + envPath.toAbsolutePath());
+                try (BufferedReader reader = new BufferedReader(new FileReader(envPath.toFile()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        parseLine(line, vars);
+                    }
+                    found = true;
+                    break;
+                } catch (IOException e) {
+                    System.err.println("Error reading .env file: " + e.getMessage());
+                }
             }
         }
-        
-        // If no .env file is found, create a dummy one with default values
-        System.out.println("No .env file found. Creating a dummy one with default values.");
-        return createDummyDotenv();
+
+        if (!found) {
+            System.out.println("No .env file found. Using default values.");
+            // Add default values
+            vars.put("APIKEY", "dummy-api-key");
+            vars.put("OPENAI_API_KEY", "dummy-openai-api-key");
+            vars.put("QWEN_API_KEY", "dummy-qwen-api-key");
+            vars.put("DB_URL", "jdbc:mysql://localhost:3306/symfonymaindatabase");
+            vars.put("DB_USER", "root");
+            vars.put("DB_PASSWORD", "");
+            vars.put("GOOGLE_CLIENT_ID", "dummy-google-client-id");
+            vars.put("GOOGLE_CLIENT_SECRET", "dummy-google-client-secret");
+        }
+
+        return vars;
     }
-    
+
     /**
-     * Create a dummy dotenv with default values
-     * @return The Dotenv instance
+     * Parse a line from the .env file
+     * @param line The line to parse
+     * @param vars The map to add the variable to
      */
-    private static Dotenv createDummyDotenv() {
-        // Create a temporary directory to store the dummy .env file
-        try {
-            Path tempDir = Files.createTempDirectory("e-waste-dotenv");
-            Path envFile = tempDir.resolve(".env");
-            
-            // Write dummy values to the .env file
-            Files.writeString(envFile, 
-                "APIKEY=dummy-api-key\n" +
-                "OPENAI_API_KEY=dummy-openai-api-key\n" +
-                "QWEN_API_KEY=dummy-qwen-api-key\n" +
-                "HUGGINGFACE_API_KEY=dummy-huggingface-api-key\n" +
-                "GEMINI_KEY=dummy-gemini-key\n" +
-                "TWILIO_ACCOUNT_SID=dummy-twilio-sid\n" +
-                "Twilio_AUTH_TOKEN=dummy-twilio-token\n" +
-                "GOOGLE_CLIENT_ID=dummy-google-client-id\n" +
-                "GOOGLE_CLIENT_SECRET=dummy-google-client-secret\n" +
-                "GOOGLE_REDIRECT_URI=http://localhost:8080/callback\n" +
-                "GOOGLE_TOKEN_URI=https://oauth2.googleapis.com/token\n" +
-                "GOOGLE_USERINFO_URI=https://www.googleapis.com/oauth2/v3/userinfo"
-            );
-            
-            return Dotenv.configure()
-                    .directory(tempDir.toString())
-                    .filename(".env")
-                    .load();
-        } catch (Exception e) {
-            System.err.println("Error creating dummy .env file: " + e.getMessage());
-            // Return an empty Dotenv as a last resort
-            return Dotenv.configure().ignoreIfMissing().load();
+    private static void parseLine(String line, Map<String, String> vars) {
+        line = line.trim();
+        // Skip comments and empty lines
+        if (line.isEmpty() || line.startsWith("#")) {
+            return;
+        }
+
+        // Split by the first equals sign
+        int equalsIndex = line.indexOf('=');
+        if (equalsIndex > 0) {
+            String key = line.substring(0, equalsIndex).trim();
+            String value = line.substring(equalsIndex + 1).trim();
+
+            // Remove quotes if present
+            if (value.startsWith("\"") && value.endsWith("\"") ||
+                value.startsWith("'") && value.endsWith("'")) {
+                value = value.substring(1, value.length() - 1);
+            }
+
+            vars.put(key, value);
         }
     }
-    
+
     /**
      * Get a value from the dotenv configuration
      * @param key The key to look up
      * @return The value, or null if not found
      */
     public static String get(String key) {
-        return getDotenv().get(key);
+        return getEnvVars().get(key);
     }
-    
+
     /**
      * Get a value from the dotenv configuration with a default value
      * @param key The key to look up
@@ -105,7 +121,7 @@ public class DotenvConfig {
      * @return The value, or the default value if not found
      */
     public static String get(String key, String defaultValue) {
-        String value = getDotenv().get(key);
+        String value = getEnvVars().get(key);
         return value != null ? value : defaultValue;
     }
 }

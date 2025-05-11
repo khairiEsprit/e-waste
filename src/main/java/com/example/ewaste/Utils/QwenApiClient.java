@@ -1,7 +1,7 @@
 package com.example.ewaste.Utils;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.example.ewaste.Utils.SimpleJsonParser.JSONArray;
+import com.example.ewaste.Utils.SimpleJsonParser.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,7 +24,7 @@ public class QwenApiClient {
     public static String generateTextFromImage(String promptText, String imageUrl) {
         try {
             // Setup connection
-            URL url = new URL(API_URL);
+            URL url = new java.net.URI(API_URL).toURL();
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Authorization", "Bearer " + API_KEY);

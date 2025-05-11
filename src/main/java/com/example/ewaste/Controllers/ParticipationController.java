@@ -11,10 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.awt.*;
+// Using direct browser launch instead of Desktop or HostServices
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -182,8 +180,24 @@ public class ParticipationController {
     // Ouvrir une page web dans le navigateur
     private void openWebPage(String url) {
         try {
-            Desktop.getDesktop().browse(new URI(url));
-        } catch (IOException | URISyntaxException e) {
+            // Use Runtime.exec to open the default browser
+            // This is a simple cross-platform solution
+            String os = System.getProperty("os.name").toLowerCase();
+            ProcessBuilder pb;
+
+            if (os.contains("win")) {
+                // Windows
+                pb = new ProcessBuilder("cmd", "/c", "start", url);
+            } else if (os.contains("mac")) {
+                // macOS
+                pb = new ProcessBuilder("open", url);
+            } else {
+                // Linux and others
+                pb = new ProcessBuilder("xdg-open", url);
+            }
+
+            pb.start();
+        } catch (IOException e) {
             e.printStackTrace();
             showAlert("Erreur", "Impossible d'ouvrir la page web.");
         }

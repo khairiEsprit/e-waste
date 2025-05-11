@@ -3,7 +3,6 @@ package com.example.ewaste.Controllers;
 import com.example.ewaste.Entities.Message;
 import com.example.ewaste.Entities.Sender;
 import com.example.ewaste.Main;
-import com.example.ewaste.Repository.PoubelleRepository;
 import com.example.ewaste.Utils.DotenvConfig;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -27,16 +26,17 @@ import java.net.http.HttpResponse;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+// Using simple string manipulation instead of JSON libraries
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ChatBotInterface {
 
-
-    PoubelleRepository pr = new PoubelleRepository();
-    String binData = pr.getLastTenPoubellesForOpenAI(1);
+    // Sample bin data for testing
+    String binData = "Bin ID: 1, Fill Level: 75%, Status: Active, Location: Ariana, Tunisia\n" +
+                     "Bin ID: 2, Fill Level: 45%, Status: Active, Location: Tunis, Tunisia\n" +
+                     "Bin ID: 3, Fill Level: 90%, Status: Full, Location: Sousse, Tunisia";
     private static final String CSS_FILE = "styles/chat-style.css";
     private static final double INITIAL_WIDTH = 450;
     private static final double INITIAL_HEIGHT = 450;
@@ -131,9 +131,24 @@ public class ChatBotInterface {
                 if (empty || message == null) {
                     setGraphic(null);
                 } else {
-                    content.setText(message.text());
-                    container.getStyleClass().setAll(message.sender().styleClass);
+                    content.setText(message.getContent());
+                    container.getStyleClass().setAll(getSenderStyleClass(message.getSender()));
                     setGraphic(container);
+                }
+            }
+
+            private String getSenderStyleClass(Sender sender) {
+                switch (sender) {
+                    case USER:
+                        return "user-message";
+                    case BOT:
+                        return "bot-message";
+                    case BOT_LOADING:
+                        return "bot-loading";
+                    case BOT_ERROR:
+                        return "bot-error";
+                    default:
+                        return "bot-message";
                 }
             }
         };
@@ -267,26 +282,20 @@ public class ChatBotInterface {
                 + "Instead, convert the coordinates into the corresponding country name. For example, if a bin's coordinates indicate a location in tunisia,ariana, simply state 'ariana'. "
                 + "Now, based on the above data, provide a summary of the bin statuses focusing on their fill levels, operational status, and the country name where each bin is located.";
 
-        // Use Gson to build the JSON payload.
-        Gson gson = new Gson();
-        JsonObject payload = new JsonObject();
-        payload.addProperty("model", "gpt-4o-mini");
-
-        JsonArray messages = new JsonArray();
-
-        JsonObject systemMessage = new JsonObject();
-        systemMessage.addProperty("role", "system");
-        systemMessage.addProperty("content", systemPrompt);
-        messages.add(systemMessage);
-
-        JsonObject userMessage = new JsonObject();
-        userMessage.addProperty("role", "user");
-        userMessage.addProperty("content", userInput);
-        messages.add(userMessage);
-
-        payload.add("messages", messages);
-
-        String jsonPayload = gson.toJson(payload);
+        // Use simple string building for JSON payload
+        String jsonPayload = "{"
+            + "\"model\": \"gpt-4o-mini\","
+            + "\"messages\": ["
+            + "  {"
+            + "    \"role\": \"system\","
+            + "    \"content\": " + escapeJsonString(systemPrompt)
+            + "  },"
+            + "  {"
+            + "    \"role\": \"user\","
+            + "    \"content\": " + escapeJsonString(userInput)
+            + "  }"
+            + "]"
+            + "}";
 
         // Debug: print the JSON payload
         System.out.println("JSON Payload: " + jsonPayload);
@@ -305,18 +314,97 @@ public class ChatBotInterface {
         // Debug: print the raw response
         System.out.println("Raw response from OpenAI: " + response.body());
 
-        JsonObject jsonResponse = gson.fromJson(response.body(), JsonObject.class);
-        JsonArray choices = jsonResponse.getAsJsonArray("choices");
+        // Parse the response using simple string manipulation
+        String responseBody = response.body();
 
-        if (choices != null && choices.size() > 0) {
-            JsonObject firstChoice = choices.get(0).getAsJsonObject();
-            JsonObject message = firstChoice.getAsJsonObject("message");
-            if (message != null && message.has("content")) {
-                return message.get("content").getAsString().trim();
-            }
+        // Extract content from the response
+        String content = extractContentFromResponse(responseBody);
+        if (content != null) {
+            return content.trim();
         }
         return "No response from AI.";
     }
 
 
+    /**
+     * Escapes a string for use in JSON
+     * @param input The string to escape
+     * @return The escaped string with quotes
+     */
+    private String escapeJsonString(String input) {
+        if (input == null) {
+            return "null";
+        }
+
+        StringBuilder sb = new StringBuilder("\"");
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            switch (c) {
+                case '\\': sb.append("\\\\"); break;
+                case '\"': sb.append("\\\""); break;
+                case '\n': sb.append("\\n"); break;
+                case '\r': sb.append("\\r"); break;
+                case '\t': sb.append("\\t"); break;
+                default: sb.append(c);
+            }
+        }
+        sb.append("\"");
+        return sb.toString();
+    }
+
+    /**
+     * Extracts the content from an OpenAI API response
+     * @param jsonResponse The JSON response from OpenAI
+     * @return The extracted content or null if not found
+     */
+    private String extractContentFromResponse(String jsonResponse) {
+        try {
+            // Find the content field in the response
+            int contentIndex = jsonResponse.indexOf("\"content\":");
+            if (contentIndex == -1) {
+                return null;
+            }
+
+            // Move past "content":
+            contentIndex += 10;
+
+            // Find the opening quote
+            int startQuote = jsonResponse.indexOf("\"", contentIndex);
+            if (startQuote == -1) {
+                return null;
+            }
+
+            // Find the closing quote (accounting for escaped quotes)
+            int endQuote = startQuote + 1;
+            boolean escaped = false;
+            while (endQuote < jsonResponse.length()) {
+                char c = jsonResponse.charAt(endQuote);
+                if (c == '\\') {
+                    escaped = !escaped;
+                } else if (c == '"' && !escaped) {
+                    break;
+                } else {
+                    escaped = false;
+                }
+                endQuote++;
+            }
+
+            if (endQuote >= jsonResponse.length()) {
+                return null;
+            }
+
+            // Extract the content
+            String content = jsonResponse.substring(startQuote + 1, endQuote);
+
+            // Unescape JSON escapes
+            return content.replace("\\\"", "\"")
+                         .replace("\\n", "\n")
+                         .replace("\\r", "\r")
+                         .replace("\\t", "\t")
+                         .replace("\\\\", "\\");
+        } catch (Exception e) {
+            System.err.println("Error parsing OpenAI response: " + e.getMessage());
+            return null;
+        }
+    }
 }

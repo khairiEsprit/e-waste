@@ -1,5 +1,6 @@
 package com.example.ewaste.Repository;
 
+import com.example.ewaste.Controllers.DataBaseConn;
 import com.example.ewaste.Entities.Event;
 import com.example.ewaste.Entities.Participation;
 
@@ -15,11 +16,7 @@ public class ListEvenementRepository {
     private final Connection connection;
 
     public ListEvenementRepository() {
-<<<<<<< Updated upstream
         this.connection = DataBaseConn.getInstance().getConnection();
-=======
-        this.connection = DataBase.getConnection();
->>>>>>> Stashed changes
     }
 
     // Méthode pour récupérer tous les événements
