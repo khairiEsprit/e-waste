@@ -1,7 +1,6 @@
 package com.example.ewaste.Utils;
 
 import com.example.ewaste.Entities.TextAnalysisResult;
-import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,11 +12,16 @@ import java.util.Scanner;
 public class OpenAiApiAvis {
     private static final String API_URL = "https://api.openai.com/v1/moderations";
 
+<<<<<<< Updated upstream
     static Dotenv dotenv = Dotenv.configure()
             .directory("C:/Users/HP/Desktop/pidev/e-waste") // Adjust the path accordingly
             .filename(".env")
             .load();
     private static final String API_KEY =dotenv.get("APIKEY"); // Remplace par ta clé API OpenAI
+=======
+    // Use the DotenvConfig utility to get the API key
+    private static final String API_KEY = DotenvConfig.get("APIKEY", "dummy-api-key"); // Fallback to dummy key if not found
+>>>>>>> Stashed changes
     public TextAnalysisResult detectBadWords(String text) {
         try {
             // Créer la connexion HTTP

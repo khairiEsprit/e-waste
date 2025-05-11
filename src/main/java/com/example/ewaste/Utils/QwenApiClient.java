@@ -1,6 +1,5 @@
 package com.example.ewaste.Utils;
 
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,19 +8,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-public class QwenApiClientEvent {
-<<<<<<< Updated upstream
-    static Dotenv dotenv = Dotenv.configure()
-            .directory("C:/Users/HP/Desktop/pidev/e-waste") // Adjust the path accordingly
-            .filename(".env")
-            .load();
-    // Replace with your actual API key
-    private static final String API_KEY = dotenv.get("QWEN_API_KEY");
-=======
+public class QwenApiClient {
     // Get API key from DotenvConfig
     private static final String API_KEY = DotenvConfig.get("QWEN_API_KEY", "dummy-qwen-api-key");
->>>>>>> Stashed changes
     private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
     /**
@@ -56,7 +45,7 @@ public class QwenApiClientEvent {
                     + "      {"
                     + "         \"type\": \"image_url\","
                     + "         \"image_url\": {"
-                    + "             \"url\": \"data:image/jpeg;base64," + imageUrl + "\"" // Use base64-encoded image
+                    + "             \"url\": \"" + escapeJson(imageUrl) + "\""
                     + "         }"
                     + "      }"
                     + "    ]"
@@ -86,35 +75,19 @@ public class QwenApiClientEvent {
             }
             String fullResponse = responseBuilder.toString();
 
-            // Print the full response for debugging
-            System.out.println("API Response: " + fullResponse);
-
-            // Parse the JSON response
+            // Parse the JSON response and extract the "content"
             JSONObject jsonResponse = new JSONObject(fullResponse);
-
-            // Check if the response contains an error
-            if (jsonResponse.has("error")) {
-                JSONObject errorObject = jsonResponse.getJSONObject("error");
-                String errorMessage = errorObject.getString("message"); // Extract the error message
-                return "API Error: " + errorMessage;
-            }
-
-            // Check if the response contains "choices"
-            if (jsonResponse.has("choices")) {
-                JSONArray choices = jsonResponse.getJSONArray("choices");
-                if (choices.length() > 0) {
-                    JSONObject firstChoice = choices.getJSONObject(0);
-                    JSONObject message = firstChoice.getJSONObject("message");
-                    return message.getString("content");
-                } else {
-                    return "No choices found in response.";
-                }
+            JSONArray choices = jsonResponse.getJSONArray("choices");
+            if (choices.length() > 0) {
+                JSONObject firstChoice = choices.getJSONObject(0);
+                JSONObject message = firstChoice.getJSONObject("message");
+                return message.getString("content");
             } else {
-                return "Unexpected API response: " + fullResponse;
+                return "No choices found in response.";
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error calling API: " + e.getMessage();
+            return null;
         }
     }
 
@@ -129,11 +102,11 @@ public class QwenApiClientEvent {
     }
 
     // Example usage
-    public static void main(String[] args) {
-        String prompt = "What is in this image?";
-        String imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg";
-
-        String extractedContent = generateTextFromImage(prompt, imageUrl);
-        System.out.println("Extracted Content: " + extractedContent);
-    }
+//    public static void main(String[] args) {
+//        String prompt = "What is in this image?";
+//        String imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg";
+//
+//        String extractedContent = generateTextFromImage(prompt, imageUrl);
+//        System.out.println("Extracted Content: " + extractedContent);
+//    }
 }

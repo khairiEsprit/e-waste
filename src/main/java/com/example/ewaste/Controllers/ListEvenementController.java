@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,11 @@ public class ListEvenementController {
     private Label totalEventsLabel;
 
     private final EventRepository eventRepository = new EventRepository();
+<<<<<<< Updated upstream
     private final CitizenPointsRepository citizenPointsRepository = new CitizenPointsRepository(DataBaseConn.getInstance().getConnection());
+=======
+    private final CitizenPointsRepository citizenPointsRepository = new CitizenPointsRepository(DataBase.getConnection());
+>>>>>>> Stashed changes
     private List<Event> events;
 
     public void initialize() {
@@ -90,10 +95,13 @@ public class ListEvenementController {
         LocalDate today = LocalDate.now();
         List<Event> filteredEvents = events.stream()
                 .filter(event -> {
-                    LocalDate eventDate = event.getDate();
-                    if (eventDate == null) {
+                    LocalDateTime eventDateTime = event.getDate();
+                    if (eventDateTime == null) {
                         return false; // Ignorer les événements sans date valide
                     }
+
+                    // Convert LocalDateTime to LocalDate for comparison
+                    LocalDate eventDate = eventDateTime.toLocalDate();
 
                     switch (status) {
                         case "Événements terminés":
@@ -147,8 +155,12 @@ public class ListEvenementController {
         // Image de l'événement
         ImageView imageView = new ImageView();
         try {
-            Image image = new Image(event.getImageUrl());
-            imageView.setImage(image);
+            // Try both getImageName and getImageUrl for compatibility
+            String imageSrc = event.getImageName() != null ? event.getImageName() : event.getImageUrl();
+            if (imageSrc != null) {
+                Image image = new Image(imageSrc);
+                imageView.setImage(image);
+            }
         } catch (Exception e) {
             System.err.println("Erreur de chargement de l'image: " + e.getMessage());
         }
@@ -163,7 +175,11 @@ public class ListEvenementController {
         Label description = new Label(event.getDescription());
         description.getStyleClass().add("event-description");
 
-        Label date = new Label("Date: " + event.getDate());
+        // Format the date for display
+        String dateStr = event.getDate() != null ?
+                         "Date: " + event.getDate().toLocalDate() + " à " + event.getDate().toLocalTime().getHour() + "h" :
+                         "Date: Non spécifiée";
+        Label date = new Label(dateStr);
         date.getStyleClass().add("event-info");
 
         Label location = new Label("Lieu: " + event.getLocation());
@@ -224,7 +240,10 @@ public class ListEvenementController {
         grid.add(descriptionArea, 1, 0);
 
         grid.add(new Label("Date:"), 0, 1);
-        grid.add(new Label(event.getDate().toString()), 1, 1);
+        String dateStr = event.getDate() != null ?
+                         event.getDate().toLocalDate().toString() + " à " + event.getDate().toLocalTime().getHour() + "h" :
+                         "Non spécifiée";
+        grid.add(new Label(dateStr), 1, 1);
 
         grid.add(new Label("Lieu:"), 0, 2);
         grid.add(new Label(event.getLocation()), 1, 2);

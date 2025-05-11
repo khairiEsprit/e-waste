@@ -4,6 +4,8 @@ import com.example.ewaste.Entities.Event;
 import com.example.ewaste.Entities.Participation;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +15,11 @@ public class ListEvenementRepository {
     private final Connection connection;
 
     public ListEvenementRepository() {
+<<<<<<< Updated upstream
         this.connection = DataBaseConn.getInstance().getConnection();
+=======
+        this.connection = DataBase.getConnection();
+>>>>>>> Stashed changes
     }
 
     // Méthode pour récupérer tous les événements
@@ -25,15 +31,37 @@ public class ListEvenementRepository {
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                Event evenement = new Event(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getString("imageUrl"),
-                        rs.getInt("remainingPlaces"),
-                        rs.getString("location"),
-                        rs.getDate("date").toLocalDate() // Convertir java.sql.Date en LocalDate
-                );
+                // Convert java.sql.Date to LocalDateTime
+                Date sqlDate = rs.getDate("date");
+                LocalDateTime dateTime = null;
+                if (sqlDate != null) {
+                    dateTime = LocalDateTime.of(sqlDate.toLocalDate(), LocalTime.MIDNIGHT);
+                }
+
+                // Create Event with proper column names
+                Event evenement = new Event();
+                evenement.setId(rs.getInt("id"));
+                evenement.setTitle(rs.getString("title"));
+                evenement.setDescription(rs.getString("description"));
+
+                // Try to get image column (could be imageUrl or image_name)
+                try {
+                    evenement.setImageName(rs.getString("imageUrl"));
+                } catch (SQLException e) {
+                    try {
+                        evenement.setImageName(rs.getString("image_name"));
+                    } catch (SQLException e2) {
+                        evenement.setImageName(null);
+                    }
+                }
+
+                evenement.setRemainingPlaces(rs.getInt("remainingPlaces"));
+                evenement.setLocation(rs.getString("location"));
+                evenement.setDate(dateTime);
+
+                // Set default participation mode
+                evenement.setParticipationMode("on-site");
+
                 evenements.add(evenement);
             }
         } catch (SQLException e) {
@@ -50,15 +78,37 @@ public class ListEvenementRepository {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                Event evenement = new Event(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getString("imageUrl"),
-                        rs.getInt("remainingPlaces"),
-                        rs.getString("location"),
-                        rs.getDate("date").toLocalDate() // Convertir java.sql.Date en LocalDate
-                );
+                // Convert java.sql.Date to LocalDateTime
+                Date sqlDate = rs.getDate("date");
+                LocalDateTime dateTime = null;
+                if (sqlDate != null) {
+                    dateTime = LocalDateTime.of(sqlDate.toLocalDate(), LocalTime.MIDNIGHT);
+                }
+
+                // Create Event with proper column names
+                Event evenement = new Event();
+                evenement.setId(rs.getInt("id"));
+                evenement.setTitle(rs.getString("title"));
+                evenement.setDescription(rs.getString("description"));
+
+                // Try to get image column (could be imageUrl or image_name)
+                try {
+                    evenement.setImageName(rs.getString("imageUrl"));
+                } catch (SQLException e) {
+                    try {
+                        evenement.setImageName(rs.getString("image_name"));
+                    } catch (SQLException e2) {
+                        evenement.setImageName(null);
+                    }
+                }
+
+                evenement.setRemainingPlaces(rs.getInt("remainingPlaces"));
+                evenement.setLocation(rs.getString("location"));
+                evenement.setDate(dateTime);
+
+                // Set default participation mode
+                evenement.setParticipationMode("on-site");
+
                 return Optional.of(evenement);
             }
         } catch (SQLException e) {
@@ -69,14 +119,40 @@ public class ListEvenementRepository {
 
     // Méthode pour ajouter un nouvel événement
     public void addEvenement(Event evenement) {
-        String query = "INSERT INTO evenements (title, description, imageUrl, remainingPlaces, location, date) VALUES (?, ?, ?, ?, ?, ?)";
+        // Try to determine if the table uses imageUrl or image_name column
+        String imageColumnName = "imageUrl"; // Default
+        try {
+            // Check if the table has image_name column
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM evenements LIMIT 1");
+            rs.getMetaData().getColumnLabel(rs.findColumn("image_name"));
+            imageColumnName = "image_name"; // If we get here, image_name exists
+            stmt.close();
+        } catch (SQLException e) {
+            // If error, stick with default "imageUrl"
+            System.out.println("Using imageUrl column for compatibility");
+        }
+
+        String query = "INSERT INTO evenements (title, description, " + imageColumnName + ", remainingPlaces, location, date, participation_mode, google_meet_link) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, evenement.getTitle());
             pstmt.setString(2, evenement.getDescription());
-            pstmt.setString(3, evenement.getImageUrl());
+            pstmt.setString(3, evenement.getImageName()); // Use getImageName for both column types
             pstmt.setInt(4, evenement.getRemainingPlaces());
             pstmt.setString(5, evenement.getLocation());
-            pstmt.setDate(6, Date.valueOf(evenement.getDate())); // Convertir LocalDate en java.sql.Date
+
+            // Convert LocalDateTime to Timestamp
+            if (evenement.getDate() != null) {
+                pstmt.setTimestamp(6, Timestamp.valueOf(evenement.getDate()));
+            } else {
+                pstmt.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+            }
+
+            // Set participation mode and Google Meet link
+            pstmt.setString(7, evenement.getParticipationMode() != null ?
+                            evenement.getParticipationMode() : "on-site");
+            pstmt.setString(8, evenement.getGoogleMeetLink());
+
             pstmt.executeUpdate();
 
             // Récupérer l'ID généré
@@ -135,15 +211,37 @@ public class ListEvenementRepository {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                Event evenement = new Event(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getString("imageUrl"),
-                        rs.getInt("remainingPlaces"),
-                        rs.getString("location"),
-                        rs.getDate("date").toLocalDate() // Convertir java.sql.Date en LocalDate
-                );
+                // Convert java.sql.Date to LocalDateTime
+                Date sqlDate = rs.getDate("date");
+                LocalDateTime dateTime = null;
+                if (sqlDate != null) {
+                    dateTime = LocalDateTime.of(sqlDate.toLocalDate(), LocalTime.MIDNIGHT);
+                }
+
+                // Create Event with proper column names
+                Event evenement = new Event();
+                evenement.setId(rs.getInt("id"));
+                evenement.setTitle(rs.getString("title"));
+                evenement.setDescription(rs.getString("description"));
+
+                // Try to get image column (could be imageUrl or image_name)
+                try {
+                    evenement.setImageName(rs.getString("imageUrl"));
+                } catch (SQLException e) {
+                    try {
+                        evenement.setImageName(rs.getString("image_name"));
+                    } catch (SQLException e2) {
+                        evenement.setImageName(null);
+                    }
+                }
+
+                evenement.setRemainingPlaces(rs.getInt("remainingPlaces"));
+                evenement.setLocation(rs.getString("location"));
+                evenement.setDate(dateTime);
+
+                // Set default participation mode
+                evenement.setParticipationMode("on-site");
+
                 evenements.add(evenement);
             }
         } catch (SQLException e) {

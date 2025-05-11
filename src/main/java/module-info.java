@@ -1,7 +1,15 @@
 module com.example.ewaste {
+<<<<<<< Updated upstream
     // Ajoutez ce module si vous utilisez des contrôles JavaFX
     // Module pour FXML
     requires javafx.web;      // Module pour JavaFX Web
+=======
+    requires javafx.web;
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires javafx.graphics;
+
+>>>>>>> Stashed changes
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;

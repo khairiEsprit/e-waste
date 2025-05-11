@@ -3,7 +3,6 @@ package com.example.ewaste.Utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.cdimascio.dotenv.Dotenv;
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,12 +14,17 @@ public class TranslationService {
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
     private static final String MODEL = "gpt-4o-mini"; // Modèle OpenAI utilisé
 
+<<<<<<< Updated upstream
     // Chargement de la clé API depuis le fichier .env
     static Dotenv dotenv = Dotenv.configure()
             .directory("C:/Users/HP/Desktop/pidev/e-waste") // Ajuste ce chemin si nécessaire
             .filename(".env")
             .load();
     private static final String API_KEY = dotenv.get("APIKEY");
+=======
+    // Chargement de la clé API depuis le fichier .env via DotenvConfig
+    private static final String API_KEY = DotenvConfig.get("OPENAI_API_KEY", "dummy-openai-api-key");
+>>>>>>> Stashed changes
 
     public String translateText(String text, String targetLanguage) {
         try {

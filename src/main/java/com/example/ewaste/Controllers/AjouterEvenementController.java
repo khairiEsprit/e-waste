@@ -2,9 +2,11 @@ package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Entities.Event;
 import com.example.ewaste.Repository.EventRepository;
+import com.example.ewaste.Utils.ImageUtils;
 import com.example.ewaste.Utils.QwenApiClientEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,6 +18,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Base64;
 
 
@@ -64,7 +68,7 @@ public class AjouterEvenementController {
     private TableColumn<Event, String> descriptionColumn;
 
     @FXML
-    private TableColumn<Event, LocalDate> dateColumn;
+    private TableColumn<Event, LocalDateTime> dateColumn;
 
     @FXML
     private TableColumn<Event, String> lieuColumn;
@@ -125,14 +129,39 @@ public class AjouterEvenementController {
         if (selectedFile != null) {
             // Check if the file is a supported image type
             if (isImageFileValid(selectedFile)) {
-                // Convert the image to base64
-                String base64Image = encodeImageToBase64(selectedFile);
-                if (base64Image != null) {
-                    imageUrl = base64Image; // Use base64-encoded image
+                try {
+                    // Get the file extension
+                    String fileName = selectedFile.getName();
+                    String fileExtension = ImageUtils.getFileExtension(fileName);
+
+                    // Load the image for display
                     Image image = new Image(selectedFile.toURI().toString());
                     imageView.setImage(image);
-                } else {
-                    showAlert("Erreur", "Impossible de convertir l'image en base64.");
+
+                    // Save the image to a file and store the path
+                    try (FileInputStream imageInputStream = new FileInputStream(selectedFile)) {
+                        byte[] imageBytes = new byte[(int) selectedFile.length()];
+                        imageInputStream.read(imageBytes);
+                        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+                        // Check if the base64 string is too large for the database
+                        if (ImageUtils.isBase64TooLarge(base64Image, 1000)) {
+                            // Save the image to a file and store the path instead
+                            String imagePath = ImageUtils.saveBase64Image(base64Image, fileExtension);
+                            if (imagePath != null) {
+                                imageUrl = imagePath;
+                                System.out.println("Image saved to: " + imagePath);
+                            } else {
+                                showAlert("Erreur", "Impossible de sauvegarder l'image.");
+                            }
+                        } else {
+                            // The base64 string is small enough to store directly
+                            imageUrl = base64Image;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert("Erreur", "Erreur lors du traitement de l'image: " + e.getMessage());
                 }
             } else {
                 showAlert("Erreur", "Le type d'image n'est pas supporté. Veuillez sélectionner une image au format JPEG ou PNG.");
@@ -156,20 +185,17 @@ public class AjouterEvenementController {
 
         return true;
     }
-    private String encodeImageToBase64(File file) {
-        try (FileInputStream imageInputStream = new FileInputStream(file)) {
-            byte[] imageBytes = new byte[(int) file.length()];
-            imageInputStream.read(imageBytes);
-            return Base64.getEncoder().encodeToString(imageBytes);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+
 
     @FXML
     private void handleAjouterButtonAction() {
         if (ajouterButton.getText().equals("Ajouter")) {
+            // Convert LocalDate to LocalDateTime (set time to midnight)
+            LocalDateTime dateTime = null;
+            if (dateField.getValue() != null) {
+                dateTime = LocalDateTime.of(dateField.getValue(), LocalTime.MIDNIGHT);
+            }
+
             Event event = new Event(
                     0,
                     titreField.getText(),
@@ -177,18 +203,32 @@ public class AjouterEvenementController {
                     imageUrl, // Utiliser l'URL de l'image
                     Integer.parseInt(placesField.getText()),
                     lieuField.getText(),
-                    dateField.getValue()
+                    dateTime
             );
+
+            // Set default participation mode
+            event.setParticipationMode("on-site");
 
             eventRepository.addEvent(event);
             eventTable.getItems().add(event);
         } else {
             selectedEvent.setTitle(titreField.getText());
             selectedEvent.setDescription(descriptionField.getText());
-            selectedEvent.setDate(dateField.getValue());
+
+            // Convert LocalDate to LocalDateTime
+            if (dateField.getValue() != null) {
+                LocalDateTime dateTime = LocalDateTime.of(dateField.getValue(), LocalTime.MIDNIGHT);
+                selectedEvent.setDate(dateTime);
+            }
+
             selectedEvent.setLocation(lieuField.getText());
             selectedEvent.setRemainingPlaces(Integer.parseInt(placesField.getText()));
-            selectedEvent.setImageUrl(imageUrl); // Utiliser l'URL de l'image
+            selectedEvent.setImageName(imageUrl); // Use setImageName instead of setImageUrl
+
+            // Ensure participation mode is set
+            if (selectedEvent.getParticipationMode() == null) {
+                selectedEvent.setParticipationMode("on-site");
+            }
 
             eventRepository.updateEvent(selectedEvent);
             eventTable.refresh();
@@ -223,9 +263,35 @@ public class AjouterEvenementController {
             return;
         }
 
+        String imageData = imageUrl;
+
+        // If the imageUrl is a file path, convert it to base64 for the API
+        if (imageUrl.startsWith("images/") || imageUrl.contains("/")) {
+            try {
+                // Load the image from the file and convert to base64
+                imageData = ImageUtils.loadImageAsBase64(imageUrl);
+                if (imageData == null) {
+                    showAlert("Erreur", "Impossible de charger l'image pour la génération de description.");
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Erreur", "Erreur lors du chargement de l'image: " + e.getMessage());
+                return;
+            }
+        }
+
         // Générer la description à partir de l'URL de l'image
+<<<<<<< Updated upstream
         String generatedDescription = QwenApiClientEvent.generateTextFromImage("Générer une description en 2 lignes à partir de cette photo d'événement.", imageUrl);
         System.out.println(imageUrl);
+=======
+        String generatedDescription = QwenApiClientEvent.generateTextFromImage(
+            "Générer une description en 10 mots à partir de cette photo d'événement.",
+            imageData
+        );
+
+>>>>>>> Stashed changes
         // Vérifier si la description contient une erreur
         if (generatedDescription.startsWith("API Error:") || generatedDescription.startsWith("Unexpected API response:")) {
             showAlert("Erreur API", generatedDescription);
@@ -238,13 +304,52 @@ public class AjouterEvenementController {
     private void populateForm(Event event) {
         titreField.setText(event.getTitle());
         descriptionField.setText(event.getDescription());
-        dateField.setValue(event.getDate());
+
+        // Convert LocalDateTime to LocalDate for DatePicker
+        if (event.getDate() != null) {
+            dateField.setValue(event.getDate().toLocalDate());
+        } else {
+            dateField.setValue(null);
+        }
+
         lieuField.setText(event.getLocation());
         placesField.setText(String.valueOf(event.getRemainingPlaces()));
-        if (event.getImageUrl() != null) {
-            imageUrl = event.getImageUrl();
-            Image image = new Image(imageUrl);
-            imageView.setImage(image);
+
+        // Handle image - try both getImageUrl and getImageName for compatibility
+        String imageSrc = event.getImageName() != null ? event.getImageName() : event.getImageUrl();
+        if (imageSrc != null) {
+            imageUrl = imageSrc;
+            try {
+                // Check if the image source is a file path
+                if (imageSrc.startsWith("images/") || imageSrc.contains("/")) {
+                    // It's a file path, load the file
+                    try {
+                        File imageFile = new File(imageSrc);
+                        if (imageFile.exists()) {
+                            Image image = new Image(imageFile.toURI().toString());
+                            imageView.setImage(image);
+                        } else {
+                            System.err.println("Image file not found: " + imageSrc);
+                            imageView.setImage(null);
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error loading image file: " + e.getMessage());
+                        imageView.setImage(null);
+                    }
+                } else {
+                    // It's likely a base64 string, try to load it directly
+                    try {
+                        Image image = new Image(imageSrc);
+                        imageView.setImage(image);
+                    } catch (Exception e) {
+                        System.err.println("Error loading image from string: " + e.getMessage());
+                        imageView.setImage(null);
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Error loading image: " + e.getMessage());
+                imageView.setImage(null);
+            }
         } else {
             imageView.setImage(null);
         }
@@ -274,9 +379,33 @@ public class AjouterEvenementController {
         // Créer les champs de texte pour la modification
         TextField titreField = new TextField(event.getTitle());
         TextArea descriptionField = new TextArea(event.getDescription());
-        DatePicker dateField = new DatePicker(event.getDate());
+
+        // Create DatePicker with LocalDate (converted from LocalDateTime)
+        DatePicker dateField = new DatePicker();
+        if (event.getDate() != null) {
+            dateField.setValue(event.getDate().toLocalDate());
+        }
+
         TextField lieuField = new TextField(event.getLocation());
         TextField placesField = new TextField(String.valueOf(event.getRemainingPlaces()));
+
+        // Add participation mode ComboBox
+        ComboBox<String> participationModeComboBox = new ComboBox<>();
+        participationModeComboBox.getItems().addAll("on-site", "online", "hybrid");
+        participationModeComboBox.setValue(event.getParticipationMode() != null ?
+                                          event.getParticipationMode() : "on-site");
+
+        // Add Google Meet link field (only visible for online/hybrid modes)
+        TextField googleMeetLinkField = new TextField(event.getGoogleMeetLink());
+        googleMeetLinkField.setPromptText("Google Meet Link (for online/hybrid events)");
+        googleMeetLinkField.setVisible("online".equals(event.getParticipationMode()) ||
+                                      "hybrid".equals(event.getParticipationMode()));
+
+        // Make Google Meet link field visible/invisible based on participation mode
+        participationModeComboBox.setOnAction(e -> {
+            String mode = participationModeComboBox.getValue();
+            googleMeetLinkField.setVisible("online".equals(mode) || "hybrid".equals(mode));
+        });
 
         // Ajouter les champs à la boîte de dialogue
         VBox vbox = new VBox(
@@ -284,7 +413,9 @@ public class AjouterEvenementController {
                 new Label("Description:"), descriptionField,
                 new Label("Date:"), dateField,
                 new Label("Lieu:"), lieuField,
-                new Label("Places:"), placesField
+                new Label("Places:"), placesField,
+                new Label("Mode de participation:"), participationModeComboBox,
+                new Label("Lien Google Meet (optionnel):"), googleMeetLinkField
         );
         vbox.setSpacing(10); // Espacement entre les éléments
         dialog.getDialogPane().setContent(vbox);
@@ -297,9 +428,17 @@ public class AjouterEvenementController {
             if (buttonType == ButtonType.OK) {
                 event.setTitle(titreField.getText());
                 event.setDescription(descriptionField.getText());
-                event.setDate(dateField.getValue());
+
+                // Convert LocalDate to LocalDateTime
+                if (dateField.getValue() != null) {
+                    LocalDateTime dateTime = LocalDateTime.of(dateField.getValue(), LocalTime.MIDNIGHT);
+                    event.setDate(dateTime);
+                }
+
                 event.setLocation(lieuField.getText());
                 event.setRemainingPlaces(Integer.parseInt(placesField.getText()));
+                event.setParticipationMode(participationModeComboBox.getValue());
+                event.setGoogleMeetLink(googleMeetLinkField.getText());
                 return ButtonType.OK;
             }
             return null;
