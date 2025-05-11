@@ -29,14 +29,14 @@ public class ContratListCellController extends ListCell<Contrat> {
         } else {
             try {
                 // 🔹 Récupérer les noms du centre et de l'employé
-                String centreNom = contratRepository.getCentreNameById(contrat.getIdCentre());
-                String employeNom = contratRepository.getEmployeNameById(contrat.getIdEmploye());
-                String employePrenom = contratRepository.getEmployePrenameById(contrat.getIdEmploye());
+                String centreNom = contratRepository.getCentreNameById(contrat.getCentreId());
+                String employeNom = contratRepository.getEmployeNameById(contrat.getEmployeId());
+                String employePrenom = contratRepository.getEmployePrenameById(contrat.getEmployeId());
 
                 // 🔹 Création des labels
                 Label idLabel = new Label("🆔 ID Contrat: " + contrat.getId());
-                Label centreLabel = new Label("🏢 Centre: " + centreNom);
-                Label employeLabel = new Label("👤 Employé: " + employeNom + " " + employePrenom);
+                Label centreLabel = new Label("🏢 Centre: " + (centreNom != null ? centreNom : "Inconnu"));
+                Label employeLabel = new Label("👤 Employé: " + (employePrenom != null ? employePrenom : "") + " " + (employeNom != null ? employeNom : ""));
                 Label dateDebutLabel = new Label("📅 Début: " + contrat.getDateDebut());
                 Label dateFinLabel = new Label("📅 Fin: " + contrat.getDateFin());
 
@@ -77,8 +77,8 @@ public class ContratListCellController extends ListCell<Contrat> {
 
                 HBox cellContent = new HBox(vbox, spacer, signatureBox);
                 cellContent.setSpacing(15);
-                cellContent.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 10px; "
-                        + "-fx-border-radius: 10px; -fx-border-color: #00693e; -fx-border-width: 2px;");
+                cellContent.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 10px; " +
+                        "-fx-border-radius: 10px; -fx-border-color: #00693e; -fx-border-width: 2px;");
                 cellContent.setPadding(new Insets(5));
 
                 // 🔹 Définir le contenu graphique

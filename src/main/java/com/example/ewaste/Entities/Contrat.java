@@ -4,25 +4,26 @@ import java.time.LocalDate;
 
 public class Contrat {
     private int id;
-    private int idCentre;
-    private int idEmploye;
+    private int centreId;
+    private int employeId;
     private LocalDate dateDebut;
     private LocalDate dateFin;
     private String signaturePath;
 
     public Contrat() {}
 
-    public Contrat(int id,int idCentre,int idEmploye,LocalDate dateDebut,LocalDate dateFin,String signaturePath) {
+    public Contrat(int id, int centreId, int employeId, LocalDate dateDebut, LocalDate dateFin, String signaturePath) {
         this.id = id;
-        this.idCentre = idCentre;
-        this.idEmploye = idEmploye;
+        this.centreId = centreId;
+        this.employeId = employeId;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.signaturePath = signaturePath;
     }
-    public Contrat(int idCentre,int idEmploye,LocalDate dateDebut,LocalDate dateFin,String signaturePath) {
-        this.idCentre = idCentre;
-        this.idEmploye = idEmploye;
+
+    public Contrat(int centreId, int employeId, LocalDate dateDebut, LocalDate dateFin, String signaturePath) {
+        this.centreId = centreId;
+        this.employeId = employeId;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.signaturePath = signaturePath;
@@ -31,62 +32,60 @@ public class Contrat {
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
-    public int getIdCentre() {
-        return idCentre;
+
+    public int getCentreId() {
+        return centreId;
     }
-    public void setIdCentre(int idCentre) {
-        this.idCentre = idCentre;
+
+    public void setCentreId(int centreId) {
+        this.centreId = centreId;
     }
-    public int getIdEmploye() {
-        return idEmploye;
+
+    public int getEmployeId() {
+        return employeId;
     }
-    public void setIdEmploye(int idEmploye) {
-        this.idEmploye = idEmploye;
+
+    public void setEmployeId(int employeId) {
+        this.employeId = employeId;
     }
+
     public LocalDate getDateDebut() {
         return dateDebut;
     }
+
     public void setDateDebut(LocalDate dateDebut) {
         this.dateDebut = dateDebut;
     }
+
     public LocalDate getDateFin() {
         return dateFin;
     }
+
     public void setDateFin(LocalDate dateFin) {
         this.dateFin = dateFin;
     }
 
-    public String getSignaturePath() {return signaturePath;}
+    public String getSignaturePath() {
+        return signaturePath;
+    }
 
-    public void setSignaturePath(String signaturePath) {this.signaturePath = signaturePath;}
+    public void setSignaturePath(String signaturePath) {
+        this.signaturePath = signaturePath;
+    }
 
     @Override
     public String toString() {
         return "Contrat{" +
                 "id=" + id +
-                ", id_centre=" + idCentre +
-                ", id_employe=" + idEmploye +
+                ", centre_id=" + centreId +
+                ", employe_id=" + employeId +
                 ", date_debut='" + dateDebut + '\'' +
                 ", date_fin='" + dateFin + '\'' +
+                ", signature_path='" + signaturePath + '\'' +
                 '}';
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
