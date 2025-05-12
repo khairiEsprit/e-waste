@@ -14,7 +14,7 @@
     <!-- Details Container -->
     <VBox spacing="10" styleClass="details-box">
         <HBox spacing="10" alignment="CENTER_LEFT">
-            <Label fx:id="lblIdUtilisateur" styleClass="detail-value" />
+            <Label fx:id="lblutilisateur_id" styleClass="detail-value" />
         </HBox>
         <HBox spacing="10" alignment="CENTER_LEFT">
             <Label fx:id="lblIdCentre" styleClass="detail-value" />

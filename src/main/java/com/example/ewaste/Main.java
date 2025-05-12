@@ -17,7 +17,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
 
 //
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("views/mainLoginSignUp.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("views/ListDemandesAdmin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);

@@ -25,7 +25,7 @@ public class DemandeRepository implements IService<Demande> {
 
     @Override
     public void ajouter(Demande demande) throws SQLException {
-        String sql = "INSERT INTO `demande`(`id_utilisateur`, `id_centre`, `adresse`, `email_utilisateur`, `message`, `type`) " +
+        String sql = "INSERT INTO `demande`(`utilisateur_id`, `centre_id`, `adresse`, `email_utilisateur`, `message`, `type`) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, 1);
@@ -39,10 +39,10 @@ public class DemandeRepository implements IService<Demande> {
 
     @Override
     public void modifier(Demande demande) throws SQLException {
-        String sql = "UPDATE `demande` SET `id_utilisateur`=?, `id_centre`=?, `adresse`=?, `email_utilisateur`=?, `message`=?, `type`=? WHERE `id`=?";
+        String sql = "UPDATE `demande` SET `utilisateur_id`=?, `centre_id`=?, `adresse`=?, `email_utilisateur`=?, `message`=?, `type`=? WHERE `id`=?";
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, demande.getIdUtilisateur());
-        ps.setInt(2, demande.getIdCentre());
+        ps.setInt(1, demande.getutilisateur_id());
+        ps.setInt(2, demande.getcentre_id());
         ps.setString(3, demande.getAdresse());
         ps.setString(4, demande.getEmailUtilisateur());
         ps.setString(5, demande.getMessage());
@@ -74,8 +74,8 @@ public class DemandeRepository implements IService<Demande> {
         while (rs.next()) {
             demandes.add(new Demande(
                     rs.getInt("id"),
-                    rs.getInt("id_utilisateur"),
-                    rs.getInt("id_centre"),
+                    rs.getInt("utilisateur_id"),
+                    rs.getInt("centre_id"),
                     rs.getString("adresse"),
                     rs.getString("email_utilisateur"),
                     rs.getString("message"),
@@ -86,13 +86,13 @@ public class DemandeRepository implements IService<Demande> {
     }
 
     @Override
-    public List<PlanificationTache> afficher(int id_centre) throws SQLException {
+    public List<PlanificationTache> afficher(int centre_id) throws SQLException {
         return List.of();
     }
 
     public List<Demande> getDemandesByUserId(int userId) throws SQLException {
         List<Demande> demandes = new ArrayList<>();
-        String sql = "SELECT * FROM `demande` WHERE `id_utilisateur`=?";
+        String sql = "SELECT * FROM `demande` WHERE `utilisateur_id`=?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, 1);
         ResultSet rs = ps.executeQuery();
@@ -100,8 +100,8 @@ public class DemandeRepository implements IService<Demande> {
         while (rs.next()) {
             demandes.add(new Demande(
                     rs.getInt("id"),
-                    rs.getInt("id_utilisateur"),
-                    rs.getInt("id_centre"),
+                    rs.getInt("utilisateur_id"),
+                    rs.getInt("centre_id"),
                     rs.getString("adresse"),
                     rs.getString("email_utilisateur"),
                     rs.getString("message"),
@@ -119,8 +119,8 @@ public class DemandeRepository implements IService<Demande> {
         if (rs.next()) {
             return new Demande(
                     rs.getInt("id"),
-                    rs.getInt("id_utilisateur"),
-                    rs.getInt("id_centre"),
+                    rs.getInt("utilisateur_id"),
+                    rs.getInt("centre_id"),
                     rs.getString("adresse"),
                     rs.getString("email_utilisateur"),
                     rs.getString("message"),

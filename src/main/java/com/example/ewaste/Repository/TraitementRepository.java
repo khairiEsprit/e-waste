@@ -23,7 +23,7 @@ public class TraitementRepository implements IService<Traitement> {
 
     @Override
     public void ajouter(Traitement traitement) throws SQLException {
-        String sql = "INSERT INTO `traitement`(`id_demande`, `status`, `date_traitement`, `commentaire`) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO `traitement`(`demande_id`, `status`, `date_traitement`, `commentaire`) VALUES (?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, traitement.getIdDemande());
         ps.setString(2, traitement.getStatus());
@@ -34,7 +34,7 @@ public class TraitementRepository implements IService<Traitement> {
 
     @Override
     public void modifier(Traitement traitement) throws SQLException {
-        String sql = "UPDATE `traitement` SET `id_demande`=?, `status`=?, `date_traitement`=?, `commentaire`=? WHERE `id`=?";
+        String sql = "UPDATE `traitement` SET `demande_id`=?, `status`=?, `date_traitement`=?, `commentaire`=? WHERE `id`=?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, traitement.getIdDemande());
         ps.setString(2, traitement.getStatus());
@@ -69,7 +69,7 @@ public class TraitementRepository implements IService<Traitement> {
         while (rs.next()) {
             traitements.add(new Traitement(
                     rs.getInt("id"),
-                    rs.getInt("id_demande"),
+                    rs.getInt("demande_id"),
                     rs.getString("status"),
                     rs.getTimestamp("date_traitement").toLocalDateTime(),
                     rs.getString("commentaire")
@@ -84,7 +84,7 @@ public class TraitementRepository implements IService<Traitement> {
     }
 
     public boolean traitementExistsForDemande(int idDemande) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM `traitement` WHERE id_demande = ?";
+        String sql = "SELECT COUNT(*) FROM `traitement` WHERE demande_id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, idDemande);
         ResultSet rs = ps.executeQuery();
@@ -96,8 +96,8 @@ public class TraitementRepository implements IService<Traitement> {
 
     public List<Traitement> getTraitementByDemande(int idDemande) throws SQLException {
         List<Traitement> traitements = new ArrayList<>();
-        //Récupère les traitements liés à une demande spécifique (id_demande).
-        String sql = "SELECT * FROM `traitement` WHERE id_demande = ?";
+        //Récupère les traitements liés à une demande spécifique (demande_id).
+        String sql = "SELECT * FROM `traitement` WHERE demande_id = ?";
 
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, idDemande);
@@ -106,7 +106,7 @@ public class TraitementRepository implements IService<Traitement> {
         while (rs.next()) {
             traitements.add(new Traitement(
                     rs.getInt("id"),
-                    rs.getInt("id_demande"),
+                    rs.getInt("demande_id"),
                     rs.getString("status"),
                     rs.getTimestamp("date_traitement").toLocalDateTime(),// Conversion Timestamp → LocalDateTime
                     rs.getString("commentaire")

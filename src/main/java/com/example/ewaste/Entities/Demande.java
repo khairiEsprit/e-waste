@@ -2,8 +2,8 @@ package com.example.ewaste.Entities;
 
 public class Demande {
     private int id;
-    private int idUtilisateur;
-    private int idCentre;
+    private int utilisateur_id;
+    private int centre_id;
     private String adresse;
     private String emailUtilisateur;
     private String message;
@@ -12,19 +12,19 @@ public class Demande {
     public Demande() {
     }
 
-    public Demande(int id, int idUtilisateur, int idCentre, String adresse, String emailUtilisateur, String message, String type) {
+    public Demande(int id, int utilisateur_id, int centre_id, String adresse, String emailUtilisateur, String message, String type) {
         this.id = id;
-        this.idUtilisateur = idUtilisateur;
-        this.idCentre = idCentre;
+        this.utilisateur_id = utilisateur_id;
+        this.centre_id = centre_id;
         this.adresse = adresse;
         this.emailUtilisateur = emailUtilisateur;
         this.message = message;
         this.type = type;
     }
 
-    public Demande(int idUtilisateur, int idCentre, String adresse, String emailUtilisateur, String message, String type) {
-        this.idUtilisateur = idUtilisateur;
-        this.idCentre = idCentre;
+    public Demande(int utilisateur_id, int centre_id, String adresse, String emailUtilisateur, String message, String type) {
+        this.utilisateur_id = utilisateur_id;
+        this.centre_id = centre_id;
         this.adresse = adresse;
         this.emailUtilisateur = emailUtilisateur;
         this.message = message;
@@ -46,20 +46,20 @@ public class Demande {
         this.id = id;
     }
 
-    public int getIdUtilisateur() {
-        return idUtilisateur;
+    public int getutilisateur_id() {
+        return utilisateur_id;
     }
 
-    public void setIdUtilisateur(int idUtilisateur) {
-        this.idUtilisateur = idUtilisateur;
+    public void setutilisateur_id(int utilisateur_id) {
+        this.utilisateur_id = utilisateur_id;
     }
 
-    public int getIdCentre() {
-        return idCentre;
+    public int getcentre_id() {
+        return centre_id;
     }
 
-    public void setIdCentre(int idCentre) {
-        this.idCentre = idCentre;
+    public void setcentre_id(int centre_id) {
+        this.centre_id = centre_id;
     }
 
     public String getAdresse() {
@@ -98,8 +98,8 @@ public class Demande {
     public String toString() {
         return "Demande{" +
                 "id=" + id +
-                ", idUtilisateur=" + idUtilisateur +
-                ", idCentre=" + idCentre +
+                ", utilisateur_id=" + utilisateur_id +
+                ", centre_id=" + centre_id +
                 ", adresse='" + adresse + '\'' +
                 ", emailUtilisateur='" + emailUtilisateur + '\'' +
                 ", message='" + message + '\'' +

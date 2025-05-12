@@ -90,26 +90,24 @@ public class FormDemandeController {
         } catch (SQLException e) {
             e.printStackTrace();
             AlertUtil.showAlert("Erreur", "Une erreur s'est produite lors de l'enregistrement.", Alert.AlertType.ERROR);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 //Affiche une alerte personnalisée
-    private void showCustomAlert(String title, String message) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/CustomAlert.fxml"));
-            Parent root = loader.load();
+    private void showCustomAlert(String title, String message) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/CustomAlert.fxml"));
+        Parent root = loader.load();
 
-            CustomAlertController controller = loader.getController();
-            controller.setMessage(title);
-            controller.setDetails(message);
+        CustomAlertController controller = loader.getController();
+        controller.setMessage(title);
+        controller.setDetails(message);
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle(title);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle(title);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
     }
     //Une méthode qui cache tous les messages d'erreur :
     private void resetErrorMessages() {
@@ -120,19 +118,14 @@ public class FormDemandeController {
     }
 
 //Ouvre la vue des demandes
-    private void openDemandeView() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/main.fxml"));
-            Parent root = loader.load();
+    private void openDemandeView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/main.fxml"));
+        Parent root = loader.load();
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Liste des Demandes");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            AlertUtil.showAlert("Erreur", "Impossible d'ouvrir la liste des demandes.", Alert.AlertType.ERROR);
-        }
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Liste des Demandes");
+        stage.show();
     }
 
     private void clearForm() {
