@@ -4,7 +4,6 @@ import com.example.ewaste.Entities.Tache;
 import com.example.ewaste.Repository.TacheRepository;
 import com.example.ewaste.Repository.TemperatureRepository;
 import com.example.ewaste.Utils.GeminiApiTache;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,7 +33,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
 import javafx.concurrent.Task;
-import javafx.scene.control.Alert.AlertType;
 
 public class ControllerTachesEmploye implements Initializable {
 
@@ -75,7 +73,7 @@ public class ControllerTachesEmploye implements Initializable {
             if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
                 String script = String.format(
                         "updateLocation(%f, %f);",
-                        tache.getLatitude(),
+                        tache.getAltitude(),
                         tache.getLongitude()
                 );
                 engine.executeScript(script);
@@ -86,14 +84,14 @@ public class ControllerTachesEmploye implements Initializable {
         lblMessage.getStyleClass().add("tache-label");
 
         Label lblTemperature = new Label("Température : " + tempService.getTemperature(
-                tache.getLatitude(),
+                tache.getAltitude(),
                 tache.getLongitude()
         ));
         lblTemperature.getStyleClass().add("tache-label");
 
         // Ajout de l'adresse
         Label lblAdresse = new Label("Adresse : " + getAddressFromCoordinates(
-                tache.getLatitude(),
+                tache.getAltitude(),
                 tache.getLongitude()));
         lblAdresse.getStyleClass().add("tache-label");
         lblAdresse.setWrapText(true);
@@ -111,12 +109,12 @@ public class ControllerTachesEmploye implements Initializable {
         return card;
     }
 
-    private String getAddressFromCoordinates(double latitude, double longitude) {
+    private String getAddressFromCoordinates(double altitude, double longitude) {
         try {
             HttpClient client = HttpClient.newHttpClient();
             String url = String.format(
                     "https://nominatim.openstreetmap.org/reverse?format=json&lat=%.6f&lon=%.6f",
-                    latitude,
+                    altitude,
                     longitude
             );
             HttpRequest request = HttpRequest.newBuilder()
@@ -152,7 +150,7 @@ public class ControllerTachesEmploye implements Initializable {
 
             // Références aux éléments UI
             Scene scene = new Scene(root);
-            Label latitudeLabel = (Label) scene.lookup("#labelLatitude");
+            Label altitudeLabel = (Label) scene.lookup("#labelAltitude");
             Label longitudeLabel = (Label) scene.lookup("#labelLongitude");
             Label temperatureLabel = (Label) scene.lookup("#labelTemperature");
             TextArea geminiResponse = (TextArea) scene.lookup("#geminiResponse");
@@ -160,9 +158,9 @@ public class ControllerTachesEmploye implements Initializable {
             WebView weatherMap = (WebView) scene.lookup("#weatherMap");
 
             // Mise à jour des coordonnées
-            double lat = tache.getLatitude();
+            double lat = tache.getAltitude();
             double lon = tache.getLongitude();
-            latitudeLabel.setText(String.format("%.4f", lat));
+            altitudeLabel.setText(String.format("%.4f", lat));
             longitudeLabel.setText(String.format("%.4f", lon));
 
             // Récupération température
@@ -181,7 +179,7 @@ public class ControllerTachesEmploye implements Initializable {
 
             String prompt = String.format(
                     "Analyse météo pour la tâche :\n" +
-                            "- Latitude: %.4f\n- Longitude: %.4f\n- Température: %.1f°C\n" +
+                            "- Altitude: %.4f\n- Longitude: %.4f\n- Température: %.1f°C\n" +
                             "Donne une analyse détaillée avec des recommandations pour les travailleurs.",
                     lat, lon, temperature
             );
@@ -294,18 +292,18 @@ public class ControllerTachesEmploye implements Initializable {
             // Write tasks to CSV
             try (java.io.PrintWriter writer = new java.io.PrintWriter(file, "UTF-8")) {
                 // CSV Header
-                writer.println("ID Employé,Message,État,Latitude,Longitude,Adresse,Température");
+                writer.println("ID Employé,Message,État,Altitude,Longitude,Adresse,Température");
 
                 // CSV Rows
                 for (Tache tache : taches) {
-                    String adresse = getAddressFromCoordinates(tache.getLatitude(), tache.getLongitude());
-                    String temperature = tempService.getTemperature(tache.getLatitude(), tache.getLongitude());
+                    String adresse = getAddressFromCoordinates(tache.getAltitude(), tache.getLongitude());
+                    String temperature = tempService.getTemperature(tache.getAltitude(), tache.getLongitude());
                     String line = String.format(
                             "%d,\"%s\",\"%s\",%.6f,%.6f,\"%s\",\"%s\"",
                             tache.getId_employe(),
                             tache.getMessage().replace("\"", "\"\""), // Escape quotes in message
                             tache.getEtat(),
-                            tache.getLatitude(),
+                            tache.getAltitude(),
                             tache.getLongitude(),
                             adresse.replace("\"", "\"\""), // Escape quotes in address
                             temperature

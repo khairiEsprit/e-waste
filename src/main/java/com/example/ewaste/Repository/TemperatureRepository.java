@@ -12,10 +12,10 @@ public class TemperatureRepository {
     private static final String API_KEY = "482ec7cd423b49848782fe48cea8eda3";
     private static final String API_URL = "https://api.openweathermap.org/data/2.5/weather";
 
-    public String getTemperature(double latitude, double longitude) {
+    public String getTemperature(double altitude, double longitude) {
         try {
             // Construire l'URL de l'API avec les coordonnées
-            String urlString = API_URL + "?lat=" + latitude + "&lon=" + longitude + "&appid=" + API_KEY + "&units=metric";
+            String urlString = API_URL + "?lat=" + altitude + "&lon=" + longitude + "&appid=" + API_KEY + "&units=metric";
             URL url = new URL(urlString);
 
             // Ouvrir une connexion HTTP
