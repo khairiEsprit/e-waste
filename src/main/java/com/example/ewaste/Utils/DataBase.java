@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class DataBase {
 
-    private final String URL = "jdbc:mysql://localhost:3306/e-waste";
+    private final String URL = "jdbc:mysql://localhost:3306/e-waste-symfony";
     private final String USER = "root";
     private final String PSW = "";
 

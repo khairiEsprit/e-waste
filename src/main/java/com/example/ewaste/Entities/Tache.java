@@ -4,7 +4,7 @@ public class Tache {
     private int id;
     private int id_centre;
     private int id_employe;
-    private float latitude;
+    private float altitude;
     private float longitude;
     private String message;
     private String etat;
@@ -13,7 +13,7 @@ public class Tache {
         this.id = id;
         this.id_centre = id_centre;
         this.id_employe = id_employe;
-        this.latitude = latitude;
+        this.altitude = latitude;
         this.longitude = longitude;
         this.message = message;
         this.etat = etat;
@@ -22,7 +22,7 @@ public class Tache {
     public Tache(int id_centre, int id_employe, float latitude, float longitude, String message, String etat) {
         this.id_centre = id_centre;
         this.id_employe = id_employe;
-        this.latitude = latitude;
+        this.altitude = latitude;
         this.longitude = longitude;
         this.message = message;
         this.etat = etat;
@@ -52,12 +52,12 @@ public class Tache {
         this.id_employe = id_employe;
     }
 
-    public float getLatitude() {
-        return latitude;
+    public float getAltitude() {
+        return altitude;
     }
 
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
+    public void setAltitude(float altitude) {
+        this.altitude = altitude;
     }
 
     public float getLongitude() {
@@ -90,7 +90,7 @@ public class Tache {
                 "id=" + id +
                 ", id_centre=" + id_centre +
                 ", id_employe=" + id_employe +
-                ", latitude=" + latitude +
+                ", altitude=" + altitude +
                 ", longitude=" + longitude +
                 ", message='" + message + '\'' +
                 ", etat='" + etat + '\'' +
