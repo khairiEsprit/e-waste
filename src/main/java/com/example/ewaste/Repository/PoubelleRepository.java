@@ -23,15 +23,20 @@ public class PoubelleRepository implements IService<poubelle>
     }
     @Override
     public void ajouter(poubelle p) throws SQLException {
-        String sql = "INSERT INTO poubelle (id_centre, adresse, niveau, etat, date_installation, hauteur_totale) VALUES (?, ?, ?, ?, ?, ?)";
-        PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        String sql = "INSERT INTO poubelle (centre_id, adresse, niveau, etat, " +
+                     "date_installation, hauteur_totale, latitude, longitude, revenu_genere) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+          PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, p.getId_centre());
         ps.setString(2, p.getAdresse());
         ps.setInt(3, p.getNiveau());
         ps.setString(4, p.getEtat().toString());
         ps.setDate(5, new java.sql.Date(p.getDate_installation().getTime()));
         ps.setInt(6, p.getHauteurTotale());
-        ps.executeUpdate();
+        ps.setDouble(7, p.getLatitude());
+        ps.setDouble(8, p.getLongitude());
+        ps.setDouble(9, p.getRevenu_genere());
+          ps.executeUpdate();
 
         // Récupérer l'ID généré pour la poubelle
         ResultSet rs = ps.getGeneratedKeys();
@@ -41,29 +46,61 @@ public class PoubelleRepository implements IService<poubelle>
             // Ajouter un capteur par défaut pour cette poubelle
             ajouterCapteurParDefaut(idPoubelle, p.getHauteurTotale());
         }
-    }
-
-
-    @Override
+    }    @Override
     public void supprimer(int id) throws SQLException {
-        String sql = "DELETE FROM poubelle WHERE id = ?";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, id);
-        ps.executeUpdate();
-    }
-
-    @Override
-    public void modifier(poubelle p) throws SQLException {
+        connection.setAutoCommit(false);
         try {
-            String sql = "UPDATE poubelle SET id_centre = ?, adresse = ?, niveau = ?, etat = ?, date_installation = ? ,hauteur_totale=?  WHERE id = ?";
+            // 1. Supprimer l'historique
+            String deleteHistoriqueSql = "DELETE FROM historique WHERE poubelle_id = ?";
+            PreparedStatement psHistorique = connection.prepareStatement(deleteHistoriqueSql);
+            psHistorique.setInt(1, id);
+            psHistorique.executeUpdate();
+
+            // 2. Supprimer les capteurs de pression (capteurp)
+            String deleteCapteursPressSql = "DELETE FROM capteurp WHERE poubelle_id = ?";
+            PreparedStatement psCapteursPress = connection.prepareStatement(deleteCapteursPressSql);
+            psCapteursPress.setInt(1, id);
+            psCapteursPress.executeUpdate();
+
+            // 3. Supprimer les capteurs normaux
+            String deleteCapteursSql = "DELETE FROM capteur WHERE poubelle_id = ?";
+            PreparedStatement psCapteurs = connection.prepareStatement(deleteCapteursSql);
+            psCapteurs.setInt(1, id);
+            psCapteurs.executeUpdate();
+
+            // 4. Finalement, supprimer la poubelle
+            String deletePoubelleSQL = "DELETE FROM poubelle WHERE id = ?";
+            PreparedStatement psPoubelle = connection.prepareStatement(deletePoubelleSQL);
+            psPoubelle.setInt(1, id);
+            psPoubelle.executeUpdate();
+
+            // Si tout s'est bien passé, on valide la transaction
+            connection.commit();
+        } catch (SQLException e) {
+            // En cas d'erreur, on annule toutes les opérations
+            connection.rollback();
+            throw e;
+        } finally {
+            // On remet l'autocommit à true
+            connection.setAutoCommit(true);
+        }
+    }    @Override
+    public void modifier(poubelle p) throws SQLException {
+        connection.setAutoCommit(false);
+        try {
+            String sql = "UPDATE poubelle SET centre_id = ?, adresse = ?, niveau = ?, etat = ?, date_installation = ?, " +
+                        "hauteur_totale = ?, latitude = ?, longitude = ?, revenu_genere = ? WHERE id = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, p.getId_centre());
             ps.setString(2, p.getAdresse());
             ps.setInt(3, p.getNiveau());
             ps.setString(4, p.getEtat().toString());
             ps.setDate(5, new java.sql.Date(p.getDate_installation().getTime()));
-            ps.setInt(6,p.getHauteurTotale());
-            ps.setInt(7, p.getId());
+            ps.setInt(6, p.getHauteurTotale());
+            ps.setDouble(7, p.getLatitude());
+            ps.setDouble(8, p.getLongitude());
+            ps.setDouble(9, p.getRevenu_genere());
+            ps.setInt(10, p.getId());
 
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated > 0) {
@@ -77,43 +114,43 @@ public class PoubelleRepository implements IService<poubelle>
         }
     }
 
+    // Méthode pour récupérer le nom du centre
+    public String getNomCentre(int centreId) throws SQLException {
+        String sql = "SELECT nom FROM centre WHERE id = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, centreId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getString("nom");
+        }
+        return "Centre inconnu";
+    }
 
     @Override
     public List<poubelle> recuperer() throws SQLException {
-        String sql = "SELECT * FROM poubelle";
+        List<poubelle> poubelles = new ArrayList<>();
+        String sql = "SELECT p.*, c.nom as nom_centre FROM poubelle p LEFT JOIN centre c ON p.centre_id = c.id";
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery(sql);
-
-        List<poubelle> poubelles = new ArrayList<>();
+        
         while (rs.next()) {
-            poubelle p = new poubelle(
-                    rs.getInt("id_centre"),
-                    rs.getString("adresse"),
-                    rs.getInt("niveau"),
-                    etat.valueOf(rs.getString("etat")),
-                    rs.getDate("date_installation"),
-                    rs.getInt("hauteur_totale")
-            );
+            poubelle p = new poubelle();
             p.setId(rs.getInt("id"));
+            p.setId_centre(rs.getInt("centre_id")); // Changed from id_centre to centre_id
+            p.setNomCentre(rs.getString("nom_centre")); // Nouveau champ pour le nom du centre
+            p.setAdresse(rs.getString("adresse"));
+            p.setNiveau(rs.getInt("niveau"));
+            p.setEtat(etat.fromString(rs.getString("etat")));
+            p.setDate_installation(rs.getTimestamp("date_installation"));
+            p.setHauteurTotale(rs.getInt("hauteur_totale"));
+            if (rs.getObject("latitude") != null) p.setLatitude(rs.getDouble("latitude"));
+            if (rs.getObject("longitude") != null) p.setLongitude(rs.getDouble("longitude"));
+            if (rs.getObject("revenu_genere") != null) p.setRevenu_genere(rs.getDouble("revenu_genere"));
             poubelles.add(p);
-
         }
         return poubelles;
     }
-//    public void viderPoubelle(int poubelleId) throws SQLException {
-//        CapteurRepository capteurRepo = new CapteurRepository();
-//        PoubelleRepository poubelleRepo = new PoubelleRepository();
-//
-//        // Récupérer la hauteur totale
-//        poubelle p = poubelleRepo.getById(poubelleId);
-//
-//        // Créer une mesure correspondant à une poubelle vide
-//        capteur mesureVide = new capteur(173, 42.0f, Timestamp.valueOf(LocalDateTime.now()));        mesureVide.setId_poubelle(poubelleId);
-//        mesureVide.setDistance_mesuree(p.getHauteurTotale());
-//        mesureVide.setDate_mesure( Timestamp.valueOf(LocalDateTime.now()));
-//
-//        capteurRepo.ajouter(mesureVide);
-//    }
+
 public int recupererDernierIdPoubelle() throws SQLException {
     String sql = "SELECT MAX(id) FROM poubelle";
     try (Statement stmt = connection.createStatement();
@@ -132,28 +169,24 @@ public int recupererDernierIdPoubelle() throws SQLException {
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            poubelle p = new poubelle(
-                    rs.getInt("id_centre"),
-                    rs.getString("adresse"),
-                    rs.getInt("niveau"),
-                    etat.valueOf(rs.getString("etat")),
-                    rs.getDate("date_installation"),
-                    rs.getInt("hauteur_totale")
+            return new poubelle(
+                rs.getInt("id"),
+                rs.getString("adresse"),
+                rs.getInt("niveau"),
+                etat.valueOf(rs.getString("etat")),
+                rs.getDate("date_installation"),
+                rs.getInt("hauteur_totale")  // Changed from hauteurTotale to hauteur_totale
             );
-            p.setId(rs.getInt("id"));
-            return p;
         }
         return null;
     }
-
-
     private void ajouterCapteurParDefaut(int idPoubelle, int hauteurTotale) throws SQLException {
         CapteurRepository capteurRepo = new CapteurRepository();
         capteur c = new capteur();
-        c.setId_poubelle(idPoubelle);
+        c.setPoubelle_id(idPoubelle);
         c.setDistance_mesuree(hauteurTotale); // Par défaut, la distance mesurée est égale à la hauteur totale (poubelle vide)
-        c.setPorteeMaximale(150.0f); // Valeur par défaut
-        c.setPrecision(1.0f); // Valeur par défaut
+        c.setPortee_maximale(150.0); // Valeur par défaut
+        c.setPrecision_capteur(1.0); // Valeur par défaut
         capteurRepo.ajouter(c);
     }
     public Map<String, Integer> recupererCentres() throws SQLException {
@@ -192,14 +225,14 @@ public int recupererDernierIdPoubelle() throws SQLException {
     }
 
     public Map<Integer, Float> getQuantiteDechetsParCentre() throws SQLException {
-        String sql = "SELECT id_centre, SUM(quantite_dechets) AS total_dechets " +
+        String sql = "SELECT centre_id, SUM(quantite_dechets) AS total_dechets " +
                 "FROM historique " +
-                "GROUP BY id_centre";
+                "GROUP BY centre_id";
         Map<Integer, Float> quantiteDechetsParCentre = new HashMap<>();
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                quantiteDechetsParCentre.put(rs.getInt("id_centre"), rs.getFloat("total_dechets"));
+                quantiteDechetsParCentre.put(rs.getInt("centre_id"), rs.getFloat("total_dechets"));
             }
         }
         return quantiteDechetsParCentre;
@@ -217,5 +250,4 @@ public int recupererDernierIdPoubelle() throws SQLException {
             }
 
     }
-
 }

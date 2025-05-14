@@ -4,30 +4,30 @@ public enum type {
     REMPLISSAGE("Remplissage"),
     VIDAGE("Vidage"),
     PANNE("Panne"),
-    REPARATION("Réparation");
+    REPARATION("Réparation"),
+    AJOUT_DECHETS("Ajout de déchets");
 
-    private final String displayName;
+    private final String label;
 
-    type(String displayName) {
-        this.displayName = displayName;
+    type(String label) {
+        this.label = label;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getLabel() {
+        return this.label;
+    }
+
+    public static type fromString(String text) {
+        for (type t : type.values()) {
+            if (t.label.equalsIgnoreCase(text) || t.name().equalsIgnoreCase(text)) {
+                return t;
+            }
+        }
+        throw new IllegalArgumentException("Aucun type trouvé avec le texte: " + text);
     }
 
     @Override
     public String toString() {
-        return displayName;
-    }
-
-    // Méthode pour convertir une chaîne en enum
-    public static type fromString(String text) {
-        for (type t : type.values()) {
-            if (t.displayName.equalsIgnoreCase(text)) {
-                return t;
-            }
-        }
-        throw new IllegalArgumentException("Aucun enum correspondant trouvé pour : " + text);
+        return this.label;
     }
 }

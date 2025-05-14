@@ -72,18 +72,24 @@ public class Ajouter_poubelle_controller {
             int hauteurTotale = Integer.parseInt(hauteurTotaleField.getText());
             Date dateInstallation = Date.valueOf(dateInstallationPicker.getValue());
             etat etat = etatComboBox.getValue();
-
-            float porteeMaximale = cr.getPorteeMaximale();
+            double porteeMaximale = cr.getPorteeMaximale();
             if (hauteurTotale > porteeMaximale) {
                 afficherAlerte("Erreur", "La hauteur totale ne doit pas dépasser la portée maximale du capteur (" + porteeMaximale + " cm).", Alert.AlertType.ERROR);
                 return;
-            }
-
-            poubelle p = new poubelle(idCentre, adresse, 0, etat, dateInstallation, hauteurTotale);
+            }            poubelle p = new poubelle();
+            p.setId_centre(idCentre);
+            p.setAdresse(adresse);
+            p.setNiveau(0);
+            p.setEtat(etat);
+            p.setDate_installation(dateInstallation);
+            p.setHauteurTotale(hauteurTotale);
+            p.setLatitude(0.0);
+            p.setLongitude(0.0);
+            p.setRevenu_genere(0.0);
             pr.ajouter(p);
 
             int idPoubelle = pr.recupererDernierIdPoubelle();
-            capteurp cp = new capteurp(idPoubelle, 0, new Timestamp(System.currentTimeMillis()));
+            capteurp cp = new capteurp(idPoubelle, 0.0, new Timestamp(System.currentTimeMillis()));
 
             // Utiliser le repository pour ajouter le capteur
             CapteurpRepository capteurpRepo = new CapteurpRepository();
