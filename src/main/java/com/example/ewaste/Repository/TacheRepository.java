@@ -104,7 +104,7 @@ public class TacheRepository implements IService<Tache> {
 
     public static List<String> getEmployeNames() throws SQLException {
         List<String> employeNames = new ArrayList<>();
-        String query = "SELECT first_name FROM user WHERE role = 'EMPLOYE'";
+        String query = "SELECT first_name FROM user";
 
         try (PreparedStatement ps = connection.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
