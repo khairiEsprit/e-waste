@@ -45,8 +45,8 @@ public class TraitementRepository implements IService<Traitement> {
     }
 
     @Override
-    public List<PlanificationTache> recuperer() throws SQLException {
-        return List.of();
+    public List<Traitement> recuperer() throws SQLException {
+        return afficher();
     }
 
     @Override

@@ -36,7 +36,10 @@ public class ChatBotInterface {
 
 
     PoubelleRepository pr = new PoubelleRepository();
-    String binData = pr.getLastTenPoubellesForOpenAI(1);
+    // Temporarily hardcoded bin data until the method is implemented
+    String binData = "Bin #1: 75% full, FUNCTIONAL, Tunisia, Ariana\n" +
+                     "Bin #2: 30% full, FUNCTIONAL, Tunisia, Ariana\n" +
+                     "Bin #3: 90% full, NEEDS_MAINTENANCE, Tunisia, Ariana";
     private static final String CSS_FILE = "styles/chat-style.css";
     private static final double INITIAL_WIDTH = 450;
     private static final double INITIAL_HEIGHT = 450;

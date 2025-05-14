@@ -75,7 +75,7 @@ public class HistoriquePoubelleController {
     private TableColumn<Historique_Poubelle, String> descriptionColumn;
 
     @FXML
-    private TableColumn<Historique_Poubelle, Float> quantiteDechetsColumn;
+    private TableColumn<Historique_Poubelle, Double> quantiteDechetsColumn;
 
     @FXML
     private ComboBox<type> typeFilterComboBox;
@@ -94,63 +94,97 @@ public class HistoriquePoubelleController {
     private CapteurpRepository capteurpRepository = new CapteurpRepository();
     private Timeline timeline;
     private int poubelleId; // Variable pour stocker l'ID de la poubelle
+    private boolean isInitialized = false;
 
     // Variable pour stocker la poubelle sélectionnée
 
     // Méthode pour définir la poubelle sélectionnée
     public void setSelectedPoubelle(poubelle selectedPoubelle) {
         this.selectedPoubelle = selectedPoubelle;
-        generateQRCode();
-        loadHistorique();
+        if (selectedPoubelle != null) {
+            this.poubelleId = selectedPoubelle.getId();
+            if (poubelleIdField != null) {
+                poubelleIdField.setText(String.valueOf(poubelleId));
+            }
+            if (isInitialized) {
+                Platform.runLater(() -> {
+                    generateQRCode();
+                    loadHistorique();
+                });
+            }
+        }
     }
 
     // Méthode pour obtenir la poubelle sélectionnée
     public poubelle getSelectedPoubelle() {
         return selectedPoubelle;
     }
+
     @FXML
     public void initialize() {
-         // Initialiser les colonnes du tableau
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        idPoubelleColumn.setCellValueFactory(new PropertyValueFactory<>("id_poubelle"));
-        dateEvenementColumn.setCellValueFactory(new PropertyValueFactory<>("date_evenement"));
-        typeEvenementColumn.setCellValueFactory(new PropertyValueFactory<>("type_evenement"));
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-        quantiteDechetsColumn.setCellValueFactory(new PropertyValueFactory<>("quantite_dechets"));
+        try {
+            // Initialiser les colonnes du tableau
+            idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idPoubelleColumn.setCellValueFactory(new PropertyValueFactory<>("poubelle_id"));
+            dateEvenementColumn.setCellValueFactory(new PropertyValueFactory<>("date_evenement"));
+            typeEvenementColumn.setCellValueFactory(new PropertyValueFactory<>("type_evenement"));
+            descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+            quantiteDechetsColumn.setCellValueFactory(new PropertyValueFactory<>("quantite_dechets"));
 
-        // Configuration initiale
-        loadingIndicator.setVisible(false);
-        downloadButton.setDisable(true);
-        qrCodeImageView.setVisible(false);
-        // Vérification des injections FXML
-        System.out.println("QR ImageView initialized: " + (qrCodeImageView != null));
-        System.out.println("Loading indicator: " + (loadingIndicator != null));
-        System.out.println("Download button: " + (downloadButton != null));
+            // Formattage de la colonne date
+            dateEvenementColumn.setCellFactory(column -> new TableCell<>() {
+                @Override
+                protected void updateItem(Date item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(item));
+                    }
+                }
+            });
 
+            // Configuration initiale
+            loadingIndicator.setVisible(false);
+            if (qrCodeImageView != null) qrCodeImageView.setVisible(false);
+            if (downloadButton != null) downloadButton.setDisable(true);
 
+            // Initialiser une liste vide
+            historiqueTable.setItems(FXCollections.observableArrayList());
 
-        // Style alternatif pour le ProgressIndicator
-        loadingIndicator.setStyle("-fx-progress-color: #2196F3; -fx-scale-x: 1.5; -fx-scale-y: 1.5;");
+            isInitialized = true;
 
-
-        // Charger l'historique initial
-        loadHistorique();
-
-        // Initialiser le Timeline pour exécuter une tâche toutes les 30 secondes
-        timeline = new Timeline(new KeyFrame(Duration.seconds(30), event -> {
-            try {
-                mettreAJourPoubelleAleatoire();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                Platform.runLater(() -> statusLabel.setText("Erreur lors de la mise à jour de la poubelle."));
+            // Charger l'historique initial
+            if (poubelleId > 0) {
+                loadHistorique();
             }
-        }));
-        timeline.setCycleCount(Timeline.INDEFINITE); // Répéter indéfiniment
-        timeline.play(); // Démarrer le Timeline
+
+            // Initialiser le Timeline pour exécuter une tâche toutes les 30 secondes
+            timeline = new Timeline(new KeyFrame(Duration.seconds(30), event -> {
+                try {
+                    mettreAJourPoubelleAleatoire();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    Platform.runLater(() -> statusLabel.setText("Erreur lors de la mise à jour de la poubelle."));
+                }
+            }));
+            timeline.setCycleCount(Timeline.INDEFINITE); // Répéter indéfiniment
+            timeline.play(); // Démarrer le Timeline
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Platform.runLater(() -> {
+                statusLabel.setText("Erreur d'initialisation: " + e.getMessage());
+                showError("Erreur d'initialisation", e.getMessage());
+            });
+        }
     }
+
     public void setPoubelleId(int poubelleId) {
         this.poubelleId = poubelleId; // Mettre à jour l'ID de la poubelle
-        loadHistorique(); // Charger l'historique de la poubelle
+        if (isInitialized) {
+            Platform.runLater(this::loadHistorique);
+        }
     }
 
     private void mettreAJourPoubelleAleatoire() throws SQLException {
@@ -182,14 +216,48 @@ public class HistoriquePoubelleController {
     }
 
     private void loadHistorique() {
-        try {
-            List<Historique_Poubelle> historiqueList = historiquePoubelleRepository.recupererr();
-            ObservableList<Historique_Poubelle> observableList = FXCollections.observableArrayList(historiqueList);
-            historiqueTable.setItems(observableList);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            statusLabel.setText("Erreur lors du chargement de l'historique.");
+        if (poubelleId <= 0) {
+            statusLabel.setText("Erreur: ID de poubelle invalide");
+            return;
         }
+
+        loadingIndicator.setVisible(true);
+        statusLabel.setText("Chargement de l'historique...");
+
+        Thread thread = new Thread(() -> {
+            try {
+                List<Historique_Poubelle> historiqueList = historiquePoubelleRepository.recupererParPoubelle(poubelleId);
+                Platform.runLater(() -> {
+                    try {
+                        ObservableList<Historique_Poubelle> observableList = FXCollections.observableArrayList(historiqueList);
+                        historiqueTable.setItems(observableList);
+                        statusLabel.setText("Historique chargé avec succès");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        statusLabel.setText("Erreur lors de l'affichage de l'historique");
+                    } finally {
+                        loadingIndicator.setVisible(false);
+                    }
+                });
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    statusLabel.setText("Erreur lors du chargement de l'historique: " + e.getMessage());
+                    loadingIndicator.setVisible(false);
+                    showError("Erreur de chargement", e.getMessage());
+                });
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    private void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML
@@ -334,9 +402,8 @@ public class HistoriquePoubelleController {
 
             if (file != null) {
                 try (PrintWriter writer = new PrintWriter(file)) {
-                    writer.println("ID,ID Poubelle,Date Événement,Type Événement,Description,Quantité Déchets (kg)");
-                    for (Historique_Poubelle h : historiqueList) {
-                        writer.println(h.getId() + "," + h.getId_poubelle() + "," + h.getDate_evenement() + "," +
+                    writer.println("ID,ID Poubelle,Date Événement,Type Événement,Description,Quantité Déchets (kg)");                    for (Historique_Poubelle h : historiqueList) {
+                        writer.println(h.getId() + "," + h.getPoubelle_id() + "," + h.getDate_evenement() + "," +
                                 h.getType_evenement() + "," + h.getDescription() + "," + h.getQuantite_dechets());
                     }
                     statusLabel.setText("Export CSV réussi : " + file.getAbsolutePath());
@@ -380,6 +447,7 @@ public class HistoriquePoubelleController {
             warning.show();
         }
     }
+
     @FXML
     public void handleAfficherHistorique() {
         try {
@@ -403,6 +471,7 @@ public class HistoriquePoubelleController {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void handleGemini(ActionEvent event) {
         try {
@@ -414,9 +483,10 @@ public class HistoriquePoubelleController {
             stage.showAndWait();
 
         } catch (IOException e) {
-            afficherAlerte(" Gemini erreur",e.getMessage(),Alert.AlertType.ERROR);
+            afficherAlerte(" Gemini erreur", e.getMessage(), Alert.AlertType.ERROR);
         }
     }
+
     private void afficherAlerte(String titre, String message, Alert.AlertType type) {
         Alert alerte = new Alert(type);
         alerte.setTitle(titre);
@@ -426,8 +496,6 @@ public class HistoriquePoubelleController {
         alerte.getDialogPane().setMinWidth(Region.USE_PREF_SIZE);
         alerte.showAndWait();
     }
-    // Modifiez la méthode generateQRCode
-
 
     private void generateQRCode() {
         if (selectedPoubelle == null) return;

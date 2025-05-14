@@ -6,6 +6,8 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -57,25 +59,32 @@
         <center>
             <VBox spacing="15" styleClass="content">
                 <HBox spacing="10" alignment="CENTER_LEFT" styleClass="list-header">
-                    <HBox spacing="5" alignment="CENTER_LEFT">
-                        <TextField fx:id="searchField" promptText="Rechercher..." styleClass="task-name"/>
-                        <ImageView fitHeight="20" fitWidth="20">
-                            <Image url="@../assets/logo.png"/>
-                        </ImageView>
-                    </HBox>
-                    <HBox spacing="5" alignment="CENTER_LEFT">
-                        <ComboBox fx:id="sortComboBox" promptText="Trier par" styleClass="status-inprogress"/>
-                        <ImageView fitHeight="20" fitWidth="20">
-                            <Image url="@../assets/logo.png"/>
-                        </ImageView>
-                    </HBox>
+                    <TextField fx:id="searchField" promptText="Rechercher..." styleClass="task-name"/>                    
+                    <ComboBox fx:id="sortComboBox" promptText="Trier par" styleClass="status-inprogress">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="ID"/>
+                                <String fx:value="Date"/>
+                                <String fx:value="Niveau"/>
+                                <String fx:value="État"/>
+                                <String fx:value="Hauteur"/>
+                                <String fx:value="Revenu"/>
+                                <String fx:value="Centre"/>
+                                <String fx:value="Position"/>
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label fx:id="statusLabel" styleClass="status-label" text="" wrapText="true"/>
                 </HBox>
 
                 <!-- Liste des poubelles -->
-                <ListView fx:id="listPoubelles" styleClass="task-list" prefHeight="500"/>
+                <ListView fx:id="listPoubelles" styleClass="task-list" VBox.vgrow="ALWAYS"/>
 
                 <!-- Pagination -->
-                <Pagination fx:id="pagination" styleClass="pagination" />
+                <Pagination fx:id="pagination" styleClass="pagination"/>
             </VBox>
         </center>
     </BorderPane>

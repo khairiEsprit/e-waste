@@ -3,26 +3,49 @@ import java.util.Date;
 
 public class poubelle {
     private int id;
-    private int id_centre;
+    private int centre_id;
+    private String nomCentre;
     private String adresse;
     private int niveau;
     private etat etat;
     private Date date_installation;
+    private int hauteur_totale;
+    private double latitude;
+    private double longitude;
+    private double revenu_genere;
     private int hauteurTotale;
+
+    // Constructors
     public poubelle() {}
 
-    public poubelle(int id,int id_centre, String adresse, int niveau, etat etat, Date date_installation, int hauteurTotale) {
+    public poubelle(int id, int centre_id, String nomCentre, String adresse, int niveau, etat etat, 
+                   Date date_installation, int hauteur_totale, double latitude, 
+                   double longitude, double revenu_genere) {
         this.id = id;
-        this.id_centre = id_centre;
+        this.centre_id = centre_id;
+        this.nomCentre = nomCentre;
         this.adresse = adresse;
         this.niveau = niveau;
         this.etat = etat;
         this.date_installation = date_installation;
-        this.hauteurTotale = hauteurTotale;
+        this.hauteur_totale = hauteur_totale;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.revenu_genere = revenu_genere;
     }
 
-    public poubelle(int id_centre, String adresse, int niveau, etat etat, Date date_installation, int hauteurTotale) {
-        this.id_centre = id_centre;
+    public poubelle(int centre_id, String nomCentre, String adresse, int niveau, etat etat, Date date_installation, int hauteur_totale) {
+        this.centre_id = centre_id;
+        this.nomCentre = nomCentre;
+        this.adresse = adresse;
+        this.niveau = niveau;
+        this.etat = etat;
+        this.date_installation = date_installation;
+        this.hauteur_totale = hauteur_totale;
+    }
+
+    public poubelle(int id, String adresse, int niveau, etat etat, Date date_installation, int hauteurTotale) {
+        this.id = id;
         this.adresse = adresse;
         this.niveau = niveau;
         this.etat = etat;
@@ -39,11 +62,19 @@ public class poubelle {
     }
 
     public int getId_centre() {
-        return id_centre;
+        return centre_id;
     }
 
-    public void setId_centre(int id_centre) {
-        this.id_centre = id_centre;
+    public void setId_centre(int centre_id) {
+        this.centre_id = centre_id;
+    }
+
+    public String getNomCentre() {
+        return nomCentre;
+    }
+
+    public void setNomCentre(String nomCentre) {
+        this.nomCentre = nomCentre;
     }
 
     public String getAdresse() {
@@ -81,27 +112,66 @@ public class poubelle {
     public int getHauteurTotale() {
         return hauteurTotale;
     }
+
     public void setHauteurTotale(int hauteurTotale) {
         this.hauteurTotale = hauteurTotale;
+    }
+
+    public int getHauteurTotaleOld() {
+        return hauteur_totale;
+    }
+
+    public void setHauteurTotaleOld(int hauteur_totale) {
+        this.hauteur_totale = hauteur_totale;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getRevenu_genere() {
+        return revenu_genere;
+    }
+
+    public void setRevenu_genere(double revenu_genere) {
+        this.revenu_genere = revenu_genere;
     }
 
     @Override
     public String toString() {
         return "poubelle{" +
                 "id=" + id +
-                ", id_centre=" + id_centre +
+                ", centre_id=" + centre_id +
+                ", nomCentre='" + nomCentre + '\'' +
                 ", adresse='" + adresse + '\'' +
                 ", niveau=" + niveau +
                 ", etat=" + etat +
                 ", date_installation=" + date_installation +
+                ", hauteur_totale=" + hauteur_totale +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", revenu_genere=" + revenu_genere +
                 ", hauteurTotale=" + hauteurTotale +
                 '}';
     }
+
     public void mettreAJourNiveauRemplissage(float distanceMesuree) {
-        if (hauteurTotale <= 0) {
+        if (hauteur_totale <= 200) {
             throw new IllegalArgumentException("La hauteur totale doit être supérieure à 0");
         }
-        this.niveau = (int) (((hauteurTotale - distanceMesuree) / hauteurTotale) * 100);
+        this.niveau = (int) (((hauteur_totale - distanceMesuree) / hauteur_totale) * 100);
     }
 
     public void verifierSeuilCritique() {

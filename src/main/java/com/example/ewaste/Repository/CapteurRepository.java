@@ -17,31 +17,48 @@ public class CapteurRepository implements IService<capteur> {
 
     public CapteurRepository (){
         connection = DataBase.getInstance().getConnection();
-    }
-    @Override
+    }    @Override
     public void ajouter(capteur c) throws SQLException {
-        // 1. Enregistrer la mesure du capteur
-        String sql = "INSERT INTO capteur (id_poubelle, distance_mesuree, date_mesure, porteeMaximale, precision_capteur) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, c.getId_poubelle());
-        ps.setFloat(2, c.getDistance_mesuree());
-        ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-        ps.setFloat(4, c.getPorteeMaximale());
-        ps.setFloat(5, c.getPrecision());
-        ps.executeUpdate();
+        // First try to find if there's an existing record for this poubelle
+        String checkSql = "SELECT id_c FROM capteur WHERE poubelle_id = ?";
+        PreparedStatement checkPs = connection.prepareStatement(checkSql);
+        checkPs.setInt(1, c.getPoubelle_id());
+        ResultSet rs = checkPs.executeQuery();
 
-        // 2. Calculer et mettre à jour le niveau de la poubelle
+        if (rs.next()) {
+            // Record exists, update it
+            String updateSql = "UPDATE capteur SET distance_mesuree = ?, date_mesure = ?, " +
+                             "portee_maximale = ?, precision_capteur = ? WHERE poubelle_id = ?";
+            PreparedStatement updatePs = connection.prepareStatement(updateSql);
+            updatePs.setDouble(1, c.getDistance_mesuree());
+            updatePs.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            updatePs.setDouble(3, c.getPortee_maximale());
+            updatePs.setDouble(4, c.getPrecision_capteur());
+            updatePs.setInt(5, c.getPoubelle_id());
+            updatePs.executeUpdate();
+        } else {
+            // Record doesn't exist, insert new one
+            String insertSql = "INSERT INTO capteur (poubelle_id, distance_mesuree, date_mesure, " +
+                             "portee_maximale, precision_capteur) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement insertPs = connection.prepareStatement(insertSql);
+            insertPs.setInt(1, c.getPoubelle_id());
+            insertPs.setDouble(2, c.getDistance_mesuree());
+            insertPs.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            insertPs.setDouble(4, c.getPortee_maximale());
+            insertPs.setDouble(5, c.getPrecision_capteur());
+            insertPs.executeUpdate();
+        }
+
+        // Mettre à jour le niveau de la poubelle
         PoubelleRepository poubelleRepo = new PoubelleRepository();
-        poubelle p = poubelleRepo.getById(c.getId_poubelle());
-
-        if (p != null) {
-            int niveau = (int) ((p.getHauteurTotale() - c.getDistance_mesuree()) / p.getHauteurTotale() * 100);
-            niveau = Math.max(0, Math.min(100, niveau)); // Contrainte 0-100%
+        poubelle p = poubelleRepo.getById(c.getPoubelle_id());
+          if (p != null) {
+            int niveau = (int) ((p.getHauteurTotale() - c.getDistance_mesuree())
+                               / p.getHauteurTotale() * 100);
+            niveau = Math.max(0, Math.min(100, niveau));
 
             p.setNiveau(niveau);
             poubelleRepo.modifier(p);
-
-            // 3. Vérifier les seuils et notifier
             checkSeuils(p);
         }
     }
@@ -53,10 +70,11 @@ public class CapteurRepository implements IService<capteur> {
             System.out.println("📩 Notification : Poubelle " + p.getId() + " à " + p.getNiveau() + "%");
         }
     }
+
     // Méthode pour simuler la mesure du niveau de remplissage
     public void simulerMesureNiveauRemplissage() throws SQLException {
         PoubelleRepository poubelleRepo = new PoubelleRepository();
-        List<poubelle> poubelles = poubelleRepo.recupererr();
+        List<poubelle> poubelles = poubelleRepo.recuperer();
 
         if (poubelles.isEmpty()) {
             System.out.println("Aucune poubelle trouvée dans la base de données.");
@@ -73,17 +91,12 @@ public class CapteurRepository implements IService<capteur> {
             return;
         }
 
-        // Choisir une poubelle fonctionnelle aléatoirement
         Random random = new Random();
         poubelle poubelleAleatoire = poubellesFonctionnelles.get(random.nextInt(poubellesFonctionnelles.size()));
 
-        // Générer une distance mesurée aléatoire entre 0 et la hauteur totale de la poubelle
         int hauteurTotale = poubelleAleatoire.getHauteurTotale();
-        float distanceMesuree = random.nextFloat() * hauteurTotale;
-
-        // Créer une nouvelle mesure de capteur
-        capteur nouvelleMesure = new capteur();
-        nouvelleMesure.setId_poubelle(poubelleAleatoire.getId());
+        float distanceMesuree = random.nextFloat() * hauteurTotale;        capteur nouvelleMesure = new capteur();
+        nouvelleMesure.setPoubelle_id(poubelleAleatoire.getId());
         nouvelleMesure.setDistance_mesuree(distanceMesuree);
         nouvelleMesure.setDate_mesure(Timestamp.valueOf(LocalDateTime.now()));
 
@@ -95,6 +108,7 @@ public class CapteurRepository implements IService<capteur> {
         System.out.println("Poubelle ID: " + poubelleAleatoire.getId() +
                 ", Niveau de remplissage: " + niveauRemplissage + "%");
     }
+
     @Override
     public void supprimer(int id_c) throws SQLException {
         String sql = "DELETE FROM capteur WHERE id_c = ?";
@@ -115,35 +129,23 @@ public class CapteurRepository implements IService<capteur> {
 
     @Override
     public void modifier(capteur c) throws SQLException {
-        try {
-            String sql = "UPDATE capteur SET id_poubelle = ?, distance_mesuree = ?, date_mesure = ?, porteeMaximale = ?, precision_capteur = ? WHERE id_c = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, c.getId_poubelle());
-            ps.setFloat(2, c.getDistance_mesuree());
-            ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-            ps.setFloat(4, c.getPorteeMaximale());
-            ps.setFloat(5, c.getPrecision()); // Utilisez le bon nom de colonne
-            ps.setInt(6, c.getId_c());
+        String sql = "UPDATE capteur SET poubelle_id = ?, distance_mesuree = ?, " +
+                     "date_mesure = ?, portee_maximale = ?, precision_capteur = ? " +
+                     "WHERE id_c = ?";
 
-            int rowsUpdated = ps.executeUpdate();
-            if (rowsUpdated > 0) {
-                System.out.println("Le capteur a été modifié avec succès.");
-            } else {
-                System.out.println("Aucun capteur trouvé avec l'ID spécifié.");
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la modification du capteur : " + e.getMessage());
-            throw e;
-        }
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, c.getPoubelle_id());
+        ps.setDouble(2, c.getDistance_mesuree());
+        ps.setTimestamp(3, c.getDate_mesure());
+        ps.setDouble(4, c.getPortee_maximale());
+        ps.setDouble(5, c.getPrecision_capteur());
+        ps.setInt(6, c.getId_c());
+
+        ps.executeUpdate();
     }
 
     @Override
-    public List<PlanificationTache> recuperer() throws SQLException {
-        return List.of();
-    }
-
-
-    public List<capteur> recupererr() throws SQLException {
+    public List<capteur> recuperer() throws SQLException {
         String sql = "SELECT * FROM capteur";
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery(sql);
@@ -151,28 +153,31 @@ public class CapteurRepository implements IService<capteur> {
         List<capteur> capteurs = new ArrayList<>();
         while (rs.next()) {
             capteur c = new capteur(
-                    rs.getInt("id_c"),
-                    rs.getInt("id_poubelle"),
-                    rs.getFloat("Distance_mesuree"),
-                    rs.getTimestamp("Date_mesure"),
-                    rs.getFloat("porteeMaximale"),
-                    rs.getFloat("precision_capteur")
+                rs.getInt("id_c"),
+                rs.getInt("poubelle_id"),
+                rs.getDouble("distance_mesuree"),
+                rs.getTimestamp("date_mesure"),
+                rs.getDouble("portee_maximale"),
+                rs.getDouble("precision_capteur")
             );
-            c.setDistance_mesuree(rs.getInt("id_c"));
             capteurs.add(c);
-
         }
         return capteurs;
     }
 
-    public float getPorteeMaximale() throws SQLException {
-        String sql = "SELECT porteeMaximale FROM capteur LIMIT 1"; // Récupérer la portée maximale du capteur
+    public double getPorteeMaximale() throws SQLException {
+        String sql = "SELECT portee_maximale FROM capteur LIMIT 1";
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery(sql);
 
         if (rs.next()) {
-            return rs.getFloat("porteeMaximale");
+            double porteeMaximale = rs.getDouble("portee_maximale");
+            // If the value from the database is 0 or negative, return the default value
+            if (porteeMaximale <= 0) {
+                return 150.0; // Valeur par défaut
+            }
+            return porteeMaximale;
         }
-        return 150.0f; // Valeur par défaut si aucune donnée n'est trouvée
+        return 150.0; // Valeur par défaut si aucun capteur n'est trouvé
     }
 }

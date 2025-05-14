@@ -104,42 +104,54 @@ public class Modifier_Poubelle {
             etatComboBox.setValue(selectedPoubelle.getEtat().toString());
 
             // Charger les données du capteur associé à la poubelle
-            try {
-                selectedCapteur = capteurRepo.recupererr().stream()
-                        .filter(c -> c.getId_poubelle() == selectedPoubelle.getId())
+            try {                selectedCapteur = capteurRepo.recuperer().stream()
+                        .filter(c -> c.getPoubelle_id() == selectedPoubelle.getId())
                         .findFirst()
                         .orElse(null);
 
                 if (selectedCapteur != null) {
                     distanceMesureeField.setText(String.valueOf(selectedCapteur.getDistance_mesuree()));
-                    porteeMaximaleField.setText(String.valueOf(selectedCapteur.getPorteeMaximale()));
-                    precisionCapteurField.setText(String.valueOf(selectedCapteur.getPrecision()));
+                    porteeMaximaleField.setText(String.valueOf(selectedCapteur.getPortee_maximale()));
+                    precisionCapteurField.setText(String.valueOf(selectedCapteur.getPrecision_capteur()));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
                 showAlert("Erreur", "Erreur lors de la récupération des données du capteur : " + e.getMessage(), Alert.AlertType.ERROR);
             }
         }
-    }
-
-    @FXML
+    }    @FXML
     private void handleConfirm() {
-        if (selectedPoubelle != null && selectedCapteur != null) {
+        if (selectedPoubelle != null) {
             try {
+                // Valider les entrées
+                if (centreComboBox.getValue() == null || adresseField.getText().isEmpty() || 
+                    hauteurTotaleField.getText().isEmpty() || etatComboBox.getValue() == null) {
+                    showAlert("Erreur de validation", "Veuillez remplir tous les champs obligatoires.", Alert.AlertType.ERROR);
+                    return;
+                }
+
                 // Mettre à jour la poubelle
                 String nomCentre = centreComboBox.getValue();
-                int idCentre = centresMap.get(nomCentre); // Récupérer l'ID du centre sélectionné
+                int idCentre = centresMap.get(nomCentre);
                 selectedPoubelle.setId_centre(idCentre);
                 selectedPoubelle.setAdresse(adresseField.getText());
+                selectedPoubelle.setHauteurTotale(Integer.parseInt(hauteurTotaleField.getText()));
                 selectedPoubelle.setEtat(etat.valueOf(etatComboBox.getValue()));
                 poubelleRepo.modifier(selectedPoubelle);
 
-                // Mettre à jour le capteur
-                selectedCapteur.setDistance_mesuree(Float.parseFloat(distanceMesureeField.getText()));
-                selectedCapteur.setPorteeMaximale(Float.parseFloat(porteeMaximaleField.getText()));
-                selectedCapteur.setPrecision(Float.parseFloat(precisionCapteurField.getText()));
-                selectedCapteur.setDate_mesure(Timestamp.valueOf(LocalDateTime.now()));
-                capteurRepo.modifier(selectedCapteur);
+                // Mettre à jour le capteur si présent
+                if (selectedCapteur != null) {
+                    try {
+                        selectedCapteur.setDistance_mesuree(Double.parseDouble(distanceMesureeField.getText()));
+                        selectedCapteur.setPortee_maximale(Double.parseDouble(porteeMaximaleField.getText()));
+                        selectedCapteur.setPrecision_capteur(Double.parseDouble(precisionCapteurField.getText()));
+                        selectedCapteur.setDate_mesure(Timestamp.valueOf(LocalDateTime.now()));
+                        capteurRepo.modifier(selectedCapteur);
+                    } catch (NumberFormatException e) {
+                        showAlert("Erreur de validation", "Les valeurs du capteur doivent être des nombres valides.", Alert.AlertType.ERROR);
+                        return;
+                    }
+                }
 
                 // Afficher un message de confirmation
                 showAlert("Succès", "La poubelle et le capteur ont été modifiés avec succès.", Alert.AlertType.INFORMATION);

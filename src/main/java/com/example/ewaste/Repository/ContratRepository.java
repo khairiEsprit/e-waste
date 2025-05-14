@@ -46,8 +46,8 @@ public class ContratRepository implements IService<Contrat> {
     }
 
     @Override
-    public List<PlanificationTache> recuperer() throws SQLException {
-        return List.of();
+    public List<Contrat> recuperer() throws SQLException {
+        return afficher();
     }
 
     @Override

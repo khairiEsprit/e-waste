@@ -46,8 +46,8 @@ public class CentreRepository implements IService<Centre> {
     }
 
     @Override
-    public List<PlanificationTache> recuperer() throws SQLException {
-        return List.of();
+    public List<Centre> recuperer() throws SQLException {
+        return afficher();
     }
 
     @Override

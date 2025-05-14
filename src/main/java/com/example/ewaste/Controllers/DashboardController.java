@@ -327,14 +327,17 @@ private final WebViewMapBox map = new WebViewMapBox();
 
 
     public void displayPoubellesAndRoute(int CENTER_ID) {
-        // Fetch center location and poubelles
-        List<poubelleK> poubelleBins = pr.getPoubellesByCenter(CENTER_ID);
-        float[] centerLocation;
-        try {
-            centerLocation = ctr.getLatitudeLongitude(CENTER_ID);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        // Temporarily hardcoded data until the method is implemented
+        List<poubelleK> poubelleBins = new ArrayList<>();
+        // Add some sample bins
+        poubelleK bin1 = new poubelleK(1, 36.8065, 10.1815, 75, true, 1);
+        poubelleK bin2 = new poubelleK(2, 36.8075, 10.1825, 30, true, 1);
+        poubelleK bin3 = new poubelleK(3, 36.8085, 10.1835, 90, true, 1);
+        poubelleBins.add(bin1);
+        poubelleBins.add(bin2);
+        poubelleBins.add(bin3);
+
+        float[] centerLocation = new float[]{36.8055f, 10.1805f};
 
         // Update Map: Mark the center and each poubelle on the map (as already implemented)
         map.addCustomMarker(centerLocation[0], centerLocation[1], "black", true, "Center of Ariana");

@@ -52,8 +52,8 @@ public class DemandeRepository implements IService<Demande> {
     }
 
     @Override
-    public List<PlanificationTache> recuperer() throws SQLException {
-        return List.of();
+    public List<Demande> recuperer() throws SQLException {
+        return afficher();
     }
 
     @Override
