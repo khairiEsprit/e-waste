@@ -7,9 +7,12 @@ import java.sql.SQLException;
 
 public class DataBase {
 
+    // Local database connection
     private static final String URL = "jdbc:mysql://localhost:3306/symfonymaindatabase";
     private static final String USER = "root";
     private static final String PSW = "";
+
+    // Remote database connection (based on user memory)
     // private static final String URL = "jdbc:mysql://172.18.5.39:3306/symfonymaindatabase";
     // private static final String USER = "khairi";
     // private static final String PSW = "root";

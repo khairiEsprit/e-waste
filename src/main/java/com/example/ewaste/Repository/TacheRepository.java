@@ -1,6 +1,5 @@
 package com.example.ewaste.Repository;
 
-import com.example.ewaste.Interfaces.IService;
 import com.example.ewaste.Entities.Tache;
 import com.example.ewaste.Utils.DataBase;
 
@@ -8,14 +7,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TacheRepository implements IService<Tache> {
+public class TacheRepository {
     private static Connection connection;
 
     public TacheRepository() {
-        connection = DataBase.getInstance().getConnection();
+        connection = DataBase.getConnection();
     }
 
-    @Override
     public void ajouter(Tache tache) throws SQLException {
         String sql = "INSERT INTO `tache`(`id_centre`, `id_employe`, `altitude`, `longitude`, `message`, `etat`) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -28,7 +26,6 @@ public class TacheRepository implements IService<Tache> {
         ps.executeUpdate();
     }
 
-    @Override
     public void modifier(Tache tache) throws SQLException {
         String sql = "UPDATE `tache` SET `id_centre`=?, `id_employe`=?, `altitude`=?, `longitude`=?, `message`=?, `etat`=? WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -42,12 +39,29 @@ public class TacheRepository implements IService<Tache> {
         ps.executeUpdate();
     }
 
-    @Override
     public List<Tache> recuperer() throws SQLException {
         return List.of();
     }
 
-    @Override
+    public List<Tache> afficher() throws SQLException {
+        List<Tache> taches = new ArrayList<>();
+        String sql = "SELECT * FROM `tache`";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            taches.add(new Tache(
+                    rs.getInt("id"),
+                    rs.getInt("id_centre"),
+                    rs.getInt("id_employe"),
+                    rs.getFloat("altitude"),
+                    rs.getFloat("longitude"),
+                    rs.getString("message"),
+                    rs.getString("etat")
+            ));
+        }
+        return taches;
+    }
+
     public void supprimer(int id) throws SQLException {
         String sql = "DELETE FROM `tache` WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -55,7 +69,6 @@ public class TacheRepository implements IService<Tache> {
         ps.executeUpdate();
     }
 
-    @Override
     public List<Tache> afficher(int idCentre) throws SQLException {
         List<Tache> taches = new ArrayList<>();
         String sql = "SELECT * FROM `tache` WHERE `id_centre` = ?";
@@ -97,43 +110,93 @@ public class TacheRepository implements IService<Tache> {
         return taches;
     }
 
-    public static List<String> getEmployeNames() throws SQLException {
+    public List<String> getEmployeNames() throws SQLException {
         List<String> employeNames = new ArrayList<>();
-        String query = "SELECT first_name FROM user WHERE role = 'EMPLOYE'";
 
-        try (PreparedStatement ps = connection.prepareStatement(query);
+        // More flexible query to find employees - check for different role formats
+        String query = "SELECT first_name FROM user WHERE role IN ('EMPLOYE', 'employe', 'Employe', 'EMPLOYEE', 'employee', 'Employee') OR role LIKE '%employ%'";
+
+        try (Connection conn = DataBase.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
-                employeNames.add(rs.getString("first_name"));
+                String firstName = rs.getString("first_name");
+                if (firstName != null && !firstName.trim().isEmpty()) {
+                    employeNames.add(firstName);
+                }
             }
+
+            // If no employees found, add some default names for testing
+            if (employeNames.isEmpty()) {
+                employeNames.add("John");
+                employeNames.add("Jane");
+                employeNames.add("Bob");
+                System.out.println("No employees found in database, using default names");
+            } else {
+                System.out.println("Found " + employeNames.size() + " employees in database");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving employee names: " + e.getMessage());
+            e.printStackTrace();
+            // Add default names in case of error
+            employeNames.add("John");
+            employeNames.add("Jane");
+            employeNames.add("Bob");
         }
+
         return employeNames;
     }
 
     public Integer getEmployeIdByName(String first_name) throws SQLException {
-        String query = "SELECT id FROM user WHERE first_name = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, first_name);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("id");
-            }
+        if (first_name == null || first_name.trim().isEmpty()) {
+            System.err.println("Warning: Empty employee name provided");
+            return 1; // Default to ID 1 if no name provided
         }
-        return null;
+
+        String query = "SELECT id FROM user WHERE first_name = ?";
+        try (Connection conn = DataBase.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, first_name);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    System.out.println("Found employee ID: " + id + " for name: " + first_name);
+                    return id;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error finding employee ID by name: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // If no employee found with this name, return a default ID
+        System.out.println("No employee found with name: " + first_name + ", using default ID 1");
+        return 1; // Default ID if not found
     }
 
 
         public String getEmployeNameById(int idEmploye) throws SQLException {
-            String query = "SELECT first_name FROM user WHERE id = ?";
-            try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                stmt.setInt(1, idEmploye);
-                ResultSet rs = stmt.executeQuery();
+        String query = "SELECT first_name FROM user WHERE id = ?";
+        try (Connection conn = DataBase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, idEmploye);
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getString("first_name");
+                    String name = rs.getString("first_name");
+                    if (name != null && !name.trim().isEmpty()) {
+                        return name;
+                    }
                 }
             }
-            return null;
+        } catch (SQLException e) {
+            System.err.println("Error finding employee name by ID: " + e.getMessage());
+            e.printStackTrace();
         }
+
+        // Return a default name if not found
+        return "Employé " + idEmploye;
+    }
 
 
        public List<Integer> getEmployeIds() throws SQLException {

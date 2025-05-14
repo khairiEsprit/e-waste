@@ -123,7 +123,7 @@ public class ControllerPageTaches implements Initializable {
 
             try {
                 // Charger les tâches une seule fois
-                ObservableList<Tache> allTasks = FXCollections.observableArrayList(serviceTache.afficherr(1));
+                ObservableList<Tache> allTasks = FXCollections.observableArrayList(serviceTache.afficher(1));
 
                 // Créer un FilteredList à partir des tâches
                 filteredData = new FilteredList<>(allTasks, tache -> true);
@@ -443,7 +443,7 @@ public class ControllerPageTaches implements Initializable {
     }
 
     private void loadTableData() throws SQLException {
-        ObservableList<Tache> allTasks = FXCollections.observableArrayList(serviceTache.afficherr(1));
+        ObservableList<Tache> allTasks = FXCollections.observableArrayList(serviceTache.afficher(1));
         filteredData = new FilteredList<>(allTasks, tache -> true);
         tableTaches.setItems(filteredData);
     }
@@ -467,10 +467,17 @@ public class ControllerPageTaches implements Initializable {
 
     private void loadComboEmploye(ComboBox<String> comboBox) {
         try {
-            List<String> employeNames = TacheRepository.getEmployeNames();
+            // Use the instance method on serviceTache instead of the static method
+            List<String> employeNames = serviceTache.getEmployeNames();
             comboBox.setItems(FXCollections.observableArrayList(employeNames));
+
+            // If the list is empty, show an alert
+            if (employeNames.isEmpty()) {
+                showAlert("Avertissement", "Aucun employé trouvé dans la base de données.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger la liste des employés: " + e.getMessage());
         }
     }
 
