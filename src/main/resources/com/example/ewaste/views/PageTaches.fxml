@@ -42,7 +42,7 @@
                      <TableColumn fx:id="colId" prefWidth="50.0" styleClass="table-column" text="ID" />
                      <TableColumn fx:id="colEmploye" prefWidth="150.0" styleClass="table-column" text="Nom Employé" />
                      <TableColumn fx:id="colMessage" prefWidth="323.20001220703125" styleClass="table-column" text="Message" />
-                     <!-- Remplacez les colonnes latitude/longitude par une colonne adresse -->
+                     <!-- Remplacez les colonnes altitude/longitude par une colonne adresse -->
                      <TableColumn fx:id="colAdresse" prefWidth="248.7999267578125" styleClass="table-column" text="Adresse" />
                      <TableColumn fx:id="colEtat" prefWidth="96.0" styleClass="table-column" text="État" />
                   </columns>

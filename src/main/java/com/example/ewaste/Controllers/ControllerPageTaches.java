@@ -66,7 +66,7 @@ public class ControllerPageTaches implements Initializable {
     // Add dialog elements
     @FXML private ComboBox<String> comboEmployeAjout;
     @FXML private TextField fieldMessageAjout;
-    @FXML private TextField fieldLatitudeAjout;
+    @FXML private TextField fieldAltitudeAjout;
     @FXML private TextField fieldLongitudeAjout;
     @FXML private ComboBox<String> comboEtatAjout;
     @FXML private WebView mapAjout;
@@ -76,7 +76,7 @@ public class ControllerPageTaches implements Initializable {
     // Modify dialog elements
     @FXML private ComboBox<String> comboEmployeModif;
     @FXML private TextField fieldMessageModif;
-    @FXML private TextField fieldLatitudeModif;
+    @FXML private TextField fieldAltitudeModif;
     @FXML private TextField fieldLongitudeModif;
     @FXML private ComboBox<String> comboEtatModif;
     @FXML private WebView mapModif;
@@ -86,11 +86,11 @@ public class ControllerPageTaches implements Initializable {
     private WebEngine webEngineMain;
     private WebEngine webEngineAjout;
     private WebEngine webEngineModif;
-    private double selectedLatitudeMain = 36.8065;
+    private double selectedAltitudeMain = 36.8065;
     private double selectedLongitudeMain = 10.1815;
-    private double selectedLatitudeAjout = 36.8065;
+    private double selectedAltitudeAjout = 36.8065;
     private double selectedLongitudeAjout = 10.1815;
-    private double selectedLatitudeModif;
+    private double selectedAltitudeModif;
     private double selectedLongitudeModif;
     private Tache selectedTache;
     private FilteredList<Tache> filteredData;
@@ -116,7 +116,7 @@ public class ControllerPageTaches implements Initializable {
             colAdresse.setCellValueFactory(param -> {
                 Tache tache = param.getValue();
                 return new SimpleStringProperty(
-                        getAddressFromCoordinates(tache.getLatitude(), tache.getLongitude())
+                        getAddressFromCoordinates(tache.getAltitude(), tache.getLongitude())
                 );
             });
             colEtat.setCellValueFactory(new PropertyValueFactory<>("etat"));
@@ -126,14 +126,14 @@ public class ControllerPageTaches implements Initializable {
                 ObservableList<Tache> allTasks = FXCollections.observableArrayList(serviceTache.afficherr(1));
 
                 // Créer un FilteredList à partir des tâches
-                filteredData = new FilteredList<>(allTasks, tache -> true); // Affiche tout par défaut
+                filteredData = new FilteredList<>(allTasks, tache -> true);
 
                 // Lier le FilteredList à la TableView
                 tableTaches.setItems(filteredData);
 
                 // Initialiser la carte et la température
                 initMapMain();
-                updateTemperature(selectedLatitudeMain, selectedLongitudeMain);
+                updateTemperature(selectedAltitudeMain, selectedLongitudeMain);
 
                 // Configurer le filtrage
                 setupSearch();
@@ -146,10 +146,10 @@ public class ControllerPageTaches implements Initializable {
             tableTaches.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
                 if (newValue != null) {
                     selectedTache = newValue;
-                    selectedLatitudeMain = newValue.getLatitude();
+                    selectedAltitudeMain = newValue.getAltitude();
                     selectedLongitudeMain = newValue.getLongitude();
-                    updateMapMain(selectedLatitudeMain, selectedLongitudeMain);
-                    updateTemperature(selectedLatitudeMain, selectedLongitudeMain);
+                    updateMapMain(selectedAltitudeMain, selectedLongitudeMain);
+                    updateTemperature(selectedAltitudeMain, selectedLongitudeMain);
                 } else {
                     selectedTache = null;
                 }
@@ -204,7 +204,7 @@ public class ControllerPageTaches implements Initializable {
                 if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
                     controller.initModifData(selectedTache);
                     // Set the initial coordinates
-                    controller.setCoordinates(selectedTache.getLatitude(), selectedTache.getLongitude());
+                    controller.setCoordinates(selectedTache.getAltitude(), selectedTache.getLongitude());
                 }
             });
 
@@ -227,7 +227,7 @@ public class ControllerPageTaches implements Initializable {
             if (response == ButtonType.YES) {
                 try {
                     String nomEmploye = comboEmployeAjout.getValue();
-                    float latitude = Float.parseFloat(fieldLatitudeAjout.getText());
+                    float altitude = Float.parseFloat(fieldAltitudeAjout.getText());
                     float longitude = Float.parseFloat(fieldLongitudeAjout.getText());
                     String message = fieldMessageAjout.getText();
                     String etat = comboEtatAjout.getValue();
@@ -238,12 +238,12 @@ public class ControllerPageTaches implements Initializable {
                     }
 
                     Integer idEmploye = serviceTache.getEmployeIdByName(nomEmploye);
-                    Tache nouvelleTache = new Tache(1, idEmploye, latitude, longitude, message, etat);
+                    Tache nouvelleTache = new Tache(1, idEmploye, altitude, longitude, message, etat);
                     serviceTache.ajouter(nouvelleTache);
 
                     String recipientEmail = serviceTache.getEmployeEmailById(idEmploye);
                     String subject = "[Tâche Affectée] Nouvelle Tâche Assignée";
-                    String googleMapsLink = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+                    String googleMapsLink = "https://www.google.com/maps?q=" + altitude + "," + longitude;
                     String emailMessage = "Bonjour " + nomEmploye + ",\n\n" +
                             "Nous vous informons qu'une nouvelle tâche vous a été assignée dans le cadre de vos responsabilités :\n\n" +
                             "Description de la tâche : " + message + "\n\n" +
@@ -276,7 +276,7 @@ public class ControllerPageTaches implements Initializable {
                     int employeID = serviceTache.getEmployeIdByName(comboEmployeModif.getValue());
                     String message = fieldMessageModif.getText();
                     String etat = comboEtatModif.getValue();
-                    float latitude = Float.parseFloat(fieldLatitudeModif.getText());
+                    float altitude = Float.parseFloat(fieldAltitudeModif.getText());
                     float longitude = Float.parseFloat(fieldLongitudeModif.getText());
 
                     if (message.isEmpty() || etat.isEmpty()) {
@@ -285,7 +285,7 @@ public class ControllerPageTaches implements Initializable {
                     }
 
                     selectedTache.setId_employe(employeID);
-                    selectedTache.setLatitude(latitude);
+                    selectedTache.setAltitude(altitude);
                     selectedTache.setLongitude(longitude);
                     selectedTache.setMessage(message);
                     selectedTache.setEtat(etat);
@@ -365,7 +365,7 @@ public class ControllerPageTaches implements Initializable {
                 if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
                     JSObject window = (JSObject) webEngineMain.executeScript("window");
                     window.setMember("javaApp", this);
-                    updateMapMain(selectedLatitudeMain, selectedLongitudeMain);
+                    updateMapMain(selectedAltitudeMain, selectedLongitudeMain);
                 }
             });
         } else {
@@ -382,7 +382,7 @@ public class ControllerPageTaches implements Initializable {
                 if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
                     JSObject window = (JSObject) webEngineAjout.executeScript("window");
                     window.setMember("javaApp", this);
-                    updateMapAjout(selectedLatitudeAjout, selectedLongitudeAjout);
+                    updateMapAjout(selectedAltitudeAjout, selectedLongitudeAjout);
                 }
             });
         }
@@ -396,10 +396,10 @@ public class ControllerPageTaches implements Initializable {
         }
     }
 
-    public void updateMapMain(double latitude, double longitude) {
+    public void updateMapMain(double altitude, double longitude) {
         if (webEngineMain != null) {
             try {
-                String script = String.format("updateLocation(%f, %f);", latitude, longitude);
+                String script = String.format("updateLocation(%f, %f);", altitude, longitude);
                 webEngineMain.executeScript(script);
             } catch (Exception e) {
                 System.out.println("Error updating mapMain: " + e.getMessage());
@@ -407,35 +407,35 @@ public class ControllerPageTaches implements Initializable {
         }
     }
 
-    public void updateMapAjout(double latitude, double longitude) {
+    public void updateMapAjout(double altitude, double longitude) {
         if (webEngineAjout != null) {
-            String script = String.format("updateLocation(%f, %f);", latitude, longitude);
+            String script = String.format("updateLocation(%f, %f);", altitude, longitude);
             webEngineAjout.executeScript(script);
         }
     }
 
-    public void updateMapModif(double latitude, double longitude) {
+    public void updateMapModif(double altitude, double longitude) {
         if (webEngineModif != null) {
-            String script = String.format("updateLocation(%f, %f);", latitude, longitude);
+            String script = String.format("updateLocation(%f, %f);", altitude, longitude);
             webEngineModif.executeScript(script);
         }
     }
 
     public void setCoordinates(double lat, double lon) {
-        if (fieldLatitudeAjout != null && fieldLongitudeAjout != null) {
-            this.selectedLatitudeAjout = lat;
+        if (fieldAltitudeAjout != null && fieldLongitudeAjout != null) {
+            this.selectedAltitudeAjout = lat;
             this.selectedLongitudeAjout = lon;
-            fieldLatitudeAjout.setText(String.valueOf(lat));
+            fieldAltitudeAjout.setText(String.valueOf(lat));
             fieldLongitudeAjout.setText(String.valueOf(lon));
             updateMapAjout(lat, lon);
-        } else if (fieldLatitudeModif != null && fieldLongitudeModif != null) {
-            this.selectedLatitudeModif = lat;
+        } else if (fieldAltitudeModif != null && fieldLongitudeModif != null) {
+            this.selectedAltitudeModif = lat;
             this.selectedLongitudeModif = lon;
-            fieldLatitudeModif.setText(String.valueOf(lat));
+            fieldAltitudeModif.setText(String.valueOf(lat));
             fieldLongitudeModif.setText(String.valueOf(lon));
             updateMapModif(lat, lon);
         } else if (mapMain != null) {
-            this.selectedLatitudeMain = lat;
+            this.selectedAltitudeMain = lat;
             this.selectedLongitudeMain = lon;
             updateMapMain(lat, lon);
             updateTemperature(lat, lon);
@@ -456,8 +456,8 @@ public class ControllerPageTaches implements Initializable {
         }
     }
 
-    private void updateTemperature(double latitude, double longitude) {
-        String temperature = serviceTemperature.getTemperature(latitude, longitude);
+    private void updateTemperature(double altitude, double longitude) {
+        String temperature = serviceTemperature.getTemperature(altitude, longitude);
         labelTemperature.setText(temperature);
     }
 
@@ -480,12 +480,12 @@ public class ControllerPageTaches implements Initializable {
             String employeNom = serviceTache.getEmployeNameById(tache.getId_employe());
             comboEmployeModif.setValue(employeNom);
             fieldMessageModif.setText(tache.getMessage());
-            fieldLatitudeModif.setText(String.valueOf(tache.getLatitude()));
+            fieldAltitudeModif.setText(String.valueOf(tache.getAltitude()));
             fieldLongitudeModif.setText(String.valueOf(tache.getLongitude()));
             comboEtatModif.setValue(tache.getEtat());
-            selectedLatitudeModif = tache.getLatitude();
+            selectedAltitudeModif = tache.getAltitude();
             selectedLongitudeModif = tache.getLongitude();
-            updateMapModif(selectedLatitudeModif, selectedLongitudeModif);
+            updateMapModif(selectedAltitudeModif, selectedLongitudeModif);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -499,7 +499,6 @@ public class ControllerPageTaches implements Initializable {
         alert.showAndWait();
     }
 
-    // Ajoutez cette méthode dans votre ControllerPageTaches
     @FXML
     private void ouvrirAnalyseMeteo() {
         Tache selectedTache = tableTaches.getSelectionModel().getSelectedItem();
@@ -517,7 +516,7 @@ public class ControllerPageTaches implements Initializable {
 
             // Références aux éléments UI
             Scene scene = new Scene(root);
-            Label latitudeLabel = (Label) scene.lookup("#labelLatitude");
+            Label altitudeLabel = (Label) scene.lookup("#labelAltitude");
             Label longitudeLabel = (Label) scene.lookup("#labelLongitude");
             Label temperatureLabel = (Label) scene.lookup("#labelTemperature");
             TextArea geminiResponse = (TextArea) scene.lookup("#geminiResponse");
@@ -525,12 +524,11 @@ public class ControllerPageTaches implements Initializable {
             WebView weatherMap = (WebView) scene.lookup("#weatherMap");
 
             // Mise à jour des coordonnées
-            double lat = selectedTache.getLatitude();
+            double lat = selectedTache.getAltitude();
             double lon = selectedTache.getLongitude();
-            latitudeLabel.setText(String.format("%.4f", lat));
+            altitudeLabel.setText(String.format("%.4f", lat));
             longitudeLabel.setText(String.format("%.4f", lon));
 
-            // Récupération température
             // Récupération température
             String tempStr = serviceTemperature.getTemperature(lat, lon);
             temperatureLabel.setText(tempStr);
@@ -547,7 +545,7 @@ public class ControllerPageTaches implements Initializable {
 
             String prompt = String.format(
                     "Analyse météo pour la tâche :\n" +
-                            "- Latitude: %.4f\n- Longitude: %.4f\n- Température: %.1f°C\n" +
+                            "- Altitude: %.4f\n- Longitude: %.4f\n- Température: %.1f°C\n" +
                             "Donne une analyse détaillée avec des recommandations pour les travailleurs.",
                     lat, lon, temperature
             );
@@ -587,10 +585,10 @@ public class ControllerPageTaches implements Initializable {
         }
     }
 
-    private String getAddressFromCoordinates(double latitude, double longitude) {
+    private String getAddressFromCoordinates(double altitude, double longitude) {
         try {
             // Vérification des coordonnées
-            if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+            if (altitude < -90 || altitude > 90 || longitude < -180 || longitude > 180) {
                 return "Coordonnées invalides";
             }
 
@@ -598,7 +596,7 @@ public class ControllerPageTaches implements Initializable {
             String url = String.format(
                     Locale.US,
                     "https://nominatim.openstreetmap.org/reverse?format=json&lat=%.6f&lon=%.6f",
-                    latitude,
+                    altitude,
                     longitude
             );
             HttpRequest request = HttpRequest.newBuilder()
@@ -641,7 +639,7 @@ public class ControllerPageTaches implements Initializable {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(tache -> {
                 if (newValue == null || newValue.isEmpty()) {
-                    return true; // Affiche toutes les tâches si le champ est vide
+                    return true;
                 }
                 String lowerCaseFilter = newValue.toLowerCase();
                 return String.valueOf(tache.getId_employe()).contains(lowerCaseFilter) ||
@@ -663,7 +661,7 @@ public class ControllerPageTaches implements Initializable {
             File file = fileChooser.showSaveDialog(stage);
 
             if (file == null) {
-                return; // L'utilisateur a annulé
+                return;
             }
 
             // Récupérer les données de la table
@@ -679,13 +677,13 @@ public class ControllerPageTaches implements Initializable {
                 writer.write("\uFEFF");
 
                 // Écrire les en-têtes des colonnes
-                String header = "ID,Employé,Message,Adresse,État,Latitude,Longitude\n";
+                String header = "ID,Employé,Message,Adresse,État,Altitude,Longitude\n";
                 writer.write(header);
 
                 // Parcourir chaque tâche et écrire les données
                 for (Tache tache : taches) {
                     String employeNom = serviceTache.getEmployeNameById(tache.getId_employe());
-                    String adresse = getAddressFromCoordinates(tache.getLatitude(), tache.getLongitude());
+                    String adresse = getAddressFromCoordinates(tache.getAltitude(), tache.getLongitude());
 
                     // Échapper les virgules et guillemets dans les champs
                     String message = "\"" + tache.getMessage().replace("\"", "\"\"") + "\"";
@@ -700,7 +698,7 @@ public class ControllerPageTaches implements Initializable {
                             message,
                             adresseEscaped,
                             etat,
-                            tache.getLatitude(),
+                            tache.getAltitude(),
                             tache.getLongitude());
                     writer.write(line);
                 }

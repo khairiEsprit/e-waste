@@ -45,7 +45,6 @@ public class ControllerCalendrierTaches {
         }
         anneeCombo.setItems(FXCollections.observableArrayList(annees));
 
-        // Sélection par défaut : mois et année actuels
         moisCombo.getSelectionModel().select(LocalDate.now().getMonthValue() - 1); // Index 0-based
         anneeCombo.getSelectionModel().select(String.valueOf(currentYear));
 

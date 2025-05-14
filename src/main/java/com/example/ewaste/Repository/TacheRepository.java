@@ -1,6 +1,5 @@
 package com.example.ewaste.Repository;
 
-import com.example.ewaste.Entities.PlanificationTache;
 import com.example.ewaste.Interfaces.IService;
 import com.example.ewaste.Entities.Tache;
 import com.example.ewaste.Utils.DataBase;
@@ -18,11 +17,11 @@ public class TacheRepository implements IService<Tache> {
 
     @Override
     public void ajouter(Tache tache) throws SQLException {
-        String sql = "INSERT INTO `tache`(`id_centre`, `id_employe`, `latitude`, `longitude`, `message`, `etat`) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO `tache`(`id_centre`, `id_employe`, `altitude`, `longitude`, `message`, `etat`) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, tache.getId_centre());
         ps.setInt(2, tache.getId_employe());
-        ps.setFloat(3, tache.getLatitude());
+        ps.setFloat(3, tache.getAltitude());
         ps.setFloat(4, tache.getLongitude());
         ps.setString(5, tache.getMessage());
         ps.setString(6, tache.getEtat());
@@ -31,11 +30,11 @@ public class TacheRepository implements IService<Tache> {
 
     @Override
     public void modifier(Tache tache) throws SQLException {
-        String sql = "UPDATE `tache` SET `id_centre`=?, `id_employe`=?, `latitude`=?, `longitude`=?, `message`=?, `etat`=? WHERE id = ?";
+        String sql = "UPDATE `tache` SET `id_centre`=?, `id_employe`=?, `altitude`=?, `longitude`=?, `message`=?, `etat`=? WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, tache.getId_centre());
         ps.setInt(2, tache.getId_employe());
-        ps.setFloat(3, tache.getLatitude());
+        ps.setFloat(3, tache.getAltitude());
         ps.setFloat(4, tache.getLongitude());
         ps.setString(5, tache.getMessage());
         ps.setString(6, tache.getEtat());
@@ -44,7 +43,7 @@ public class TacheRepository implements IService<Tache> {
     }
 
     @Override
-    public List<PlanificationTache> recuperer() throws SQLException {
+    public List<Tache> recuperer() throws SQLException {
         return List.of();
     }
 
@@ -57,17 +56,7 @@ public class TacheRepository implements IService<Tache> {
     }
 
     @Override
-    public List<Tache> afficher() throws SQLException {
-        return List.of();
-    }
-
-    @Override
-    public List<PlanificationTache> afficher(int id_centre) throws SQLException {
-        return List.of();
-    }
-
-
-    public List<Tache> afficherr(int idCentre) throws SQLException {
+    public List<Tache> afficher(int idCentre) throws SQLException {
         List<Tache> taches = new ArrayList<>();
         String sql = "SELECT * FROM `tache` WHERE `id_centre` = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -78,7 +67,7 @@ public class TacheRepository implements IService<Tache> {
                     rs.getInt("id"),
                     rs.getInt("id_centre"),
                     rs.getInt("id_employe"),
-                    rs.getFloat("latitude"),
+                    rs.getFloat("altitude"),
                     rs.getFloat("longitude"),
                     rs.getString("message"),
                     rs.getString("etat")
@@ -99,7 +88,7 @@ public class TacheRepository implements IService<Tache> {
                     rs.getInt("id"),
                     rs.getInt("id_centre"),
                     rs.getInt("id_employe"),
-                    rs.getFloat("latitude"),
+                    rs.getFloat("altitude"),
                     rs.getFloat("longitude"),
                     rs.getString("message"),
                     rs.getString("etat")
@@ -110,21 +99,21 @@ public class TacheRepository implements IService<Tache> {
 
     public static List<String> getEmployeNames() throws SQLException {
         List<String> employeNames = new ArrayList<>();
-        String query = "SELECT nom FROM utilisateur WHERE role = 'EMPLOYEE'";
+        String query = "SELECT first_name FROM user WHERE role = 'EMPLOYE'";
 
         try (PreparedStatement ps = connection.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                employeNames.add(rs.getString("nom"));
+                employeNames.add(rs.getString("first_name"));
             }
         }
         return employeNames;
     }
 
-    public Integer getEmployeIdByName(String nom) throws SQLException {
-        String query = "SELECT id FROM utilisateur WHERE nom = ?";
+    public Integer getEmployeIdByName(String first_name) throws SQLException {
+        String query = "SELECT id FROM user WHERE first_name = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, nom);
+            ps.setString(1, first_name);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getInt("id");
@@ -135,12 +124,12 @@ public class TacheRepository implements IService<Tache> {
 
 
         public String getEmployeNameById(int idEmploye) throws SQLException {
-            String query = "SELECT nom FROM utilisateur WHERE id = ?";
+            String query = "SELECT first_name FROM user WHERE id = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, idEmploye);
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
-                    return rs.getString("nom");
+                    return rs.getString("first_name");
                 }
             }
             return null;
@@ -165,7 +154,7 @@ public class TacheRepository implements IService<Tache> {
 
     public String getEmployeEmailById(int idEmploye) throws SQLException {
         String email = null;
-        String query = "SELECT email FROM utilisateur WHERE id = ?";
+        String query = "SELECT email FROM user WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, idEmploye);
             try (ResultSet rs = ps.executeQuery()) {
@@ -188,7 +177,7 @@ public class TacheRepository implements IService<Tache> {
                     rs.getInt("id"),
                     rs.getInt("id_centre"),
                     rs.getInt("id_employe"),
-                    rs.getFloat("latitude"),
+                    rs.getFloat("altitude"),
                     rs.getFloat("longitude"),
                     rs.getString("message"),
                     rs.getString("etat")
