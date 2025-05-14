@@ -2,6 +2,8 @@ package com.example.ewaste.Entities;
 
 public class Participation {
     private int id;
+    private Integer eventId;
+    private Integer userId;
     private String firstName;
     private String lastName;
     private String email;
@@ -9,12 +11,23 @@ public class Participation {
     private String city;
     private String country;
     private String zipCode;
-    private int pointsEarned; // Nouveau champ pour les points gagnés
+    private boolean reminderSent;
+    private String participationMode;
+    private String googleMeetLink;
+    private boolean googleAuthenticated;
+    private int pointsEarned; // Kept for backward compatibility
 
-    // Constructeurs
-    public Participation() {}
+    // Default constructor
+    public Participation() {
+        this.reminderSent = false;
+        this.participationMode = "on-site";
+        this.googleAuthenticated = false;
+        this.pointsEarned = 0;
+    }
 
+    // Basic constructor (for backward compatibility)
     public Participation(int id, String firstName, String lastName, String email, String phone, String city, String country, String zipCode, int pointsEarned) {
+        this();
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,6 +39,28 @@ public class Participation {
         this.pointsEarned = pointsEarned;
     }
 
+    // Full constructor
+    public Participation(int id, Integer eventId, Integer userId, String firstName, String lastName,
+                        String email, String phone, String city, String zipCode, String country,
+                        boolean reminderSent, String participationMode, String googleMeetLink,
+                        boolean googleAuthenticated) {
+        this.id = id;
+        this.eventId = eventId;
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.city = city;
+        this.zipCode = zipCode;
+        this.country = country;
+        this.reminderSent = reminderSent;
+        this.participationMode = participationMode != null ? participationMode : "on-site";
+        this.googleMeetLink = googleMeetLink;
+        this.googleAuthenticated = googleAuthenticated;
+        this.pointsEarned = 0; // Default value
+    }
+
     // Getters et Setters
     public int getId() {
         return id;
@@ -33,6 +68,22 @@ public class Participation {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Integer getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getFirstName() {
@@ -91,6 +142,38 @@ public class Participation {
         this.zipCode = zipCode;
     }
 
+    public boolean isReminderSent() {
+        return reminderSent;
+    }
+
+    public void setReminderSent(boolean reminderSent) {
+        this.reminderSent = reminderSent;
+    }
+
+    public String getParticipationMode() {
+        return participationMode;
+    }
+
+    public void setParticipationMode(String participationMode) {
+        this.participationMode = participationMode;
+    }
+
+    public String getGoogleMeetLink() {
+        return googleMeetLink;
+    }
+
+    public void setGoogleMeetLink(String googleMeetLink) {
+        this.googleMeetLink = googleMeetLink;
+    }
+
+    public boolean isGoogleAuthenticated() {
+        return googleAuthenticated;
+    }
+
+    public void setGoogleAuthenticated(boolean googleAuthenticated) {
+        this.googleAuthenticated = googleAuthenticated;
+    }
+
     public int getPointsEarned() {
         return pointsEarned;
     }
@@ -103,6 +186,8 @@ public class Participation {
     public String toString() {
         return "Participation{" +
                 "id=" + id +
+                ", eventId=" + eventId +
+                ", userId=" + userId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
@@ -110,6 +195,10 @@ public class Participation {
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
                 ", zipCode='" + zipCode + '\'' +
+                ", reminderSent=" + reminderSent +
+                ", participationMode='" + participationMode + '\'' +
+                ", googleMeetLink='" + googleMeetLink + '\'' +
+                ", googleAuthenticated=" + googleAuthenticated +
                 ", pointsEarned=" + pointsEarned +
                 '}';
     }

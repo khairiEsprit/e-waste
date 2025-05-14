@@ -1,0 +1,208 @@
+/* Couleurs de la palette */
+.root {
+    -fx-background-color: #FEFEFA; /* Fond principal */
+}
+
+.main-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #00693E; /* Couleur foncée pour le titre */
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.search-field {
+    -fx-pref-width: 300px;
+    -fx-padding: 8px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #29AB87; /* Bordure verte claire */
+    -fx-background-color: white;
+}
+
+.event-card {
+    -fx-padding: 15;
+    -fx-border-color: #29AB87; /* Bordure verte claire */
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-background-color: #ACE1AF; /* Fond vert clair */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+    -fx-min-width: 300px;
+    -fx-max-width: 300px;
+}
+
+.event-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: #013220; /* Texte foncé */
+}
+
+.event-description {
+    -fx-font-size: 12px;
+    -fx-text-fill: #00693E; /* Texte vert foncé */
+}
+
+.event-info {
+    -fx-font-size: 12px;
+    -fx-text-fill: #00693E; /* Texte vert foncé */
+}
+
+.button {
+    -fx-background-color: #29AB87; /* Bouton vert clair */
+    -fx-text-fill: white;
+    -fx-padding: 8px 12px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-font-weight: bold;
+}
+
+.button:disabled {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: black;
+}
+
+.info-card {
+    -fx-padding: 15;
+    -fx-border-color: #29AB87; /* Bordure verte claire */
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-background-color: #FEFEFA; /* Fond blanc */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+    -fx-min-width: 200px;
+    -fx-max-width: 200px;
+    -fx-alignment: center;
+}
+
+.info-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-text-fill: #013220; /* Texte foncé */
+    -fx-alignment: center;
+}
+
+.info-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 25px;
+    -fx-text-fill: #013220; /* Texte vert foncé */
+    -fx-alignment: center;
+}
+
+.sidebar {
+    -fx-padding: 15;
+    -fx-border-color: #29AB87; /* Bordure verte claire */
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-background-color: #FEFEFA; /* Fond blanc */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+    -fx-alignment: center;
+}
+
+.sidebar-button {
+    -fx-background-color: #29AB87; /* Bouton vert clair */
+    -fx-text-fill: white;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-font-weight: bold;
+    -fx-min-width: 150px;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #00693E; /* Vert foncé au survol */
+}
+
+/* Style pour le ComboBox (Trier par statut) */
+.combo-box {
+    -fx-background-color: #29AB87; /* Bouton vert clair */
+    -fx-text-fill: white;
+    -fx-padding: 5px 8px; /* Réduire le padding pour diminuer la taille */
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-font-weight: bold;
+    -fx-min-width: 120px; /* Réduire la largeur minimale */
+    -fx-pref-height: 30px; /* Réduire la hauteur */
+    -fx-font-size: 12px; /* Réduire la taille de la police si nécessaire */
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #29AB87; /* Fond vert clair */
+    -fx-text-fill: white;
+    -fx-font-size: 12px; /* Réduire la taille de la police dans la liste déroulante */
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #29AB87; /* Bouton vert clair */
+    -fx-padding: 5px; /* Réduire le padding de la flèche */
+}
+
+.combo-box .arrow {
+    -fx-background-color: white; /* Flèche blanche */
+}
+
+.combo-box:hover {
+    -fx-background-color: #29AB87; /* Vert foncé au survol */
+}
+
+/* Classe combinée .button.info-label */
+.button .nombre {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-text-fill: #013220; /* Texte vert foncé */
+    -fx-background-color: #29AB87; /* Fond vert clair */
+    -fx-padding: 8px 12px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-alignment: center;
+    -fx-margin-right: 20px; /* Ajouter une marge à droite si nécessaire */
+}
+
+.icon-button {
+    -fx-background-color: #013220; /* Fond transparent */
+    -fx-border-color: transparent; /* Pas de bordure */
+    -fx-padding: 0; /* Pas de rembourrage */
+    -fx-background-radius: 0; /* Pas de bord arrondi */
+    -fx-border-radius: 0; /* Pas de bord arrondi */
+}
+
+.icon-button:hover {
+    -fx-opacity: 0.8; /* Effet de survol : légère transparence */
+}
+
+.icon-button:pressed {
+    -fx-opacity: 0.6; /* Effet lors du clic */
+}
+
+/* Style pour la boîte de dialogue des détails */
+.dialog-pane {
+    -fx-background-color: #FEFEFA; /* Fond de la boîte de dialogue */
+    -fx-border-color: #29AB87; /* Bordure de la boîte de dialogue */
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+.dialog-pane .label {
+    -fx-text-fill: #013220; /* Couleur du texte des labels */
+    -fx-font-size: 14px;
+}
+
+.dialog-pane .text-area {
+    -fx-background-color: #ACE1AF; /* Fond des zones de texte */
+    -fx-text-fill: #013220; /* Couleur du texte */
+    -fx-border-color: #29AB87; /* Bordure */
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.dialog-pane .button {
+    -fx-background-color: #29AB87; /* Fond des boutons */
+    -fx-text-fill: #FEFEFA; /* Couleur du texte */
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px 10px;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #00693E; /* Couleur au survol */
+}

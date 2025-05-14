@@ -107,7 +107,7 @@ public class ListParticipationController {
     private void handleRetour() {
         try {
             // Charger le fichier FXML de l'interface ListEvenement
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/ListEvenement-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/ListEvenement-view.fxml"));
             Parent root = loader.load();
 
             // Obtenir la scène actuelle à partir du bouton Retour
@@ -177,7 +177,7 @@ public class ListParticipationController {
         dialog.setHeaderText("Modifier les détails de la participation");
 
         // Appliquer les styles CSS à la boîte de dialogue
-        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/com/example/ewaste/styles/ListParticipation.css").toExternalForm());
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/com.example.ewaste/styles/ListParticipation.css").toExternalForm());
         dialog.getDialogPane().getStyleClass().add("dialog-pane");
 
         // Créer les champs de texte pour la modification

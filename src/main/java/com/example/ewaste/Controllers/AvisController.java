@@ -3,7 +3,6 @@ package com.example.ewaste.Controllers;
 import com.example.ewaste.Entities.Avis;
 import com.example.ewaste.Entities.TextAnalysisResult;
 import com.example.ewaste.Repository.AvisRepository;
-import com.example.ewaste.Utils.DataBase;
 import com.example.ewaste.Utils.OpenAiApiAvis;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -78,7 +77,7 @@ public class AvisController {
     }
 
     public AvisController() {
-        Connection conn = DataBase.getInstance().getConnection();
+        Connection conn = DataBaseConn.getInstance().getConnection();
         this.avisRepository = new AvisRepository(conn);
         this.profanityDetectionService = new OpenAiApiAvis();
     }
@@ -210,7 +209,7 @@ public class AvisController {
 
     private void redirectToListAvis() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/ListAvis-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/ListAvis-view.fxml"));
             Parent root = loader.load();
             Scene currentScene = submitButton.getScene();
             currentScene.setRoot(root);

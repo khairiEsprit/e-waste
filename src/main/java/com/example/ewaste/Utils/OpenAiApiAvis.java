@@ -1,27 +1,22 @@
 package com.example.ewaste.Utils;
 
 import com.example.ewaste.Entities.TextAnalysisResult;
-import io.github.cdimascio.dotenv.Dotenv;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.example.ewaste.Utils.SimpleJsonParser.JSONArray;
+import com.example.ewaste.Utils.SimpleJsonParser.JSONObject;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Scanner;
 
 public class OpenAiApiAvis {
     private static final String API_URL = "https://api.openai.com/v1/moderations";
 
-    static Dotenv dotenv = Dotenv.configure()
-            .directory("C:/Users/User/Documents/e-waste/e-waste") // Adjust the path accordingly
-            .filename(".env")
-            .load();
-    private static final String API_KEY =dotenv.get("APIKEY"); // Remplace par ta clé API OpenAI
+    // Use the DotenvConfig utility to get the API key
+    private static final String API_KEY = DotenvConfig.get("APIKEY", "dummy-api-key"); // Fallback to dummy key if not found
     public TextAnalysisResult detectBadWords(String text) {
         try {
             // Créer la connexion HTTP
-            HttpURLConnection connection = (HttpURLConnection) new URL(API_URL).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new java.net.URI(API_URL).toURL().openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Authorization", "Bearer " + API_KEY);
             connection.setRequestProperty("Content-Type", "application/json");

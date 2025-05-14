@@ -2,7 +2,6 @@ package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Entities.Avis;
 import com.example.ewaste.Repository.AvisRepository;
-import com.example.ewaste.Utils.DataBase;
 import com.example.ewaste.Utils.TranslationService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,7 +51,7 @@ public class ListAvisController {
     private final Map<String, String> translationCache = new HashMap<>(); // Cache pour stocker les traductions
 
     public ListAvisController() {
-        Connection conn = DataBase.getInstance().getConnection();
+        Connection conn = DataBaseConn.getInstance().getConnection();
         this.avisRepository = new AvisRepository(conn);
     }
 
@@ -176,7 +175,7 @@ public class ListAvisController {
     @FXML
     private void handleReturnAction() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/Avis.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.ewaste/views/Avis.fxml"));
             Parent root = loader.load();
             Scene currentScene = returnButton.getScene();
             currentScene.setRoot(root);
@@ -222,7 +221,7 @@ public class ListAvisController {
         dialog.setHeaderText("Modifier les détails de l'avis");
 
         // Appliquer le style CSS à la boîte de dialogue
-        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/com/example/ewaste/styles/ListAvis.css").toExternalForm());
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/com.example.ewaste/styles/ListAvis.css").toExternalForm());
 
         // Créer les champs de texte
         TextField nameField = new TextField(avis.getName());

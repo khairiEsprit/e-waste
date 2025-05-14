@@ -32,11 +32,20 @@ public class AvisRepository {
             throw new SQLException("Un avis avec les mêmes coordonnées existe déjà.");
         }
 
-        String sql = "INSERT INTO avis (nom, description, note) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO avis (user_id, nom, avis, description, image, audio_file, video_file, media_type, note, created_at) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, avis.getName());
-            stmt.setString(2, avis.getDescription());
-            stmt.setInt(3, avis.getRating());
+            stmt.setObject(1, avis.getUserId()); // Can be null
+            stmt.setString(2, avis.getName());
+            stmt.setString(3, avis.getDescription()); // Using description as 'avis' field
+            stmt.setString(4, avis.getDescription()); // Also set as description field
+            stmt.setString(5, avis.getImage());
+            stmt.setString(6, avis.getAudioFile());
+            stmt.setString(7, avis.getVideoFile());
+            stmt.setString(8, avis.getMediaType());
+            stmt.setInt(9, avis.getRating());
+            stmt.setTimestamp(10, avis.getCreatedAt() != null ?
+                Timestamp.valueOf(avis.getCreatedAt()) : Timestamp.valueOf(java.time.LocalDateTime.now()));
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -52,12 +61,7 @@ public class AvisRepository {
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                Avis avis = new Avis(
-                        rs.getInt("id"),
-                        rs.getString("nom"),
-                        rs.getString("description"),
-                        rs.getInt("note")
-                );
+                Avis avis = mapResultSetToAvis(rs);
                 avisList.add(avis);
             }
         } catch (SQLException e) {
@@ -66,18 +70,59 @@ public class AvisRepository {
         return avisList;
     }
 
+    // Helper method to map ResultSet to Avis object
+    private Avis mapResultSetToAvis(ResultSet rs) throws SQLException {
+        Avis avis = new Avis();
+        avis.setId(rs.getInt("id"));
+
+        // Handle nullable fields
+        Object userId = rs.getObject("user_id");
+        if (userId != null) {
+            avis.setUserId((Integer) userId);
+        }
+
+        avis.setName(rs.getString("nom"));
+
+        // Get description from 'avis' column if available, otherwise from 'description'
+        String avisText = rs.getString("avis");
+        String description = rs.getString("description");
+        avis.setDescription(avisText != null ? avisText : description);
+
+        avis.setImage(rs.getString("image"));
+        avis.setAudioFile(rs.getString("audio_file"));
+        avis.setVideoFile(rs.getString("video_file"));
+        avis.setMediaType(rs.getString("media_type"));
+        avis.setRating(rs.getInt("note"));
+
+        Timestamp createdAt = rs.getTimestamp("created_at");
+        if (createdAt != null) {
+            avis.setCreatedAt(createdAt.toLocalDateTime());
+        } else {
+            avis.setCreatedAt(java.time.LocalDateTime.now());
+        }
+
+        return avis;
+    }
+
     // Update an existing Avis
     public boolean update(Avis avis) throws SQLException {
         if (findById(avis.getId()) == null) {
             throw new IllegalArgumentException("L'avis avec l'ID " + avis.getId() + " n'existe pas");
         }
 
-        String sql = "UPDATE avis SET nom = ?, description = ?, note = ? WHERE id = ?";
+        String sql = "UPDATE avis SET user_id = ?, nom = ?, avis = ?, description = ?, image = ?, " +
+                     "audio_file = ?, video_file = ?, media_type = ?, note = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, avis.getName());
-            stmt.setString(2, avis.getDescription());
-            stmt.setInt(3, avis.getRating());
-            stmt.setInt(4, avis.getId());
+            stmt.setObject(1, avis.getUserId()); // Can be null
+            stmt.setString(2, avis.getName());
+            stmt.setString(3, avis.getDescription()); // Using description as 'avis' field
+            stmt.setString(4, avis.getDescription()); // Also set as description field
+            stmt.setString(5, avis.getImage());
+            stmt.setString(6, avis.getAudioFile());
+            stmt.setString(7, avis.getVideoFile());
+            stmt.setString(8, avis.getMediaType());
+            stmt.setInt(9, avis.getRating());
+            stmt.setInt(10, avis.getId());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -110,12 +155,7 @@ public class AvisRepository {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Avis(
-                            rs.getInt("id"),
-                            rs.getString("nom"),
-                            rs.getString("description"),
-                            rs.getInt("note")
-                    );
+                    return mapResultSetToAvis(rs);
                 }
             }
         } catch (SQLException e) {
