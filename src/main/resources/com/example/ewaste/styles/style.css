@@ -1,0 +1,153 @@
+/* General VBox Styling */
+.vbox {
+    -fx-background-color: #F0F4F8; /* Light background */
+    -fx-padding: 20px;
+    -fx-spacing: 15px;
+}
+
+/* Title Label */
+.label {
+    -fx-font-size: 24px;
+    -fx-text-fill: #2C3E50; /* Dark blue color */
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.1), 2, 0, 0, 1); /* Subtle shadow */
+}
+
+/* Search Field */
+.text-field {
+    -fx-pref-width: 300px;
+    -fx-padding: 8px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px; /* Rounded corners */
+    -fx-border-color: #29AB87; /* Light green border */
+    -fx-background-color: #FEFEFA; /* Soft white background */
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5, 0, 0, 3); /* Subtle shadow */
+}
+
+.text-field:focused {
+    -fx-border-color: #00693E; /* Darker green border */
+    -fx-background-color: #FFFFFF; /* White background */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 105, 62, 0.2), 10, 0, 0, 5); /* Enhanced shadow */
+}
+
+/* TableView Styling */
+.table-view {
+    -fx-background-color: #FFFFFF; /* White background */
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px; /* Rounded corners */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5); /* Subtle shadow */
+    -fx-padding: 10px;
+}
+
+/* Table Header */
+.table-view .column-header-background {
+    -fx-background-color: #29AB87; /* Light green background */
+    -fx-border-radius: 10px 10px 0 0; /* Rounded top corners */
+    -fx-background-radius: 10px 10px 0 0; /* Rounded top corners */
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: white; /* White text */
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+
+/* Table Rows */
+.table-row-cell {
+    -fx-background-color: #FFFFFF; /* White background */
+    -fx-border-color: #E0E0E0; /* Light gray border */
+    -fx-border-width: 0 0 1 0; /* Bottom border only */
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #F8F8F8; /* Light gray for odd rows */
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #ACE1AF; /* Light green for selected row */
+    -fx-text-fill: #013220; /* Dark green text */
+}
+
+/* Table Cells */
+.table-cell {
+    -fx-text-fill: #2C3E50; /* Dark blue text */
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER;
+    -fx-padding: 10px;
+}
+
+/* Buttons in Actions Column */
+.button {
+    -fx-background-color: linear-gradient(to bottom, #29AB87, #1E7A5E); /* Green gradient */
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 3); /* Subtle shadow */
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #00693E, #004D2E); /* Darker green gradient */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 8, 0, 0, 5); /* Enhanced shadow */
+}
+
+.button:pressed {
+    -fx-background-color: #2980B9; /* Slight color change for click effect */
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+
+/* HBox for Buttons */
+.hbox {
+    -fx-spacing: 5px; /* Spacing between buttons */
+}
+
+
+/* General Container */
+.detail-container {
+    -fx-background-color: #FEFEFA; /* Soft white background */
+    -fx-padding: 30px;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px; /* Rounded corners */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5); /* Subtle shadow */
+}
+
+/* Title */
+.detail-title {
+    -fx-font-size: 24px;
+    -fx-text-fill: #2C3E50; /* Dark blue color */
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.1), 2, 0, 0, 1); /* Subtle shadow */
+}
+
+/* Details Container */
+.details-box {
+    -fx-background-color: #FFFFFF; /* White background */
+    -fx-padding: 20px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px; /* Rounded corners */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5, 0, 0, 3); /* Subtle shadow */
+}
+
+/* Detail Labels */
+.detail-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2C3E50; /* Dark blue color */
+    -fx-font-weight: bold;
+    -fx-min-width: 120px; /* Fixed width for alignment */
+}
+
+/* Detail Values */
+.detail-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: #29AB87; /* Light green color */
+    -fx-font-weight: normal;
+}

@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.dialogs.MFXGenericDialog?>
+<?import javafx.animation.TranslateTransition?>
+<?import javafx.animation.ScaleTransition?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.animation.FadeTransition?>
+<?import javafx.scene.effect.DropShadow?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.UseraccountController">
+    <left>
+        <VBox prefHeight="731.0" prefWidth="282.0" styleClass="sidebar" stylesheets="@../styles/UserAccountStyle.css">
+            <children>
+                <HBox alignment="TOP_CENTER" prefHeight="147.0" prefWidth="200.0" spacing="100.0">
+                    <children>
+                        <ImageView fitHeight="149.0" fitWidth="156.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../assets/logo.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </HBox>
+                <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="10.0" VBox.vgrow="ALWAYS" />
+                <VBox spacing="20.0" VBox.vgrow="ALWAYS">
+                    <children>
+<!--                        <Button fx:id="Home_Btn" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#onHomeButtonClick" prefHeight="48.0" prefWidth="236.0" styleClass="sidebar-link" text="Home" textFill="WHITE">-->
+<!--                            <font>-->
+<!--                                <Font name="System Bold" size="19.0" />-->
+<!--                            </font>-->
+<!--                            <graphic>-->
+<!--                                <ImageView>-->
+<!--                                    <image>-->
+<!--                                        <Image url="@../assets/icons8-home-24.png" />-->
+<!--                                    </image>-->
+<!--                                </ImageView>-->
+<!--                            </graphic>-->
+<!--                        </Button>-->
+                        <Button fx:id="Users_Btn" alignment="TOP_LEFT" graphicTextGap="10.0" lineSpacing="15.0" mnemonicParsing="false" onAction="#onUserButtonClick" prefHeight="48.0" prefWidth="237.0" styleClass="sidebar-link-active" text="Profile" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                            <graphic>
+                                <ImageView>
+                                    <image>
+                                        <Image url="@../assets/AiOutlineUser.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+<!--                        <Button fx:id="Reclamations_Btn" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#onReclamationsButtonClick" prefHeight="47.0" prefWidth="232.0" styleClass="sidebar-link" text="Reclamations" textFill="WHITE">-->
+<!--                            <font>-->
+<!--                                <Font name="System Bold" size="19.0" />-->
+<!--                            </font>-->
+<!--                            <graphic>-->
+<!--                                <ImageView>-->
+<!--                                    <image>-->
+<!--                                        <Image url="@../assets/AiOutlineReconciliation.png" />-->
+<!--                                    </image>-->
+<!--                                </ImageView>-->
+<!--                            </graphic>-->
+<!--                        </Button>-->
+
+                        <Button fx:id="Events_Btn" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#onEventsButtonClick" prefHeight="47.0" prefWidth="232.0" styleClass="sidebar-link" text="Events" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="19.0" />
+                            </font>
+                            <graphic>
+                                <ImageView>
+                                    <image>
+                                        <Image url="@../assets/MdEventNote.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="takePhotoButton" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="232.0" styleClass="sidebar-link" text="setUp face recognition" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="10.0" />
+                            </font>
+                            <graphic>
+                                <ImageView fitHeight="20" fitWidth="20">
+                                    <image>
+                                        <Image url="@../assets/faceLogoPng.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="Demandes_Btn" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#onDemandesButtonClick" prefHeight="47.0" prefWidth="232.0" styleClass="sidebar-link" text="Demandes" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="19.0" />
+                            </font>
+                            <graphic>
+                                <ImageView>
+                                    <image>
+                                        <Image url="@../assets/MdEventNote.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+
+                    </children>
+                </VBox>
+                <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="10.0" VBox.vgrow="ALWAYS" />
+                <HBox alignment="TOP_CENTER" prefHeight="57.0" prefWidth="279.0">
+                    <children>
+                        <Button fx:id="Logout_Btn" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" prefHeight="48.0" prefWidth="220.0" styleClass="sidebar-logout" text="Logout" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="21.0" />
+                            </font>
+                            <graphic>
+                                <ImageView>
+                                    <image>
+                                        <Image url="@../assets/AiOutlineLogout.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </left>
+    <center>
+        <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="707.0" prefWidth="921.0">
+                    <children>
+                        <Pane fx:id="general_pane" layoutY="-2.0" prefHeight="700.0" prefWidth="922.0">
+                            <children>
+                                <!-- Background Card with Shadow and Hover Animation -->
+                                <MFXButton buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" depthLevel="LEVEL4"
+                                           layoutX="206.0" layoutY="130.0" prefHeight="493.0" prefWidth="511.0"
+                                           style="-fx-background-color: #FFFFFF; -fx-background-radius: 15px;
+                          -fx-border-width: 0; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 20, 0, 0, 5);"
+                                           onMouseEntered="#onButtonHoverEnter"
+                                           onMouseExited="#onButtonHoverExit">
+
+                                </MFXButton>
+
+                                <!-- Circular Profile Image with Border and Fade-In Animation -->
+                                <ImageView fx:id="ImageviewUser" fitHeight="120.0" fitWidth="120.0"
+                                           layoutX="402.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true">
+                                    <clip>
+                                        <Circle radius="60.0" centerX="60.0" centerY="60.0"/>
+                                    </clip>
+                                    <effect>
+                                        <DropShadow color="#29AB8733" radius="10.0" spread="0.2"/>
+                                    </effect>
+                                    <!-- Fade-in animation when image loads -->
+
+                                </ImageView>
+
+                                <!-- Change Image Button with Slide Animation -->
+                                <MFXButton fx:id="ChangeImageBtn" text="Change Image"
+                                           layoutX="562.0" layoutY="186.0" prefHeight="30.0" prefWidth="120.0"
+                                           style="-fx-background-color: #29AB87; -fx-text-fill: white;
+                          -fx-background-radius: 25px; -fx-font-size: 12px;
+                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);"
+                                           onAction="#changeImage"
+                                           onMouseEntered="#onButtonHoverEnter"
+                                           onMouseExited="#onButtonHoverExit">
+
+                                </MFXButton>
+
+                                <!-- Styled Text Fields with Floating Labels and Animations -->
+                                <VBox layoutX="300.0" layoutY="280.0" spacing="25.0">
+                                    <children>
+                                        <MFXTextField fx:id="tf_UserAccountEmail"
+                                                      floatingText="Email"
+                                                      prefHeight="45.0" prefWidth="280.0"
+                                                      style="-fx-background-color: transparent;
+                                     -fx-border-color: #29AB87;
+                                     -fx-border-width: 0 0 2 0;
+                                     -fx-text-fill: #333333;
+                                     -fx-font-size: 14px;">
+                                            <font>
+                                                <Font name="System" size="14.0"/>
+                                            </font>
+
+                                        </MFXTextField>
+
+                                        <MFXTextField fx:id="tf_UserAccountNumero"
+                                                      floatingText="Phone Number"
+                                                      prefHeight="45.0" prefWidth="280.0"
+                                                      style="-fx-background-color: transparent;
+                                     -fx-border-color: #29AB87;
+                                     -fx-border-width: 0 0 2 0;
+                                     -fx-text-fill: #333333;
+                                     -fx-font-size: 14px;">
+                                            <font>
+                                                <Font name="System" size="14.0"/>
+                                            </font>
+
+                                        </MFXTextField>
+                                    </children>
+                                </VBox>
+
+                                <!-- Action Buttons with Hover Effects and Sequential Animation -->
+                                <HBox layoutX="300.0" layoutY="450.0" spacing="15.0">
+                                    <children>
+                                        <MFXButton fx:id="Confirmer_AccountUser" buttonType="RAISED"
+                                                   depthLevel="LEVEL3" onAction="#updateUser"
+                                                   prefHeight="40.0" prefWidth="100.0"
+                                                   style="-fx-background-radius: 25px;
+                 -fx-background-color: #29AB87;
+                 -fx-text-fill: WHITE;
+                 -fx-font-size: 14px;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);"
+                                                   text="Save"
+                                                   onMouseEntered="#onButtonHoverEnter"
+                                                   onMouseExited="#onButtonHoverExit">
+                                            <padding>
+                                                <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                                            </padding>
+                                        </MFXButton>
+
+                                        <MFXButton fx:id="Update_AccountUser" buttonType="RAISED"
+                                                   depthLevel="LEVEL3" onAction="#afficherUpdate"
+                                                   prefHeight="40.0" prefWidth="140.0"
+                                                   style="-fx-background-radius: 25px;
+                                 -fx-background-color: #29AB87;
+                                 -fx-text-fill: WHITE;
+                                 -fx-font-size: 14px;
+                                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);"
+                                                   text="Update Password"
+
+                                                   onMouseEntered="#onButtonHoverEnter"
+                                                   onMouseExited="#onButtonHoverExit">
+                                            <padding>
+                                                <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                                            </padding>
+
+                                        </MFXButton>
+
+                                        <MFXButton fx:id="ConfirmerD0_AccountUser1" buttonType="RAISED"
+                                                   depthLevel="LEVEL3" onAction="#afficherDeleteDialog"
+                                                   prefHeight="40.0" prefWidth="100.0"
+                                                   style="-fx-background-radius: 25px;
+                                 -fx-background-color: #FF4444;
+                                 -fx-text-fill: WHITE;
+                                 -fx-font-size: 14px;
+                                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);"
+                                                   text="Delete" textFill="white"
+                                                   onMouseEntered="#onButtonHoverEnter"
+                                                   onMouseExited="#onButtonHoverExit">
+                                            <padding>
+                                                <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                                            </padding>
+
+                                        </MFXButton>
+                                    </children>
+
+                                </HBox>
+                            </children>
+                        </Pane>
+
+                        <MFXGenericDialog fx:id="DialogConfirm_Delete" layoutX="313.0" layoutY="297.0" prefHeight="238.0" prefWidth="400.0" showAlwaysOnTop="false" showClose="false" showMinimize="false" visible="false" style="-fx-background-color: #ACE1AF">
+                            <center>
+                                <Pane prefHeight="224.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+                                    <children>
+                                        <Label layoutX="76.0" layoutY="40.0" prefHeight="35.0" prefWidth="248.0" text="Si vous cliquer oui votre compte ">
+                                            <font>
+                                                <Font name="System Bold" size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <Label layoutX="89.0" layoutY="82.0" text="sera supprimé definitivement">
+                                            <font>
+                                                <Font name="System Bold" size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <MFXButton fx:id="AnnulerDelete1_User" alignment="TOP_LEFT" contentDisplay="GRAPHIC_ONLY" depthLevel="LEVEL3" layoutX="329.0" layoutY="-15.0" onAction="#closeDeleteD" prefHeight="23.0" prefWidth="35.0" style="-fx-background-radius: 10px;" textAlignment="RIGHT" textFill="WHITE">
+                                            <graphic>
+                                                <ImageView fitHeight="14.0" fitWidth="14.0">
+                                                    <image>
+                                                        <Image url="@../assets/cross.png" />
+                                                    </image>
+                                                    <cursor>
+                                                        <Cursor fx:constant="HAND" />
+                                                    </cursor>
+                                                </ImageView>
+                                            </graphic>
+                                            <font>
+                                                <Font name="Montserrat-Regular" size="14.0" />
+                                            </font>
+                                        </MFXButton>
+                                        <MFXButton fx:id="ConfirmDelete1_User" buttonType="RAISED" depthLevel="LEVEL3" layoutX="154.0" layoutY="125.0" onAction="#deleteUser" prefHeight="38.0" prefWidth="91.0" style="-fx-background-radius: 10px; -fx-background-color: #29AB87;" text="Oui" textFill="WHITE">
+                                            <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                            </padding>
+                                        </MFXButton>
+                                    </children>
+                                </Pane>
+                            </center>
+                        </MFXGenericDialog>
+                        <Pane prefHeight="65.0" prefWidth="920.0">
+                            <children>
+                                <MFXButton buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" depthLevel="LEVEL3" layoutY="-3.0" prefHeight="65.0" prefWidth="920.0" style="-fx-background-color: #ACE1AF"/>
+                                <Label layoutX="22.0" layoutY="13.0" prefHeight="39.0" prefWidth="232.0" text="Welcome back" textAlignment="CENTER" textFill="white">
+                                    <font>
+                                        <Font name="Montserrat-Regular" size="28.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="user_name" layoutX="254.0" layoutY="13.0" prefHeight="39.0" prefWidth="232.0" textAlignment="CENTER">
+                                    <font>
+                                        <Font name="Montserrat-Regular" size="28.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </Pane>
+                        <MFXGenericDialog fx:id="Dialog_UpdatePassword_User" prefHeight="393.0" prefWidth="400.0" showAlwaysOnTop="false" showClose="false" showMinimize="false" translateX="250.0" translateY="200.0" visible="false" style="-fx-background-color: #ACE1AF">
+                            <center>
+                                <Pane prefHeight="351.0" prefWidth="378.0" BorderPane.alignment="CENTER">
+                                    <children>
+                                        <HBox alignment="CENTER" layoutX="15.0" layoutY="111.0" prefHeight="37.0" prefWidth="371.0" spacing="20.0"  >
+                                            <children>
+                                                <Label prefHeight="20.0" prefWidth="167.0" text="Old Password : ">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                </Label>
+                                                <MFXTextField fx:id="tf_UserOldPassword" prefHeight="49.0" prefWidth="232.0" style="-fx-background-color: #29AB87" />
+                                                <ImageView>
+                                                    <image>
+                                                        <Image url="@../assets/MdMailOutline.png" />
+                                                    </image>
+                                                    <effect>
+                                                        <Reflection />
+                                                    </effect>
+                                                </ImageView>
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER" layoutX="15.0" layoutY="194.0" prefHeight="37.0" prefWidth="371.0" spacing="20.0" >
+                                            <children>
+                                                <Label prefHeight="20.0" prefWidth="167.0" text="New Password : ">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                </Label>
+                                                <MFXTextField fx:id="tf_UserNewPassword" prefHeight="49.0" prefWidth="233.0" style="-fx-background-color: #29AB87" />
+                                                <ImageView>
+                                                    <image>
+                                                        <Image url="@../assets/MdMailOutline.png" />
+                                                    </image>
+                                                    <effect>
+                                                        <Reflection />
+                                                    </effect>
+                                                </ImageView>
+                                            </children>
+                                        </HBox>
+                                        <MFXButton fx:id="UpdatePassword_User" buttonType="RAISED" depthLevel="LEVEL3" layoutX="135.0" layoutY="289.0" onAction="#UpdatePassword" prefHeight="38.0" prefWidth="91.0" style="-fx-background-radius: 10px; -fx-background-color: #29AB87;" text="Save" textFill="WHITE">
+                                            <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                            </padding>
+                                        </MFXButton>
+                                    </children>
+                                </Pane>
+                            </center>
+                            <top>
+                                <MFXButton fx:id="AnnulerUpdateP_User" alignment="TOP_LEFT" contentDisplay="GRAPHIC_ONLY" depthLevel="LEVEL3" onAction="#ondialogueupdatebtnClick" prefHeight="18.0" prefWidth="22.0" style="-fx-background-radius: 10px;" textAlignment="RIGHT" textFill="WHITE" translateX="175.0" BorderPane.alignment="CENTER">
+                                    <graphic>
+                                        <ImageView fitHeight="11.0" fitWidth="11.0">
+                                            <image>
+                                                <Image url="@../assets/cross.png" />
+                                            </image>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </ImageView>
+                                    </graphic>
+                                    <font>
+                                        <Font name="Montserrat-Regular" size="14.0" />
+                                    </font>
+                                </MFXButton>
+                            </top>
+                        </MFXGenericDialog>
+                        <MFXGenericDialog fx:id="faceSetupDialog" prefHeight="500.0" prefWidth="600.0" translateX="150.0" translateY="100.0" visible="false" style="-fx-background-color: #ACE1AF">
+                            <center>
+                                <VBox alignment="CENTER" spacing="20.0" prefHeight="450.0" prefWidth="600.0">
+                                    <children>
+                                        <Label text="Set Up Face Recognition" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                                        <ImageView fx:id="webcamPreview" fitHeight="300.0" fitWidth="400.0" preserveRatio="true" />
+                                        <Label fx:id="statusLabel" text="Position your face in front of the camera" style="-fx-font-size: 14px;" />
+                                        <HBox alignment="CENTER" spacing="20.0">
+                                            <MFXButton fx:id="captureButton" text="Capture" onAction="#captureFace" prefHeight="38.0" prefWidth="100.0" style="-fx-background-color: #29AB87; -fx-text-fill: white; -fx-background-radius: 10px;" />
+                                            <MFXButton fx:id="saveButton" text="Save" onAction="#saveFace" prefHeight="38.0" prefWidth="100.0" style="-fx-background-color: #29AB87; -fx-text-fill: white; -fx-background-radius: 10px;" disable="true" />
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </center>
+                            <top>
+                                <MFXButton fx:id="closeFaceDialogButton" contentDisplay="GRAPHIC_ONLY" onAction="#closeFaceDialog" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 10px;" translateX="280.0">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="@../assets/cross.png" />
+                                            </image>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </ImageView>
+                                    </graphic>
+                                </MFXButton>
+                            </top>
+                        </MFXGenericDialog>
+
+                    </children>
+                </Pane>
+            </children>
+        </Pane>
+    </center>
+</BorderPane>

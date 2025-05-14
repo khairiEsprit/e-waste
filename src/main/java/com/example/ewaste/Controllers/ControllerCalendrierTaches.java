@@ -1,6 +1,6 @@
 package com.example.ewaste.Controllers;
 
-import com.example.ewaste.Entities.PlanificationTache;
+import com.example.ewaste.Entities.PlannificationTache;
 import com.example.ewaste.Repository.PlanificationTacheRepository;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -76,7 +76,7 @@ public class ControllerCalendrierTaches {
         LocalDate premierJour = yearMonth.atDay(1);
         int jourSemaineDebut = premierJour.getDayOfWeek().getValue() - 1; // 0 = Lundi
 
-        List<PlanificationTache> taches;
+        List<PlannificationTache> taches;
         try {
             taches = servicePlanification.afficher(0);
         } catch (SQLException e) {
@@ -100,7 +100,7 @@ public class ControllerCalendrierTaches {
 
                 LocalDate date = LocalDate.of(annee, mois, jour);
                 StringBuilder tachesText = new StringBuilder();
-                for (PlanificationTache tache : taches) {
+                for (PlannificationTache tache : taches) {
                     if (tache.getDate_limite() != null &&
                             tache.getDate_limite().toLocalDate().equals(date)) {
                         String nomTache = servicePlanification.getTacheNomById(tache.getId_tache());

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" styleClass="border-pane" stylesheets="@../styles/tache.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.mainController">
+
+    <!-- Top Navigation Bar -->
+    <top>
+        <HBox alignment="CENTER" spacing="20" styleClass="top-nav">
+            <Button onAction="#showDemande" styleClass="nav-button" text="Demande" />
+            <Button onAction="#show" styleClass="nav-button" text="Consulter" />
+            <Button text="Ouvrir tasks Chatbot" onAction="#openChatBot" styleClass="sidebar-button" maxWidth="200"/>
+
+        </HBox>
+    </top>
+
+    <!-- Main Content Area -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area">
+            <!-- Default "Accueil" Title -->
+            <Label fx:id="welcomeTitle" styleClass="welcome-title" text="Accueil" />
+        </StackPane>
+    </center>
+
+</BorderPane>

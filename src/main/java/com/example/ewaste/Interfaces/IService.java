@@ -1,16 +1,19 @@
 package com.example.ewaste.Interfaces;
 
-import com.example.ewaste.Entities.Tache;
+import com.example.ewaste.Entities.PlannificationTache;
 
 import java.sql.SQLException;
 import java.util.List;
 
-        public interface IService<T> {
-        void ajouter (T m) throws SQLException;
-        void supprimer (int id) throws SQLException;
-        void modifier (T m) throws SQLException;
-        List<T> recuperer() throws SQLException;
+public interface IService<T> {
 
-                List<T> afficher(int idCentre) throws SQLException;
-        }
+    void ajouter(T t) throws SQLException;
+    void modifier(T t)throws SQLException;
 
+    List<PlannificationTache> recuperer() throws SQLException;
+
+    void supprimer(int id)throws SQLException;
+    List<T> afficher() throws SQLException;
+
+    List<T> afficher(int id_centre) throws SQLException;
+}

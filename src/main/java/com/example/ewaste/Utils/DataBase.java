@@ -7,9 +7,9 @@ import java.sql.SQLException;
 
 public class DataBase {
 
-    private final String URL = "jdbc:mysql://localhost:3306/e-waste-symfony";
-    private final String USER = "root";
-    private final String PSW = "";
+    private static final String URL = "jdbc:mysql://localhost:3306/e-waste-symfony";
+    private static final String USER = "root";
+    private static final String PSW = "";
 
     private static DataBase instance;
 
@@ -28,7 +28,7 @@ public class DataBase {
         return instance;
     }
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         try {
             return DriverManager.getConnection(URL, USER, PSW);
         } catch (SQLException e) {

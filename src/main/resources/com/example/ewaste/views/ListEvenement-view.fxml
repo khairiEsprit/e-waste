@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.collections.FXCollections?>
+
+<?import java.lang.String?>
+<HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.ewaste.Controllers.ListEvenementController"
+      spacing="20" styleClass="root" stylesheets="@../styles/ListEvenement.css" prefHeight="600.0" prefWidth="1100.0">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Contenu principal -->
+    <VBox spacing="20" style="-fx-padding: 0 0 0 20;" HBox.hgrow="ALWAYS">
+        <!-- Titre de la page -->
+        <Label text="Liste des Événements" styleClass="main-title"/>
+
+        <!-- Barre de recherche, boutons de tri et affichage du nombre total d'événements -->
+        <HBox spacing="10" style="-fx-padding: 10;" alignment="CENTER_LEFT">
+            <!-- Barre de recherche -->
+            <TextField fx:id="searchField" promptText="Rechercher par nom..." styleClass="search-field"/>
+
+            <!-- Bouton Trier par date -->
+            <Button text="Trier par date" onAction="#sortByDate" styleClass="button"/>
+
+            <!-- ComboBox Trier par statut -->
+            <ComboBox fx:id="statusFilter" promptText="Trier par statut" styleClass="button combo-box">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Tous"/>
+                        <String fx:value="Événements terminés"/>
+                        <String fx:value="Événements en cours"/>
+                        <String fx:value="Événements à venir"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <!-- Espaceur pour pousser le label vers la droite -->
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Label Nombre total d'événements -->
+            <Label fx:id="totalEventsLabel" text="Nombre total d'événements : 0" styleClass="button nombre"/>
+        </HBox>
+
+        <!-- Conteneur principal avec défilement et carte à droite -->
+        <HBox spacing="20" HBox.hgrow="ALWAYS">
+            <!-- Liste des événements -->
+            <ScrollPane fitToWidth="true" styleClass="scroll-pane" HBox.hgrow="ALWAYS">
+                <GridPane fx:id="eventGrid" hgap="20" vgap="20" style="-fx-padding: 10;">
+                    <!-- Colonne de gauche -->
+                    <VBox fx:id="leftEventContainer" spacing="15" GridPane.columnIndex="0">
+                        <!-- Bouton Avis ajouté ici -->
+                        <Button text="Avis" onAction="#goToAvis" styleClass="button" />
+                    </VBox>
+
+                    <!-- Colonne du milieu -->
+                    <VBox fx:id="middleEventContainer" spacing="15" GridPane.columnIndex="1"/>
+
+                    <!-- Colonne de droite -->
+                    <VBox fx:id="rightEventContainer" spacing="15" GridPane.columnIndex="2"/>
+                </GridPane>
+            </ScrollPane>
+
+            <!-- Carte à droite -->
+            <VBox styleClass="info-card" spacing="10" prefWidth="400">
+                <!-- Titre et icône pour Événements -->
+                <Label text="NB Événements" styleClass="info-title"/>
+                <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/event-icon.png"/>
+                    </image>
+                </ImageView>
+                <Label text="1" styleClass="info-label"/>
+
+                <!-- Titre et icône pour Points -->
+                <Label text="NB Points" styleClass="info-title"/>
+                <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/points-icon.png"/>
+                    </image>
+                </ImageView>
+                <Label text="10" styleClass="info-label"/>
+
+                <!-- Titre et icône pour Amis -->
+                <Label text="NB Amis" styleClass="info-title"/>
+                <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/friends-icon.png"/>
+                    </image>
+                </ImageView>
+                <Label text="2" styleClass="info-label"/>
+            </VBox>
+        </HBox>
+    </VBox>
+</HBox>

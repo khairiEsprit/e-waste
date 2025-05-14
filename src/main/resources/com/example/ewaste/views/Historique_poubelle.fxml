@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.ewaste.Controllers.HistoriquePoubelleController"
+            prefHeight="700.0" prefWidth="1200.0"
+            stylesheets="@../style/style.css">
+
+    <BorderPane prefHeight="700.0" prefWidth="1200.0" styleClass="container1">
+
+        <!-- Sidebar (gauche) -->
+        <left>
+            <VBox spacing="15" styleClass="sidebar" prefWidth="300">
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="sidebar-header">
+                    <FontAwesomeIconView glyphName="TRASH_ALT" glyphSize="24" styleClass="header-icon"/>
+                    <Label text="Gestion des Poubelles" styleClass="header-title"/>
+                </HBox>
+
+                <!-- Séparateur stylisé -->
+                <Separator styleClass="fancy-separator"/>
+
+                <!-- Contrôle du thème -->
+                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="theme-control">
+                    <Label text="Apparence :" styleClass="theme-label"/>
+                    <ToggleButton fx:id="themeToggle" styleClass="theme-toggle"/>
+                </HBox>
+            </VBox>
+        </left>
+
+        <!-- Contenu principal (centre) -->
+        <center>
+            <VBox spacing="15" styleClass="content">
+                <!-- En-tête de recherche et tri -->
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="list-header">
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <TextField fx:id="searchField" promptText="Rechercher..." styleClass="task-name"/>
+                        <ImageView fitHeight="20" fitWidth="20">
+                            <Image url="@../assets/logo.png"/>
+                        </ImageView>
+                    </HBox>
+
+                </HBox>
+
+                <!-- Tableau d'historique -->
+                <VBox spacing="10" styleClass="historique-container">
+                    <Label text="Historique des Événements de Poubelle"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                    <TableView fx:id="historiqueTable" prefHeight="200" prefWidth="700">
+                        <columns>
+                            <TableColumn fx:id="idColumn" text="ID" prefWidth="50">
+                                <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="idPoubelleColumn" text="ID Poubelle" prefWidth="100">
+                                <cellValueFactory><PropertyValueFactory property="id_poubelle"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="dateEvenementColumn" text="Date Événement" prefWidth="150">
+                                <cellValueFactory><PropertyValueFactory property="date_evenement"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="typeEvenementColumn" text="Type Événement" prefWidth="100">
+                                <cellValueFactory><PropertyValueFactory property="type_evenement"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="200">
+                                <cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="quantiteDechetsColumn" text="Quantité Déchets (kg)" prefWidth="100">
+                                <cellValueFactory><PropertyValueFactory property="quantite_dechets"/></cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+
+                    <!-- Boutons pour exporter les données -->
+                    <HBox spacing="10">
+                        <Button text="Exporter en CSV" onAction="#handleExportCSV"/>
+                        <Button text="Gemini" onAction="#handleGemini"/>
+                    </HBox>
+                    <VBox spacing="20" alignment="CENTER">
+                        <Label text="QR Code de la Poubelle" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+                        <StackPane>
+                            <ImageView fx:id="qrCodeImageView"
+                                       fitWidth="100"
+                                       fitHeight="100"
+                                       preserveRatio="true"
+                                       visible="false"/>
+
+                            <ProgressIndicator fx:id="loadingIndicator"
+                                               visible="false"
+                                               style="-fx-progress-color: #2196F3; -fx-max-width: 50; -fx-max-height: 50;"/>
+                        </StackPane>
+
+                        <Button fx:id="downloadButton"
+                                text="Télécharger QR Code"
+                                onAction="#handleDownload"
+                                disable="true"
+                                style="-fx-font-size: 14; -fx-padding: 8 15;"/>
+                    </VBox>
+                    <Label fx:id="statusLabel" style="-fx-text-fill: green; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <!-- Pagination -->
+                <Pagination fx:id="pagination" styleClass="pagination" />
+            </VBox>
+        </center>
+    </BorderPane>
+</AnchorPane>

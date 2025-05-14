@@ -1,6 +1,6 @@
 package com.example.ewaste.Controllers;
 
-import com.example.ewaste.Entities.PlanificationTache;
+import com.example.ewaste.Entities.PlannificationTache;
 import com.example.ewaste.Repository.PlanificationTacheRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,7 +40,7 @@ public class ControllerPlannificationTache {
         loadComboBoxData();
 
         try {
-            PlanificationTache planification = servicePlanification.getByIdTache(idTache);
+            PlannificationTache planification = servicePlanification.getByIdTache(idTache);
             if (planification != null) {
                 comboPriorite.setValue(planification.getPriorite());
                 if (planification.getDate_limite() != null) {
@@ -72,7 +72,7 @@ public class ControllerPlannificationTache {
                 return;
             }
 
-            PlanificationTache planification = new PlanificationTache(0, idTache, priorite, java.sql.Date.valueOf(dateLimite));
+            PlannificationTache planification = new PlannificationTache(0, idTache, priorite, java.sql.Date.valueOf(dateLimite));
             servicePlanification.ajouter(planification);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Planification ajoutée avec succès !");
             fermerFenetre();
@@ -85,7 +85,7 @@ public class ControllerPlannificationTache {
     @FXML
     private void modifierPlanification() {
         try {
-            PlanificationTache planificationExistante = servicePlanification.getByIdTache(idTache);
+            PlannificationTache planificationExistante = servicePlanification.getByIdTache(idTache);
             if (planificationExistante == null) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Aucune planification existante pour cette tâche.");
                 return;
@@ -98,7 +98,7 @@ public class ControllerPlannificationTache {
                 return;
             }
 
-            PlanificationTache planification = new PlanificationTache(
+            PlannificationTache planification = new PlannificationTache(
                     planificationExistante.getId(),
                     idTache,
                     priorite,
@@ -119,7 +119,7 @@ public class ControllerPlannificationTache {
     @FXML
     private void supprimerPlanification() {
         try {
-            PlanificationTache planification = servicePlanification.getByIdTache(idTache);
+            PlannificationTache planification = servicePlanification.getByIdTache(idTache);
             if (planification == null) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Aucune planification existante pour cette tâche.");
                 return;

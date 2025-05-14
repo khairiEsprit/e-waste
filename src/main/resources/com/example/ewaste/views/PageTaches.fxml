@@ -50,7 +50,7 @@
             </VBox>
          </center>
       </BorderPane>
-      <Label fx:id="labelTemperature" layoutX="438.0" layoutY="27.0" prefHeight="90.0" prefWidth="480.0" styleClass="label-temperature" text="Température: --°C" />
+      <Label fx:id="labelTemperature" layoutX="360.0" layoutY="27.0" prefHeight="90.0" prefWidth="558.0" styleClass="label-temperature" text="Température: --°C" />
       <Button layoutX="732.0" layoutY="52.0" onAction="#ouvrirAnalyseMeteo" text="⛅ Analyse Météo" />
       <WebView fx:id="mapMain" layoutX="981.0" layoutY="151.0" prefHeight="586.0" prefWidth="318.0" />
    </children>

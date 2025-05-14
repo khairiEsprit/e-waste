@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.ewaste.Controllers.AvisController"
+            stylesheets="@../styles/FeedBack.css" prefHeight="600.0" prefWidth="1100.0">
+
+    <!-- Centre : Formulaire de feedback et contenu de notation -->
+    <center>
+        <HBox spacing="20" alignment="CENTER">
+            <!-- Formulaire de feedback -->
+            <VBox spacing="15" alignment="CENTER" styleClass="form-container">
+                <!-- Titre de la page -->
+                <Label text="Votre Avis" styleClass="title-label"/>
+
+                <!-- Image en haut de l'interface -->
+                <ImageView fx:id="feedbackImage" fitWidth="900" fitHeight="200" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/avis.jpg"/>
+                    </image>
+                </ImageView>
+
+                <!-- Texte descriptif -->
+                <Label text="Les avis aident à améliorer les services et à instaurer la confiance."
+                       styleClass="description-label" wrapText="true" maxWidth="1200" prefHeight="50"/>
+
+                <!-- Champ pour le nom/prénom -->
+                <TextField fx:id="nameField" promptText="Nom/Prénom" styleClass="input-field" prefWidth="300" prefHeight="30"/>
+
+                <!-- Champ pour la description de l'avis -->
+                <TextArea fx:id="descriptionField" promptText="Description de votre avis" styleClass="input-field" prefWidth="300" prefHeight="80"/>
+
+                <!-- Label pour afficher les messages d'avertissement -->
+                <Label fx:id="warningLabel" styleClass="warning-label" visible="false" wrapText="true" maxWidth="300"/>
+
+                <!-- Note sous forme de 5 étoiles -->
+                <HBox spacing="10" styleClass="star-container">
+                    <ToggleButton fx:id="star1" text="★" styleClass="star-button"/>
+                    <ToggleButton fx:id="star2" text="★" styleClass="star-button"/>
+                    <ToggleButton fx:id="star3" text="★" styleClass="star-button"/>
+                    <ToggleButton fx:id="star4" text="★" styleClass="star-button"/>
+                    <ToggleButton fx:id="star5" text="★" styleClass="star-button"/>
+                </HBox>
+
+                <!-- Bouton pour envoyer l'avis -->
+                <Button fx:id="submitButton" onAction="#handleSubmit" text="Envoyer" styleClass="submit-button" prefWidth="150" prefHeight="40"/>
+            </VBox>
+
+            <!-- Section pour afficher les statistiques des avis -->
+            <VBox spacing="10" translateY="100.0" alignment="BOTTOM_CENTER" styleClass="rating-container">
+                <HBox alignment="CENTER" spacing="10">
+                    <VBox alignment="CENTER">
+                        <HBox alignment="CENTER" spacing="5">
+                            <Label text="★" styleClass="average-rating"/>
+                            <Label fx:id="averageRatingLabel" text="4.5" styleClass="rating-label"/>
+                        </HBox>
+                        <Label fx:id="totalReviewsLabel" text="+655 reviews" styleClass="reviews-label"/>
+                    </VBox>
+                    <VBox spacing="5" alignment="CENTER_LEFT">
+                        <!-- 5 étoiles -->
+                        <HBox spacing="5">
+                            <Label text="5★" styleClass="star-label"/>
+                            <ProgressBar fx:id="progressBar5" styleClass="progress-bar" prefWidth="150"/>
+                            <Label fx:id="star5CountLabel" text="0" styleClass="count-label"/>
+                        </HBox>
+                        <!-- 4 étoiles -->
+                        <HBox spacing="5">
+                            <Label text="4★" styleClass="star-label"/>
+                            <ProgressBar fx:id="progressBar4" styleClass="progress-bar" prefWidth="150"/>
+                            <Label fx:id="star4CountLabel" text="0" styleClass="count-label"/>
+                        </HBox>
+                        <!-- 3 étoiles -->
+                        <HBox spacing="5">
+                            <Label text="3★" styleClass="star-label"/>
+                            <ProgressBar fx:id="progressBar3" styleClass="progress-bar" prefWidth="150"/>
+                            <Label fx:id="star3CountLabel" text="0" styleClass="count-label"/>
+                        </HBox>
+                        <!-- 2 étoiles -->
+                        <HBox spacing="5">
+                            <Label text="2★" styleClass="star-label"/>
+                            <ProgressBar fx:id="progressBar2" styleClass="progress-bar" prefWidth="150"/>
+                            <Label fx:id="star2CountLabel" text="0" styleClass="count-label"/>
+                        </HBox>
+                        <!-- 1 étoile -->
+                        <HBox spacing="5">
+                            <Label text="1★" styleClass="star-label"/>
+                            <ProgressBar fx:id="progressBar1" styleClass="progress-bar" prefWidth="150"/>
+                            <Label fx:id="star1CountLabel" text="0" styleClass="count-label"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

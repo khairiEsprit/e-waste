@@ -1,5 +1,6 @@
 package com.example.ewaste.Repository;
 
+import com.example.ewaste.Entities.PlannificationTache;
 import com.example.ewaste.Interfaces.IService;
 import com.example.ewaste.Entities.Tache;
 import com.example.ewaste.Utils.DataBase;
@@ -43,7 +44,7 @@ public class TacheRepository implements IService<Tache> {
     }
 
     @Override
-    public List<Tache> recuperer() throws SQLException {
+    public List<PlannificationTache> recuperer() throws SQLException {
         return List.of();
     }
 
@@ -56,11 +57,15 @@ public class TacheRepository implements IService<Tache> {
     }
 
     @Override
+    public List<Tache> afficher() throws SQLException {
+        return List.of();
+    }
+
+    @Override
     public List<Tache> afficher(int idCentre) throws SQLException {
         List<Tache> taches = new ArrayList<>();
-        String sql = "SELECT * FROM `tache` WHERE `id_centre` = ?";
+        String sql = "SELECT * FROM `tache`";
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, idCentre);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             taches.add(new Tache(

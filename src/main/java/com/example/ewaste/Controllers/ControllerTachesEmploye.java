@@ -1,6 +1,7 @@
 package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Entities.Tache;
+import com.example.ewaste.Main;
 import com.example.ewaste.Repository.TacheRepository;
 import com.example.ewaste.Repository.TemperatureRepository;
 import com.example.ewaste.Utils.GeminiApiTache;
@@ -68,7 +69,7 @@ public class ControllerTachesEmploye implements Initializable {
         WebView map = new WebView();
         map.setPrefSize(300, 200);
         WebEngine engine = map.getEngine();
-        engine.load(getClass().getResource("/com/example/ewaste/views/map.html").toExternalForm());
+        engine.load(Main.class.getResource("views/map.html").toExternalForm());
         engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
             if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
                 String script = String.format(
@@ -142,7 +143,7 @@ public class ControllerTachesEmploye implements Initializable {
 
     private void ouvrirAnalyseMeteo(Tache tache) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/AnalyseMeteoDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/AnalyseMeteoDialog.fxml"));
             Parent root = loader.load();
             Stage dialog = new Stage();
             dialog.initModality(Modality.APPLICATION_MODAL);
@@ -220,7 +221,7 @@ public class ControllerTachesEmploye implements Initializable {
     @FXML
     private void ouvrirCalendrier() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/CalendrierTaches.fxml"));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/CalendrierTaches.fxml"));
             Parent root = loader.load();
 
             Scene scene = tilePaneTaches.getScene();

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="511.0" prefWidth="844.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ewaste.Controllers.TraitementCardsController">
+
+    <HBox layoutX="5.0" layoutY="7.0" prefHeight="502.0" prefWidth="832.0" spacing="20" styleClass="root" stylesheets="@../styles/style2.css">
+        <padding>
+            <Insets bottom="20" left="20" right="20" top="20" />
+        </padding>
+
+
+        <!-- Main Content -->
+        <VBox prefHeight="247.0" prefWidth="806.0" spacing="20" style="-fx-padding: 0 0 0 20;" HBox.hgrow="ALWAYS">
+
+            <!-- Main Container with Scroll and Info Card -->
+            <HBox spacing="20" HBox.hgrow="ALWAYS" />
+            <Label alignment="CENTER" prefHeight="66.0" prefWidth="325.0" styleClass="main-title" text="Liste des Traitements" />
+             <!-- Traitement List -->
+             <ScrollPane fitToWidth="true" prefHeight="358.0" prefWidth="773.0" styleClass="scroll-pane">
+                 <GridPane fx:id="gridPane" hgap="20" styleClass="grid-pane" vgap="20">
+                        <!-- Traitements will be loaded dynamically here -->
+                    </GridPane>
+             </ScrollPane>
+        </VBox>
+    </HBox>
+</AnchorPane>

@@ -1,7 +1,7 @@
 package com.example.ewaste.Repository;
 
 import com.example.ewaste.Interfaces.IService;
-import com.example.ewaste.Entities.PlanificationTache;
+import com.example.ewaste.Entities.PlannificationTache;
 import com.example.ewaste.Utils.DataBase;
 
 import java.sql.*;
@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlanificationTacheRepository implements IService<PlanificationTache> {
+public class PlanificationTacheRepository implements IService<PlannificationTache> {
     private Connection connection;
 
     public PlanificationTacheRepository() {
@@ -18,8 +18,8 @@ public class PlanificationTacheRepository implements IService<PlanificationTache
     }
 
     @Override
-    public void ajouter(PlanificationTache planificationTache) throws SQLException {
-        String sql = "INSERT INTO planificationtache(id_tache, priorite, date_limite) VALUES (?, ?, ?)";
+    public void ajouter(PlannificationTache planificationTache) throws SQLException {
+        String sql = "INSERT INTO plannificationtache(id_tache, priorite, date_limite) VALUES (?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, planificationTache.getId_tache());
         ps.setString(2, planificationTache.getPriorite());
@@ -32,8 +32,8 @@ public class PlanificationTacheRepository implements IService<PlanificationTache
     }
 
     @Override
-    public void modifier(PlanificationTache planificationTache) throws SQLException {
-        String sql = "UPDATE planificationtache SET id_tache=?, priorite=?, date_limite=? WHERE id=?";
+    public void modifier(PlannificationTache planificationTache) throws SQLException {
+        String sql = "UPDATE plannificationtache SET id_tache=?, priorite=?, date_limite=? WHERE id=?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, planificationTache.getId_tache());
         ps.setString(2, planificationTache.getPriorite());
@@ -47,26 +47,31 @@ public class PlanificationTacheRepository implements IService<PlanificationTache
     }
 
     @Override
-    public List<PlanificationTache> recuperer() throws SQLException {
+    public List<PlannificationTache> recuperer() throws SQLException {
         return List.of();
     }
 
     @Override
     public void supprimer(int id) throws SQLException {
-        String sql = "DELETE FROM planificationtache WHERE id=?";
+        String sql = "DELETE FROM plannificationtache WHERE id=?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, id);
         ps.executeUpdate();
     }
 
     @Override
-    public List<PlanificationTache> afficher(int id_centre) throws SQLException {
-        List<PlanificationTache> planifications = new ArrayList<>();
-        String sql = "SELECT * FROM planificationtache";
+    public List<PlannificationTache> afficher() throws SQLException {
+        return List.of();
+    }
+
+    @Override
+    public List<PlannificationTache> afficher(int id_centre) throws SQLException {
+        List<PlannificationTache> planifications = new ArrayList<>();
+        String sql = "SELECT * FROM plannificationtache";
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
-            planifications.add(new PlanificationTache(
+            planifications.add(new PlannificationTache(
                     rs.getInt("id"),
                     rs.getInt("id_tache"),
                     rs.getString("priorite"),
@@ -87,14 +92,14 @@ public class PlanificationTacheRepository implements IService<PlanificationTache
         }
     }
 
-    public PlanificationTache getByIdTache(int idTache) throws SQLException {
-        String sql = "SELECT * FROM planificationtache WHERE id_tache = ?";
+    public PlannificationTache getByIdTache(int idTache) throws SQLException {
+        String sql = "SELECT * FROM plannificationtache WHERE id_tache = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, idTache);
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            return new PlanificationTache(
+            return new PlannificationTache(
                     rs.getInt("id"),
                     rs.getInt("id_tache"),
                     rs.getString("priorite"),
@@ -104,13 +109,13 @@ public class PlanificationTacheRepository implements IService<PlanificationTache
         return null;
     }
 
-    public PlanificationTache afficherPlannification() throws SQLException {
-        String sql = "SELECT * FROM planificationtache";
+    public PlannificationTache afficherPlannification() throws SQLException {
+        String sql = "SELECT * FROM plannificationtache";
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            return new PlanificationTache(
+            return new PlannificationTache(
                     rs.getInt("id"),
                     rs.getInt("id_tache"),
                     rs.getString("priorite"),

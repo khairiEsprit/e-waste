@@ -1,10 +1,11 @@
 package com.example.ewaste.Controllers;
 
 import com.example.ewaste.Entities.Tache;
+import com.example.ewaste.Main;
 import com.example.ewaste.Repository.TacheRepository;
-import com.example.ewaste.Repository.EmailRepository;
 import com.example.ewaste.Repository.TemperatureRepository;
 import com.example.ewaste.Utils.GeminiApiTache;
+import com.example.ewaste.Utils.SendMail;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -97,7 +98,6 @@ public class ControllerPageTaches implements Initializable {
 
     private final TacheRepository serviceTache = new TacheRepository();
     private final TemperatureRepository serviceTemperature = new TemperatureRepository();
-    private final EmailRepository emailService = new EmailRepository();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -254,7 +254,7 @@ public class ControllerPageTaches implements Initializable {
                             "Nous vous remercions pour votre engagement et votre contribution à nos efforts.\n\n" +
                             "Cordialement,\n\n" +
                             "L'équipe E-WASTE";
-                    EmailRepository.sendEmail(recipientEmail, subject, emailMessage);
+                    SendMail.send(recipientEmail, subject, emailMessage);
 
                     fermerAjouterDialog();
                     loadTableData();
@@ -358,7 +358,7 @@ public class ControllerPageTaches implements Initializable {
 
     private void initMapMain() {
         webEngineMain = mapMain.getEngine();
-        URL mapUrl = getClass().getResource("/com/example/ewaste/views/map.html");
+        URL mapUrl = Main.class.getResource("views/map.html");
         if (mapUrl != null) {
             webEngineMain.load(mapUrl.toExternalForm());
             webEngineMain.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
@@ -375,7 +375,7 @@ public class ControllerPageTaches implements Initializable {
 
     private void initMapAjout() {
         webEngineAjout = mapAjout.getEngine();
-        URL mapUrl = getClass().getResource("/com/example/ewaste/views/map.html");
+        URL mapUrl = Main.class.getResource("views/map.html");
         if (mapUrl != null) {
             webEngineAjout.load(mapUrl.toExternalForm());
             webEngineAjout.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
@@ -390,7 +390,7 @@ public class ControllerPageTaches implements Initializable {
 
     private void initMapModif() {
         webEngineModif = mapModif.getEngine();
-        URL mapUrl = getClass().getResource("/com/example/ewaste/views/map.html");
+        URL mapUrl = Main.class.getResource("views/map.html");
         if (mapUrl != null) {
             webEngineModif.load(mapUrl.toExternalForm());
         }
@@ -508,7 +508,7 @@ public class ControllerPageTaches implements Initializable {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/AnalyseMeteoDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/AnalyseMeteoDialog.fxml"));
             Parent root = loader.load();
             Stage dialog = new Stage();
             dialog.initModality(Modality.APPLICATION_MODAL);
