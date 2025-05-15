@@ -73,7 +73,13 @@ public class ListeDemandeUserController implements Initializable {
         // Ce bouton permet d'afficher les détails du traitement d'une demande.
         Button seeTreatmentButton = new Button("See Treatment");
         seeTreatmentButton.getStyleClass().add("button");
-        seeTreatmentButton.setOnAction(event -> handleSeeTreatment(demande));
+        seeTreatmentButton.setOnAction(event -> {
+            try {
+                handleSeeTreatment(demande);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         // Adding elements to the card
         card.getChildren().addAll(typeLabel, adresseLabel, emailLabel, seeTreatmentButton);
@@ -81,22 +87,18 @@ public class ListeDemandeUserController implements Initializable {
     }
 //Affichage des détails d’un traitement
 
-    private void handleSeeTreatment(Demande demande) {
+    private void handleSeeTreatment(Demande demande) throws IOException {
         System.out.println("Handling Treatment for Demande ID: " + demande.getId());
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/traitementCards.fxml"));
-            Parent root = loader.load();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/traitementCards.fxml"));
+        Parent root = loader.load();
 
 
-            TraitementCardsController controller = loader.getController();
-            controller.setDemandeId(demande.getId());
+        TraitementCardsController controller = loader.getController();
+        controller.setDemandeId(demande.getId());
 
-            Stage stage = new Stage();
-            stage.setTitle("Traitement Details");
-            stage.setScene(new Scene(root, 800, 600));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Stage stage = new Stage();
+        stage.setTitle("Traitement Details");
+        stage.setScene(new Scene(root, 800, 600));
+        stage.show();
     }
 }

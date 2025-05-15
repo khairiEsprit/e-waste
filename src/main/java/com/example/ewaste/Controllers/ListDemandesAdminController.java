@@ -106,12 +106,22 @@ public class ListDemandesAdminController implements Initializable {
             private final Button traitementButton = new Button("Traitement");
 
             {
-                editButton.setOnAction(event -> editDemande(getTableView().getItems().get(getIndex())));
+                editButton.setOnAction(event -> {
+                    try {
+                        editDemande(getTableView().getItems().get(getIndex()));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
                 deleteButton.setOnAction(event -> deleteDemande(getTableView().getItems().get(getIndex())));
                 detailButton.setOnAction(event -> showDemandeDetail(getTableView().getItems().get(getIndex())));
                 traitementButton.setOnAction(event -> {
                     Demande selectedDemande = getTableView().getItems().get(getIndex());
-                    showTraitementDetails(selectedDemande.getId());
+                    try {
+                        showTraitementDetails(selectedDemande.getId());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 });
             }
 
@@ -128,22 +138,17 @@ public class ListDemandesAdminController implements Initializable {
         });
     }
     //Ouvre un formulaire pour modifier une demande.
-    private void editDemande(Demande demande) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/FormDemande.fxml"));
-            Parent root = loader.load();
+    private void editDemande(Demande demande) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/FormDemande.fxml"));
+        Parent root = loader.load();
 
-            FormDemandeController controller = loader.getController();
-            controller.setDemandeToEdit(demande);
+        FormDemandeController controller = loader.getController();
+        controller.setDemandeToEdit(demande);
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Modifier la Demande");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            AlertUtil.showAlert("Erreur", "Impossible d'ouvrir la fenêtre de modification.", Alert.AlertType.ERROR);
-        }
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Modifier la Demande");
+        stage.show();
     }
 
     private void deleteDemande(Demande demande) {
@@ -191,24 +196,19 @@ public class ListDemandesAdminController implements Initializable {
         }
     }
 
-    private void showTraitementDetails(int idDemande) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/TaitementByDemandeAdmin.fxml"));
-            Parent root = loader.load();
+    private void showTraitementDetails(int idDemande) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ewaste/views/TaitementByDemandeAdmin.fxml"));
+        Parent root = loader.load();
 
-            TaitementByDemandeAdminController traitementController = loader.getController();
-            traitementController.setDemandeId(idDemande);
-            traitementController.loadTraitementByDemande(idDemande);
+        TaitementByDemandeAdminController traitementController = loader.getController();
+        traitementController.setDemandeId(idDemande);
+        traitementController.loadTraitementByDemande(idDemande);
 
-            Stage stage = new Stage();
-            Scene scene=new Scene(root,900,600);
-            stage.setScene(scene);
-            stage.setTitle("Détails du Traitement");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            AlertUtil.showAlert("Erreur", "Impossible d'ouvrir la fenêtre du traitement.", Alert.AlertType.ERROR);
-        }
+        Stage stage = new Stage();
+        Scene scene=new Scene(root,900,600);
+        stage.setScene(scene);
+        stage.setTitle("Détails du Traitement");
+        stage.show();
     }
     // ta5ou ay heja da5elha fel input mta3 recherche w tfiltrilik el list mta3 demande selon id address type w email
     public void filterList() {
@@ -228,6 +228,7 @@ public class ListDemandesAdminController implements Initializable {
             });
         });
     }
+
 
     @FXML
     private void generatePDF() {
@@ -305,4 +306,5 @@ public class ListDemandesAdminController implements Initializable {
             AlertUtil.showAlert("Erreur", "Erreur lors de la génération du PDF.", Alert.AlertType.ERROR);
         }
     }
+
 }

@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class DemandeDetailController {
     @FXML
-    private Label lblIdUtilisateur;
+    private Label lblutilisateur_id;
     @FXML
     private Label lblIdCentre;
     @FXML
@@ -33,8 +33,8 @@ public class DemandeDetailController {
     // Method to set Demande details
     public void setDemandeDetails(Demande demande) {
         this.demande = demande;
-        lblIdUtilisateur.setText("ID Utilisateur: " + demande.getIdUtilisateur());
-        lblIdCentre.setText("ID Centre: " + demande.getIdCentre());
+        lblutilisateur_id.setText("ID Utilisateur: " + demande.getutilisateur_id());
+        lblIdCentre.setText("ID Centre: " + demande.getcentre_id());
         lblAdresse.setText("Adresse: " + demande.getAdresse());
         lblEmailUtilisateur.setText("Email: " + demande.getEmailUtilisateur());
         lblMessage.setText("Message: " + demande.getMessage());
@@ -78,8 +78,8 @@ public class DemandeDetailController {
             com.itextpdf.text.Font cellFont = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 10);
 
             // Ajoute chaque information de la demande dans le tableau.
-            addRowToTable(pdfTable, "ID Utilisateur", String.valueOf(demande.getIdUtilisateur()), headerFont, cellFont);
-            addRowToTable(pdfTable, "ID Centre", String.valueOf(demande.getIdCentre()), headerFont, cellFont);
+            addRowToTable(pdfTable, "ID Utilisateur", String.valueOf(demande.getutilisateur_id()), headerFont, cellFont);
+            addRowToTable(pdfTable, "ID Centre", String.valueOf(demande.getcentre_id()), headerFont, cellFont);
             addRowToTable(pdfTable, "Adresse", demande.getAdresse(), headerFont, cellFont);
             addRowToTable(pdfTable, "Email Utilisateur", demande.getEmailUtilisateur(), headerFont, cellFont);
             addRowToTable(pdfTable, "Message", demande.getMessage(), headerFont, cellFont);

@@ -110,7 +110,7 @@ public class TraitementFormController implements Initializable {
         // Ajouter les informations de la demande
         emailContent.append("Détails de la demande :\n");
         emailContent.append("- ID de la demande : ").append(demande.getId()).append("\n");
-        emailContent.append("- Nom de l'utilisateur : ").append(demande.getIdUtilisateur()).append("\n");
+        emailContent.append("- Nom de l'utilisateur : ").append(demande.getutilisateur_id()).append("\n");
         emailContent.append("- Email de l'utilisateur : ").append(demande.getEmailUtilisateur()).append("\n");
         emailContent.append("- Adresse : ").append(demande.getAdresse()).append("\n");
         emailContent.append("- Type : ").append(demande.getType()).append("\n");
