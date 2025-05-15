@@ -21,7 +21,7 @@ public class Main extends Application {
         hostServices = getHostServices();
         try {
             // Load the Avis.fxml view with the correct path
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("views/liste_poubelle.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("views/mainLoginSignUp.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             stage.setScene(scene);
             stage.setResizable(true);

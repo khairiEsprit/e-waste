@@ -18,12 +18,18 @@ public class DataBase {
     // private static final String PSW = "root";
 
     private static DataBase instance;
+    private static boolean isConnected = false;
 
     private DataBase() {
         try {
-            System.out.println("Connected");
+            // Test the connection during initialization
+            Connection testConnection = DriverManager.getConnection(URL, USER, PSW);
+            testConnection.close();
+            isConnected = true;
+            System.out.println("Connected to database successfully");
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            isConnected = false;
+            System.err.println("Database connection failed: " + e.getMessage());
         }
     }
 
@@ -36,9 +42,22 @@ public class DataBase {
 
     public static Connection getConnection() {
         try {
-            return DriverManager.getConnection(URL, USER, PSW);
+            // Try to establish a connection
+            Connection conn = DriverManager.getConnection(URL, USER, PSW);
+
+            // Test if the connection is valid
+            if (conn.isValid(5)) { // 5 second timeout
+                return conn;
+            } else {
+                throw new SQLException("Database connection is invalid");
+            }
         } catch (SQLException e) {
+            System.err.println("Database connection error: " + e.getMessage());
             throw new RuntimeException("Error getting database connection", e);
         }
+    }
+
+    public static boolean isConnected() {
+        return isConnected;
     }
 }
